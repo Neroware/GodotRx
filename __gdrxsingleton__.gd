@@ -146,3 +146,5 @@ func OnUnhandledInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 4)
 func OnUnhandledKeyInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 5)
+func FromGodotInputAction(input_action : String, checks : Observable) -> Observable:
+	return gd.from_godot_input_action(input_action, checks)
