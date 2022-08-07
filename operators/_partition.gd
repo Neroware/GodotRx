@@ -12,8 +12,8 @@ static func partition_(
 			GDRx.op.ref_count()
 		)
 		return [
-			published.pipe(GDRx.op.filter(predicate)),
-			published.pipe(GDRx.op.filter(not_predicate))
+			published.pipe1(GDRx.op.filter(predicate)),
+			published.pipe1(GDRx.op.filter(not_predicate))
 		]
 	
 	return partition
@@ -32,8 +32,8 @@ static func partition_indexed_(
 			GDRx.op.ref_count()
 		)
 		return [
-			published.pipe(GDRx.op.filter_indexed(predicate_indexed)),
-			published.pipe(GDRx.op.filter_indexed(not_predicate_indexed))
+			published.pipe1(GDRx.op.filter_indexed(predicate_indexed)),
+			published.pipe1(GDRx.op.filter_indexed(not_predicate_indexed))
 		]
 	
 	return partition_indexed
