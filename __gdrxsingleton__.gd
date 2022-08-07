@@ -92,8 +92,10 @@ func BuildUsing(
 		observable_factory : Callable = func(disp : DisposableBase) -> DisposableBase: return GDRx.obs.empty()
 	) -> Observable:
 		return obs.using(resource_factory, observable_factory)
-func WithLatestFrom(parent : Observable, sources : Array[Observable]) -> Observable:
-	return obs.with_latest_from(parent, sources)
+func WithLatestFrom(sources : Array[Observable]) -> Observable:
+	var _sources : Array[Observable] = sources.duplicate()
+	var parent = _sources.pop_front()
+	return obs.with_latest_from(parent, _sources)
 func Zip(sources : Array[Observable]) -> Observable:
 	return obs.zip(sources)
 func RepeatValue(value, repeat_count = null) -> Observable:

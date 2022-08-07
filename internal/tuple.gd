@@ -17,7 +17,7 @@ func at(i : int):
 	return _x[i]
 
 func as_list() -> Array:
-	return _x
+	return _x.duplicate()
 
 func gt(other) -> bool:
 	if not other is Tuple:
