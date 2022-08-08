@@ -17,7 +17,7 @@ var _getter : Callable
 var _setter : Callable
 var _disposed : bool
 
-func Get():
+func getv():
 	_lock.lock()
 	if _disposed:
 		push_error("Property has been disposed!")
@@ -27,7 +27,7 @@ func Get():
 	_lock.unlock()
 	return _ret
 
-func Set(value):
+func setv(value):
 	_lock.lock()
 	if _disposed:
 		push_error("Property has been disposed!")

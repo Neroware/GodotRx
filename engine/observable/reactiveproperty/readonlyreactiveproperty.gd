@@ -15,8 +15,8 @@ func _init(prop : ReactiveProperty):
 	
 	super(subscribe)
 
-func Get():
-	return self._prop.Get()
+func getv():
+	return self._prop.getv()
 
 func with_getter(getter : Callable = func(v): return v):
 	self._prop.with_getter(getter)
