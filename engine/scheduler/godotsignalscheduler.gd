@@ -23,7 +23,6 @@ func schedule_signal(
 		0:
 			signal_callback = func():
 				var action_ = func(scheduler : SchedulerBase, state = null):
-					action.bind()
 					action.call()
 				mad.set_disposable(self.invoke_action(action_, state))
 		1:
