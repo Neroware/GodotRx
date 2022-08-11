@@ -1,5 +1,4 @@
 static func amb_(right_source : Observable) -> Callable:
-	# Note: In RxPY conversion check for Future
 	var obs : Observable = right_source
 	
 	var amb = func(left_source : Observable) -> Observable:

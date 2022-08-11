@@ -1,7 +1,6 @@
 class_name SchedulerBase
 
 ### IMPORTANT! We will always use DateTime/DeltaTime in Seconds!
-### Represented as floats because otherwise I'll go nutso!
 
 func now() -> float:
 	push_error("No implementation here!")

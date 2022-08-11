@@ -17,7 +17,6 @@ static func from_callback(
 					return
 				observer.on_next(results)
 		
-			#arguments.append(handler)
 			fun.call(arguments, handler)
 			return Disposable.new()
 		

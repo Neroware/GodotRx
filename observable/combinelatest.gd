@@ -19,7 +19,7 @@ static func combine_latest_(sources : Array[Observable]) -> Observable:
 				var res = Tuple.new(values)
 				observer.on_next(res)
 			
-			# I wish myself list arithmetic!
+			# Would be way shorter with list arithmetic!
 			# elif all([x for j, x in enumerate(is_done) if j != i]):
 			else:
 				var completed = true

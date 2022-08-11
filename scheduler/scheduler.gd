@@ -1,7 +1,7 @@
 extends SchedulerBase
 class_name Scheduler
 
-const UTC_ZERO = 0 # Yep, zero
+const UTC_ZERO = 0
 const DELTA_ZERO = 0
 
 func now() -> float:

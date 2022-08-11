@@ -2,7 +2,7 @@ class_name PriorityQueue
 
 var _Heap = GDRx.heap
 
-const MIN_COUNT = 0 #65536 # Maybe 9223372036854775807 ?
+const MIN_COUNT = 9223372036854775807
 
 var _items : Array[Comparable]
 var _count : int
