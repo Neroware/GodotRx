@@ -67,6 +67,7 @@ func release():
 func disposable() -> DisposableBase:
 	self._lock.lock()
 	if self._is_disposed:
+		self._lock.unlock()
 		return Disposable.new()
 	
 	self._count += 1
