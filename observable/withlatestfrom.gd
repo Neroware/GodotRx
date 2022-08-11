@@ -38,6 +38,7 @@ static func with_latest_from_(
 					res_.push_front(value)
 					var result = Tuple.new(res_)
 					observer.on_next(result)
+				parent._lock.unlock()
 			
 			var children_subscription = []
 			for i in range(children.size()):

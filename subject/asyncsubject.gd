@@ -19,7 +19,9 @@ func _subscribe_core(
 	if check_disposed() != false: self._lock.unlock() ; return
 	if not _OBV._is_stopped:
 		self._observers.append(observer)
-		return InnerSubscription.new(self, observer)
+		var ret_ = InnerSubscription.new(self, observer)
+		self._lock.unlock()
+		return ret_
 	
 	var ex = self._exception
 	var has_value = self._has_value
