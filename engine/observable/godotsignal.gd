@@ -1,5 +1,6 @@
 static func from_godot_signal_(
-	sig : Signal,
+	conn, 
+	signal_name : String, 
 	n_args : int,
 	scheduler : SchedulerBase = null
 ) -> Observable:
@@ -53,6 +54,6 @@ static func from_godot_signal_(
 			return Disposable.new()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler
-		return godot_signal_scheduler.schedule_signal(sig, n_args, action)
+		return godot_signal_scheduler.schedule_signal(conn, signal_name, n_args, action)
 	
 	return Observable.new(subscribe)

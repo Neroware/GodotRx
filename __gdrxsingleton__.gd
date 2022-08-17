@@ -124,9 +124,7 @@ func FromGodotSignal(conn, signal_name : String) -> Observable:
 		if sig["name"] == signal_name:
 			n_args = sig["args"].size()
 			break
-	return gd.from_godot_signal(conn.get(signal_name) as Signal, n_args)
-func GodotSignalAsObservable(sig : Signal, n_args) -> Observable:
-	return gd.from_godot_signal(sig, n_args)
+	return gd.from_godot_signal(conn, signal_name, n_args)
 func CreateGodotUserSignal(conn : Node, signal_name : String, n_args : int, args : Array = []) -> Observable:
 	if conn.has_signal(signal_name):
 		return FromGodotSignal(conn, signal_name)

@@ -9,7 +9,8 @@ static func singleton() -> GodotSignalScheduler:
 	return GDRx.GodotSignalScheduler_
 
 func schedule_signal(
-	sig : Signal,
+	conn,
+	signal_name : String, 
 	n_args : int, 
 	action : Callable, 
 	state = null
@@ -69,7 +70,7 @@ func schedule_signal(
 			return null
 	
 	var dispose = func():
-		sig.disconnect(signal_callback)
+		conn.disconnect(signal_name, signal_callback)
 	
-	sig.connect(signal_callback)
+	conn.connect(signal_name, signal_callback)
 	return CompositeDisposable.new([mad, Disposable.new(dispose)])
