@@ -9,7 +9,7 @@ static func singleton() -> GodotSignalScheduler:
 	return GDRx.GodotSignalScheduler_
 
 func schedule_signal(
-	conn,
+	conn : Object,
 	signal_name : String, 
 	n_args : int, 
 	action : Callable, 

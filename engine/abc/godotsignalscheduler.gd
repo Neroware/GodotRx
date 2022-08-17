@@ -3,7 +3,7 @@ class_name GodotSignalSchedulerBase
 
 
 func schedule_signal(
-	conn : Node,
+	conn : Object,
 	signal_name : String, 
 	n_args : int, 
 	action : Callable, 

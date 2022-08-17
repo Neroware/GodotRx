@@ -1,5 +1,5 @@
 static func from_godot_signal_(
-	conn, 
+	conn : Object, 
 	signal_name : String, 
 	n_args : int,
 	scheduler : SchedulerBase = null

@@ -118,14 +118,14 @@ func ScheduleDatetime(datetime_sec : float) -> Observable:
 func StartPeriodicTimerAtDatetime(datetime_sec : float, period_sec : float) -> Observable:
 	return obs.timer(datetime_sec, true, period_sec)
 ## Godot ##
-func FromGodotSignal(conn, signal_name : String) -> Observable:
+func FromGodotSignal(conn : Object, signal_name : String) -> Observable:
 	var n_args : int = -1
 	for sig in conn.get_signal_list():
 		if sig["name"] == signal_name:
 			n_args = sig["args"].size()
 			break
 	return gd.from_godot_signal(conn, signal_name, n_args)
-func CreateGodotUserSignal(conn : Node, signal_name : String, n_args : int, args : Array = []) -> Observable:
+func CreateGodotUserSignal(conn : Object, signal_name : String, n_args : int, args : Array = []) -> Observable:
 	if conn.has_signal(signal_name):
 		return FromGodotSignal(conn, signal_name)
 	var _args : Array = []
