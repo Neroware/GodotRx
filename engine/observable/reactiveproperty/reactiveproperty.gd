@@ -10,7 +10,7 @@ var _Value:
 	set(value):
 		var tmp = _Value
 		_Value = value
-		emit_signal("_on_changed", tmp, _Value)
+		self._on_changed.emit(tmp, _Value)
 
 var _cond : Callable
 var _getter : Callable
@@ -59,7 +59,7 @@ func dispose():
 	self._lock.lock()
 	if not self._disposed:
 		self._disposed = true
-		_on_dispose.emit()
+		self._on_dispose.emit()
 	self._lock.unlock()
 
 func _init(value, cond = func(v_old, v_new): return v_old != v_new):
@@ -76,8 +76,8 @@ func _init(value, cond = func(v_old, v_new): return v_old != v_new):
 		var on_dispose = func(__):
 			observer.on_completed()
 		
-		var sub = GDRx.gd.from_godot_signal(self, "_on_changed", 2).subscribe(observer)
-		var d = GDRx.gd.from_godot_signal(self, "_on_dispose", 0).subscribe(on_dispose)
+		var sub = GDRx.gd.from_godot_signal(self._on_changed, 2).subscribe(observer)
+		var d = GDRx.gd.from_godot_signal(self._on_dispose, 0).subscribe(on_dispose)
 		
 		return CompositeDisposable.new([sub, d])
 	

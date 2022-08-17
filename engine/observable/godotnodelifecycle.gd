@@ -44,13 +44,13 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 				_listener = _ListenerOnUnhandledInput.new()
 			5:
 				_listener = _ListenerOnUnhandledKeyInput.new()
-		_listener.name = "__" + str(conn.name) + "$listener__"
+		_listener.name = "__" + str(conn.name) + "$Listener__"
 		conn.call_deferred("add_child", _listener)
 		
 		var dispose = func():
 			_listener.queue_free()
 		
-		var subscription = GDRx.gd.from_godot_signal(_listener, "_on_event", 1).subscribe(
+		var subscription = GDRx.gd.from_godot_signal(_listener._on_event, 1).subscribe(
 			observer, func(e):return, func():return,
 			scheduler
 		)
