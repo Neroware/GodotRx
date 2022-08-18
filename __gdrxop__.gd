@@ -489,7 +489,7 @@ func window_when(closing_mapper : Callable) -> Callable:
 	return _Window_.window_when_(closing_mapper)
 
 func window_with_count(count : int, skip = null) -> Callable:
-	return _WindowWithCount_.window_with_count(count, skip)
+	return _WindowWithCount_.window_with_count_(count, skip)
 
 func window_with_time(timespan : float, timeshift = null, scheduler : SchedulerBase = null) -> Callable:
 	return _WindowWithTime_.window_with_time_(timespan, timeshift, scheduler)

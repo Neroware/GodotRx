@@ -31,7 +31,7 @@ static func buffer_with_count_(
 			return value.size() > 0
 		
 		return source.pipe3(
-			GDRx.op.window_with_count(count, skip.v),
+			GDRx.op.window_with_count(count, _skip.v),
 			GDRx.op.flat_map(mapper),
 			GDRx.op.filter(predicate)
 		)

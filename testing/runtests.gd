@@ -103,3 +103,51 @@ func _test_op_amb(test_id : int):
 		func(): _assert(res.v == 42, test_id, succ)
 	)
 
+func _test_op_average(test_id : int):
+	var succ : Array[ETestState] = [0]
+	var stream = GDRx.FromRange(1, 101).pipe1(
+		GDRx.op.average()
+	)
+	stream.subscribe(func(avg : float): _assert(avg == 50.5, test_id, succ))
+
+func _test_op_buffer_count(test_id : int):
+	var succ : Array[ETestState] = [0, 0]
+	
+	var res = RefValue.Set([])
+	var stream = GDRx.FromRange(1, 101).pipe1(
+		GDRx.op.buffer_with_count(10)
+	)
+	stream.subscribe(
+		func(buf : Array):
+			res.v.append(buf),
+		func(__): _fail(test_id, succ, 0),
+		func():
+			var count = 0
+			for i in range(res.v.size()):
+				for j in range(res.v[i].size()):
+					count += res.v[i][j]
+			_assert(res.v.all(func(elem): return elem.size() == 10), test_id, succ, 0)
+			_assert(count == 5050, test_id, succ, 1)
+	)
+
+func _test_op_catch(test_id : int):
+	var succ : Array[ETestState] = [0, 0]
+	
+	var res1 = RefValue.Set(false)
+	var stream1 = GDRx.Throw(GDRx.err.Error.new("Catched Error")).pipe1(
+		GDRx.op.catch(func(__, ___): return GDRx.ReturnValue(42))
+	)
+	stream1.subscribe(
+		func(i): res1.v = i == 42,
+		func(e): _fail(test_id, succ, 0),
+		func(): _assert(res1.v, test_id, succ, 0)
+	)
+	
+	var stream2 = GDRx.Throw(GDRx.err.Error.new("Catched Error")).pipe1(
+		GDRx.op.catch(func(__, ___): return GDRx.err.Error.new("Uncatched Error"))
+	)
+	stream2.subscribe(
+		func(i): _fail(test_id, succ, 1),
+		func(e): _success(test_id, succ, 1),
+		func(): _fail(test_id, succ, 1)
+	)
