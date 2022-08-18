@@ -151,3 +151,21 @@ func _test_op_catch(test_id : int):
 		func(e): _success(test_id, succ, 1),
 		func(): _fail(test_id, succ, 1)
 	)
+
+func _test_op_combine_latest(id : int):
+	var succ : Array[ETestState] = [0, 0]
+	
+	var res = []
+	var stream = GDRx.FromRange(3).pipe1(
+		GDRx.op.combine_latest([GDRx.ReturnValue(42)])
+	)
+	stream.subscribe(
+		func(t : Tuple): res.append(t),
+		func(e): _fail(id, succ, 0),
+		func():
+			_assert(res.size() == 3 and res.all(func(elem): return elem.at(1) == 42), id, succ, 0)
+			var c = 0
+			for t in res:
+				c += t.at(0)
+			_assert(c == 6, id, succ, 1)
+	)

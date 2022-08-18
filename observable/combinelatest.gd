@@ -54,7 +54,7 @@ static func combine_latest_(sources : Array[Observable]) -> Observable:
 			
 			var on_completed = func():
 				parent._lock.lock()
-				done.call()
+				done.call(i)
 				parent._lock.unlock()
 			
 			var subscription = subscriptions[i]
