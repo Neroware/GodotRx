@@ -4,55 +4,63 @@ class_name ReactiveProperty
 signal _on_changed(v_old, v_new)
 signal _on_dispose()
 
-var _Value:
-	get:
-		return _Value
-	set(value):
-		var tmp = _Value
-		_Value = value
-		emit_signal("_on_changed", tmp, _Value)
-
 var _cond : Callable
 var _getter : Callable
 var _setter : Callable
+
+var _initialized : bool
 var _disposed : bool
 
+var Value:
+	get:
+		self._lock.lock()
+		if _disposed:
+			push_error("Property has been disposed!")
+			self._lock.unlock()
+			return null
+		var _ret = _getter.call(Value)
+		self._lock.unlock()
+		return _ret
+	
+	set(value):
+		if not _initialized:
+			Value = value
+			_initialized = true
+			return
+		
+		self._lock.lock()
+		var tmp = Value
+		if _disposed:
+			push_error("Property has been disposed!")
+			self._lock.unlock()
+			return
+		value = _setter.call(tmp, value)
+		Value = value
+		self._lock.unlock()
+		_on_changed.emit(tmp, value)
+
 func getv():
-	_lock.lock()
-	if _disposed:
-		push_error("Property has been disposed!")
-		_lock.unlock()
-		return null
-	var _ret = _getter.call(_Value)
-	_lock.unlock()
-	return _ret
+	return Value
 
 func setv(value):
-	_lock.lock()
-	if _disposed:
-		push_error("Property has been disposed!")
-		_lock.unlock()
-		return null
-	value = _setter.call(_Value, value)
-	_Value = value
-	_lock.unlock()
+	Value = value
 
-func with_getter(getter : Callable = func(v): return v):
-	_lock.lock()
+func with_getter(getter : Callable = func(v): return v) -> ReactiveProperty:
+	self._lock.lock()
 	self._getter = getter
-	_lock.unlock()
+	self._lock.unlock()
 	return self
 
-func with_setter(setter : Callable = func(old_v, new_v): return new_v):
-	_lock.lock()
+func with_setter(setter : Callable = func(old_v, new_v): return new_v) -> ReactiveProperty:
+	self._lock.lock()
 	self._setter = setter
-	_lock.unlock()
+	self._lock.unlock()
 	return self
 
-func with_condition(cond = func(v_old, v_new): return v_old != v_new):
-	_lock.lock()
+func with_condition(cond = func(v_old, v_new): return v_old != v_new) -> ReactiveProperty:
+	self._lock.lock()
 	self._cond = cond
-	_lock.unlock()
+	self._lock.unlock()
 	return self
 
 func dispose():
@@ -63,10 +71,12 @@ func dispose():
 	self._lock.unlock()
 
 func _init(value, cond = func(v_old, v_new): return v_old != v_new):
-	_Value = value
+	_initialized = false
 	_cond = cond
 	_getter = func(v): return v
 	_setter = func(old_v, new_v): return new_v
+	
+	Value = value
 	
 	var subscribe = func(
 		observer : ObserverBase,
