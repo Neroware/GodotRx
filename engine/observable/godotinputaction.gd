@@ -3,6 +3,8 @@ enum EInputState
 	RELEASED = 0, JUST_PRESSED = 1, PRESSED = 2, JUST_RELEASED = 3
 }
 
+## Represents an input action as an observable sequence whcih emits input state
+## each time [code]checks[/code] emits an item.
 static func from_godot_input_action_(input_action : String, checks : Observable) -> Observable:
 	var subscribe = func(
 		observer : ObserverBase,

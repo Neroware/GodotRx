@@ -1,3 +1,4 @@
+## Represents a Godot [Signal] as an observable sequence
 static func from_godot_signal_(
 	conn : Object, 
 	signal_name : String, 

@@ -25,6 +25,11 @@ class _ListenerOnUnhandledKeyInput extends _NodeLifecycleListener:
 	func _unhandled_key_input(event : InputEvent):
 		_on_event.emit(event)
 
+## Represents [Node] lifecycle events like [code]_process(delta)[/code]. 
+## Observable emits argument from call as item on the stream.
+## [br][br]
+## [color=yellow]Warning![/color] This only creates a Node of type [b]_Listener[/b]
+## which is added as a child since it is not possible to get signals on lifecycle callbacks.
 static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observable:
 	var subscribe = func(
 		observer : ObserverBase,
