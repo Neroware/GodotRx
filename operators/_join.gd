@@ -13,10 +13,10 @@ static func join_(
 		) -> DisposableBase:
 			var group = CompositeDisposable.new()
 			var left_done = RefValue.Set(false)
-			var left_map : Dictionary = {} ## TODO OrderedDict()
+			var left_map : Dictionary = {} # TODO OrderedDict()
 			var left_id = RefValue.Set(0)
 			var right_done = RefValue.Set(false)
-			var right_map : Dictionary = {} ## TODO OrderedDict()
+			var right_map : Dictionary = {} # TODO OrderedDict()
 			var right_id = RefValue.Set(0)
 			
 			var on_next_left = func(value):

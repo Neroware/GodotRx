@@ -1,5 +1,9 @@
 class_name LockBase
 
+## Interface of a Lock
+##
+## Allows a thread to aquire and release it.
+
 func lock():
 	push_error("Not implemented here!")
 

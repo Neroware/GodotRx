@@ -1,8 +1,11 @@
 class_name __GDRx_Engine__
+## Provides access to Godot-specific [Observable] constructors.
+##
+## Bridge between Godot-specific implementations and [__GDRx_Singleton__]
 
-### ======================================================================= ###
+# =========================================================================== #
 #   Observables
-### ======================================================================= ###
+# =========================================================================== #
 var _GodotSignal_ = load("res://reactivex/engine/observable/godotsignal.gd")
 var _GodotLifecycle_ = load("res://reactivex/engine/observable/godotnodelifecycle.gd")
 var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputaction.gd")

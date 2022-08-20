@@ -45,7 +45,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 	duetime = self.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)
 
-### Utility function to cancel a timer
+## Utility function to cancel a timer
 func _cancel_timer(timer : SceneTreeTimer):
 	for conn in timer.timeout.get_connections():
 		timer.timeout.disconnect(conn["callable"])

@@ -1,8 +1,7 @@
 class_name __GDRx_Obs__
-
-### ======================================================================= ###
-#   Observables
-### ======================================================================= ###
+## Provides access to [Observable] constructor.
+##
+## Bridge between [Observable] constructor implementations and [__GDRx_Singleton__]
 
 var _Amb_ = load("res://reactivex/observable/amb.gd")
 var _Case_ = load("res://reactivex/observable/case.gd")

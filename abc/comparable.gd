@@ -1,5 +1,10 @@
 class_name Comparable
 
+## Interface for comparable objects
+##
+## This interface provides comparison functions. It is needed because GDScript
+## does not allow defining custom operators.
+
 func eq(other) -> bool:
 	push_error("No implementation here!")
 	return false

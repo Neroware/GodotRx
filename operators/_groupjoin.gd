@@ -14,7 +14,7 @@ static func group_join_(
 		) -> DisposableBase:
 			var group = CompositeDisposable.new()
 			var rcd = RefCountDisposable.new(group)
-			var left_map : Dictionary = {} ## TODO OrderedDict()
+			var left_map : Dictionary = {} # TODO OrderedDict()
 			var right_map : Dictionary = {}
 			var left_id = [0]
 			var right_id = [0]

@@ -1,7 +1,7 @@
 class_name __GDRx_Op__
-### ======================================================================= ###
-#   Operators
-### ======================================================================= ###
+## Provides access to [Observable] operators.
+##
+## Bridge between operator implementations and [__GDRx_Singleton__]
 
 var _RefCount_ = load("res://reactivex/operators/connectable/_refcount.gd")
 

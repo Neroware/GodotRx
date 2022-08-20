@@ -1,5 +1,5 @@
-### Heap queue algorithm (a.k.a. priority queue).
-### See https://github.com/python/cpython/blob/3.10/Lib/heapq.py
+## Heap queue algorithm (a.k.a. priority queue).
+## See https://github.com/python/cpython/blob/3.10/Lib/heapq.py
 
 func heappush(heap : Array[Comparable], item):
 	heap.append(item)
