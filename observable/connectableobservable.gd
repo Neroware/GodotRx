@@ -1,6 +1,11 @@
 extends Observable
 class_name ConnectableObservable
 
+## A connectable observable
+##
+## Represents an observable that can be connected and
+## disconnected.
+
 var _subject : SubjectBase
 var _has_subscription : bool
 var _subscription : DisposableBase
@@ -20,6 +25,7 @@ func _subscribe_core(
 ) -> DisposableBase:
 	return self._subject.observable().subscribe(observer, func(e): return, func(): return, scheduler)
 
+## Connects the observable
 func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 	if not self._has_subscription:
 		self._has_subscription = true
@@ -32,6 +38,12 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 	
 	return self._subscription
 
+## Returns an observable sequence that stays connected to the
+##        source indefinitely to the observable sequence.
+##        Providing a subscriber_count will cause it to connect() after
+##        that many subscriptions occur. A subscriber_count of 0 will
+##        result in emissions firing immediately without waiting for
+##        subscribers.
 func auto_connect_observable(subscriber_count : int = 1) -> Observable:
 	var connectable_subscription : Array[DisposableBase] = [null]
 	var count = [0]

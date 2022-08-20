@@ -1,3 +1,18 @@
+## Converts a callback function to an observable sequence.
+##    [br]
+##    Args:
+##    [br]
+##        -> func: Function with a callback as the last argument to
+##            convert to an Observable sequence.
+##    [br]
+##        -> mapper: [Optional] A mapper which takes the arguments
+##            from the callback to produce a single item to yield on next.
+##    [br][br]
+##    Returns:
+##    [br]
+##        A function, when executed with the required arguments minus
+##        the callback, produces an Observable sequence with a single value of
+##        the arguments to the callback as a list.
 static func from_callback(
 	fun : Callable = func(args : Array, cb : Callable): return,
 	mapper : Callable = func(args): return args

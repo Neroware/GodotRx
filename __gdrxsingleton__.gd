@@ -48,6 +48,17 @@ var CurrentThreadScheduler_global_ : WeakRefDictionary = WeakRefDictionary.new()
 var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #
+#  Helper functions
+# =========================================================================== #
+## Create an iterable sequence from an array
+func iter(data : Array) -> IterableBase:
+	return GDRx.util.Iter(data)
+
+## Create an observable sequence from an array
+func of(data : Array) -> Observable:
+	return self.FromArray(data)
+
+# =========================================================================== #
 #   Observable Constructors
 # =========================================================================== #
 
@@ -118,6 +129,9 @@ func ConcatStreams(sources : Array[Observable]) -> Observable:
 func ConcatStreamsWithIterable(sources : IterableBase) -> Observable:
 	return obs.concat_with_iterable(sources)
 
+## Creates an observable which emits all final items from all observable streams 
+## after all completed. If a sequence completes before emitting an item,
+## the join will also immediatly complete.
 func ForkJoin(sources : Array[Observable]) -> Observable:
 	return obs.fork_join(sources)
 

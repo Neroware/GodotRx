@@ -1,3 +1,21 @@
+## Returns an observable sequence that invokes the specified factory
+##    function whenever a new observer subscribes.
+##    [br]
+##    Example:
+##    [codeblock]
+##        var res = GDRx.obs.defer(func(scheduler): return GDRx.of([1, 2, 3]))
+##    [/codeblock]
+##    [br]
+##    Args:
+##    [br]
+##        -> observable_factory: Observable factory function to invoke for
+##        each observer that subscribes to the resulting sequence. The
+##        factory takes a single argument, the scheduler used.
+##    [br][br]
+##    Returns:
+##    [br]
+##        An observable sequence whose observers trigger an invocation
+##        of the given observable factory function.
 static func defer_(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
 	
 	var subscribe = func(

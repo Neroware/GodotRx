@@ -1,3 +1,20 @@
+##Continues an observable sequence that is terminated by an
+##    exception with the next observable sequence.
+##    [br]
+##    Examples:
+##    [codeblock]
+##        var res = GDRx.obs.catch_with_iterable(GDRx.util.Iter([xs, ys, zs]))
+##    [/codeblock]
+##    [br]
+##    Args:
+##    [br]
+##        -> sources: an Iterable of observables. Thus a generator is accepted.
+##    [br][br]
+##    Returns:
+##    [br]
+##        An observable sequence containing elements from consecutive
+##        source sequences until a source sequence terminates
+##        successfully.
 static func catch_with_iterable_(sources : IterableBase) -> Observable:
 	
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:

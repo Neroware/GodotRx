@@ -1,3 +1,14 @@
+## Propagates the observable sequence that reacts first.
+##    [br]
+##    Example:
+##    [codeblock]
+##    var winner = GDRx.obs.amb([xs, ys, zs])
+##    [/codeblock]
+##    [br]
+##    Returns:
+##    [br]
+##    An observable sequence that surfaces any of the given sequences,
+##    whichever reacted first.
 static func amb_(sources : Array[Observable]) -> Observable:
 	
 	var acc : Observable = GDRx.obs.never()

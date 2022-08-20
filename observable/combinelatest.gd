@@ -1,3 +1,16 @@
+## Merges the specified observable sequences into one observable
+##    sequence by creating a tuple whenever any of the
+##    observable sequences produces an element.
+##    [br]
+##    Examples:
+##    [codeblock]
+##        var obs = GDRx.obs.combine_latest([obs1, obs2, obs3])
+##    [/codeblock]
+##    [br]
+##    Returns:
+##    [br]
+##        An observable sequence containing the result of combining
+##        elements of the sources into a tuple.
 static func combine_latest_(sources : Array[Observable]) -> Observable:
 	var parent = sources[0]
 	
