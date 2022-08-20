@@ -1,3 +1,23 @@
+## Generates an observable sequence that repeats the given element
+##    the specified number of times.
+## [br]
+##    Examples:
+##        [codeblock]
+##        1 - var res = GDRx.obs.repeat_value(42)
+##        2 - var res = GDRx.obs.repeat_value(42, 4)
+##        [/codeblock]
+## [br]
+##    Args:
+## [br]
+##        -> value: Element to repeat.
+## [br]
+##        -> repeat_count: [Optional] Number of times to repeat the element.
+##            If not specified, repeats indefinitely.
+## [br][br]
+##    Returns:
+## [br]
+##        An observable sequence that repeats the given element the
+##        specified number of times.
 static func repeat_value_(value, repeat_count = null) -> Observable:
 	
 	if repeat_count == -1:

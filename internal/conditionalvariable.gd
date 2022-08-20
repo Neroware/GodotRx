@@ -1,5 +1,7 @@
 class_name ConditionalVariable
 
+## Naive implementation of a conditional variable for multi-threading
+
 var _lock
 var _waiting_queue : Array
 

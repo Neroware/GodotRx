@@ -1,6 +1,8 @@
 extends IterableBase
 class_name ArrayIterator
 
+## An iterator working on an array
+
 var _x : Array
 
 var _index : int

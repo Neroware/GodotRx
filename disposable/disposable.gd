@@ -1,5 +1,8 @@
 extends DisposableBase
 class_name Disposable
+## Main disposable class
+##
+## Invokes specified action when disposed.
 
 var _is_disposed : bool
 var _action : Callable
@@ -7,11 +10,24 @@ var _lock : RLock
 
 var _dispose_with : Dictionary
 
+## Creates a disposable object that invokes the specified
+##        action when disposed.
+## [br]
+##        Args:
+## [br]
+##            -> action: Action to run during the first call to dispose.
+##                The action is guaranteed to be run at most once.
+## [br][br]
+##        Returns:
+## [br]
+##            The disposable object that runs the given action upon
+##            disposal.
 func _init(action : Callable = func(): return):
 	self._is_disposed = false
 	self._action = action
 	self._lock = RLock.new()
 
+## Performs the task of cleaning up resources.
 func dispose():
 	var dispose = false
 	self._lock.lock()
@@ -23,6 +39,7 @@ func dispose():
 	if dispose:
 		self._action.call()
 
+## Links disposable to [Node] lifetime in scene-tree via [code]tree_exiting[/code].
 func dispose_with(node : Node) -> DisposableBase:
 	_lock.lock()
 	_dispose_with[node] = func():
@@ -32,3 +49,9 @@ func dispose_with(node : Node) -> DisposableBase:
 	
 	node.connect("tree_exiting", _dispose_with[node])
 	return self
+
+## Casts any object with [code]dispose()[/code] to a [DisposableBase].
+static func Cast(obj) -> DisposableBase:
+	if obj.has_method("dispose"):
+		return Disposable.new(obj.dispose)
+	return Disposable.new()

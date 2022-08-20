@@ -1,3 +1,4 @@
+## Links the [Thread] instance to a [Callable] before starting it.
 class StartableThread:
 	var _thread : Thread
 	var _target : Callable
@@ -15,6 +16,7 @@ class StartableThread:
 func default_thread_factory(target : Callable) -> StartableThread:
 	return StartableThread.new(target)
 
+## Operator to synchronize access to a given function
 func synchronized(lock : RLock, n_args : int) -> Callable:
 	var wrapper = func(fn : Callable) -> Callable:
 		var inner : Callable

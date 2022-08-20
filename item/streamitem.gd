@@ -1,7 +1,10 @@
 class_name StreamItem
 
+## GDRx-own item type
+
 var _payload
 
+## Represents empty [StreamItem]
 class _Unit extends StreamItem:
 	func _init():
 		self._payload = self

@@ -1,3 +1,29 @@
+## Generates an observable sequence by iterating a state from an
+##    initial state until the condition fails.
+##    [br]
+##    Example:
+##    [codeblock]
+##        var res = GDRx.obs.generate_with_relative_time(
+##            0, func(x): return true, func(x): return x + 1, func(x): return 0.5
+##        )
+##    [/codeblock]
+##    [br]
+##    Args:
+##    [br]
+##        -> initial_state: Initial state.
+##    [br]
+##        -> condition: Condition to terminate generation (upon returning
+##            false).
+##    [br]
+##        -> iterate: Iteration step function.
+##    [br]
+##        -> time_mapper: Time mapper function to control the speed of
+##            values being produced each iteration, returning relative
+##            times, i.e. either floats denoting seconds or instances of
+##            timedelta.
+##    [br][br]
+##    Returns:
+##        The generated sequence.
 static func generate_with_relative_time_(
 	initial_state,
 	condition : Callable = func(state) -> bool: return true,

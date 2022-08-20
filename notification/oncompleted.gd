@@ -1,6 +1,8 @@
 extends Notification
 class_name OnCompletedNotification
 
+## Represents an OnCompleted notification to an observer.
+
 func _init():
 	super._init()
 	self._kind = "C"

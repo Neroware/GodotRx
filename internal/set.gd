@@ -1,5 +1,7 @@
 class_name ArraySet
 
+## A Set data structure based on a list
+
 var _list : Array
 
 func _init():

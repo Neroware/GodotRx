@@ -1,5 +1,7 @@
 class_name WeakRefDictionary
 
+## A dictionary with only weak-key-references.
+
 var _data : Dictionary
 
 func _init(from : Dictionary = {}):

@@ -1,3 +1,25 @@
+## Constructs an observable sequence that depends on a resource
+##    object, whose lifetime is tied to the resulting observable
+##    sequence's lifetime.
+## [br]
+##    Example:
+## [br]
+##        [codeblock]
+##        var res = GDRx.obs.using(func(): return AsyncSubject.new(), func(s): return s)
+##        [/codeblock]
+## [br]
+##    Args:
+## [br]
+##        -> resource_factory: Factory function to obtain a resource object.
+## [br]
+##        -> observable_factory: Factory function to obtain an observable
+##            sequence that depends on the obtained resource.
+## [br][br]
+##
+##    Returns:
+## [br]
+##        An observable sequence whose lifetime controls the lifetime
+##        of the dependent resource object.
 static func using_(
 	resource_factory : Callable,
 	observable_factory : Callable,
@@ -15,6 +37,8 @@ static func using_(
 		elif resource is GDRx.err.Error:
 			var d = GDRx.obs.throw(resource).subscribe(observer, func(e): return, func(): return, scheduler)
 			return CompositeDisposable.new([d, disp])
+		else:
+			disp = Disposable.Cast(resource)
 		
 		var source = observable_factory.call(resource)
 		

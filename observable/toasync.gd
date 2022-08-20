@@ -1,3 +1,25 @@
+## Converts the function into an asynchronous function. Each
+##    invocation of the resulting asynchronous function causes an
+##    invocation of the original synchronous function on the specified
+##    scheduler.
+## [br]
+##    Examples:
+##        [codeblock]
+##        var res = GDRx.obs.to_async(func(x, y): return x + y).call(4, 3)
+##        var res = GDRx.obs.to_async(func(x, y): return x + y, GDRx.TimeoutScheduler_).call(4, 3)
+##        var res = GDRx.obs.to_async(func(x): print(x), GDRx.TimeoutScheduler_).call("hello")
+##        [/codeblock]
+## [br]
+##    Args:
+## [br]
+##        -> func: Function to convert to an asynchronous function.
+## [br]
+##        -> scheduler: [Optional] Scheduler to run the function on. If not
+##            specified, defaults to GDRx.TimeoutScheduler_.
+## [br][br]
+##    Returns:
+## [br]
+##        Aynchronous function.
 static func to_async_(
 	fun : Callable, scheduler : SchedulerBase = null
 ) -> Callable:

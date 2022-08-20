@@ -1,6 +1,11 @@
 extends Subject
 class_name ReplaySubject
 
+## Represents an object that is both an observable sequence as well
+## as an observer. 
+##
+## Each notification is broadcasted to all subscribed
+## and future observers, subject to buffer trimming policies.
 
 class RemovableDisposable extends DisposableBase:
 	var _subject : Subject
@@ -28,6 +33,17 @@ var _window : float
 var _scheduler : SchedulerBase
 var _queue : Array
 
+## Initializes a new instance of the ReplaySubject class with
+##        the specified buffer size, window and scheduler.
+## [br]
+##        Args:
+## [br]
+##            -> buffer_size: [Optional] Maximum element count of the replay
+##                buffer.
+## [br]
+##            -> window [Optional]: Maximum time length of the replay buffer.
+## [br]
+##            -> scheduler: [Optional] Scheduler the observers are invoked on.
 func _init(
 	buffer_size : int = GDRx.util.MAX_SIZE,
 	window : float = GDRx.util.MAX_SIZE,
@@ -71,6 +87,7 @@ func _trim(now : float):
 	while self._queue.size() > 0 and (now - self._queue[0].interval()) > self._window:
 		self._queue.pop_front()
 
+## Notifies all subscribed observers with the value.
 func _on_next_core(__super : Callable, i):
 	self._lock.lock()
 	var observers = self._observers.duplicate()
@@ -86,6 +103,7 @@ func _on_next_core(__super : Callable, i):
 		var obv : ScheduledObserver = observer
 		obv.ensure_active()
 
+## Notifies all subscribed observers with the exception.
 func _on_error_core(__super : Callable, e):
 	self._lock.lock()
 	var observers = self._observers.duplicate()
@@ -100,6 +118,7 @@ func _on_error_core(__super : Callable, e):
 		var obv : ScheduledObserver = observer
 		obv.ensure_active()
 
+## Notifies all subscribed observers of the end of the sequence.
 func _on_completed(__super : Callable):
 	self._lock.lock()
 	var observers = self._observers.duplicate()
@@ -113,6 +132,8 @@ func _on_completed(__super : Callable):
 		var obv : ScheduledObserver = observer
 		obv.ensure_active()
 
+## Releases all resources used by the current instance of the
+## ReplaySubject class and unsubscribe all observers.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._queue.clear()

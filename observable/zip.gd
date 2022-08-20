@@ -1,3 +1,21 @@
+## Merges the specified observable sequences into one observable
+##    sequence by creating a tuple whenever all of the
+##    observable sequences have produced an element at a corresponding
+##    index.
+## [br]
+##    Example:
+##        [codeblock]
+##        var res = GDRx.obs.zip([obs1, obs2])
+##        [/codeblock]
+## [br]
+##    Args:
+## [br]
+##       -> args: Observable sources to zip.
+## [br][br]
+##    Returns:
+## [br]
+##        An observable sequence containing the result of combining
+##        elements of the sources as tuple.
 static func zip_(sources : Array[Observable]) -> Observable:
 	
 	var subscribe = func(

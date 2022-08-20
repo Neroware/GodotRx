@@ -1,6 +1,10 @@
 extends SubjectBase
 class_name Subject
 
+## Represents an object that is both an observable sequence as well
+## as an observer. Each notification is broadcasted to all subscribed
+## observers.
+
 var _is_disposed : bool
 var _observers : Array[ObserverBase]
 var _exception
@@ -88,12 +92,15 @@ func _init():
 	self._OBS = _Observable.new(self, self._lock)
 	self._OBV = _Observer.new(self)
 
+## Return [ObservableBase] behaviour.
 func observable() -> ObservableBase:
 	return self._OBS
 
+## Return [ObserverBase] behaviour.
 func observer() -> ObserverBase:
 	return self._OBV
 
+## Causes an error when already disposed.
 func check_disposed():
 	if self._is_disposed:
 		var err = GDRx.err.DisposedException.new()
@@ -121,6 +128,13 @@ func _subscribe_core(
 	self._lock.unlock()
 	return Disposable.new()
 
+## Notifies all subscribed observers with the value
+## [br]
+##        Args:
+## [br]
+##            -> __super: Callback of super-class 
+## [br]
+##            -> value: The value to send to all subscribed observers.
 func on_next(__super : Callable, i):
 	self._lock.lock()
 	if check_disposed() != false: self._lock.unlock() ; return
@@ -135,6 +149,13 @@ func _on_next_core(__super : Callable, i):
 	for ob in observers:
 		ob.on_next(i)
 
+## Notifies all subscribed observers with the exception.
+## [br]
+##        Args:
+## [br]
+##            -> __super: Callback of super-class 
+## [br]
+##            -> error: The exception to send to all subscribed observers.
 func on_error(__super : Callable, e):
 	self._lock.lock()
 	if check_disposed() != false: self._lock.unlock() ; return
@@ -149,6 +170,7 @@ func _on_error_core(__super : Callable, e):
 	for ob in observers:
 		ob.on_error(e)
 
+## Notifies all subscribed observers of the end of the sequence.
 func on_completed(__super : Callable):
 	self._lock.lock()
 	if check_disposed() != false: self._lock.unlock() ; return
@@ -163,6 +185,7 @@ func _on_completed_core(__super : Callable):
 	for ob in observers:
 		ob.on_completed()
 
+## Unsubscribe all observers and release resources.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._is_disposed = true

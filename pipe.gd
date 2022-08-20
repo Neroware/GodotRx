@@ -49,6 +49,23 @@ func compose6(
 func composea(operators : Array[Callable]) -> Callable:
 	return compose(GDRx.util.Iter(operators))
 
+## Compose multiple operators left to right.
+##   Composes zero or more operators into a functional composition. The
+##   operators are composed to left to right. A composition of zero
+##   operators gives back the source.
+## [br]
+##    Examples:
+##        [codeblock]
+##        pipe0().call(source) == source
+##        pipe1(f).call(source) == f.call(source)
+##        pipe2(f, g).call(source) == g.call(f.call(source))
+##        pipe3(f, g, h).call(source) == h.call(g.call(f.call(source)))
+##        ...
+##        [/codeblock]
+## [br][br]
+##    Returns:
+## [br]
+##        The composed observable.
 func compose(operators : IterableBase) -> Callable:
 	var _compose = func(source):
 		return reduce(func(obs, op): return op.call(obs), operators, source)
@@ -147,5 +164,16 @@ func pipe9(
 func pipea(__value, arr : Array):
 	return pipe(__value, GDRx.util.Iter(arr))
 
+## Functional pipe (`|>`)
+## [br]
+##    Allows the use of function argument on the left side of the
+##    function.
+## [br]
+##    Example:
+##        [codeblock]
+##        pipe2(x, fn) == __fn.call(x)  # Same as x |> fn
+##        pipe3(x, fn, gn) == gn.call(fn.call(x))  # Same as x |> fn |> gn
+##        ...
+##        [/codeblock]
 func pipe(__value : Variant, fns : IterableBase) -> Variant:
 	return compose(fns).call(__value)

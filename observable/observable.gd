@@ -1,6 +1,8 @@
 extends ObservableBase
 class_name Observable
 
+## Observable base class.
+
 var _lock : RLock
 var _subscribe : Callable
 
@@ -14,6 +16,44 @@ func _subscribe_core(
 	scheduler : SchedulerBase = null) -> DisposableBase:
 		return self._subscribe.call(observer, scheduler)
 
+## Subscribe an observer to the observable sequence.
+## [br]
+##        You may subscribe using an observer or callbacks, not both; if the first
+##        argument is an instance of [Observer] ([ObserverBase]) or if
+##        it has a [Callable] attribute named [code]on_next[/code], then any callback
+##        arguments will be ignored.
+## [br][br]
+##        Examples:
+## [br]
+##            [codeblock]
+##            source.subscribe(observer)
+##            source.subscribe(on_next)
+##            source.subscribe(on_next, on_error)
+##            source.subscribe(on_next, on_error, on_completed)
+##            source.subscribe(on_next, on_error, on_completed, scheduler)
+##            [/codeblock]
+## [br]
+##        Args:
+## [br]
+##            -> observer: The object that is to receive
+##                notifications.
+## [br]
+##            -> on_error: [Optional] Action to invoke upon exceptional termination
+##                of the observable sequence.
+## [br]
+##            -> on_completed: [Optional] Action to invoke upon graceful termination
+##                of the observable sequence.
+## [br]
+##            -> on_next: Action to invoke for each element in the
+##                observable sequence.
+## [br]
+##            -> scheduler: [Optional] The default scheduler to use for this
+##                subscription.
+## [br][br]
+##        Returns:
+## [br]
+##            Disposable object representing an observer's subscription to
+##            the observable sequence.
 func subscribe(
 	on_next, # Callable or Observer or Object with callbacks
 	on_error : Callable = func(e): return,
@@ -55,18 +95,22 @@ func subscribe(
 		
 		return Disposable.new(auto_detach_observer.dispose)
 
+## Pipe operator
 func pipe0() -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([]))
 
+## Pipe operator
 func pipe1(__fn1 : Callable) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1]))
 
+## Pipe operator
 func pipe2(
 	__fn1 : Callable,
 	__fn2 : Callable
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2]))
 
+## Pipe operator
 func pipe3( 
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -74,6 +118,7 @@ func pipe3(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3]))
 
+## Pipe operator
 func pipe4( 
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -82,6 +127,7 @@ func pipe4(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4]))
 
+## Pipe operator
 func pipe5(
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -91,6 +137,7 @@ func pipe5(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4, __fn5]))
 
+## Pipe operator
 func pipe6(
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -101,6 +148,7 @@ func pipe6(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4, __fn5, __fn6]))
 
+## Pipe operator
 func pipe7(
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -112,6 +160,7 @@ func pipe7(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4, __fn5, __fn6, __fn7]))
 
+## Pipe operator
 func pipe8( 
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -124,6 +173,7 @@ func pipe8(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4, __fn5, __fn6, __fn7, __fn8]))
 
+## Pipe operator
 func pipe9(
 	__fn1 : Callable,
 	__fn2 : Callable,
@@ -137,8 +187,30 @@ func pipe9(
 ) -> Variant:
 	return GDRx.pipe.pipe(self, GDRx.util.Iter([__fn1, __fn2, __fn3, __fn4, __fn5, __fn6, __fn7, __fn8, __fn9]))
 
+## Pipe operator taking a list
 func pipea(arr : Array):
 	return GDRx.pipe.pipe(self, GDRx.util.Iter(arr))
 
+## Compose multiple operators left to right.
+## [br]
+##        Composes zero or more operators into a functional composition.
+##        The operators are composed from left to right. A composition of zero
+##        operators gives back the original source.
+## [br][br]
+##        Examples:
+##            [codeblock]
+##            source.pipe0() == source
+##            source.pipe1(f) == f(source)
+##            source.pipe2(g, f) == f(g(source))
+##            source.pipe3(h, g, f) == f(g(h(source)))
+##            [/codeblock]
+## [br]
+##        Args:
+## [br]
+##            operators: Sequence of operators.
+## [br][br]
+##        Returns:
+## [br]
+##             The composed observable.
 func pipe(fns : IterableBase) -> Variant:
 	return GDRx.pipe.compose(fns).call(self)

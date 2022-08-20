@@ -1,6 +1,8 @@
 extends Notification
 class_name OnNextNotification
 
+## Represents an OnNext notification to an observer.
+
 func _init(value):
 	super._init()
 	self._value = value

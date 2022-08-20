@@ -1,14 +1,27 @@
 extends PeriodicScheduler
 class_name TimeoutScheduler
-
+## A scheduler that schedules work via a timed callback.
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_error("Warning! Must only instance Scheduler from GDRx singleton!")
 
+## Returns singleton
 static func singleton() -> TimeoutScheduler:
 	return GDRx.TimeoutScheduler_
 
+## Schedules an action to be executed.
+## [br]
+##        Args:
+## [br]
+##            -> action: Action to be executed.
+## [br]
+##            -> state: [Optional] state to be given to the action function.
+## [br][br]
+##        Returns:
+## [br]
+##            The disposable object used to cancel the scheduled action
+##            (best effort).
 func schedule(action : Callable, state = null) -> DisposableBase:
 	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
 	
@@ -23,6 +36,21 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	
 	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
+## Schedules an action to be executed after duetime.
+## [br]
+##        Args:
+## [br]
+##            -> duetime: Relative time after which to execute the action.
+## [br]
+##            -> action: Action to be executed.
+## [br]
+##            -> state: [Optional] state to be given to the action function.
+## [br][br]
+##
+##        Returns:
+## [br]
+##            The disposable object used to cancel the scheduled action
+##            (best effort).
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
 	var seconds = self.to_seconds(duetime)
 	if seconds <= 0.0:
@@ -41,6 +69,21 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 	
 	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
+## Schedules an action to be executed at duetime.
+## [br]
+##        Args:
+## [br]
+##            -> duetime: Absolute time at which to execute the action.
+## [br]
+##            -> action: Action to be executed.
+## [br]
+##            -> state: [Optional] state to be given to the action function.
+## [br][br]
+##
+##        Returns:
+## [br]
+##            The disposable object used to cancel the scheduled action
+##            (best effort).
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
 	duetime = self.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)

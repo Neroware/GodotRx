@@ -1,6 +1,8 @@
 extends LockBase
 class_name Lock
 
+## A lock which can only be aquired and released once by any thread.
+
 var _aquired_thread
 var _mutex : Mutex
 

@@ -58,6 +58,10 @@ func iter(data : Array) -> IterableBase:
 func of(data : Array) -> Observable:
 	return self.FromArray(data)
 
+## Alias for GDRx.obs.return_value
+func just(value, scheduler : SchedulerBase = null) -> Observable:
+	return self.ReturnValue(value, scheduler)
+
 # =========================================================================== #
 #   Observable Constructors
 # =========================================================================== #

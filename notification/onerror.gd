@@ -1,6 +1,8 @@
 extends Notification
 class_name OnErrorNotification
 
+## Represents an OnError notification to an observer.
+
 var _err
 
 func _init(err):

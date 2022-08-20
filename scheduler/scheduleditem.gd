@@ -1,6 +1,8 @@
 extends Comparable
 class_name ScheduledItem
 
+## Represents a scheduled action.
+
 var _scheduler : Scheduler
 var _state
 var _action : Callable
@@ -18,6 +20,8 @@ func invoke():
 	var ret = self._scheduler.invoke_action(self._action, self._state)
 	self._disposable.set_disposable(ret)
 
+## Cancels the work item by disposing the resource returned by
+## invoke_core as soon as possible.
 func cancel():
 	self._disposable.dispose()
 

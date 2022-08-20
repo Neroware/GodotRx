@@ -1,9 +1,16 @@
 extends Subject
 class_name AsyncSubject
 
+## Represents the result of an asynchronous operation. 
+##
+## The last value before the close notification, or the error received through
+## on_error, is sent to all subscribed observers.
+
 var _value
 var _has_value : bool
 
+## Creates a subject that can only receive one value and that value is
+## cached for all future observations.
 func _init():
 	super._init()
 	
@@ -38,12 +45,21 @@ func _subscribe_core(
 	
 	return Disposable.new()
 
+## Remember the value. Upon completion, the most recently received value
+##        will be passed on to all subscribed observers.
+## [br][br]
+##        Args:
+## [br]
+##            -> value: The value to remember until completion
 func _on_next_core(__super : Callable, i):
 	self._lock.lock()
 	self._value = i
 	self._has_value = true
 	self._lock.unlock()
 
+## Notifies all subscribed observers of the end of the sequence. The
+## most recently received value, if any, will now be passed on to all
+## subscribed observers.
 func _on_completed_core(__super : Callable):
 	self._lock.lock()
 	var observers = self._observers.duplicate()
@@ -60,6 +76,7 @@ func _on_completed_core(__super : Callable):
 		for obs in observers:
 			obs.on_completed()
 
+## Unsubscribe all observers and release resources.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._value = null

@@ -1,8 +1,21 @@
 extends Subject
 class_name BehaviorSubject
 
+## Represents a value that changes over time.
+##
+## Observers can subscribe to the subject to receive the last (or initial) value and
+## all subsequent notifications.
+
 var _value
 
+## Initializes a new instance of the BehaviorSubject class which
+##        creates a subject that caches its last value and starts with the
+##        specified value.
+## [br]
+##        Args:
+## [br]
+##            -> value: Initial value sent to observers when no other value has been
+##                received by the subject yet.
 func _init(value):
 	super._init()
 	self._value = value
@@ -30,6 +43,7 @@ func _subscribe_core(
 	
 	return Disposable.new()
 
+## Notifies all subscribed observers with the value.
 func _on_next_core(__super : Callable, i):
 	self._lock.lock()
 	var observers = self._observers.duplicate()
@@ -39,6 +53,10 @@ func _on_next_core(__super : Callable, i):
 	for observer in observers:
 		observer.on_next(i)
 
+## Release all resources.
+##
+## Releases all resources used by the current instance of the
+## BehaviorSubject class and unsubscribe all observers.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._value = null

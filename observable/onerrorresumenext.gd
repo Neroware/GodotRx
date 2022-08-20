@@ -1,3 +1,15 @@
+## Continues an observable sequence that is terminated normally or
+##    by an exception with the next observable sequence.
+## [br][br]
+##    Examples:
+##        [codeblock]
+##        var res = GDRx.obs.on_error_resume_next([xs, ys, zs])
+##        [/codeblock]
+## [br][br]
+##    Returns:
+## [br]
+##        An observable sequence that concatenates the source sequences,
+##        even if a sequence terminates exceptionally.
 static func on_error_resume_next_(
 	sources : Array
 ) -> Observable:

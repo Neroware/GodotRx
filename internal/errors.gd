@@ -1,3 +1,5 @@
+## GDRx Error types
+
 class Error:
 	var _msg : String
 	func _init(msg : String):

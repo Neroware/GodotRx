@@ -1,6 +1,8 @@
 extends Comparable
 class_name Tuple
 
+## A Tuple based on a list
+
 var _x : Array
 
 func _init(x : Array):
