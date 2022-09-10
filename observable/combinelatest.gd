@@ -2,12 +2,12 @@
 ##    sequence by creating a tuple whenever any of the
 ##    observable sequences produces an element.
 ##    [br]
-##    Examples:
-##    [codeblock]
+##    [b]Examples:[/b]
+##        [codeblock]
 ##        var obs = GDRx.obs.combine_latest([obs1, obs2, obs3])
-##    [/codeblock]
+##        [/codeblock]
 ##    [br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##        An observable sequence containing the result of combining
 ##        elements of the sources into a tuple.

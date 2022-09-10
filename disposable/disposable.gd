@@ -13,12 +13,12 @@ var _dispose_with : Dictionary
 ## Creates a disposable object that invokes the specified
 ##        action when disposed.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> action: Action to run during the first call to dispose.
+##            [code]action[/code] Action to run during the first call to dispose.
 ##                The action is guaranteed to be run at most once.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            The disposable object that runs the given action upon
 ##            disposal.
@@ -39,7 +39,7 @@ func dispose():
 	if dispose:
 		self._action.call()
 
-## Links disposable to [Node] lifetime in scene-tree via [code]tree_exiting[/code].
+## Links disposable to [Node] lifetime in scene-tree via [signal Node.tree_exiting].
 func dispose_with(node : Node) -> DisposableBase:
 	_lock.lock()
 	_dispose_with[node] = func():

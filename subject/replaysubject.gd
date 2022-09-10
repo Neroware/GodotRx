@@ -33,17 +33,17 @@ var _window : float
 var _scheduler : SchedulerBase
 var _queue : Array
 
-## Initializes a new instance of the ReplaySubject class with
+## Initializes a new instance of the [ReplaySubject] class with
 ##        the specified buffer size, window and scheduler.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> buffer_size: [Optional] Maximum element count of the replay
+##            [code]buffer_size[/code] [Optional] Maximum element count of the replay
 ##                buffer.
 ## [br]
-##            -> window [Optional]: Maximum time length of the replay buffer.
+##            [code]window[/code] [Optional] Maximum time length of the replay buffer.
 ## [br]
-##            -> scheduler: [Optional] Scheduler the observers are invoked on.
+##            [code]scheduler[/code] [Optional] Scheduler the observers are invoked on.
 func _init(
 	buffer_size : int = GDRx.util.MAX_SIZE,
 	window : float = GDRx.util.MAX_SIZE,
@@ -133,7 +133,7 @@ func _on_completed(__super : Callable):
 		obv.ensure_active()
 
 ## Releases all resources used by the current instance of the
-## ReplaySubject class and unsubscribe all observers.
+## [ReplaySubject] class and unsubscribe all observers.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._queue.clear()

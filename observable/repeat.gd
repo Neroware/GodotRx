@@ -1,20 +1,20 @@
 ## Generates an observable sequence that repeats the given element
 ##    the specified number of times.
 ## [br]
-##    Examples:
+##    [b]Examples:[/b]
 ##        [codeblock]
 ##        1 - var res = GDRx.obs.repeat_value(42)
 ##        2 - var res = GDRx.obs.repeat_value(42, 4)
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> value: Element to repeat.
+##        [code]value[/code] Element to repeat.
 ## [br]
-##        -> repeat_count: [Optional] Number of times to repeat the element.
+##        [code]repeat_count[/code] [Optional] Number of times to repeat the element.
 ##            If not specified, repeats indefinitely.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        An observable sequence that repeats the given element the
 ##        specified number of times.

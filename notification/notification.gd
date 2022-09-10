@@ -15,23 +15,23 @@ func _init():
 ## Invokes the delegate corresponding to the notification or an
 ##        observer and returns the produced result.
 ## [br]
-##        Examples:
+##        [b]Examples:[/b]
 ##            [codeblock]
 ##            notification.accept(observer)
 ##            notification.accept(on_next, on_error, on_completed)
 ##            [/codeblock]
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> on_next: Delegate to invoke for an OnNext notification.
+##            [code]on_next[/code] Delegate to invoke for an OnNext notification.
 ## [br]
-##            -> on_error: [Optional] Delegate to invoke for an OnError
+##            [code]on_error[/code] [Optional] Delegate to invoke for an OnError
 ##                notification.
 ## [br]
-##            -> on_completed: [Optional] Delegate to invoke for an
+##            [code]on_completed[/code] [Optional] Delegate to invoke for an
 ##                OnCompleted notification.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            Result produced by the observation.
 func accept(
@@ -55,12 +55,12 @@ func _accept_observer(observer : ObserverBase):
 ## Returns an observable sequence with a single notification,
 ##        using the specified scheduler, else the immediate scheduler.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> scheduler: [Optional] Scheduler to send out the
+##            [code]scheduler[/code] [Optional] Scheduler to send out the
 ##                notification calls on.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            An observable sequence that surfaces the behavior of the
 ##            notification upon subscription.
@@ -85,11 +85,11 @@ func equals(other : Notification) -> bool:
 
 ## Creates an observer from a notification callback.
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> handler: Action that handles a notification.
+##        [code]handler[/code] Action that handles a notification.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        The observer object that invokes the specified handler using
 ##        a notification corresponding to each message it receives.

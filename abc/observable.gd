@@ -5,7 +5,7 @@ class_name ObservableBase
 ## All communication in GDRx is handled asynchronously via observable data 
 ## streams, so-called [Observable]s. An [Observer] can subscribe to an 
 ## [Observable] to receive emitted items sent on the stream.
-## Create a new subscription via [code]subscribe(...)[/code].
+## Create a new subscription via [method subscribe].
 
 ## Creates a new subscription.
 ## [br]

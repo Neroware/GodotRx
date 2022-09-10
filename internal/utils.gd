@@ -30,19 +30,19 @@ class WhileIterator extends IterableBase:
 			return End.new()
 		return self._it.next()
 
-## Creates an ArrayIterator
+## Creates an [ArrayIterator]
 func Iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:
 	return ArrayIterator.new(x, start, end)
 
-## Creates an InfiniteIterator
+## Creates an [b]InfiniteIterator[/b]
 func Infinite(infval = GDRx.util.GetNotSet()) -> IterableBase:
 	return InfiniteIterator.new(infval)
 
-## Creates a WhileIterator
+## Creates a [b]WhileIterator[/b]
 func TakeWhile(cond : Callable, it : IterableBase) -> IterableBase:
 	return WhileIterator.new(it, cond)
 
-## Creates an instance of NotSet
+## Creates an instance of [b]NotSet[/b]
 func GetNotSet() -> NotSet:
 	return NotSet.new()
 

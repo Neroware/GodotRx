@@ -256,27 +256,27 @@ func CreateGodotUserSignal(conn : Object, signal_name : String, n_args : int, ar
 	conn.add_user_signal(signal_name, _args)
 	return FromGodotSignal(conn, signal_name)
 
-## Emits items from [code]func _process(delta)[/code].
+## Emits items from [method Node._process].
 func OnProcessAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 0)
 
-## Emits items from [code]func _physics_process(delta)[/code].
+## Emits items from [method Node._physics_process].
 func OnPhysicsProcessAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 1)
 
-## Emits items from [code]func _input(event)[/code].
+## Emits items from [method Node._input].
 func OnInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 2)
 
-## Emits items from [code]func _shortcut_input(event)[/code].
+## Emits items from [method Node._shortcut_input].
 func OnShortcutInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 3)
 
-## Emits items from [code]func _unhandled_input(event)[/code].
+## Emits items from [method Node._unhandled_input].
 func OnUnhandledInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 4)
 
-## Emits items from [code]func _unhandled_key_input(event)[/code].
+## Emits items from [method Node._unhandled_key_input].
 func OnUnhandledKeyInputAsObservable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 5)
 

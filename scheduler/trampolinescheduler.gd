@@ -3,12 +3,12 @@ class_name TrampolineScheduler
 
 ## Represents an object that schedules units of work on the [Trampoline].
 ##
-## You should never schedule timeouts using the [b]TrampolineScheduler[/b], as
+## You should never schedule timeouts using the [TrampolineScheduler], as
 ##  it will block the thread while waiting.
 ##
 ##    Each instance has its own trampoline (and queue), and you can schedule work
 ##    on it from different threads. Beware though, that the first thread to call
-##    a [code]schedule[/code] method while the [Trampoline] is idle will then remain occupied
+##    a [code]schedule[/code] method while the trampoline is idle will then remain occupied
 ##    until the queue is empty.
 
 var _tramp : Trampoline
@@ -22,13 +22,13 @@ func get_trampoline() -> Trampoline:
 
 ## Schedules an action to be executed.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> action: Action to be executed.
+##            [code]action[/code] Action to be executed.
 ## [br]
-##            -> state: [Optional] state to be given to the action function.
+##            [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
@@ -37,16 +37,16 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 
 ## Schedules an action to be executed after duetime.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> duetime: Relative time after which to execute the action.
+##            [code]duetime[/code] Relative time after which to execute the action.
 ## [br]
-##            -> action: Action to be executed.
+##            [code]action[/code] Action to be executed.
 ## [br]
-##            -> state: [Optional] state to be given to the action function.
+##            [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
 ##
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
@@ -56,16 +56,16 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 
 ## Schedules an action to be executed at duetime.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> duetime: Absolute time at which to execute the action.
+##           [code]duetime[/code] Absolute time at which to execute the action.
 ## [br]
-##            -> action: Action to be executed.
+##            [code]action[/code] Action to be executed.
 ## [br]
-##            -> state: [Optional] state to be given to the action function.
+##            [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
 ##
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
@@ -88,7 +88,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 func schedule_required() -> bool:
 	return self.get_trampoline().idle()
 
-## Method for testing the TrampolineScheduler.
+## Method for testing the [TrampolineScheduler].
 func ensure_trampoline(action : Callable):
 	if self.schedule_required():
 		return self.schedule(action)

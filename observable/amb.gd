@@ -1,11 +1,11 @@
 ## Propagates the observable sequence that reacts first.
 ##    [br]
-##    Example:
+##    [b]Example:[/b]
 ##    [codeblock]
 ##    var winner = GDRx.obs.amb([xs, ys, zs])
 ##    [/codeblock]
 ##    [br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##    An observable sequence that surfaces any of the given sequences,
 ##    whichever reacted first.

@@ -1,16 +1,16 @@
-##Continues an observable sequence that is terminated by an
+## Continues an observable sequence that is terminated by an
 ##    exception with the next observable sequence.
 ##    [br]
-##    Examples:
-##    [codeblock]
+##    [b]Examples:[/b]
+##        [codeblock]
 ##        var res = GDRx.obs.catch_with_iterable(GDRx.util.Iter([xs, ys, zs]))
-##    [/codeblock]
+##        [/codeblock]
 ##    [br]
-##    Args:
+##    [b]Args:[/b]
 ##    [br]
-##        -> sources: an Iterable of observables. Thus a generator is accepted.
+##        [code]sources[/code] an iterable of observables. Thus a generator is accepted.
 ##    [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##        An observable sequence containing elements from consecutive
 ##        source sequences until a source sequence terminates

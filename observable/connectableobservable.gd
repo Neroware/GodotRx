@@ -40,8 +40,8 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 
 ## Returns an observable sequence that stays connected to the
 ##        source indefinitely to the observable sequence.
-##        Providing a subscriber_count will cause it to connect() after
-##        that many subscriptions occur. A subscriber_count of 0 will
+##        Providing a [i]subscriber_count[/i] will cause it to [method connect_observable] after
+##        that many subscriptions occur. A [i]subscriber_count[/i] of 0 will
 ##        result in emissions firing immediately without waiting for
 ##        subscribers.
 func auto_connect_observable(subscriber_count : int = 1) -> Observable:

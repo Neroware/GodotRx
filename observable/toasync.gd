@@ -3,21 +3,21 @@
 ##    invocation of the original synchronous function on the specified
 ##    scheduler.
 ## [br]
-##    Examples:
+##    [b]Examples:[/b]
 ##        [codeblock]
 ##        var res = GDRx.obs.to_async(func(x, y): return x + y).call(4, 3)
 ##        var res = GDRx.obs.to_async(func(x, y): return x + y, GDRx.TimeoutScheduler_).call(4, 3)
 ##        var res = GDRx.obs.to_async(func(x): print(x), GDRx.TimeoutScheduler_).call("hello")
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> func: Function to convert to an asynchronous function.
+##        [code]func[/code] Function to convert to an asynchronous function.
 ## [br]
-##        -> scheduler: [Optional] Scheduler to run the function on. If not
+##        [code]scheduler[/code] [Optional] Scheduler to run the function on. If not
 ##            specified, defaults to GDRx.TimeoutScheduler_.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        Aynchronous function.
 static func to_async_(

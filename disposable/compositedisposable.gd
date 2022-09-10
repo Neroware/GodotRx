@@ -1,6 +1,10 @@
 extends DisposableBase
 class_name CompositeDisposable
 
+## A collection of disposables
+##
+## When disposed, the underlying composition of disposables are disposed as well.
+
 var _disposable : Array
 var _is_disposed : bool
 var _lock : RLock

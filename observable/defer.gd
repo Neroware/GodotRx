@@ -1,18 +1,18 @@
 ## Returns an observable sequence that invokes the specified factory
 ##    function whenever a new observer subscribes.
 ##    [br]
-##    Example:
-##    [codeblock]
+##    [b]Example:[/b]
+##        [codeblock]
 ##        var res = GDRx.obs.defer(func(scheduler): return GDRx.of([1, 2, 3]))
-##    [/codeblock]
+##        [/codeblock]
 ##    [br]
-##    Args:
+##    [b]Args:[/b]
 ##    [br]
-##        -> observable_factory: Observable factory function to invoke for
+##        [code]observable_factory[/code] Observable factory function to invoke for
 ##        each observer that subscribes to the resulting sequence. The
 ##        factory takes a single argument, the scheduler used.
 ##    [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##        An observable sequence whose observers trigger an invocation
 ##        of the given observable factory function.

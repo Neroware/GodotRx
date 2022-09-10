@@ -3,16 +3,16 @@
 ##    observable sequences have produced an element at a corresponding
 ##    index.
 ## [br]
-##    Example:
+##    [b]Example:[/b]
 ##        [codeblock]
 ##        var res = GDRx.obs.zip([obs1, obs2])
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##       -> args: Observable sources to zip.
+##       [code]args[/code] Observable sources to zip.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        An observable sequence containing the result of combining
 ##        elements of the sources as tuple.

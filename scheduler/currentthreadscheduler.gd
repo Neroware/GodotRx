@@ -2,7 +2,7 @@ extends TrampolineScheduler
 class_name CurrentThreadScheduler
 
 ## Represents an object that schedules units of work on the current thread.
-##    You should never schedule timeouts using the [b]CurrentThreadScheduler[/b],
+##    You should never schedule timeouts using the [CurrentThreadScheduler],
 ##    as that will block the thread while waiting.
 ##
 ##    Each instance manages a number of trampolines (and queues), one for each
@@ -17,9 +17,9 @@ var _tramps : Dictionary
 ##        pass this instance to another thread, it will effectively behave as
 ##        if it were created by that other thread (separate trampoline and queue).
 ## [br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
-##            The singleton [b]CurrentThreadScheduler[/b] instance.
+##            The singleton [CurrentThreadScheduler] instance.
 static func singleton() -> CurrentThreadScheduler:
 	var thread = OS.get_thread_caller_id()
 	var class_map = GDRx.CurrentThreadScheduler_global_.get(cls)

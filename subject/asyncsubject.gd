@@ -4,7 +4,7 @@ class_name AsyncSubject
 ## Represents the result of an asynchronous operation. 
 ##
 ## The last value before the close notification, or the error received through
-## on_error, is sent to all subscribed observers.
+## [i]on_error[/i], is sent to all subscribed observers.
 
 var _value
 var _has_value : bool
@@ -48,9 +48,9 @@ func _subscribe_core(
 ## Remember the value. Upon completion, the most recently received value
 ##        will be passed on to all subscribed observers.
 ## [br][br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> value: The value to remember until completion
+##            [code]value[/code] The value to remember until completion
 func _on_next_core(__super : Callable, i):
 	self._lock.lock()
 	self._value = i

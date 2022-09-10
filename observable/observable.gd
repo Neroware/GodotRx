@@ -23,8 +23,7 @@ func _subscribe_core(
 ##        it has a [Callable] attribute named [code]on_next[/code], then any callback
 ##        arguments will be ignored.
 ## [br][br]
-##        Examples:
-## [br]
+##        [b]Examples:[/b]
 ##            [codeblock]
 ##            source.subscribe(observer)
 ##            source.subscribe(on_next)
@@ -33,24 +32,24 @@ func _subscribe_core(
 ##            source.subscribe(on_next, on_error, on_completed, scheduler)
 ##            [/codeblock]
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> observer: The object that is to receive
+##            [code]observer[/code] The object that is to receive
 ##                notifications.
 ## [br]
-##            -> on_error: [Optional] Action to invoke upon exceptional termination
+##            [code]on_error[/code] [Optional] Action to invoke upon exceptional termination
 ##                of the observable sequence.
 ## [br]
-##            -> on_completed: [Optional] Action to invoke upon graceful termination
+##            [code]on_completed[/code] [Optional] Action to invoke upon graceful termination
 ##                of the observable sequence.
 ## [br]
-##            -> on_next: Action to invoke for each element in the
+##            [code]on_next[/code] Action to invoke for each element in the
 ##                observable sequence.
 ## [br]
-##            -> scheduler: [Optional] The default scheduler to use for this
+##            [code]scheduler[/code] [Optional] The default scheduler to use for this
 ##                subscription.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            Disposable object representing an observer's subscription to
 ##            the observable sequence.
@@ -197,7 +196,7 @@ func pipea(arr : Array):
 ##        The operators are composed from left to right. A composition of zero
 ##        operators gives back the original source.
 ## [br][br]
-##        Examples:
+##        [b]Examples:[/b]
 ##            [codeblock]
 ##            source.pipe0() == source
 ##            source.pipe1(f) == f(source)
@@ -205,11 +204,11 @@ func pipea(arr : Array):
 ##            source.pipe3(h, g, f) == f(g(h(source)))
 ##            [/codeblock]
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            operators: Sequence of operators.
+##            [code]operators[/code] Sequence of operators.
 ## [br][br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##             The composed observable.
 func pipe(fns : IterableBase) -> Variant:

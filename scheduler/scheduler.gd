@@ -2,7 +2,7 @@ extends SchedulerBase
 class_name Scheduler
 
 ## Base class for the various scheduler implementations in this package as
-##    This does not include an implementation of schedule_periodic, 
+##    This does not include an implementation of [method PeriodicSchedulerBase.schedule_periodic], 
 ##    refer to [PeriodicScheduler].
 
 const UTC_ZERO = 0
@@ -12,7 +12,7 @@ const DELTA_ZERO = 0
 ##        scheduled on a scheduler will adhere to the time denoted by this
 ##        property.
 ## [br]
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##             The scheduler's current time, as a datetime instance.
 func now() -> float:
@@ -21,14 +21,14 @@ func now() -> float:
 ## Invoke the given given action. This is typically called by instances
 ##        of [ScheduledItem].
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> action: Action to be executed.
+##            [code]action[/code] Action to be executed.
 ## [br]
-##            -> state: [Optional] state to be given to the action function.
+##            [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
 ##
-##        Returns:
+##        [b]Returns:[/b]
 ## [br]
 ##            The disposable object returned by the action, if any; or a new
 ##            (no-op) disposable otherwise.

@@ -1,18 +1,19 @@
 ## Returns an observable sequence that contains a single element,
 ##    using the specified scheduler to send out observer messages.
-##    There is an alias called 'just'.
+##    There is an alias called [method __GDRx_Singleton__.just].
 ## [br]
-##    Examples:
+##    [b]Examples:[/b]
 ##        [codeblock]
 ##        var res = GDRx.obs.return_value(42)
 ##        var res = GDRx.obs.return_value(42, GDRx.TimeoutScheduler_)
+##        var res = GDRx.just(42)
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> value: Single element in the resulting observable sequence.
+##        [code]value[/code] Single element in the resulting observable sequence.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        An observable sequence containing the single specified
 ##        element.

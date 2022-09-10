@@ -54,7 +54,7 @@ func composea(operators : Array[Callable]) -> Callable:
 ##   operators are composed to left to right. A composition of zero
 ##   operators gives back the source.
 ## [br]
-##    Examples:
+##    [b]Examples:[/b]
 ##        [codeblock]
 ##        pipe0().call(source) == source
 ##        pipe1(f).call(source) == f.call(source)
@@ -63,7 +63,7 @@ func composea(operators : Array[Callable]) -> Callable:
 ##        ...
 ##        [/codeblock]
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        The composed observable.
 func compose(operators : IterableBase) -> Callable:
@@ -169,7 +169,7 @@ func pipea(__value, arr : Array):
 ##    Allows the use of function argument on the left side of the
 ##    function.
 ## [br]
-##    Example:
+##    [b]Example:[/b]
 ##        [codeblock]
 ##        pipe2(x, fn) == __fn.call(x)  # Same as x |> fn
 ##        pipe3(x, fn, gn) == gn.call(fn.call(x))  # Same as x |> fn |> gn

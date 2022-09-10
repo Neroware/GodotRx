@@ -2,21 +2,20 @@
 ##    object, whose lifetime is tied to the resulting observable
 ##    sequence's lifetime.
 ## [br]
-##    Example:
-## [br]
+##    [b]Example:[/b]
 ##        [codeblock]
 ##        var res = GDRx.obs.using(func(): return AsyncSubject.new(), func(s): return s)
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> resource_factory: Factory function to obtain a resource object.
+##        [code]resource_factory[/code] Factory function to obtain a resource object.
 ## [br]
-##        -> observable_factory: Factory function to obtain an observable
+##        [code]observable_factory[/code] Factory function to obtain an observable
 ##            sequence that depends on the obtained resource.
 ## [br][br]
 ##
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        An observable sequence whose lifetime controls the lifetime
 ##        of the dependent resource object.

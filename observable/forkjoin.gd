@@ -2,12 +2,12 @@
 ##    they emitted into a tuple. Whenever any of that observables completes
 ##    without emitting any value, result sequence will complete at that moment as well.
 ##    [br][br]
-##    Examples:
+##    [b]Examples:[/b]
 ##    [codeblock]
 ##    var obs = GDRx.obs.fork_join([obs1, obs2, obs3])
 ##    [/codeblock]
 ##    [br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##        An observable sequence containing the result of combining last element from
 ##        each source in given sequence.

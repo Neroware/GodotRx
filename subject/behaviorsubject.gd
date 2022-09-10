@@ -12,9 +12,9 @@ var _value
 ##        creates a subject that caches its last value and starts with the
 ##        specified value.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> value: Initial value sent to observers when no other value has been
+##            [code]value[/code] Initial value sent to observers when no other value has been
 ##                received by the subject yet.
 func _init(value):
 	super._init()
@@ -56,7 +56,7 @@ func _on_next_core(__super : Callable, i):
 ## Release all resources.
 ##
 ## Releases all resources used by the current instance of the
-## BehaviorSubject class and unsubscribe all observers.
+## [BehaviorSubject] class and unsubscribe all observers.
 func dispose(__super : Callable):
 	self._lock.lock()
 	self._value = null

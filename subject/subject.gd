@@ -130,11 +130,11 @@ func _subscribe_core(
 
 ## Notifies all subscribed observers with the value
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> __super: Callback of super-class 
+##            [code]__super[/code] Callback of super-class 
 ## [br]
-##            -> value: The value to send to all subscribed observers.
+##            [code]value[/code] The value to send to all subscribed observers.
 func on_next(__super : Callable, i):
 	self._lock.lock()
 	if check_disposed() != false: self._lock.unlock() ; return
@@ -151,11 +151,11 @@ func _on_next_core(__super : Callable, i):
 
 ## Notifies all subscribed observers with the exception.
 ## [br]
-##        Args:
+##        [b]Args:[/b]
 ## [br]
-##            -> __super: Callback of super-class 
+##            [code]__super[/code] Callback of super-class 
 ## [br]
-##            -> error: The exception to send to all subscribed observers.
+##            [code]error[/code] The exception to send to all subscribed observers.
 func on_error(__super : Callable, e):
 	self._lock.lock()
 	if check_disposed() != false: self._lock.unlock() ; return

@@ -4,25 +4,25 @@ const MAX_SIZE = 9223372036854775807
 ##    specified range, using the specified scheduler to send out observer
 ##    messages.
 ## [br]
-##    Examples:
+##    [b]Examples:[/b]
 ##        [codeblock]
 ##        var res = GDRx.obs.range(10)
 ##        var res = GDRx.obs.range(0, 10)
 ##        var res = GDRx.obs.range(0, 10, 1)
 ##        [/codeblock]
 ## [br]
-##    Args:
+##    [b]Args:[/b]
 ## [br]
-##        -> start: The value of the first integer in the sequence.
+##        [code]start[/code] The value of the first integer in the sequence.
 ## [br]
-##        -> stop: [Optional] Generate number up to (exclusive) the stop
+##        [code]stop[/code] [Optional] Generate number up to (exclusive) the stop
 ##            value. Default is `sys.maxsize`.
 ## [br]
-##        -> step: [Optional] The step to be used (default is 1).
+##        [code]step[/code] [Optional] The step to be used (default is 1).
 ## [br]
-##        -> scheduler: The scheduler to schedule the values on.
+##        [code]scheduler[/code] The scheduler to schedule the values on.
 ## [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ## [br]
 ##        An observable sequence that contains a range of sequential
 ##        integral numbers.

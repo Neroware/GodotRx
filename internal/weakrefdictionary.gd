@@ -63,14 +63,14 @@ func clear():
 	for idx in range(self._buffer_size):
 		self._data[idx] = null
 
-func duplicate(gc = true) -> WeakRefDictionary:
+func duplicate(gc : bool = true) -> WeakRefDictionary:
 	if gc: _collect_garbage()
 	var ret = WeakRefDictionary.new()
 	ret._data = self._data.duplicate(true)
 	ret._buffer_size = self._buffer_size
 	return ret
 
-func erase(key, gc = true) -> bool:
+func erase(key, gc : bool = true) -> bool:
 	if gc: _collect_garbage()
 	var idx = _hash_index(key)
 	var col_lst = self._data[idx]
@@ -83,7 +83,7 @@ func erase(key, gc = true) -> bool:
 			return true
 	return false
 
-func find_key(value, gc = true) -> Variant:
+func find_key(value, gc : bool = true) -> Variant:
 	if gc: _collect_garbage()
 	for col_lst in self._data:
 		if col_lst == null:
@@ -97,7 +97,7 @@ func find_key(value, gc = true) -> Variant:
 				return key
 	return null
 
-func get(key, default = null, gc = true) -> Variant:
+func get(key, default = null, gc : bool = true) -> Variant:
 	if gc: _collect_garbage()
 	var idx = _hash_index(key)
 	var col_lst = self._data[idx]
@@ -110,7 +110,7 @@ func get(key, default = null, gc = true) -> Variant:
 			return pair.value()
 	return default
 
-func has(key, gc = true) -> bool:
+func has(key, gc : bool = true) -> bool:
 	if gc: _collect_garbage()
 	var idx = _hash_index(key)
 	var col_lst = self._data[idx]
@@ -123,18 +123,18 @@ func has(key, gc = true) -> bool:
 			return true
 	return false
 
-func has_all(keys : Array, gc = true):
+func has_all(keys : Array, gc : bool = true):
 	if gc: _collect_garbage()
 	return keys.all(func(elem): return has(elem, false))
 
 func hash() -> int:
 	return self._data.hash()
 
-func is_empty(gc = true) -> bool:
+func is_empty(gc : bool = true) -> bool:
 	if gc: _collect_garbage()
 	return self._data.all(func(elem): elem == null or elem.is_empty())
 
-func keys(gc = true) -> Array:
+func keys(gc : bool = true) -> Array:
 	if gc: _collect_garbage()
 	var keys = []
 	for col_lst in self._data:
@@ -146,16 +146,16 @@ func keys(gc = true) -> Array:
 				keys.append(key)
 	return keys
 
-func merge(dictionary : WeakRefDictionary, overwrite : bool = false, gc = true):
+func merge(dictionary : WeakRefDictionary, overwrite : bool = false, gc : bool = true):
 	if gc: _collect_garbage()
 	for key in dictionary.keys():
 		if not has(key, false) or (has(key, false) and overwrite):
 			set_pair(key, dictionary.get(key, false), false)
 
-func size(gc = true) -> int:
+func size(gc : bool = true) -> int:
 	return keys(gc).size()
 
-func values(gc = true) -> Array:
+func values(gc : bool = true) -> Array:
 	if gc: _collect_garbage()
 	var vs = []
 	for col_lst in self._data:
@@ -165,7 +165,7 @@ func values(gc = true) -> Array:
 			vs.append(pair.value())
 	return vs
 
-func set_pair(key, value, gc = true):
+func set_pair(key, value, gc : bool = true):
 	if gc: _collect_garbage()
 	var idx = _hash_index(key)
 	var col_lst = self._data[idx]

@@ -1,18 +1,18 @@
 ## Converts an iterable to an observable sequence.
 ##    [br]
-##    Example:
-##    [codeblock]
+##    [b]Example:[/b]
+##        [codeblock]
 ##        var res = GDRx.obs.from_iterable(GDRx.iter([1,2,3]))
 ##        var res = GDRx.obs.from_iterable(GDRx.util.Infinite())
-##    [/codeblock]
+##        [/codeblock]
 ##    [br]
-##    Args:
+##    [b]Args:[/b]
 ##    [br]
-##        -> iterable: An instance of [IterableBase]
+##        [code]iterable[/code] An instance of [IterableBase]
 ##    [br]
-##        -> scheduler: An optional scheduler to schedule the values on.
+##        [code]scheduler[/code] An optional scheduler to schedule the values on.
 ##    [br][br]
-##    Returns:
+##    [b]Returns:[/b]
 ##    [br]
 ##        The observable sequence whose elements are pulled from the
 ##        given iterable sequence.
