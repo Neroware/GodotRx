@@ -305,7 +305,7 @@ func flat_map_latest(mapper = null) -> Callable:
 
 ## See: [b]res://reactivex/operators/_forkjoin.gd[/b]
 func fork_join(args : Array[Observable]) -> Callable:
-	return _ForkJoin_.fork_join(args)
+	return _ForkJoin_.fork_join_(args)
 
 ## See: [b]res://reactivex/operators/_groupby.gd[/b]
 func group_by(key_mapper : Callable, element_mapper = null, subject_mapper = null) -> Callable:
@@ -344,7 +344,7 @@ func last_or_default(default_value = null, predicate = null) -> Callable:
 	return _LastOrDefault_.last_or_default_(default_value, predicate)
 
 ## See: [b]res://reactivex/operators/_map.gd[/b]
-func map(mapper : Callable = GDRx.util.identity) -> Callable:
+func map(mapper : Callable = GDRx.basic.identity) -> Callable:
 	return _Map_.map_(mapper)
 
 ## See: [b]res://reactivex/operators/_map.gd[/b]
