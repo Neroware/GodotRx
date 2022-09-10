@@ -3,6 +3,31 @@ static func skip_with_time_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var skip_with_time = func(source : Observable) -> Observable:
+		"""Skips elements for the specified duration from the start of
+		the observable source sequence.
+
+		Args:
+			>>> var res = GDRx.op.skip_with_time(5.0)
+
+		Specifying a zero value for duration doesn't guarantee no
+		elements will be dropped from the start of the source sequence.
+		This is a side-effect of the asynchrony introduced by the
+		scheduler, where the action that causes callbacks from the
+		source sequence to be forwarded may not execute immediately,
+		despite the zero due time.
+
+		Errors produced by the source sequence are always forwarded to
+		the result sequence, even if the error occurs before the
+		duration.
+
+		Args:
+			duration: Duration for skipping elements from the start of
+			the sequence.
+
+		Returns:
+			An observable sequence with the elements skipped during the
+			specified duration from the start of the source sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null

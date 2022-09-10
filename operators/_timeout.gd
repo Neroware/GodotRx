@@ -9,6 +9,19 @@ static func timeout_(
 	var obs = _other
 	
 	var timeout = func(source : Observable) -> Observable:
+		"""Returns the source observable sequence or the other observable
+		sequence if duetime elapses.
+
+		Examples:
+			>>> var res = timeout.call(source)
+
+		Args:
+			source: Source observable to timeout
+
+		Returns:
+			An obserable sequence switching to the other sequence in
+			case of a timeout.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null

@@ -4,6 +4,32 @@ static func timeout_with_mapper_(
 	other : Observable = null
 ) -> Callable:
 	
+	"""Returns the source observable sequence, switching to the other
+	observable sequence if a timeout is signaled.
+
+		var res = GDRx.obs.timeout_with_mapper(GDRx.obs.timer(500))
+		var res = GDRx.obs.timeout_with_mapper(GDRx.obs.timer(500), func(x): return GDRx.obs.timer(200))
+		var res = GDRx.obs.timeout_with_mapper(
+			GDRx.obs.timer(500),
+			func(x): return GDRx.obs.timer(200)),
+			GDRx.obs.return_value(42)
+		)
+
+	Args:
+		first_timeout -- [Optional] Observable sequence that represents the
+			timeout for the first element. If not provided, this defaults to
+			reactivex.never().
+		timeout_duration_mapper -- [Optional] Selector to retrieve an
+			observable sequence that represents the timeout between the
+			current element and the next element.
+		other -- [Optional] Sequence to return in case of a timeout. If not
+			provided, this is set to reactivex.throw().
+
+	Returns:
+		The source sequence switching to the other sequence in case
+	of a timeout.
+	"""
+	
 	var first_timeout_ = first_timeout if first_timeout != null else GDRx.obs.never()
 	var other_ = other if other != null else GDRx.obs.throw(GDRx.err.Error.new("Timeout"))
 	

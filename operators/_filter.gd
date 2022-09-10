@@ -1,5 +1,19 @@
 static func filter_(predicate : Callable = func(x): return true) -> Callable:
 	var filter = func(source : Observable) -> Observable:
+		"""Partially applied filter operator.
+
+		Filters the elements of an observable sequence based on a
+		predicate.
+
+		Example:
+			>>> filter.call(source)
+
+		Args:
+			source: Source observable to filter.
+
+		Returns:
+			A filtered observable sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
@@ -23,7 +37,21 @@ static func filter_(predicate : Callable = func(x): return true) -> Callable:
 	return filter
 
 static func filter_indexed_(predicate : Callable = func(x, index): return true) -> Callable:
-	var filter = func(source : Observable) -> Observable:
+	var filter_indexed = func(source : Observable) -> Observable:
+		"""Partially applied indexed filter operator.
+
+		Filters the elements of an observable sequence based on a
+		predicate by incorporating the element's index.
+
+		Example:
+			>>> filter_indexed.call(source)
+
+		Args:
+			source: Source observable to filter.
+
+		Returns:
+			A filtered observable sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
@@ -47,4 +75,4 @@ static func filter_indexed_(predicate : Callable = func(x, index): return true) 
 		
 		return Observable.new(subscribe)
 	
-	return filter
+	return filter_indexed

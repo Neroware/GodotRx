@@ -3,6 +3,21 @@ static func merge_(
 	max_concorrent : int = -1
 ) -> Callable:
 	var merge = func(source : Observable) -> Observable:
+		"""Merges an observable sequence of observable sequences into
+		an observable sequence, limiting the number of concurrent
+		subscriptions to inner sequences. Or merges two observable
+		sequences into a single observable sequence.
+
+		Examples:
+			>>> var res = merge.call(sources)
+
+		Args:
+			source: Source observable.
+
+		Returns:
+			The observable sequence that merges the elements of the
+			inner sequences.
+		"""
 		
 		if max_concorrent < 0:
 			var sources_ : Array[Observable] = [source] + sources
@@ -68,7 +83,18 @@ static func merge_(
 
 static func merge_all_() -> Callable:
 	var merge_all = func(source : Observable) -> Observable:
-		
+		"""Partially applied merge_all operator.
+
+		Merges an observable sequence of observable sequences into an
+		observable sequence.
+
+		Args:
+			source: Source observable to merge.
+
+		Returns:
+			The observable sequence that merges the elements of the inner
+			sequences.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

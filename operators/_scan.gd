@@ -5,6 +5,20 @@ static func scan_(
 	var has_seed = !(seed is GDRx.util.NotSet)
 	
 	var scan = func(source : Observable) -> Observable:
+		"""Partially applied scan operator.
+
+		Applies an accumulator function over an observable sequence and
+		returns each intermediate result.
+
+		Examples:
+			>>> var scanned = scan.call(source)
+
+		Args:
+			source: The observable source to scan.
+
+		Returns:
+			An observable sequence containing the accumulated values.
+		"""
 		var factory = func(scheduler : SchedulerBase) -> Observable:
 			var has_accumulation = RefValue.Set(false)
 			var accumulation = RefValue.Null()

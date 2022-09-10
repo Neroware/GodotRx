@@ -3,7 +3,22 @@ static func delay_with_mapper_(
 	delay_duration_mapper = null
 ) -> Callable:
 	var delay_with_mapper = func(source : Observable) -> Observable:
-		
+		"""Time shifts the observable sequence based on a subscription
+		delay and a delay mapper function for each element.
+
+		Examples:
+			>>> var obs = delay_with_selector.call(source)
+
+		Args:
+			subscription_delay: [Optional] Sequence indicating the
+				delay for the subscription to the source.
+			delay_duration_mapper: [Optional] Selector function to
+				retrieve a sequence indicating the delay for each given
+				element.
+
+		Returns:
+			Time-shifted observable sequence.
+		"""
 		var sub_delay : Observable = null
 		var mapper = null
 		

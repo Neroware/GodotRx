@@ -1,7 +1,15 @@
 static func window_toggle_(
 	openings : Observable, closing_mapper : Callable
 ) -> Callable:
-	
+	"""Projects each element of an observable sequence into zero or
+	more windows.
+
+	Args:
+		source: Source observable to project into windows.
+
+	Returns:
+		An observable sequence of windows.
+	"""
 	var window_toggle = func(source : Observable) -> Observable:
 		var mapper = func(args : Tuple):
 			var window = args.at(1)
@@ -19,6 +27,15 @@ static func window_toggle_(
 	return window_toggle
 
 static func window_(boundaries : Observable) -> Callable:
+	"""Projects each element of an observable sequence into zero or
+	more windows.
+
+	Args:
+		source: Source observable to project into windows.
+
+	Returns:
+		An observable sequence of windows.
+	"""
 	var window = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase,
@@ -68,6 +85,15 @@ static func window_(boundaries : Observable) -> Callable:
 
 
 static func window_when_(closing_mapper : Callable) -> Callable:
+	"""Projects each element of an observable sequence into zero or
+	more windows.
+
+	Args:
+		source: Source observable to project into windows.
+
+	Returns:
+		An observable sequence of windows.
+	"""
 	var window_when = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase,

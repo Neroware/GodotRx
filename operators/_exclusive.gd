@@ -1,4 +1,12 @@
 static func exclusive_() -> Callable:
+	"""Performs a exclusive waiting for the first to finish before
+	subscribing to another observable. Observables that come in between
+	subscriptions will be dropped on the floor.
+
+	Returns:
+		An exclusive observable with only the results that
+		happen when subscribed.
+	"""
 	var exclusive = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase, scheduler : SchedulerBase = null

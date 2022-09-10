@@ -1,5 +1,24 @@
 static func take_last_buffer_(count : int) -> Callable:
 	var take_last_buffer = func(source : Observable) -> Callable:
+		"""Returns an array with the specified number of contiguous
+		elements from the end of an observable sequence.
+
+		Example:
+			>>> var res = take_last.call(source)
+
+		This operator accumulates a buffer with a length enough to
+		store elements count elements. Upon completion of the source
+		sequence, this buffer is drained on the result sequence. This
+		causes the elements to be delayed.
+
+		Args:
+			source: Source observable to take elements from.
+
+		Returns:
+			An observable sequence containing a single list with the
+			specified number of elements from the end of the source
+			sequence.
+		"""
 		
 		var subscribe = func(
 			observer : ObserverBase,

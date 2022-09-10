@@ -9,6 +9,22 @@ static func average_(
 	key_mapper = null
 ) -> Callable:
 	var average = func(source : Observable) -> Observable:
+		"""Partially applied average operator.
+
+		Computes the average of an observable sequence of values that
+		are in the sequence or obtained by invoking a transform
+		function on each element of the input sequence if present.
+
+		Examples:
+			>>> var res = average.call(source)
+
+		Args:
+			source: Source observable to average.
+
+		Returns:
+			An observable sequence containing a single element with the
+			average of the sequence of values.
+		"""
 		var key_mapper_ : Callable = key_mapper if key_mapper != null else func(x): return float(x)
 		
 		var accumulator = func(prev : AverageValue, curr : float) -> AverageValue:

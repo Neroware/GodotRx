@@ -1,5 +1,9 @@
 static func to_set_() -> Callable:
-	
+	"""Converts the observable sequence to a set.
+
+	Returns an observable sequence with a single value of a set
+	containing the values from the observable sequence.
+	"""
 	var to_set = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase,

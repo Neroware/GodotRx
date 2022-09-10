@@ -1,4 +1,17 @@
 static func skip_until_(other : Observable) -> Callable:
+	"""Returns the values from the source observable sequence only after
+	the other observable sequence produces a value.
+
+	Args:
+		other: The observable sequence that triggers propagation of
+			elements of the source sequence.
+
+	Returns:
+		An observable sequence containing the elements of the source
+	sequence starting from the point the other sequence triggered
+	propagation.
+	"""
+	
 	var obs : Observable = other
 	
 	var skip_until = func(source : Observable) -> Observable:

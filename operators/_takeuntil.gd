@@ -4,6 +4,17 @@ static func take_until_(
 	var obs = other
 	
 	var take_until = func(source : Observable) -> Observable:
+		"""Returns the values from the source observable sequence until
+		the other observable sequence produces a value.
+
+		Args:
+			source: The source observable sequence.
+
+		Returns:
+			An observable sequence containing the elements of the source
+			sequence up to the point the other sequence interrupted
+			further propagation.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

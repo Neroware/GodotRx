@@ -1,5 +1,17 @@
 static func materialize_() -> Callable:
 	var materialize = func(source : Observable) -> Observable:
+		"""Partially applied materialize operator.
+
+		Materializes the implicit notifications of an observable
+		sequence as explicit notification values.
+
+		Args:
+			source: Source observable to materialize.
+
+		Returns:
+			An observable sequence containing the materialized
+			notification values from the source sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

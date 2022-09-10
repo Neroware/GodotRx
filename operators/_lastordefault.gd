@@ -32,6 +32,18 @@ static func last_or_default_(
 	default_value = null, predicate = null
 ) -> Callable:
 	var last_or_default = func(source : Observable) -> Observable:
+		"""Return last or default element.
+
+		Examples:
+			>>> var res = last_or_default.call(source)
+
+		Args:
+			source: Observable sequence to get the last item from.
+
+		Returns:
+			Observable sequence containing the last element in the
+			observable sequence.
+		"""
 		if predicate != null:
 			var predicate_ : Callable = predicate
 			return source.pipe2(

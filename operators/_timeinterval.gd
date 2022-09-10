@@ -2,7 +2,15 @@ static func time_interval_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var time_interval = func(source : Observable) -> Observable:
-		
+		"""Records the time interval between consecutive values in an
+		observable sequence.
+
+			>>> var res = time_interval.call(source)
+
+		Return:
+			An observable sequence with time interval information on
+			values.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null

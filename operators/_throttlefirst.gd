@@ -3,6 +3,16 @@ static func throttle_first_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var throttle_first = func(source : Observable) -> Observable:
+		"""Returns an observable that emits only the first item emitted
+		by the source Observable during sequential time windows of a
+		specified duration.
+
+		Args:
+			source: Source observable to throttle.
+
+		Returns:
+			An Observable that performs the throttle operation.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null

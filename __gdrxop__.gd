@@ -456,7 +456,7 @@ func scan(accumulator : Callable, seed = GDRx.util.GetNotSet()) -> Callable:
 	return _Scan_.scan_(accumulator, seed)
 
 ## See: [b]res://reactivex/operators/_sequenceequal.gd[/b]
-func sequence_equal(second : Observable, comparer  = null, second_it : IterableBase = null) -> Callable:
+func sequence_equal(second, comparer  = null, second_it : IterableBase = null) -> Callable:
 	return _SequenceEqual_.sequence_equal_(second, comparer, second_it)
 
 ## See: [b]res://reactivex/operators/_single.gd[/b]

@@ -28,6 +28,23 @@ func distinct_(
 	var comparer_ = comparer
 	
 	var distinct = func(source : Observable) -> Observable:
+		"""Returns an observable sequence that contains only distinct
+		elements according to the key_mapper and the comparer. Usage of
+		this operator should be considered carefully due to the
+		maintenance of an internal lookup structure which can grow
+		large.
+
+		Examples:
+			>>> var obs = distinct.call(source)
+
+		Args:
+			source: Source observable to return distinct items from.
+
+		Returns:
+			An observable sequence only containing the distinct
+			elements, based on a computed key value, from the source
+			sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

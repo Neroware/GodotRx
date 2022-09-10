@@ -4,7 +4,17 @@ static func join_(
 	right_duration_mapper : Callable
 ) -> Callable:
 	var join = func(source : Observable) -> Observable:
-		
+		"""Correlates the elements of two sequences based on
+		overlapping durations.
+
+		Args:
+			source: Source observable.
+
+		Return:
+			An observable sequence that contains elements
+			combined into a tuple from source elements that have an overlapping
+			duration.
+		"""
 		var left = source
 		
 		var subscribe = func(

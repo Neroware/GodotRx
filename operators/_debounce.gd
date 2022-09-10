@@ -3,7 +3,19 @@ static func debounce_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var debounce = func(source : Observable) -> Observable:
-		
+		"""Ignores values from an observable sequence which are followed by
+		another value before duetime.
+
+		Example:
+			>>> var res = debounce.call(source)
+
+		Args:
+			source: Source observable to debounce.
+
+		Returns:
+			An operator function that takes the source observable and
+			returns the debounced observable sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null
@@ -61,6 +73,20 @@ func throttle_with_mapper_(
 	throttle_duration_mapper : Callable
 ) -> Callable:
 	var throttle_with_mapper = func(source : Observable) -> Observable:
+		"""Partially applied throttle_with_mapper operator.
+
+		Ignores values from an observable sequence which are followed by
+		another value within a computed throttle duration.
+
+		Example:
+			>>> var obs = throttle_with_mapper.call(source)
+
+		Args:
+			source: The observable source to throttle.
+
+		Returns:
+			The throttled observable sequence.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

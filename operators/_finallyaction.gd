@@ -2,7 +2,19 @@ static func finally_action_(
 	action : Callable
 ) -> Callable:
 	var finally_action = func(source: Observable) -> Observable:
-		
+		"""Invokes a specified action after the source observable
+		sequence terminates gracefully or exceptionally.
+
+		Example:
+			res = finally(source)
+
+		Args:
+			source: Observable sequence.
+
+		Returns:
+			An observable sequence with the action-invoking termination
+			behavior applied.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

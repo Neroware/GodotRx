@@ -3,7 +3,20 @@ static func take_while_(
 	inclusive : bool = false
 ) -> Callable:
 	var take_while = func(source : Observable) -> Observable:
-		
+		"""Returns elements from an observable sequence as long as a
+		specified condition is true.
+
+		Example:
+			>>> take_while.call(source)
+
+		Args:
+			source: The source observable to take from.
+
+		Returns:
+			An observable sequence that contains the elements from the
+			input sequence that occur before the element at which the
+			test no longer passes.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
@@ -44,7 +57,21 @@ static func take_while_indexed_(
 	inclusive : bool = false
 ) -> Callable:
 	var take_while_indexed = func(source : Observable) -> Observable:
-		
+		"""Returns elements from an observable sequence as long as a
+		specified condition is true. The element's index is used in the
+		logic of the predicate function.
+
+		Example:
+			>>> take_while_indexed.call(source)
+
+		Args:
+			source: Source observable to take from.
+
+		Returns:
+			An observable sequence that contains the elements from the
+			input sequence that occur before the element at which the
+			test no longer passes.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

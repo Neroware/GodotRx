@@ -4,6 +4,19 @@ static func take_until_with_time_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var take_until_with_time = func(source : Observable) -> Observable:
+		"""Takes elements for the specified duration until the specified end
+		time, using the specified scheduler to run timers.
+
+		Examples:
+			>>> var res = take_until_with_time.call(source)
+
+		Args:
+			source: Source observale to take elements from.
+
+		Returns:
+			An observable sequence with the elements taken
+			until the specified end time.
+		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null
