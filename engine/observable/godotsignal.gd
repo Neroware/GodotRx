@@ -1,8 +1,6 @@
 ## Represents a Godot [Signal] as an observable sequence
 static func from_godot_signal_(
-	conn : Object, 
-	signal_name : String, 
-	n_args : int,
+	sig : Signal,
 	scheduler : SchedulerBase = null
 ) -> Observable:
 	var subscribe = func(
@@ -13,6 +11,17 @@ static func from_godot_signal_(
 		if scheduler != null: _scheduler = scheduler
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = GodotSignalScheduler.singleton()
+		
+		var obj = instance_from_id(sig.get_object_id())
+		if obj == null:
+			push_error("Tried to create Observable on Signal of a freed instance!")
+			return Disposable.new()
+		var n_args = -1
+		var sig_lst = obj.get_signal_list()
+		for dict in sig_lst:
+			if dict["name"] == sig.get_name():
+				n_args = dict["args"].size()
+				break
 		
 		var action : Callable
 		match n_args:
@@ -55,6 +64,6 @@ static func from_godot_signal_(
 			return Disposable.new()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler
-		return godot_signal_scheduler.schedule_signal(conn, signal_name, n_args, action)
+		return godot_signal_scheduler.schedule_signal(sig, n_args, action)
 	
 	return Observable.new(subscribe)

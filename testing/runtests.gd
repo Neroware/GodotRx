@@ -6,6 +6,8 @@ enum ETestState {
 	FAILED = -1
 }
 
+signal on_assert(test_id, succ)
+
 func _assert(pred : bool, test_id : int, succ : Array[ETestState], succ_idx : int = 0):
 	if pred: succ[succ_idx] = ETestState.SUCCESS
 	else: succ[succ_idx] = ETestState.FAILED
@@ -36,7 +38,7 @@ func _ready():
 			continue
 		test_callbacks.append(m["name"])
 
-	var on_assert = GDRx.CreateGodotUserSignal(self, "on_assert", 2)
+	var on_assert = GDRx.FromGodotSignal(self.on_assert)
 	var current_test = RefValue.Set(0)
 
 	var success_count = RefValue.Set(0)

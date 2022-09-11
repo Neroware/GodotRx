@@ -11,8 +11,8 @@ var _GodotLifecycle_ = load("res://reactivex/engine/observable/godotnodelifecycl
 var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputaction.gd")
 
 ## See: [b]res://reactivex/engine/observable/godotsignal.gd[/b]
-func from_godot_signal(conn : Object, signal_name : String, n_args : int, scheduler : SchedulerBase = null) -> Observable:
-	return _GodotSignal_.from_godot_signal_(conn, signal_name, n_args, scheduler)
+func from_godot_signal(sig : Signal, scheduler : SchedulerBase = null) -> Observable:
+	return _GodotSignal_.from_godot_signal_(sig, scheduler)
 
 ## See: [b]res://reactivex/engine/observable/godotnodelifecycle.gd[/b]
 func from_godot_node_lifecycle_event(conn : Node, type : int) -> Observable:

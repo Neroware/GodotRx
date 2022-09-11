@@ -235,26 +235,21 @@ func StartPeriodicTimerAtDatetime(datetime_sec : float, period_sec : float) -> O
 	return obs.timer(datetime_sec, true, period_sec)
 
 ## Creates an observable from a Godot Signal
-func FromGodotSignal(conn : Object, signal_name : String) -> Observable:
-	var n_args : int = -1
-	for sig in conn.get_signal_list():
-		if sig["name"] == signal_name:
-			n_args = sig["args"].size()
-			break
-	return gd.from_godot_signal(conn, signal_name, n_args)
+func FromGodotSignal(sig : Signal) -> Observable:
+	return gd.from_godot_signal(sig)
 
 ## Adds user signal to node and creates an observable from it.
-func CreateGodotUserSignal(conn : Object, signal_name : String, n_args : int, args : Array = []) -> Observable:
-	if conn.has_signal(signal_name):
-		return FromGodotSignal(conn, signal_name)
-	var _args : Array = []
-	if not args.is_empty() and n_args <= 0:
-		_args = args
-	else:
-		for i in range(n_args):
-			_args.append({"name":"arg" + str(i), "type":TYPE_MAX})
-	conn.add_user_signal(signal_name, _args)
-	return FromGodotSignal(conn, signal_name)
+#func CreateGodotUserSignal(conn : Object, signal_name : String, n_args : int, args : Array = []) -> Observable:
+#	if conn.has_signal(signal_name):
+#		return FromGodotSignal(conn.get(signal_name))
+#	var _args : Array = []
+#	if not args.is_empty() and n_args <= 0:
+#		_args = args
+#	else:
+#		for i in range(n_args):
+#			_args.append({"name":"arg" + str(i), "type":TYPE_MAX})
+#	conn.add_user_signal(signal_name, _args)
+#	return FromGodotSignal(conn.get(signal_name))
 
 ## Emits items from [method Node._process].
 func OnProcessAsObservable(conn : Node) -> Observable:

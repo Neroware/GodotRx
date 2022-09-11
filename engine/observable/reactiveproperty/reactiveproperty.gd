@@ -100,8 +100,8 @@ func _init(value, cond = func(v_old, v_new): return v_old != v_new):
 		var on_dispose = func(__):
 			observer.on_completed()
 		
-		var sub = GDRx.gd.from_godot_signal(self, "_on_changed", 2).subscribe(observer)
-		var d = GDRx.gd.from_godot_signal(self, "_on_dispose", 0).subscribe(on_dispose)
+		var sub = GDRx.gd.from_godot_signal(self._on_changed).subscribe(observer)
+		var d = GDRx.gd.from_godot_signal(self._on_dispose).subscribe(on_dispose)
 		
 		return CompositeDisposable.new([sub, d])
 	
