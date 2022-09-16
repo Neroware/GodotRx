@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window,compare_array"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -65,12 +65,12 @@ class ObservableSequence extends ArrayIterator:
 			
 			var expected = self.next()
 			if expected is Complete:
-				print("[ReactiveX]: Expected end of sequence but got item!")
-				end_sequence.call(ETestState.FAIL)
+				print("[ReactiveX]: Expected end of sequence but got item: ", i)
+				end_sequence.call(ETestState.FAILED)
 			
 			elif expected is Error:
-				print("[ReactiveX]: Expected error in sequence but got item!")
-				end_sequence.call(ETestState.FAIL)
+				print("[ReactiveX]: Expected error in sequence but got item: ", i)
+				end_sequence.call(ETestState.FAILED)
 			
 			elif expected is UnsubscribeOn:
 				end_sequence.call(cmp.call(expected.value, i))
@@ -192,7 +192,7 @@ func _test_range():
 	var obs = GDRx.FromRange(1, 13, 2)
 	seq.compare(obs, self.sequence_finished)
 
-func _test_window():
+func _test_window_with_count():
 	var obs = GDRx.FromRange(16).window_with_count(5)
 	var seq = ObservableSequence.new([
 		ObservableSequence.new([0, 1, 2, 3, 4, COMPLETE]),
