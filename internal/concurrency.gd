@@ -1,17 +1,19 @@
 ## Links the [Thread] instance to a [Callable] before starting it.
-class StartableThread:
+class StartableThread extends StartableBase:
 	var _thread : Thread
 	var _target : Callable
+	var _priority : int
 	
-	func _init(target : Callable):
+	func _init(target : Callable, priority = Thread.PRIORITY_NORMAL):
 		self._thread = Thread.new()
 		self._target = target
+		self._priority = priority
 	
 	func thread() -> Thread:
 		return self._thread
 	
-	func start(priority = Thread.PRIORITY_NORMAL):
-		self._thread.start(self._target, priority)
+	func start():
+		self._thread.start(self._target, self._priority)
 
 func default_thread_factory(target : Callable) -> StartableThread:
 	return StartableThread.new(target)

@@ -18,6 +18,9 @@ func _init():
 func size():
 	return _items.size()
 
+func is_empty() -> bool:
+	return self.size() == 0
+
 func peek():
 	return self._items[0].at(0)
 

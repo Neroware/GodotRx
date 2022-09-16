@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -206,4 +206,19 @@ func _test_window_with_count():
 func _test_compare_array():
 	var obs = GDRx.just([1, 2, 3])
 	var seq = ObservableSequence.new([[1, 2, 3], COMPLETE])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_new_thread_scheduler():
+	var scheduler : NewThreadScheduler = NewThreadScheduler.new()
+	
+	var foo = GDRx.ReturnValue("foo").delay(1000.0)
+	var d = foo.subscribe(
+		func(i): print("[ReactiveX]: This element was delayed: ", i), 
+		func(e): return, 
+		func(): return, 
+		scheduler
+	)
+	
+	var obs = GDRx.ReturnValue(42, scheduler)
+	var seq = ObservableSequence.new([42, COMPLETE])
 	seq.compare(obs, self.sequence_finished)
