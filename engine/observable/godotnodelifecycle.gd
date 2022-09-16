@@ -58,7 +58,7 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 		
 		var dispose = func():
 			count.v -= 1
-			if count.v == 0:
+			if count.v == 0 and listener != null:
 				listener.queue_free()
 		
 		var subscription = GDRx.gd.from_godot_signal(listener.on_event).subscribe(
