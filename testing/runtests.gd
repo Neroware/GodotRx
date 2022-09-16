@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "map"
+@export var tests : String = "amb,throw,range,window,compare_array"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -51,6 +51,8 @@ class ObservableSequence extends ArrayIterator:
 		var cmp = func(expected, check) -> ETestState:
 			if expected is ObservableSequence and check is Observable:
 				expected.compare(check, result, seq_remaining)
+				return ETestState.SUCCESS
+			if expected is Array and expected.hash() == check.hash():
 				return ETestState.SUCCESS
 			if expected == check:
 				return ETestState.SUCCESS
@@ -171,7 +173,37 @@ var ERROR : ObservableSequence.Error = ObservableSequence.Error.new()
 # ============================================================================ #
 # 								Test Suit									   #
 # ============================================================================ #
-func _test_map():
-	var seq = ObservableSequence.new([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, COMPLETE])
-	var obs = GDRx.FromRange(10)
+
+func _test_amb():
+	var obs1 : Observable = GDRx.StartPeriodicTimer(1.0).map(func(i): return "T1")
+	var obs2 : Observable = GDRx.StartTimespan(0.5).map(func(i): return "T2")
+	var obs3 : Observable = GDRx.StartPeriodicTimer(2.5).map(func(i): return "T3")
+	var obs = GDRx.WinnerOf([obs1, obs2, obs3])
+	var seq = ObservableSequence.new(["T2", COMPLETE])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_throw():
+	var obs = GDRx.Throw(GDRx.err.Error.new("Kill sequence"))
+	var seq = ObservableSequence.new([ERROR])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_range():
+	var seq = ObservableSequence.new([1, 3, 5, 7, 9, 11, COMPLETE])
+	var obs = GDRx.FromRange(1, 13, 2)
+	seq.compare(obs, self.sequence_finished)
+
+func _test_window():
+	var obs = GDRx.FromRange(16).window_with_count(5)
+	var seq = ObservableSequence.new([
+		ObservableSequence.new([0, 1, 2, 3, 4, COMPLETE]),
+		ObservableSequence.new([5, 6, 7, 8, 9, COMPLETE]),
+		ObservableSequence.new([10, 11, 12, 13, 14, COMPLETE]),
+		ObservableSequence.new([15, COMPLETE]),
+		COMPLETE
+	])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_compare_array():
+	var obs = GDRx.just([1, 2, 3])
+	var seq = ObservableSequence.new([[1, 2, 3], COMPLETE])
 	seq.compare(obs, self.sequence_finished)
