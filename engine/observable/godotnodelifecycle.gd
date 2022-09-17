@@ -31,7 +31,7 @@ class _ListenerOnUnhandledKeyInput extends _NodeLifecycleListener:
 ## [color=yellow]Warning![/color] This only creates a Node of type [b]_NodeLifecycleListener[/b]
 ## which is added as a child since it is not possible to get signals on lifecycle callbacks.
 static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observable:
-	var listener : _NodeLifecycleListener = null
+	var listener : RefValue = RefValue.Null()
 	var count : RefValue = RefValue.Set(0)
 	
 	var subscribe = func(
@@ -41,27 +41,27 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 		if count.v == 0:
 			match type:
 				0:
-					listener = _ListenerOnProcess.new()
+					listener.v = _ListenerOnProcess.new()
 				1:
-					listener = _ListenerOnPhysicsProcess.new()
+					listener.v = _ListenerOnPhysicsProcess.new()
 				2:
-					listener = _ListenerOnInput.new()
+					listener.v = _ListenerOnInput.new()
 				3:
-					listener = _ListenerOnShortcutInput.new()
+					listener.v = _ListenerOnShortcutInput.new()
 				4:
-					listener = _ListenerOnUnhandledInput.new()
+					listener.v = _ListenerOnUnhandledInput.new()
 				5:
-					listener = _ListenerOnUnhandledKeyInput.new()
-			listener.name = "_GDRxListener" + str(conn.get_instance_id())
-			conn.call_deferred("add_child", listener)
+					listener.v = _ListenerOnUnhandledKeyInput.new()
+			listener.v.name = "_GDRxListener" + str(conn.get_instance_id())
+			conn.call_deferred("add_child", listener.v)
 		count.v += 1
 		
 		var dispose = func():
 			count.v -= 1
-			if count.v == 0 and listener != null:
-				listener.queue_free()
+			if count.v == 0 and listener.v != null:
+				listener.v.queue_free()
 		
-		var subscription = GDRx.gd.from_godot_signal(listener.on_event).subscribe(
+		var subscription = GDRx.gd.from_godot_signal(listener.v.on_event).subscribe(
 			observer, func(e):return, func():return,
 			scheduler
 		)
