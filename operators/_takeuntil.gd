@@ -19,7 +19,7 @@ static func take_until_(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
-			var on_completed = func():
+			var on_completed = func(__):
 				observer.on_completed()
 			
 			return CompositeDisposable.new([
