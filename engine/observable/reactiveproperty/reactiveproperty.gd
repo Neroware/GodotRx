@@ -162,3 +162,6 @@ static func OutsideRange(value = 0, r_min = -1, r_max = 1):
 ## applies.
 static func With(value = null, cond = func(o, n): return o != n):
 	return ReactiveProperty.new(value, cond)
+
+func _to_string():
+	return str(Value)

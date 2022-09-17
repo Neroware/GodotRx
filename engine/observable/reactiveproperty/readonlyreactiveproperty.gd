@@ -48,3 +48,6 @@ func with_condition(cond = func(v_old, v_new): return v_old != v_new) -> ReadOnl
 ## Disposes the reactive property. Reading the value afterwards will cause an error.
 func dispose():
 	self._prop.dispose()
+
+func _to_string():
+	return str(self._prop)
