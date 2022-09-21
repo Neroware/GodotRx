@@ -1,27 +1,18 @@
-# GDRx - Godot Engine Reactive Extensions
+# GodotRx - Reactive Extensions for the Godot Game Engine version 4 (GDRx)
 
-A port of ReactiveX for Python (RxPY) to Godot Engine version 4 (GDRx)
-
-See: https://github.com/ReactiveX/RxPY
-
+## What is GodotRx?
+GodotRx (short: GDRx) is a full implementation of ReactiveX for the Godot Game Engine 4. The code was originally ported from RxPY (see: https://github.com/ReactiveX/RxPY) as Python shares a lot of similarities with GDScript.
 
 ## Installation
+You can easily add GDRx to your Godot 4 project:
 
-You can easily add GDRx to your Godot 4 project using the git submodule command:
-
-1. Go to the project root folder
-
-2. Initialize the submodule using this command:
-
-    * `` git submodule add https://github.com/Neroware/gdrx.git reactivex/ ``
-
-3. Go to your project settings > Autoload
-
-4. Add the singleton script with name 'GDRx' to autoload
-
-    * `` res://reactivex//__gdrxsingleton__.gd ``
-
+1. Download this repository as an archive.
+2. Navigate to your project root folder.
+3. Extract GDRx into your project. The folder should be named '``res://reactivex/``'.
+4. Add the singleton script with name 'GDRx' to autoload (``res://reactivex//__gdrxsingleton__.gd``).
 5. GDRx should now be ready to use. Try creating a simple Observable using:
 
-    * `` var obs : Observable = GDRx.ReturnValue(42) ``
-    * `` obs.subscribe(func(i): print("The answer: " + str(i))) ``
+```csharp
+var obs : Observable = GDRx.ReturnValue(42) \
+    subscribe(func(i): print("The answer: " + str(i)))
+```
