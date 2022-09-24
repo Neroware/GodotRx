@@ -26,14 +26,14 @@ var OnCompleted = __init__.NotificationOnCompleted_
 
 ## Internal heap implementation
 var heap = __init__.Heap_.new()
-## Error types
-var err = __init__.Error_.new()
 ## Basic functions & types
 var basic = __init__.Basic_.new()
 ## Concurrency functions & types
 var concur = __init__.Concurrency_.new()
 ## Utility functions & types
 var util = __init__.Util_.new()
+## Exception types
+var exc = __init__.Exception_.new()
 ## Access to pipe operators
 var pipe = __init__.Pipe_.new()
 
@@ -48,11 +48,38 @@ var CurrentThreadScheduler_global_ : WeakRefDictionary = WeakRefDictionary.new()
 var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #
+#   Exception Handler Singleton
+# =========================================================================== #
+var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
+
+# =========================================================================== #
 #  Helper functions
 # =========================================================================== #
-## Create an iterable sequence from an array
-func iter(data : Array) -> IterableBase:
-	return GDRx.util.Iter(data)
+func try(fun : Callable) -> TryCatch:
+	return TryCatch.new(fun)
+
+func raise(exc : ThrowableBase, default = null) -> Variant:
+	return ExceptionHandler.singleton().raise(exc, default)
+
+func with(l, fun : Callable = func():return):
+	return concur.with(l, fun)
+
+func iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:
+	return util.Iter(x, start, end)
+
+func take_while(cond : Callable, it : IterableBase) -> IterableBase:
+	return util.TakeWhile(cond, it)
+
+func infinite(infval = NOT_SET) -> IterableBase:
+	return util.Infinite(infval)
+
+var NOT_SET = util.GetNotSet()
+
+func not_set():
+	return NOT_SET
+
+func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
+	return util.AddRef(xs, r)
 
 ## Create an observable sequence from an array
 func of(data : Array) -> Observable:

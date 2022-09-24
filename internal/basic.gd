@@ -17,4 +17,11 @@ func default_key_serializer(x) -> String:
 	return str(x)
 
 func default_error(err):
-	push_error(err)
+	if err is ThrowableBase:
+		err.throw()
+	
+	GDRx.raise(GDRx.exc.Exception.new(err))
+
+func default_crash(e):
+	OS.alert("Unhandled exception: " + str(e))
+	OS.crash("Unhandled exception: " + str(e))

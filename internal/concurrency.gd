@@ -54,9 +54,20 @@ func synchronized(lock : RLock, n_args : int) -> Callable:
 					lock.unlock()
 					return r
 			_:
-				push_error("synchronized-wrapper only supports up to 4 parameters. Returning noop!")
+				GDRx.exc.TooManyArgumentsException.new(
+					"synchronized-wrapper only supports up to 4 parameters. Returning noop!"
+				).throw()
 				inner = func(): return
 		
 		return inner
 	
 	return wrapper
+
+func with(l, fun : Callable = func():return):
+	var ret = null
+	if l.has_method("lock"):
+		l.lock()
+	ret = fun.call()
+	if l.has_method("unlock"):
+		l.unlock()
+	return ret
