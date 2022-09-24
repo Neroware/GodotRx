@@ -9,10 +9,10 @@ class_name SubjectBase
 
 ## Returns the Subject's [Observer] behavior.
 func observer() -> ObserverBase:
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 	return null
 
 ## Returns the Subject's [Observable] behavior.
 func observable() -> ObservableBase:
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 	return null

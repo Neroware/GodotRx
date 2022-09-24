@@ -13,7 +13,7 @@ var Value:
 	get:
 		return getv()
 	set(__):
-		push_error("Trying to set value of ReadOnlyReactiveProperty!")
+		GDRx.raise_message("Trying to set value of ReadOnlyReactiveProperty!")
 
 func _init(prop : ReactiveProperty):
 	self._prop = prop

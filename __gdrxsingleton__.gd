@@ -61,6 +61,9 @@ func try(fun : Callable) -> TryCatch:
 func raise(exc : ThrowableBase, default = null) -> Variant:
 	return ExceptionHandler.singleton().raise(exc, default)
 
+func raise_message(msg : String, default = null):
+	return exc.raise(msg, default)
+
 func with(l, fun : Callable = func():return):
 	return concur.with(l, fun)
 

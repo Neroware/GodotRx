@@ -1,5 +1,8 @@
 ## GDRx Exception types
 
+func raise(msg : String, default = null):
+	return GDRx.raise(self.Exception.new(msg), default)
+
 class Exception extends ThrowableBase:
 	var _msg : String
 	func _init(msg : String):
@@ -105,3 +108,19 @@ class LockNotAquiredException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "LockNotAquiredException"]
+
+class NullReferenceException extends Exception:
+	func _init(msg = null):
+		if msg != null: super._init(str(msg))
+		else: super._init("Instance not set to a value!")
+	
+	func tags() -> Array[String]:
+		return ["Exception", "NullReferenceException"]
+
+class BadArgumentException extends Exception:
+	func _init(msg = null):
+		if msg != null: super._init(str(msg))
+		else: super._init("An argument contained bad input!")
+	
+	func tags() -> Array[String]:
+		return ["Exception", "BadArgumentException"]

@@ -1,6 +1,6 @@
 static func take_(count : int) -> Callable:
 	if count < 0:
-		push_error("Argument 'count' is out of range!")
+		GDRx.exc.ArgumentOutOfRangeException.new().throw()
 		count = 0
 	
 	var take = func(source : Observable) -> Observable:

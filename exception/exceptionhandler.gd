@@ -8,7 +8,7 @@ var _try_catch_stack : Array[TryCatch]
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
-		push_error("Warning! Must only instance Scheduler from GDRx singleton!")
+		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 	self._try_catch_stack = []
 
 static func singleton() -> ExceptionHandler:

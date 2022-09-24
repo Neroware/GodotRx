@@ -14,7 +14,7 @@ static func from_godot_signal_(
 		
 		var obj = instance_from_id(sig.get_object_id())
 		if obj == null:
-			push_error("Tried to create Observable on Signal of a freed instance!")
+			GDRx.raise(GDRx.exc.NullReferenceException.new())
 			return Disposable.new()
 		var n_args = -1
 		var sig_lst = obj.get_signal_list()
@@ -56,11 +56,12 @@ static func from_godot_signal_(
 				action = func(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8):
 					observer.on_next(Tuple.new([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]))
 			_:
-				push_error("Only up to 8 signal parameters supported! Use lists instead!")
+				GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+					"Only up to 8 signal parameters supported! Use lists instead!"))
 				return Disposable.new()
 		
 		if not _scheduler is GodotSignalScheduler:
-			push_error("Scheduler must be GodotSignalScheduler")
+			GDRx.raise(GDRx.exc.BadArgumentException.new("Scheduler must be GodotSignalScheduler"))
 			return Disposable.new()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler

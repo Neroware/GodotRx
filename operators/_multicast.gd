@@ -26,7 +26,7 @@ static func multicast_(
 		subject: Subject to push source elements into.
 		mapper: [Optional] Mapper function which can use the
 			multicasted source sequence subject to the policies enforced
-			by the created subject. Specified only if subject_factory"
+			by the created subject. Specified only if subject_factory
 			is a factory function.
 
 	Returns:
@@ -59,7 +59,7 @@ static func multicast_(
 			return Observable.new(subscribe)
 		
 		if subject == null:
-			push_error("multicast: Subject cannot be null")
+			GDRx.exc.NullReferenceException.new().throw()
 		var ret = ConnectableObservable.new(source, subject)
 		return ret
 	

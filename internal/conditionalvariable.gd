@@ -17,19 +17,19 @@ func unlock():
 
 func notify(n = 1):
 	if not self._lock.is_locking_thread():
-		push_error("Thread did not aquire underlying lock!")
+		GDRx.exc.LockNotAquiredException.new().throw()
 		return
 	for __ in range(n): self._waiting_queue.pop_front()
 
 func notify_all():
 	if not self._lock.is_locking_thread():
-		push_error("Thread did not aquire underlying lock!")
+		GDRx.exc.LockNotAquiredException.new().throw()
 		return
 	self._waiting_queue.clear()
 
 func wait(time_sec : float = -1.0) -> bool:
 	if not self._lock.is_locking_thread():
-		push_error("Thread did not aquire underlying lock!")
+		GDRx.exc.LockNotAquiredException.new().throw()
 		return false
 	var id = OS.get_thread_caller_id()
 	

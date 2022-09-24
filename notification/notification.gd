@@ -47,10 +47,10 @@ func _accept(
 	on_next : Callable,
 	on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return):
-		push_error("No implementation here!")
+		GDRx.raise(GDRx.exc.NotImplementedException.new())
 
 func _accept_observer(observer : ObserverBase):
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 
 ## Returns an observable sequence with a single notification,
 ##        using the specified scheduler, else the immediate scheduler.

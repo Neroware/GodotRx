@@ -18,12 +18,12 @@ static func window_with_count_(
 		An observable sequence of windows.
 	"""
 	if count <= 0:
-		push_error("Count canot be less than 1!")
+		GDRx.exc.ArgumentOutOfRangeException.new().throw()
 		count = 1
 	
 	var skip_ : int = skip if skip != null else count
 	if skip_ <= 0:
-		push_error("Skip canot be less than 1!")
+		GDRx.exc.ArgumentOutOfRangeException.new().throw()
 		skip_ = 1
 	
 	var window_with_count = func(source : Observable) -> Observable:

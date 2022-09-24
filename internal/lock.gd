@@ -22,7 +22,8 @@ func lock():
 func unlock():
 	self._mutex.lock()
 	if self._aquired_thread == null:
-		push_error("Lock was released but nobody aquired it!")
+		GDRx.exc.LockNotAquiredException.new(
+			"Lock was released but nobody aquired it!").throw()
 	self._aquired_thread = null
 	self._mutex.unlock()
 

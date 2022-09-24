@@ -4,7 +4,7 @@ class_name TimeoutScheduler
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
-		push_error("Warning! Must only instance Scheduler from GDRx singleton!")
+		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 
 ## Returns singleton
 static func singleton() -> TimeoutScheduler:

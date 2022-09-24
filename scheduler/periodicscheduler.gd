@@ -17,9 +17,9 @@ func schedule_periodic(
 			var now : float = scheduler.now()
 			
 			state = action.call(state)
-			if state is GDRx.err.Error:
+			if state is GDRx.exc.Exception:
 				disp.dispose()
-				push_error(state)
+				state.throw()
 				return
 			
 			var time = seconds - (scheduler.now() - now)

@@ -104,7 +104,7 @@ func observer() -> ObserverBase:
 func check_disposed():
 	if self._is_disposed:
 		var err = GDRx.err.DisposedException.new()
-		push_error(err)
+		GDRx.raise(err)
 		return err
 	return false
 

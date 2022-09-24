@@ -38,7 +38,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 ## Schedule a new action for future execution at [code]duetime[/code].
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
 	if self._is_disposed:
-		push_error(GDRx.err.DisposedException.new())
+		GDRx.exc.DisposedException.new().throw()
 		return Disposable.new()
 	
 	var dt = duetime
@@ -62,7 +62,7 @@ func schedule_periodic(
 	action : Callable,
 	state = null) -> DisposableBase:
 		if self._is_disposed:
-			push_error(GDRx.err.DisposedException.new())
+			GDRx.exc.DisposedException.new().throw()
 			return Disposable.new()
 		
 		return super.schedule_periodic(period, action, state)

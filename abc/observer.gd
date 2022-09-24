@@ -14,12 +14,12 @@ class_name ObserverBase
 
 ## Called when the [Observable] emits a new item on the stream
 func on_next(i):
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 
 ## Called when the [Observable] emits an error on the stream
 func on_error(e):
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 
 ## Called when the [Observable] is finished and no more items are sent.
 func on_completed():
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())

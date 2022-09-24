@@ -13,7 +13,8 @@ static func _flat_map_internal(
 		elif mapper_result is Array:
 			result = GDRx.obs.from_iterable(GDRx.util.Iter(mapper_result))
 		else:
-			push_error("Mapper failed to produce a squence of observables!")
+			GDRx.exc.BadMappingException.new(
+				"Mapper failed to produce a sequence of observables!").throw()
 			result = GDRx.obs.empty()
 		return result
 	

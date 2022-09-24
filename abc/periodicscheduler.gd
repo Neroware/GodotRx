@@ -11,5 +11,5 @@ func schedule_periodic(
 	period : float,
 	action : Callable,
 	state = null) -> DisposableBase:
-		push_error("No implementation here!")
+		GDRx.raise(GDRx.exc.NotImplementedException.new())
 		return null

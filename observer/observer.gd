@@ -48,10 +48,9 @@ func fail(e):
 		return true
 	return false
 
-func throw(e):
+func throw(error : ThrowableBase):
 	print_stack()
-	push_error(e)
-	return e
+	GDRx.raise(error)
 
 func to_notifier() -> Callable:
 	return func(notifier : Notification): 

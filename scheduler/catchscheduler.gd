@@ -51,7 +51,7 @@ func schedule_periodic(
 	state = null) -> DisposableBase:
 		var schedule_periodic = self._scheduler.get("schedule_periodic")
 		if schedule_periodic == null:
-			push_error("Periodic Scheduling not implemented!")
+			GDRx.raise(GDRx.exc.NotImplementedException.new())
 			return Disposable.new()
 		
 		var disp : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
@@ -61,10 +61,10 @@ func schedule_periodic(
 			if failed.v:
 				return null
 			var ex = action.call(state)
-			if ex is GDRx.err.Error:
+			if ex is GDRx.exc.Exception:
 				failed.v = true
 				if not self._handler.call(ex):
-					push_error(ex)
+					ex.throw()
 					return
 				disp.dispose()
 				return null
@@ -84,7 +84,7 @@ func _wrap(action : Callable) -> Callable:
 		var ex = action.call(parent._get_recursive_wrapper(self_), state)
 		if ex is GDRx.err.Error:
 			if not parent._handler.call(ex):
-				push_error(ex)
+				ex.throw()
 		return Disposable.new()
 	
 	return wrapped_action

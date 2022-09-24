@@ -6,15 +6,15 @@ class_name Comparable
 ## does not allow defining custom operators.
 
 func eq(other) -> bool:
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 	return false
 
 func lt(other) -> bool:
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 	return false
 
 func gt(other) -> bool:
-	push_error("No implementation here!")
+	GDRx.raise(GDRx.exc.NotImplementedException.new())
 	return false
 
 func gte(other) -> bool:

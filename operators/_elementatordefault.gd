@@ -3,7 +3,8 @@ static func element_at_or_default_(
 ) -> Callable:
 	
 	if index < 0:
-		push_error("Index canot be lower than zero!")
+		GDRx.exc.ArgumentOutOfRangeException.new(
+			"Argument cannot be lower than zero!").throw()
 		index = 0
 	
 	var element_at_or_default = func(source : Observable) -> Observable:

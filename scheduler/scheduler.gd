@@ -43,7 +43,7 @@ static func to_seconds(value):
 	if value is float:
 		return value
 	if not value is Dictionary:
-		push_error("Error: Cannot convert datetime from any other class than Dictionary!")
+		GDRx.raise_message("Error: Cannot convert datetime from any other class than Dictionary!")
 		return 0
 	var datetime : Dictionary = value
 	return Time.get_unix_time_from_datetime_dict(datetime)

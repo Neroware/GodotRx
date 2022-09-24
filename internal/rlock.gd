@@ -28,8 +28,9 @@ func lock():
 func unlock():
 	self._mutex.lock()
 	if self._counter == 0:
-		push_error("RLock has not been aquired by any thread yet!")
 		self._mutex.unlock()
+		GDRx.exc.LockNotAquiredException.new(
+			"Lock was released but nobody aquired it!").throw()
 		return
 	self._counter -= 1
 	if self._counter == 0:

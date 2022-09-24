@@ -32,7 +32,7 @@ static func average_(
 		
 		var mapper = func(s : AverageValue) -> float:
 			if s.count == 0:
-				push_error("Input Sequence was empty!")
+				GDRx.exc.BadMappingException.new("Input Sequence was empty!").throw()
 				return NAN
 			
 			return s.sum / float(s.count)

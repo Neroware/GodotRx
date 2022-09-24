@@ -18,7 +18,7 @@ func disposable() -> DisposableBase:
 
 func set_disposable(value : DisposableBase):
 	if self._current != null:
-		push_error("Disposable has already been assigned")
+		GDRx.raise_message("Disposable has already been assigned")
 		return
 	
 	self._lock.lock()

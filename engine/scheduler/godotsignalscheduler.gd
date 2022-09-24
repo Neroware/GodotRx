@@ -3,7 +3,7 @@ class_name GodotSignalScheduler
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
-		push_error("Warning! Must only instance Scheduler from GDRx singleton!")
+		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 
 static func singleton() -> GodotSignalScheduler:
 	return GDRx.GodotSignalScheduler_
@@ -65,7 +65,8 @@ func schedule_signal(
 					action.call(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 				mad.set_disposable(self.invoke_action(action_, state))
 		_:
-			push_error("Only up to 8 signal parameters supported! Use lists instead!")
+			GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+				"Only up to 8 signal parameters supported! Use lists instead!"))
 			return null
 	
 	var dispose = func():

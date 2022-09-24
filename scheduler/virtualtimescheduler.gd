@@ -98,7 +98,7 @@ func advance_to(time : float):
 	var dt : float = time
 	self._lock.lock()
 	if self.now() > dt:
-		push_error(GDRx.err.ArgumentOutOfRangeException.new())
+		GDRx.exc.ArgumentOutOfRangeException.new().throw()
 		self._lock.unlock()
 		return
 	
@@ -154,7 +154,7 @@ func sleep(time : float):
 	var dt : float = absolute
 	
 	if self.now() > dt:
-		push_error(GDRx.err.ArgumentOutOfRangeException.new())
+		GDRx.exc.ArgumentOutOfRangeException.new().throw()
 	
 	self._lock.lock()
 	self._clock = dt

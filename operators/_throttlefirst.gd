@@ -24,7 +24,7 @@ static func throttle_first_(
 			
 			var duration = window_duration
 			if duration <= 0:
-				push_error("window_duration cannot be less or equal zero.")
+				GDRx.exc.ArgumentOutOfRangeException.new().throw()
 			var last_on_next = RefValue.Null()
 			
 			var on_next = func(x):

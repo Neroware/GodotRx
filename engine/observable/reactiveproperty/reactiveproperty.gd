@@ -21,8 +21,8 @@ var Value:
 	get:
 		self._lock.lock()
 		if _disposed:
-			push_error("Property has been disposed!")
 			self._lock.unlock()
+			GDRx.exc.DisposedException.new().throw()
 			return null
 		var _ret = _getter.call(Value)
 		self._lock.unlock()
@@ -37,8 +37,8 @@ var Value:
 		self._lock.lock()
 		var tmp = Value
 		if _disposed:
-			push_error("Property has been disposed!")
 			self._lock.unlock()
+			GDRx.exc.DisposedException.new().throw()
 			return
 		value = _setter.call(tmp, value)
 		Value = value
