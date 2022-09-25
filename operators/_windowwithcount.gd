@@ -39,18 +39,18 @@ static func window_with_count_(
 			var create_window = func():
 				var s : Subject = Subject.new()
 				q.append(s)
-				observer.on_next(GDRx.util.AddRef(s.observable(), refCountDisposable))
+				observer.on_next(GDRx.util.AddRef(s.as_observable(), refCountDisposable))
 			
 			create_window.call()
 			
 			var on_next = func(x):
 				for item in q:
-					item.observer().on_next(x)
+					item.as_observer().on_next(x)
 				
 				var c = n[0] - count + 1
 				if c >= 0 and c % skip_ == 0:
 					var s = q.pop_front()
-					s.observer().on_completed()
+					s.as_observer().on_completed()
 				
 				n[0] += 1
 				if (n[0] % skip_) == 0:
@@ -58,12 +58,12 @@ static func window_with_count_(
 			
 			var on_error = func(exception):
 				while not q.is_empty():
-					q.pop_front().observer().on_error(exception)
+					q.pop_front().as_observer().on_error(exception)
 				observer.on_error(exception)
 			
 			var on_completed = func():
 				while not q.is_empty():
-					q.pop_front().observer().on_completed()
+					q.pop_front().as_observer().on_completed()
 				observer.on_completed()
 			
 			m.set_disposable(source.subscribe(

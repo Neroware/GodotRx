@@ -54,11 +54,11 @@ static func window_with_time_(
 					if is_shift:
 						s = Subject.new()
 						queue.append(s)
-						observer.on_next(GDRx.util.AddRef(s.observable(), ref_count_disposable))
+						observer.on_next(GDRx.util.AddRef(s.as_observable(), ref_count_disposable))
 					
 					if is_span:
 						s = queue.pop_front()
-						s.observer().on_completed()
+						s.as_observer().on_completed()
 					
 					__create_timer_rec.bind(__create_timer_rec).call()
 					source._lock.unlock()
@@ -66,26 +66,26 @@ static func window_with_time_(
 				m.set_disposable(_scheduler.schedule_relative(ts, action))
 			
 			queue.append(Subject.new())
-			observer.on_next(GDRx.util.AddRef(queue[0].observable(), ref_count_disposable))
+			observer.on_next(GDRx.util.AddRef(queue[0].as_observable(), ref_count_disposable))
 			create_timer.bind(create_timer).call()
 			
 			var on_next = func(x):
 				source._lock.lock()
 				for s in queue:
-					s.observer().on_next(x)
+					s.as_observer().on_next(x)
 				source._lock.unlock()
 			
 			var on_error = func(e):
 				source._lock.lock()
 				for s in queue:
-					s.observer().on_error(e)
+					s.as_observer().on_error(e)
 				observer.on_error(e)
 				source._lock.unlock()
 			
 			var on_completed = func():
 				source._lock.lock()
 				for s in queue:
-					s.observer().on_completed()
+					s.as_observer().on_completed()
 				observer.on_completed()
 				source._lock.unlock()
 			

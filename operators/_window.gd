@@ -45,17 +45,17 @@ static func window_(boundaries : Observable) -> Callable:
 			var d = CompositeDisposable.new()
 			var r = RefCountDisposable.new(d)
 			
-			observer.on_next(GDRx.util.AddRef(window_subject.v.observable(), r))
+			observer.on_next(GDRx.util.AddRef(window_subject.v.as_observable(), r))
 			
 			var on_next_window = func(x):
-				window_subject.v.observer().on_next(x)
+				window_subject.v.as_observer().on_next(x)
 			
 			var on_error = func(err):
-				window_subject.v.observer().on_error(err)
+				window_subject.v.as_observer().on_error(err)
 				observer.on_error(err)
 			
 			var on_completed = func():
-				window_subject.v.observer().on_completed()
+				window_subject.v.as_observer().on_completed()
 				observer.on_completed()
 			
 			d.add(
@@ -66,9 +66,9 @@ static func window_(boundaries : Observable) -> Callable:
 			)
 			
 			var on_next_observer = func(w : Observable):
-				window_subject.v.observer().on_completed()
+				window_subject.v.as_observer().on_completed()
 				window_subject.v = Subject.new()
-				observer.on_next(GDRx.util.AddRef(window_subject.v.observable(), r))
+				observer.on_next(GDRx.util.AddRef(window_subject.v.as_observable(), r))
 			
 			d.add(
 				boundaries.subscribe(
@@ -107,14 +107,14 @@ static func window_when_(closing_mapper : Callable) -> Callable:
 			observer.on_next(GDRx.util.AddRef(window.v, r))
 			
 			var on_next = func(value):
-				window.v.observer().on_next(value)
+				window.v.as_observer().on_next(value)
 			
 			var on_error = func(error):
-				window.v.observer().on_error(error)
+				window.v.as_observer().on_error(error)
 				observer.on_error(error)
 			
 			var on_completed = func():
-				window.v.observer().on_completed()
+				window.v.as_observer().on_completed()
 				observer.on_completed()
 			
 			d.add(
@@ -129,7 +129,7 @@ static func window_when_(closing_mapper : Callable) -> Callable:
 					return
 				
 				var on_completed_inner = func():
-					window.v.observer().on_completed()
+					window.v.as_observer().on_completed()
 					window.v = Subject.new()
 					observer.on_next(GDRx.util.AddRef(window.v, r))
 					__rec_cb.bind(__rec_cb).call()

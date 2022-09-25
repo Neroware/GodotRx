@@ -32,40 +32,40 @@ static func window_with_time_or_count_(
 					n.v = 0
 					window_id.v += 1
 					var new_id = window_id.v
-					s.v.observer().on_completed()
+					s.v.as_observer().on_completed()
 					s.v = Subject.new()
-					observer.on_next(GDRx.util.AddRef(s.v.observable(), ref_count_disposable))
+					observer.on_next(GDRx.util.AddRef(s.v.as_observable(), ref_count_disposable))
 					__create_timer_rec.bind(__create_timer_rec).call(new_id)
 				
 				m.set_disposable(_scheduler.schedule_relative(timespan, action))
 			
-			observer.on_next(GDRx.util.AddRef(s.v.observable(), ref_count_disposable))
+			observer.on_next(GDRx.util.AddRef(s.v.as_observable(), ref_count_disposable))
 			create_timer.bind(create_timer).call(0)
 			
 			var on_next = func(x):
 				var new_window = false
 				var new_id = 0
 				
-				s.v.observer().on_next(x)
+				s.v.as_observer().on_next(x)
 				n.v += 1
 				if n.v == count:
 					new_window = true
 					n.v = 0
 					window_id.v += 1
 					new_id = window_id.v
-					s.v.observer().on_completed()
+					s.v.as_observer().on_completed()
 					s.v = Subject.new()
-					observer.on_next(GDRx.util.AddRef(s.v.observable(), ref_count_disposable))
+					observer.on_next(GDRx.util.AddRef(s.v.as_observable(), ref_count_disposable))
 				
 				if new_window:
 					create_timer.bind(create_timer).call(new_id)
 			
 			var on_error = func(e):
-				s.v.observer().on_error(e)
+				s.v.as_observer().on_error(e)
 				observer.on_error(e)
 			
 			var on_completed = func():
-				s.v.observer().on_completed()
+				s.v.as_observer().on_completed()
 				observer.on_completed()
 			
 			group_disposable.add(source.subscribe(

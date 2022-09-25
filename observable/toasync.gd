@@ -32,13 +32,13 @@ static func to_async_(
 		var action = func(scheduler : SchedulerBase, state = null):
 			var result = fun.call(args)
 			if result is GDRx.err.Error:
-				subject.observer().on_error(result)
+				subject.as_observer().on_error(result)
 				return
 			
-			subject.observer().on_next(result)
-			subject.observer().on_completed()
+			subject.as_observer().on_next(result)
+			subject.as_observer().on_completed()
 		
 		_scheduler.schedule(action)
-		return subject.observable().pipe1(GDRx.op.as_observable())
+		return subject.as_observable().pipe1(GDRx.op.as_observable())
 	
 	return wrapper

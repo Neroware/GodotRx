@@ -93,11 +93,11 @@ func _init():
 	self._OBV = _Observer.new(self)
 
 ## Return [ObservableBase] behaviour.
-func observable() -> ObservableBase:
+func as_observable() -> ObservableBase:
 	return self._OBS
 
 ## Return [ObserverBase] behaviour.
-func observer() -> ObserverBase:
+func as_observer() -> ObserverBase:
 	return self._OBV
 
 ## Causes an error when already disposed.

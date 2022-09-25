@@ -45,11 +45,11 @@ static func group_join_(
 				left_map[_id] = subject
 				left._lock.unlock()
 				
-				var result = Tuple.new([value, GDRx.util.AddRef(subject.observable(), rcd)])
+				var result = Tuple.new([value, GDRx.util.AddRef(subject.as_observable(), rcd)])
 				observer.on_next(result)
 				
 				for right_value in right_map.values():
-					subject.observer().on_next(right_value)
+					subject.as_observer().on_next(right_value)
 				
 				var md = SingleAssignmentDisposable.new()
 				group.add(md)
@@ -57,26 +57,26 @@ static func group_join_(
 				var expire = func():
 					if _id in left_map.keys():
 						left_map.erase(_id)
-						subject.observer().on_completed()
+						subject.as_observer().on_completed()
 					group.remove(md)
 				
 				var duration = left_duration_mapper.call(value)
 				if duration is GDRx.err.Error:
 					for left_value in left_map.values():
-						left_value.observer().on_error(duration)
+						left_value.as_observer().on_error(duration)
 					
 					observer.on_error(duration)
 					return
 				if not duration is Observable:
 					for left_value in left_map.values():
-						left_value.observer().on_error(GDRx.err.BadMappingException.new())
+						left_value.as_observer().on_error(GDRx.err.BadMappingException.new())
 					
 					observer.on_error(GDRx.err.BadMappingException.new())
 					return
 				
 				var on_error = func(error):
 					for left_value in left_map.values():
-						left_value.observer().on_error(error)
+						left_value.as_observer().on_error(error)
 					
 					observer.on_error(error)
 				
@@ -86,7 +86,7 @@ static func group_join_(
 			
 			var on_error_left = func(error):
 				for left_value in left_map.values():
-					left_value.observer().on_error(error)
+					left_value.as_observer().on_error(error)
 				
 				observer.on_error(error)
 			
@@ -116,13 +116,13 @@ static func group_join_(
 				var duration = right_duration_mapper.call(value)
 				if duration is GDRx.err.Error:
 					for left_value in left_map.values():
-						left_value.observer().on_error(duration)
+						left_value.as_observer().on_error(duration)
 					
 					observer.on_error(duration)
 					return
 				if not duration is Observable:
 					for left_value in left_map.values():
-						left_value.observer().on_error(GDRx.err.BadMappingException.new())
+						left_value.as_observer().on_error(GDRx.err.BadMappingException.new())
 					
 					observer.on_error(GDRx.err.BadMappingException.new())
 					return
@@ -130,12 +130,12 @@ static func group_join_(
 				var on_error = func(error):
 					left._lock.lock()
 					for left_value in left_map.values():
-						left_value.observer().on_next(value)
+						left_value.as_observer().on_next(value)
 					left._lock.unlock()
 			
 			var on_error_right = func(error):
 				for left_value in left_map.values():
-					left_value.observer().on_error(error)
+					left_value.as_observer().on_error(error)
 				
 				observer.on_error(error)
 			
