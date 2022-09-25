@@ -16,6 +16,9 @@ class Exception extends ThrowableBase:
 	
 	func tags() -> Array[String]:
 		return ["Exception"]
+	
+	static func Throw(default = null) -> Variant:
+		return Exception.new("An exception occured!").throw(default)
 
 class NotImplementedException extends Exception:
 	func _init():
@@ -23,6 +26,9 @@ class NotImplementedException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "NotImplementedException"]
+	
+	static func Throw(default = null) -> Variant:
+		return NotImplementedException.new().throw(default)
 
 class DivideByZeroException extends Exception:
 	func _init():
@@ -30,6 +36,9 @@ class DivideByZeroException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "DivideByZeroException"]
+	
+	static func Throw(default = null) -> Variant:
+		return DivideByZeroException.new().throw(default)
 
 class WouldBlockException extends Exception:
 	func _init(msg = null):
@@ -38,6 +47,9 @@ class WouldBlockException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "WouldBlockException"]
+	
+	static func Throw(default = null) -> Variant:
+		return WouldBlockException.new().throw(default)
 
 class FactoryFailedException extends Exception:
 	var _produced
@@ -52,6 +64,9 @@ class FactoryFailedException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "FactoryFailedException"]
+	
+	static func Throw(default = null) -> Variant:
+		return FactoryFailedException.new().throw(default)
 
 class BadMappingException extends Exception:
 	func _init(msg = null):
@@ -60,6 +75,9 @@ class BadMappingException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "BadMappingException"]
+	
+	static func Throw(default = null) -> Variant:
+		return BadMappingException.new().throw(default)
 
 class BadPredicateError extends Exception:
 	func _init(msg = null):
@@ -68,6 +86,9 @@ class BadPredicateError extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "BadPredicateError"]
+	
+	static func Throw(default = null) -> Variant:
+		return BadPredicateError.new().throw(default)
 
 class SequenceContainsNoElementsException extends Exception:
 	func _init(msg = null):
@@ -76,6 +97,9 @@ class SequenceContainsNoElementsException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "SequenceContainsNoElementsException"]
+	
+	static func Throw(default = null) -> Variant:
+		return SequenceContainsNoElementsException.new().throw(default)
 
 class DisposedException extends Exception:
 	func _init(msg = null):
@@ -84,6 +108,9 @@ class DisposedException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "DisposedException"]
+	
+	static func Throw(default = null) -> Variant:
+		return DisposedException.new().throw(default)
 
 class ArgumentOutOfRangeException extends Exception:
 	func _init(msg = null):
@@ -92,6 +119,9 @@ class ArgumentOutOfRangeException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "ArgumentOutOfRangeException"]
+	
+	static func Throw(default = null) -> Variant:
+		return ArgumentOutOfRangeException.new().throw(default)
 
 class TooManyArgumentsException extends Exception:
 	func _init(msg = null):
@@ -100,6 +130,9 @@ class TooManyArgumentsException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "TooManyArgumentsException"]
+	
+	static func Throw(default = null) -> Variant:
+		return TooManyArgumentsException.new().throw(default)
 
 class LockNotAquiredException extends Exception:
 	func _init(msg = null):
@@ -108,6 +141,9 @@ class LockNotAquiredException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "LockNotAquiredException"]
+	
+	static func Throw(default = null) -> Variant:
+		return LockNotAquiredException.new().throw(default)
 
 class NullReferenceException extends Exception:
 	func _init(msg = null):
@@ -116,6 +152,9 @@ class NullReferenceException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "NullReferenceException"]
+	
+	static func Throw(default = null) -> Variant:
+		return NullReferenceException.new().throw(default)
 
 class BadArgumentException extends Exception:
 	func _init(msg = null):
@@ -124,3 +163,6 @@ class BadArgumentException extends Exception:
 	
 	func tags() -> Array[String]:
 		return ["Exception", "BadArgumentException"]
+	
+	static func Throw(default = null) -> Variant:
+		return BadArgumentException.new().throw(default)
