@@ -25,5 +25,5 @@ func subscribe(
 	on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return,
 	scheduler : SchedulerBase = null) -> DisposableBase:
-		GDRx.raise(GDRx.exc.NotImplementedException.new())
+		GDRx.exc.NotImplementedException.Throw()
 		return null

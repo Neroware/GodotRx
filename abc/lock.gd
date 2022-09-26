@@ -5,21 +5,21 @@ class_name LockBase
 ## Allows a thread to aquire and release it.
 
 func lock():
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 
 func unlock():
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 
 func try_lock() -> bool:
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 	return false
 
 func is_locking_thread() -> bool:
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 	return false
 
 func _unlock_and_store_recursion_depth():
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 
 func _lock_and_restore_recursion_depth():
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()

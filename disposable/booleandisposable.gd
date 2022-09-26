@@ -1,12 +1,14 @@
 extends DisposableBase
 class_name BooleanDisposable
 
-var _is_disposed : bool
-var _lock : RLock
+var is_disposed : bool
+var lock : RLock
 
 func _init():
-	self._is_disposed = false
-	self._lock = RLock.new()
+	self.is_disposed = false
+	self.lock = RLock.new()
+	
+	super._init()
 
 func dispose():
-	self._is_disposed = true
+	self.is_disposed = true

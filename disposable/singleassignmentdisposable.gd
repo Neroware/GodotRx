@@ -1,44 +1,47 @@
 extends DisposableBase
 class_name SingleAssignmentDisposable
 
-var _is_disposed : bool
-var _current : DisposableBase
-var _lock : RLock
+var is_disposed : bool
+var current : DisposableBase
+var lock : RLock
 
 func _init():
-	self._is_disposed = false
-	self._current = null
-	self._lock = RLock.new()
+	self.is_disposed = false
+	self.current = null
+	self.lock = RLock.new()
+	
+	super._init()
 
 func get_disposabe() -> DisposableBase:
-	return self._current
-
-func disposable() -> DisposableBase:
-	return self._current
+	return self.current
 
 func set_disposable(value : DisposableBase):
-	if self._current != null:
-		GDRx.raise_message("Disposable has already been assigned")
+	if self.current != null:
+		GDRx.exc.DisposedException.Throw()
 		return
 	
-	self._lock.lock()
-	var should_dispose = self._is_disposed
+	self.lock.lock()
+	var should_dispose = self.is_disposed
 	if not should_dispose:
-		self._current = value
-	self._lock.unlock()
+		self.current = value
+	self.lock.unlock()
 	
-	if self._is_disposed and value != null:
+	if self.is_disposed and value != null:
 		value.dispose()
+
+var disposable : DisposableBase:
+	set(value): set_disposable(value)
+	get: return get_disposabe()
 
 func dispose():
 	var old = null
 	
-	self._lock.lock()
-	if not self._is_disposed:
-		self._is_disposed = true
-		old = self._current
-		self._current = null
-	self._lock.unlock()
+	self.lock.lock()
+	if not self.is_disposed:
+		self.is_disposed = true
+		old = self.current
+		self.current = null
+	self.lock.unlock()
 	
 	if old != null:
 		old.dispose()

@@ -7,7 +7,7 @@ class_name IterableBase
 ## Returns next element in the iterable sequence. Return instance of 
 ## [IterableBase.End] when end is reached.
 func next() -> Variant:
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 	return null
 
 ## Marks end of sequence.

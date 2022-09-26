@@ -5,42 +5,43 @@ class_name CompositeDisposable
 ##
 ## When disposed, the underlying composition of disposables are disposed as well.
 
-var _disposable : Array
-var _is_disposed : bool
-var _lock : RLock
+var disposable : Array
+var is_disposed : bool
+var lock : RLock
 
 
 func _init(args = []):
 	if args is Array:
-		self._disposable = args
+		self.disposable = args
 	else:
-		self._disposable = [args]
+		self.disposable = [args]
 	
-	self._is_disposed = false
-	self._lock = RLock.new()
+	self.is_disposed = false
+	self.lock = RLock.new()
+	super._init()
 
 func add(item : DisposableBase):
 	var should_dispose = false
-	self._lock.lock()
-	if self._is_disposed:
+	self.lock.lock()
+	if self.is_disposed:
 		should_dispose = true
 	else:
-		self._disposable.append(item)
-	self._lock.unlock()
+		self.disposable.append(item)
+	self.lock.unlock()
 	
 	if should_dispose:
 		item.dispose()
 
 func remove(item : DisposableBase) -> bool:
-	if self._is_disposed:
+	if self.is_disposed:
 		return false
 	
 	var should_dispose = false
-	self._lock.lock()
-	if item in self._disposable:
-		self._disposable.erase(item)
+	self.lock.lock()
+	if item in self.disposable:
+		self.disposable.erase(item)
 		should_dispose = true
-	self._lock.unlock()
+	self.lock.unlock()
 	
 	if should_dispose:
 		item.dispose()
@@ -48,32 +49,34 @@ func remove(item : DisposableBase) -> bool:
 	return should_dispose
 
 func dispose():
-	if self._is_disposed:
+	if self.is_disposed:
 		return
 	
-	self._lock.lock()
-	self._is_disposed = true
-	var current_disposable = self._disposable
-	self._disposable = []
-	self._lock.unlock()
+	self.lock.lock()
+	self.is_disposed = true
+	var current_disposable = self.disposable
+	self.disposable = []
+	self.lock.unlock()
 	
 	for disp in current_disposable:
 		disp.dispose()
 
 func clear():
-	self._lock.lock()
-	var current_disposable = self._disposable
-	self._disposable = []
-	self._lock.unlock()
+	self.lock.lock()
+	var current_disposable = self.disposable
+	self.disposable = []
+	self.lock.unlock()
 	
 	for disposable in current_disposable:
 		disposable.dispose()
 
 func contains(item : DisposableBase) -> bool:
-	return item in self._disposable
+	return item in self.disposable
 
 func to_list() -> Array[DisposableBase]:
-	return self._disposable
+	return self.disposable.duplicate()
 
-func length() -> int:
-	return self._disposable.size()
+func size() -> int:
+	return self.disposable.size()
+
+var length : int : get = size

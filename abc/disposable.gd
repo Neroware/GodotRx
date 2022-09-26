@@ -7,10 +7,10 @@ class_name DisposableBase
 
 ## Disposes the disposable and executes a defined action.
 func dispose():
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 
 ## Links the disposable to a [Node]'s lifetime in the scene-tree.
 ## When [signal Node.tree_exiting] is emited by the [Node], the disposable is disposed.
 func dispose_with(node : Node) -> DisposableBase:
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 	return null
