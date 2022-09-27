@@ -5,18 +5,18 @@ class_name OnNextNotification
 
 func _init(value):
 	super._init()
-	self._value = value
-	self._has_value = true
-	self._kind = "N"
+	self.value = value
+	self.has_value = true
+	self.kind = "N"
 
 func _accept(
 	on_next : Callable,
 	on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return):
-		return on_next.call(self._value)
+		return on_next.call(self.value)
 
 func _accept_observer(observer : ObserverBase):
-	return observer.on_next(self._value)
+	return observer.on_next(self.value)
 
 func _to_string():
-	return "OnNext(" + str(self._value) + ")"
+	return "OnNext(" + str(self.value) + ")"

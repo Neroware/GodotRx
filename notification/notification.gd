@@ -1,16 +1,17 @@
+extends Comparable
 class_name Notification
 
 ## Represents a notification to an observer.
 
-var _has_value : bool
-var _value
-var _kind : String
+var has_value : bool
+var value
+var kind : String
 
 ## Default constructor used by derived types.
 func _init():
-	self._has_value = false
-	self._value = null
-	self._kind = ""
+	self.has_value = false
+	self.value = null
+	self.kind = ""
 
 ## Invokes the delegate corresponding to the notification or an
 ##        observer and returns the produced result.
@@ -47,10 +48,10 @@ func _accept(
 	on_next : Callable,
 	on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return):
-		GDRx.raise(GDRx.exc.NotImplementedException.new())
+		GDRx.exc.NotImplementedException.Throw()
 
 func _accept_observer(observer : ObserverBase):
-	GDRx.raise(GDRx.exc.NotImplementedException.new())
+	GDRx.exc.NotImplementedException.Throw()
 
 ## Returns an observable sequence with a single notification,
 ##        using the specified scheduler, else the immediate scheduler.
@@ -70,7 +71,7 @@ func to_observable(scheduler : SchedulerBase = null) -> ObservableBase:
 	var subscribe = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
 		var action = func(scheduler : SchedulerBase, state):
 			self._accept_observer(observer)
-			if self._kind == "N":
+			if self.kind == "N":
 				observer.on_completed()
 			
 		var __scheduler = scheduler if scheduler != null else _scheduler
@@ -82,6 +83,12 @@ func to_observable(scheduler : SchedulerBase = null) -> ObservableBase:
 func equals(other : Notification) -> bool:
 	var other_string = "" if other == null else str(other)
 	return str(self) == other_string
+
+## Inherited from [Comparable]
+func eq(other) -> bool:
+	if not (other is Notification):
+		return false
+	return self.equals(other)
 
 ## Creates an observer from a notification callback.
 ## [br]

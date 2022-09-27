@@ -52,7 +52,7 @@ func AddRef(xs : Observable, r : RefCountDisposable) -> Observable:
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		return CompositeDisposable.new([
-			r.disposable(), 
+			r.disposable, 
 			xs.subscribe(observer)
 		])
 	

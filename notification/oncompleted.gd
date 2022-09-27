@@ -5,7 +5,7 @@ class_name OnCompletedNotification
 
 func _init():
 	super._init()
-	self._kind = "C"
+	self.kind = "C"
 
 func _accept(
 	on_next : Callable,
