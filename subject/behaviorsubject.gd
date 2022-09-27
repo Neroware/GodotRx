@@ -27,7 +27,7 @@ func _subscribe_core(
 ) -> DisposableBase:
 	self.lock.lock()
 	if not check_disposed(): self.lock.unlock() ; return Disposable.new()
-	if not _OBV._is_stopped:
+	if not _OBV.is_stopped:
 		self.observers.append(observer)
 		observer.on_next(self.value)
 		var sub_ = InnerSubscription.new(self, observer)
