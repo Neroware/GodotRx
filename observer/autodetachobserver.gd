@@ -5,8 +5,9 @@ var _on_next : Callable
 var _on_error : Callable
 var _on_completed : Callable
 
-var _is_stopped : bool
 var _subscription : SingleAssignmentDisposable
+
+var is_stopped : bool
 
 func _init(
 	on_next : Callable = func(i): return,
@@ -17,43 +18,46 @@ func _init(
 		self._on_completed = on_completed
 		
 		self._subscription = SingleAssignmentDisposable.new()
-		self._is_stopped = false
+		self.is_stopped = false
 
 func on_next(i):
-	if self._is_stopped:
+	if self.is_stopped:
 		return
 	self._on_next.call(i)
 
 func on_error(e):
-	if self._is_stopped:
+	if self.is_stopped:
 		return
-	self._is_stopped = true
+	self.is_stopped = true
 	
-	self._on_error.call(e)
+	GDRx.try(func():
+		self._on_error.call(e)
+	).end_try_catch()
 	self.dispose()
 
 func on_completed():
-	if self._is_stopped:
+	if self.is_stopped:
 		return
-	self._is_stopped = true
+	self.is_stopped = true
 	
-	self._on_completed.call()
+	GDRx.try(func():
+		self._on_completed.call()
+	).end_try_catch()
 	self.dispose()
 
 func set_disposable(value : DisposableBase):
-	self._subscription.set_disposable(value)
+	self._subscription.disposable = value
 
-func subscription() -> DisposableBase:
-	return self._subscription.get_disposabe()
+var subscription: set = set_disposable
 
 func dispose():
-	self._is_stopped = true
+	self.is_stopped = true
 	self._subscription.dispose()
 
 func fail(err) -> bool:
-	if self._is_stopped:
+	if self.is_stopped:
 		return false
 	
-	self._is_stopped = true
+	self.is_stopped = true
 	self._on_error.call(err)
 	return true

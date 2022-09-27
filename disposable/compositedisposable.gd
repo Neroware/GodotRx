@@ -79,4 +79,4 @@ func to_list() -> Array[DisposableBase]:
 func size() -> int:
 	return self.disposable.size()
 
-var length : int : get = size
+var length : int: get = size

@@ -25,8 +25,10 @@ func raise(exc : ThrowableBase, default = null) -> Variant:
 	if self._try_catch_stack.is_empty():
 		handler.call(exc)
 		return default
-	var stmt : TryCatch = self._try_catch_stack.pop_back()
 	
+	handler = GDRx.basic.noop
+	
+	var stmt : TryCatch = self._try_catch_stack.pop_back()
 	for type in stmt.caught_types.keys():
 		if type in exc.tags():
 			handler = stmt.caught_types[type]
