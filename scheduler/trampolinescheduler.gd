@@ -77,7 +77,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 	
 	self.get_trampoline().run(item)
 	
-	return item._disposable
+	return item.disposable
 
 ## Test if scheduling is required.
 ##

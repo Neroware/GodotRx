@@ -3,20 +3,20 @@ class_name NewThreadScheduler
 
 ## Creates an object that schedules each unit of work on a separate thread.
 
-var _thread_factory : Callable
+var thread_factory : Callable
 
 func _init(thread_factory : Callable = GDRx.concur.default_thread_factory):
 	super._init()
-	self._thread_factory = thread_factory
+	self.thread_factory = thread_factory
 
 ## Schedule a new action for future execution
 func schedule(action : Callable, state = null) -> DisposableBase:
-	var scheduler : EventLoopScheduler = EventLoopScheduler.new(self._thread_factory, true)
+	var scheduler : EventLoopScheduler = EventLoopScheduler.new(self.thread_factory, true)
 	return scheduler.schedule(action, state)
 
 ## Schedule a new action for future execution in [code]duetime[/code] seconds.
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
-	var scheduler : EventLoopScheduler = EventLoopScheduler.new(self._thread_factory, true)
+	var scheduler : EventLoopScheduler = EventLoopScheduler.new(self.thread_factory, true)
 	return scheduler.schedule_relative(duetime, action, state)
 
 ## Schedule a new action for future execution at [code]duetime[/code].
@@ -48,7 +48,7 @@ func schedule_periodic(
 				
 				timeout.v = seconds.v - (self.now() - time)
 		
-		var thread : StartableBase = self._thread_factory.call(run)
+		var thread : StartableBase = self.thread_factory.call(run)
 		thread.start()
 		
 		var dispose = func():

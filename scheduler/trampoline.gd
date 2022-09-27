@@ -29,7 +29,7 @@ func run(item : ScheduledItem):
 		self._lock.unlock()
 		return
 	
-	self._run()
+	GDRx.try(self._run).end_try_catch()
 	
 	self._lock.lock()
 	self._idle = true
@@ -42,7 +42,7 @@ func _run():
 		self._lock.lock()
 		while(self._queue.size() > 0):
 			var item : ScheduledItem = self._queue.peek()
-			if item._duetime <= item._scheduler.now():
+			if item.duetime <= item.scheduler.now():
 				self._queue.dequeue()
 				ready.append(item)
 			else:
@@ -59,7 +59,7 @@ func _run():
 			self._lock.unlock()
 			break
 		var item : ScheduledItem = self._queue.peek()
-		var seconds = Scheduler.to_seconds(item._duetime - item._scheduler.now())
+		var seconds = Scheduler.to_seconds(item.duetime - item.scheduler.now())
 		if seconds > 0.0:
 			self._condition.wait(seconds)
 		self._lock.unlock()

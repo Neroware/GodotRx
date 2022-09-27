@@ -45,7 +45,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 	self._lock.lock()
 	self._queue.enqueue(si)
 	self._lock.unlock()
-	return si._disposable
+	return si.disposable
 
 ## Starts the virtual time scheduler.
 func start():
@@ -67,8 +67,8 @@ func start():
 		
 		var item : ScheduledItem = self._queue.dequeue()
 		
-		if item._duetime > self.now():
-			self._clock = item._duetime
+		if item.duetime > self.now():
+			self._clock = item.duetime
 			spinning = 0
 		
 		elif spinning > MAX_SPINNING:
@@ -98,7 +98,7 @@ func advance_to(time : float):
 	var dt : float = time
 	self._lock.lock()
 	if self.now() > dt:
-		GDRx.exc.ArgumentOutOfRangeException.new().throw()
+		GDRx.exc.ArgumentOutOfRangeException.Throw()
 		self._lock.unlock()
 		return
 	
@@ -118,12 +118,12 @@ func advance_to(time : float):
 		
 		var item : ScheduledItem = self._queue.peek()
 		
-		if item._duetime > dt:
+		if item.duetime > dt:
 			self._lock.unlock()
 			break
 		
-		if item._duetime > self.now():
-			self._clock = item._duetime
+		if item.duetime > self.now():
+			self._clock = item.duetime
 		
 		self._queue.dequeue()
 		
@@ -154,7 +154,7 @@ func sleep(time : float):
 	var dt : float = absolute
 	
 	if self.now() > dt:
-		GDRx.exc.ArgumentOutOfRangeException.new().throw()
+		GDRx.exc.ArgumentOutOfRangeException.Throw()
 	
 	self._lock.lock()
 	self._clock = dt

@@ -51,7 +51,7 @@ func schedule_periodic(
 	state = null) -> DisposableBase:
 		var schedule_periodic = self._scheduler.get("schedule_periodic")
 		if schedule_periodic == null:
-			GDRx.raise(GDRx.exc.NotImplementedException.new())
+			GDRx.exc.NotImplementedException.Throw()
 			return Disposable.new()
 		
 		var disp : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
@@ -60,18 +60,21 @@ func schedule_periodic(
 		var periodic = func(state = null):
 			if failed.v:
 				return null
-			var ex = action.call(state)
-			if ex is GDRx.exc.Exception:
+			var res = RefValue.Null()
+			GDRx.try(func():
+				res.v = action.call(state)
+			) \
+			.catch("Exception", func(e):
 				failed.v = true
-				if not self._handler.call(ex):
-					ex.throw()
-					return
+				if not self._handler.call(e):
+					GDRx.raise(e)
 				disp.dispose()
-				return null
-			return ex
+			) \
+			.end_try_catch()
+			return res.v if not failed.v else null
 		
 		var scheduler : PeriodicScheduler = self._scheduler
-		disp.set_disposable(scheduler.schedule_periodic(period, periodic, state))
+		disp.disposable = scheduler.schedule_periodic(period, periodic, state)
 		return disp
 
 func _clone(scheduler : SchedulerBase) -> CatchScheduler:
@@ -81,11 +84,18 @@ func _wrap(action : Callable) -> Callable:
 	var parent : CatchScheduler = self
 	
 	var wrapped_action = func(self_ : SchedulerBase, state = null):
-		var ex = action.call(parent._get_recursive_wrapper(self_), state)
-		if ex is GDRx.err.Error:
+		var res = RefValue.Null()
+		var failed = RefValue.Set(false)
+		GDRx.try(func():
+			res.v = action.call(parent._get_recursive_wrapper(self_), state)
+		) \
+		.catch("Exception", func(ex):
+			failed.v = true
 			if not parent._handler.call(ex):
-				ex.throw()
-		return Disposable.new()
+				GDRx.raise(ex)
+		) \
+		.end_try_catch()
+		return res.v if not failed.v else Disposable.new()
 	
 	return wrapped_action
 

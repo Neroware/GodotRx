@@ -11,22 +11,29 @@ func schedule_periodic(
 		var seconds = period # to_seconds(period)
 		
 		var periodic : Callable = func(scheduler : SchedulerBase, state = null, periodic_ : Callable = func(__, ___, ____): return) -> Disposable:
-			if disp._is_disposed:
+			if disp.is_disposed:
 				return null
 			
 			var now : float = scheduler.now()
 			
-			state = action.call(state)
-			if state is GDRx.exc.Exception:
+			var state_res = RefValue.Null()
+			var failed = RefValue.Set(false)
+			GDRx.try(func():
+				state_res.v = action.call(state)
+			) \
+			.catch("Exception", func(ex):
+				failed.v = true
 				disp.dispose()
-				state.throw()
-				return
+				GDRx.raise(ex)
+			) \
+			.end_try_catch()
+			if not failed.v: state = state_res.v 
 			
 			var time = seconds - (scheduler.now() - now)
-			disp.set_disposable(scheduler.schedule_relative(time, periodic_.bind(periodic_), state))
+			disp.disposable = scheduler.schedule_relative(time, periodic_.bind(periodic_), state)
 			
 			return null
 		periodic = periodic.bind(periodic)
 		
-		disp.set_disposable(self.schedule_relative(period, periodic, state))
+		disp.disposable = self.schedule_relative(period, periodic, state)
 		return disp

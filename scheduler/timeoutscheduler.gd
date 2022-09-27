@@ -26,7 +26,7 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
 	
 	var interval = func():
-		sad.set_disposable(self.invoke_action(action, state))
+		sad.disposable = self.invoke_action(action, state)
 	
 	var timer : SceneTreeTimer = GDRx.get_tree().create_timer(0.0)
 	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
@@ -59,7 +59,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
 	
 	var interval = func():
-		sad.set_disposable(self.invoke_action(action, state))
+		sad.disposable = self.invoke_action(action, state)
 	
 	var timer = GDRx.get_tree().create_timer(seconds)
 	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
