@@ -15,7 +15,7 @@
 ##        the arguments to the callback as a list.
 static func from_callback(
 	fun : Callable = func(args : Array, cb : Callable): return,
-	mapper : Callable = func(args): return args
+	mapper = null
 ) -> Callable:
 	
 	var function = func(args : Array) -> Observable:
@@ -26,20 +26,20 @@ static func from_callback(
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var handler = func(args : Array):
-				var results = RefValue.Null()
-				var failed = RefValue.Set(false)
-				GDRx.try(func():
-					results.v = mapper.call(args)
-				) \
-				.catch("Exception", func(e):
-					observer.on_error(e)
-					failed.v = true
-				).end_try_catch()
-				
-				if failed.v:
-					return
-				observer.on_next(results)
-		
+				var results = RefValue.Set(args)
+				if mapper != null:
+					if GDRx.try(func():
+						results.v = mapper.call(args)
+					) \
+					.catch("Exception", func(e):
+						observer.on_error(e)
+					).end_try_catch():
+						return Disposable.new()
+					observer.on_next(results.v)
+				else:
+					observer.on_next(results.v)
+					observer.on_completed()
+			
 			fun.call(arguments, handler)
 			return Disposable.new()
 		

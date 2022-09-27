@@ -14,23 +14,21 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 			var on_completed = func():
 				cancelable.disposable = _scheduler.schedule(action_.bind(action_))
 			
-			var current_ref = RefValue.Null()
-			var failed = GDRx.try(func():
-				current_ref.v = sources.next()
+			var current = RefValue.Null()
+			if GDRx.try(func():
+				current.v = sources.next()
 			) \
 			.catch("Exception", func(ex):
 				observer.on_error(ex)
 			) \
-			.end_try_catch()
-			var current = current_ref.v
-			if failed:
+			.end_try_catch():
 				pass
-			elif current is sources.End:
+			elif current.v is sources.End:
 				observer.on_completed()
 			else:
 				var d = SingleAssignmentDisposable.new()
 				subscription.disposable = d
-				d.disposable = current.subscribe(
+				d.disposable = current.v.subscribe(
 					observer.on_next,
 					observer.on_error,
 					on_completed,

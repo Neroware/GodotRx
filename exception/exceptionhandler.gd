@@ -5,50 +5,44 @@ class_name ExceptionHandler
 ## Objects of type [ThrowableBase] are handled by this type's singleton
 
 var _try_catch_stack : Array[TryCatch]
-var _raised_exceptions : Dictionary
+var _has_failed : Dictionary
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 	self._try_catch_stack = []
-	self._raised_exceptions = {}
+	self._has_failed = {}
 
 static func singleton() -> ExceptionHandler:
 	return GDRx.ExceptionHandler_
 
-func run(stmt : TryCatch):
-	var failed_ = false
-	self._raised_exceptions[stmt] = []
-	self._try_catch_stack.push_front(stmt)
+func run(stmt : TryCatch) -> bool:
+	self._has_failed[stmt] = false
 	
+	self._try_catch_stack.push_back(stmt)
 	stmt.risky_code.call()
-	if self._raised_exceptions[stmt].size() > 0:
-		failed_ = true
-		_handle_exceptions()
+	self._try_catch_stack.pop_back()
 	
-	self._try_catch_stack.pop_front()
-	self._raised_exceptions.erase(stmt)
-	return failed_
+	var failed = self._has_failed[stmt]
+	self._has_failed.erase(stmt)
+	return failed
 
 func raise(exc : ThrowableBase, default = null) -> Variant:
+	var handler : Callable = GDRx.basic.default_crash
+	
 	if self._try_catch_stack.is_empty():
-		GDRx.basic.default_crash.call(exc)
-	var current : TryCatch = self._try_catch_stack[0]
-	self._raised_exceptions[current].append(exc)
+		handler.call(exc)
+		return default
 	
-	return default
-
-func _handle_exceptions():
-	var stmt : TryCatch = self._try_catch_stack.pop_front()
-	var handler : Callable = GDRx.basic.noop
+	handler = GDRx.basic.noop
 	
-	if self._raised_exceptions[stmt].size() > 1:
-		push_warning("Risky code produced more than one exception! Only first one is handled!")
-	var exc = self._raised_exceptions[stmt][0]
-	
+	var stmt : TryCatch = self._try_catch_stack.pop_back()
+	self._has_failed[stmt] = true
 	for type in exc.tags():
-		if type in stmt.caught_types.keys():
+		if type in stmt.caught_types:
 			handler = stmt.caught_types[type]
+			break
 	
 	handler.call(exc)
-	self._try_catch_stack.push_front(stmt)
+	self._try_catch_stack.push_back(stmt)
+	return default

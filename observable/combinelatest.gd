@@ -56,6 +56,7 @@ static func combine_latest_(sources : Array[Observable]) -> Observable:
 				observer.on_completed()
 		
 		var subscriptions = [] ; for __ in range(n): subscriptions.append(null)
+		
 		var fun = func(i):
 			subscriptions[i] = SingleAssignmentDisposable.new()
 			

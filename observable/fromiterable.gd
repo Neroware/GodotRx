@@ -34,16 +34,18 @@ static func from_iterable_(
 		var disposed = RefValue.Set(false)
 		
 		var action = func(__ : SchedulerBase, ___ = null):
-			while not disposed.v:
-				var value = iterable.next()
-				if value is IterableBase.End:
-					observer.on_completed()
-					break
-				elif value is GDRx.err.Error:
-					observer.on_error(value)
-					break
-				else:
-					observer.on_next(value)
+			GDRx.try(func():
+				while not disposed.v:
+					var value = iterable.next()
+					if value is IterableBase.End:
+						observer.on_completed()
+					else:
+						observer.on_next(value)
+			) \
+			.catch("Exception", func(error):
+				observer.on_error(error)
+			) \
+			.end_try_catch()
 		
 		var dispose = func():
 			disposed.v = true
