@@ -69,7 +69,7 @@ func _subscribe_core(
 	self.observers.append(so)
 	
 	for item in self.queue:
-		so.on_next(item.value())
+		so.on_next(item.value)
 	
 	if self.exception != null:
 		so.on_error(self.exception)
@@ -84,7 +84,7 @@ func _trim(now : float):
 	while self.queue.size() > self.buffer_size:
 		self.queue.pop_front()
 	
-	while self.queue.size() > 0 and (now - self.queue[0].interval()) > self.window:
+	while self.queue.size() > 0 and (now - self.queue[0].interval) > self.window:
 		self.queue.pop_front()
 
 ## Notifies all subscribed observers with the value.
@@ -119,7 +119,7 @@ func _on_error_core(__super : Callable, e):
 		obv.ensure_active()
 
 ## Notifies all subscribed observers of the end of the sequence.
-func _on_completed(__super : Callable):
+func _on_completed_core(__super : Callable):
 	self.lock.lock()
 	var observers = self.observers.duplicate()
 	self.observers.clear()

@@ -69,9 +69,10 @@ func schedule_periodic(
 				if not self._handler.call(e):
 					GDRx.raise(e)
 				disp.dispose()
+				res.v = null
 			) \
 			.end_try_catch()
-			return res.v if not failed.v else null
+			return res.v
 		
 		var scheduler : PeriodicScheduler = self._scheduler
 		disp.disposable = scheduler.schedule_periodic(period, periodic, state)
@@ -85,17 +86,16 @@ func _wrap(action : Callable) -> Callable:
 	
 	var wrapped_action = func(self_ : SchedulerBase, state = null):
 		var res = RefValue.Null()
-		var failed = RefValue.Set(false)
 		GDRx.try(func():
 			res.v = action.call(parent._get_recursive_wrapper(self_), state)
 		) \
 		.catch("Exception", func(ex):
-			failed.v = true
 			if not parent._handler.call(ex):
 				GDRx.raise(ex)
+			res.v = Disposable.new()
 		) \
 		.end_try_catch()
-		return res.v if not failed.v else Disposable.new()
+		return res.v
 	
 	return wrapped_action
 

@@ -104,8 +104,8 @@ func run():
 		# and the due subset of previously queued items.
 		var time = self.now()
 		while not self._queue.is_empty():
-			var due = self._queue.peek()._duetime
-			while self._ready_list and due > self._ready_list[0]._duetime:
+			var due = self._queue.peek().duetime
+			while self._ready_list and due > self._ready_list[0].duetime:
 				ready.append(self._ready_list.pop_front())
 			if due > time:
 				break

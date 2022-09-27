@@ -28,7 +28,7 @@ static func exclusive_() -> Callable:
 					var on_completed_inner = func():
 						g.remove(inner_subscription)
 						has_current[0] = false
-						if is_stopped[0] and g.length() == 1:
+						if is_stopped[0] and g.length == 1:
 							observer.on_completed()
 					
 					inner_subscription.set_disposable(inner_source.subscribe(
@@ -40,7 +40,7 @@ static func exclusive_() -> Callable:
 			
 			var on_completed = func():
 				is_stopped[0] = true
-				if not has_current[0] and g.length() == 1:
+				if not has_current[0] and g.length == 1:
 					observer.on_completed()
 			
 			m.set_disposable(source.subscribe(

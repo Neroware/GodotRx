@@ -36,7 +36,7 @@ static func delay_with_mapper_(
 			var at_end = [false]
 			
 			var done = func():
-				if at_end[0] and delays.length() == 0:
+				if at_end[0] and delays.length == 0:
 					observer.on_completed()
 			
 			var subscription = SerialDisposable.new()

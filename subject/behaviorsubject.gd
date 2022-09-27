@@ -6,7 +6,7 @@ class_name BehaviorSubject
 ## Observers can subscribe to the subject to receive the last (or initial) value and
 ## all subsequent notifications.
 
-var _value
+var value
 
 ## Initializes a new instance of the BehaviorSubject class which
 ##        creates a subject that caches its last value and starts with the

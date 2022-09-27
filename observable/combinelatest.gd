@@ -60,15 +60,15 @@ static func combine_latest_(sources : Array[Observable]) -> Observable:
 			subscriptions[i] = SingleAssignmentDisposable.new()
 			
 			var on_next = func(x):
-				parent._lock.lock()
+				parent.lock.lock()
 				values[i] = x
 				_next.call(i)
-				parent._lock.unlock()
+				parent.lock.unlock()
 			
 			var on_completed = func():
-				parent._lock.lock()
+				parent.lock.lock()
 				done.call(i)
-				parent._lock.unlock()
+				parent.lock.unlock()
 			
 			var subscription = subscriptions[i]
 			assert(subscription != null)

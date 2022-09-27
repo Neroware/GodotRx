@@ -17,17 +17,14 @@ func schedule_periodic(
 			var now : float = scheduler.now()
 			
 			var state_res = RefValue.Null()
-			var failed = RefValue.Set(false)
-			GDRx.try(func():
+			if not GDRx.try(func():
 				state_res.v = action.call(state)
 			) \
 			.catch("Exception", func(ex):
-				failed.v = true
 				disp.dispose()
 				GDRx.raise(ex)
 			) \
-			.end_try_catch()
-			if not failed.v: state = state_res.v 
+			.end_try_catch(): state = state_res.v 
 			
 			var time = seconds - (scheduler.now() - now)
 			disp.disposable = scheduler.schedule_relative(time, periodic_.bind(periodic_), state)

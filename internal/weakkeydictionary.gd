@@ -1,8 +1,8 @@
-class_name WeakRefDictionary
+class_name WeakKeyDictionary
 
 ## A dictionary with weak references to keys
 ##
-## Pairs with non-valid keys are automatically removed in a gargabe collection
+## Pairs with non-referenced keys are automatically removed in a gargabe collection
 ## step
 
 class _Pair:
@@ -63,9 +63,9 @@ func clear():
 	for idx in range(self._buffer_size):
 		self._data[idx] = null
 
-func duplicate(gc : bool = true) -> WeakRefDictionary:
+func duplicate(gc : bool = true) -> WeakKeyDictionary:
 	if gc: _collect_garbage()
-	var ret = WeakRefDictionary.new()
+	var ret = WeakKeyDictionary.new()
 	ret._data = self._data.duplicate(true)
 	ret._buffer_size = self._buffer_size
 	return ret
@@ -146,7 +146,7 @@ func keys(gc : bool = true) -> Array:
 				keys.append(key)
 	return keys
 
-func merge(dictionary : WeakRefDictionary, overwrite : bool = false, gc : bool = true):
+func merge(dictionary : WeakKeyDictionary, overwrite : bool = false, gc : bool = true):
 	if gc: _collect_garbage()
 	for key in dictionary.keys():
 		if not has(key, false) or (has(key, false) and overwrite):

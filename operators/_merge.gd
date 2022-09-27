@@ -111,7 +111,7 @@ static func merge_all_() -> Callable:
 				var on_completed = func():
 					source._lock.lock()
 					group.remove(inner_subscription)
-					if is_stopped[0] and group.length() == 1:
+					if is_stopped[0] and group.length == 1:
 						observer.on_completed()
 					source._lock.unlock()
 				
@@ -125,7 +125,7 @@ static func merge_all_() -> Callable:
 			
 			var on_completed = func():
 				is_stopped[0] = true
-				if group.length() == 1:
+				if group.length == 1:
 					observer.on_completed()
 			
 			m.set_disposable(source.subscribe(

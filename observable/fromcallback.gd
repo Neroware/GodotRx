@@ -26,9 +26,17 @@ static func from_callback(
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var handler = func(args : Array):
-				var results = mapper.call(args)
-				if results is GDRx.err.Error:
-					observer.on_error(results)
+				var results = RefValue.Null()
+				var failed = RefValue.Set(false)
+				GDRx.try(func():
+					results.v = mapper.call(args)
+				) \
+				.catch("Exception", func(e):
+					observer.on_error(e)
+					failed.v = true
+				).end_try_catch()
+				
+				if failed.v:
 					return
 				observer.on_next(results)
 		

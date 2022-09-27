@@ -14,6 +14,7 @@ func _init(scheduler : SchedulerBase, observer : ObserverBase):
 	
 	self.scheduler = scheduler
 	self.observer = observer
+	
 	self.lock = RLock.new()
 	self.is_acquired = false
 	self.has_faulted = false

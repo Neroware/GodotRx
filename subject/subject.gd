@@ -165,6 +165,8 @@ func on_error(__super : Callable, e):
 func _on_error_core(__super : Callable, e):
 	self.lock.lock()
 	var observers : Array = self.observers.duplicate()
+	self.observers.clear()
+	self.exception = e
 	self.lock.unlock()
 	
 	for ob in observers:
@@ -180,6 +182,7 @@ func on_completed(__super : Callable):
 func _on_completed_core(__super : Callable):
 	self.lock.lock()
 	var observers : Array = self.observers.duplicate()
+	self.observers.clear()
 	self.lock.unlock()
 	
 	for ob in observers:

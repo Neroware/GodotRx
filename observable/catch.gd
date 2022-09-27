@@ -28,31 +28,40 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 		var action = func(scheduler : SchedulerBase, state = null, action_ : Callable = func(__, ___, ____): return):
 			var on_error = func(exn):
 				last_exception.v = exn
-				cancelable.set_disposable(_scheduler.schedule(action_.bind(action_)))
+				cancelable.disposable = _scheduler.schedule(action_.bind(action_))
 			
 			if is_disposed.v:
 				return
 			
-			var current = sources.next()
-			if not current is Observable:
+			RefValue.Set(false)
+			var current_ref = RefValue.Null()
+			var failed = GDRx.try(func():
+				current_ref.v = sources.next()
+			) \
+			.catch("Exception", func(ex):
+				observer.on_error(ex)
+			) \
+			.end_try_catch()
+			var current = current_ref.v
+			if failed:
+				pass
+			elif current is sources.End:
 				if last_exception.v != null:
 					observer.on_error(last_exception.v)
-				elif current is GDRx.err.Error:
-					observer.on_error(current)
 				else:
 					observer.on_completed()
 			else:
 				var d = SingleAssignmentDisposable.new()
-				subscription.set_disposable(d)
-				d.set_disposable(current.subscribe(
+				subscription.disposable = d
+				d.disposable = current.subscribe(
 					observer.on_next,
 					on_error,
 					observer.on_completed,
 					scheduler_
-				))
+				)
 		action = action.bind(action)
 		
-		cancelable.set_disposable(_scheduler.schedule(action))
+		cancelable.disposable = _scheduler.schedule(action)
 		
 		var dispose = func():
 			is_disposed.v = true

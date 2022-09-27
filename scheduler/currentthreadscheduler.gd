@@ -11,7 +11,7 @@ class_name CurrentThreadScheduler
 ##    key dictionary.
 
 const cls = "CurrentThreadScheduler"
-var _tramps : Dictionary
+var _tramps : WeakKeyDictionary
 
 ## Obtain a singleton instance for the current thread. Please note, if you
 ##        pass this instance to another thread, it will effectively behave as
@@ -23,9 +23,9 @@ var _tramps : Dictionary
 static func singleton() -> CurrentThreadScheduler:
 	var thread = OS.get_thread_caller_id()
 	var class_map = GDRx.CurrentThreadScheduler_global_.get(cls)
-	var class_map_ : WeakRefDictionary
+	var class_map_ : WeakKeyDictionary
 	if class_map == null:
-		class_map_ = WeakRefDictionary.new()
+		class_map_ = WeakKeyDictionary.new()
 		GDRx.CurrentThreadScheduler_global_.set_pair(cls, class_map_)
 	else:
 		class_map_ = class_map
@@ -40,7 +40,7 @@ static func singleton() -> CurrentThreadScheduler:
 	return self_
 
 func _init():
-	self._tramps = {}
+	self._tramps = WeakKeyDictionary.new()
 
 ## Returns a [Trampoline]
 func get_trampoline() -> Trampoline:
@@ -48,21 +48,23 @@ func get_trampoline() -> Trampoline:
 	var tramp = self._tramps.get(thread)
 	if tramp == null:
 		tramp = Trampoline.new()
-		self._tramps[thread] = tramp
+		self._tramps.set_pair(thread, tramp)
 	return tramp
 
 class _Local:
 	var _tramp : Dictionary
 	
-	func tramp():
+	func _trampoline():
 		var id = OS.get_thread_caller_id()
 		if not id in self._tramp.keys():
 			self._tramp[id] = Trampoline.new()
 		return self._tramp[id]
+	
+	var tramp : Trampoline: get = _trampoline
 
 class CurrentThreadSchedulerSingleton extends CurrentThreadScheduler:
 	func _init():
 		pass
 	
 	func get_trampoline() -> Trampoline:
-		return GDRx.CurrentThreadScheduler_local_.tramp()
+		return GDRx.CurrentThreadScheduler_local_.tramp

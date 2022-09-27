@@ -44,7 +44,7 @@ var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
 var TimeoutScheduler_ : TimeoutScheduler = TimeoutScheduler.new("GDRx")
 var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
-var CurrentThreadScheduler_global_ : WeakRefDictionary = WeakRefDictionary.new()
+var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
 var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #

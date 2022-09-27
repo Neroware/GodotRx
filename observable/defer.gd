@@ -22,10 +22,16 @@ static func defer_(factory : Callable = func(scheduler : SchedulerBase) -> Obser
 		observer : ObserverBase, 
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
-		var result = factory.call(scheduler if scheduler != null else ImmediateScheduler.singleton())
-		if not result is Observable:
-			return GDRx.obs.throw(GDRx.err.FactoryFailedException.new(null, result)).subscribe(observer)
 		
-		return result.subscribe(observer, func(e):return, func():return, scheduler)
+		var result = RefValue.Null()
+		if GDRx.try(func():
+			result.v = factory.call(scheduler if scheduler != null else ImmediateScheduler.singleton())
+		) \
+		.catch("Exception", func(ex):
+			result.v = GDRx.obs.throw(ex).subscribe(observer)
+		) \
+		.end_try_catch():
+			return result.v
+		return result.v.subscribe(observer, func(e):return, func():return, scheduler)
 	
 	return Observable.new(subscribe)

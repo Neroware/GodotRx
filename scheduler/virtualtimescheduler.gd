@@ -155,6 +155,7 @@ func sleep(time : float):
 	
 	if self.now() > dt:
 		GDRx.exc.ArgumentOutOfRangeException.Throw()
+		return
 	
 	self._lock.lock()
 	self._clock = dt

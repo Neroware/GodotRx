@@ -16,7 +16,7 @@ func _init(
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			return CompositeDisposable.new([
-				merged_disposable.disposable() if merged_disposable != null else Disposable.new(),
+				merged_disposable.disposable if merged_disposable != null else Disposable.new(),
 				underlying_observable.subscribe(observer, func(e): return, func(): return, scheduler)
 			])
 		

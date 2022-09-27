@@ -6,16 +6,16 @@ class_name ConnectableObservable
 ## Represents an observable that can be connected and
 ## disconnected.
 
-var _subject : SubjectBase
-var _has_subscription : bool
-var _subscription : DisposableBase
-var _source : ObservableBase
+var subject : SubjectBase
+var has_subscription : bool
+var subscription : DisposableBase
+var source : ObservableBase
 
 func _init(source : ObservableBase, subject : SubjectBase):
-	self._subject = subject
-	self._has_subscription = false
-	self._subscription = null
-	self._source = source
+	self.subject = subject
+	self.has_subscription = false
+	self.subscription = null
+	self.source = source
 	
 	super._init()
 
@@ -23,20 +23,20 @@ func _subscribe_core(
 	observer : ObserverBase,
 	scheduler : SchedulerBase = null
 ) -> DisposableBase:
-	return self._subject.as_observable().subscribe(observer, func(e): return, func(): return, scheduler)
+	return self.subject.as_observable().subscribe(observer, func(e): return, func(): return, scheduler)
 
 ## Connects the observable
 func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
-	if not self._has_subscription:
-		self._has_subscription = true
+	if not self.has_subscription:
+		self.has_subscription = true
 		
 		var dispose = func():
-			self._has_subscription = false
+			self.has_subscription = false
 		
-		var subscription = self._source.subscribe(self._subject.as_observer(), func(e): return, func(): return, scheduler)
-		self._subscription = CompositeDisposable.new([subscription, Disposable.new(dispose)])
+		var subscription = self.source.subscribe(self.subject.as_observer(), func(e): return, func(): return, scheduler)
+		self.subscription = CompositeDisposable.new([subscription, Disposable.new(dispose)])
 	
-	return self._subscription
+	return self.subscription
 
 ## Returns an observable sequence that stays connected to the
 ##        source indefinitely to the observable sequence.

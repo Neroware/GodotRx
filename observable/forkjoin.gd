@@ -44,19 +44,19 @@ static func fork_join_(sources : Array[Observable]) -> Observable:
 			subscriptions[i] = SingleAssignmentDisposable.new()
 			
 			var on_next = func(value):
-				parent._lock.lock()
+				parent.lock.lock()
 				values[i] = value
 				has_value[i] = true
-				parent._lock.unlock()
+				parent.lock.unlock()
 			
 			var on_completed = func():
-				parent._lock.lock()
+				parent.lock.lock()
 				done.call(i)
-				parent._lock.unlock()
+				parent.lock.unlock()
 			
-			subscriptions[i].set_disposable(sources[i].subscribe(
+			subscriptions[i].disposable = sources[i].subscribe(
 				on_next, observer.on_error, on_completed, scheduler
-			))
+			)
 		
 		for i in range(n):
 			_subscribe.call(i)

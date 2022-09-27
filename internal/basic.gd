@@ -24,4 +24,5 @@ func default_error(err):
 
 func default_crash(e):
 	OS.alert("Unhandled exception: " + str(e))
-	OS.crash("Unhandled exception: " + str(e))
+	print_stack()
+	GDRx.get_tree().quit(1)

@@ -7,8 +7,8 @@ func _init(fun : Callable = func():return):
 	self.risky_code = fun
 	self.caught_types = {}
 
-func end_try_catch():
-	ExceptionHandler.singleton().add(self)
+func end_try_catch() -> bool:
+	return ExceptionHandler.singleton().run(self)
 
 func catch(type : String, fun : Callable = func(__):return) -> TryCatch:
 	if type in self.caught_types.keys():

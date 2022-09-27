@@ -16,3 +16,11 @@ func as_observer() -> ObserverBase:
 func as_observable() -> ObservableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
+
+## The Subject's [Observer] behavior.
+var obv : ObserverBase:
+	get: return as_observer()
+
+## The Subject's [Observable] behavior.
+var obs : ObservableBase:
+	get: return as_observable()
