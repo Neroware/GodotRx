@@ -5,11 +5,11 @@ class_name Subject
 ## as an observer. Each notification is broadcasted to all subscribed
 ## observers.
 
-var _is_disposed : bool
-var _observers : Array[ObserverBase]
-var _exception
+var is_disposed : bool
+var observers : Array[ObserverBase]
+var exception
 
-var _lock : RLock
+var lock : RLock
 
 var _OBS : _Observable
 var _OBV : _Observer
@@ -21,7 +21,7 @@ class _Observable extends Observable:
 	func _init(subject : Subject, lock : RLock):
 		super._init()
 		self._subject = weakref(subject)
-		self._lock = lock
+		self.lock = lock
 	
 	func _subscribe_core(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
 		if self._subject.get_ref() == null:
@@ -84,12 +84,12 @@ class _Observer extends Observer:
 
 
 func _init():
-	self._is_disposed = false
-	self._observers = []
-	self._exception = null
-	self._lock = RLock.new()
+	self.is_disposed = false
+	self.observers = []
+	self.exception = null
+	self.lock = RLock.new()
 	
-	self._OBS = _Observable.new(self, self._lock)
+	self._OBS = _Observable.new(self, self.lock)
 	self._OBV = _Observer.new(self)
 
 ## Return [ObservableBase] behaviour.
@@ -102,30 +102,30 @@ func as_observer() -> ObserverBase:
 
 ## Causes an error when already disposed.
 func check_disposed():
-	if self._is_disposed:
-		var err = GDRx.err.DisposedException.new()
-		GDRx.raise(err)
-		return err
-	return false
+	if self.is_disposed:
+		GDRx.exc.DisposedException.Throw()
+		return false
+	return true
+	
 
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
 	scheduler : SchedulerBase = null,
 ) -> DisposableBase:
-	self._lock.lock()
-	if check_disposed() != false: self._lock.unlock() ; return
-	if not _OBV._is_stopped:
-		self._observers.append(observer)
+	self.lock.lock()
+	if not check_disposed(): self.lock.unlock() ; return
+	if not _OBV.is_stopped:
+		self.observers.append(observer)
 		var _sub = InnerSubscription.new(self, observer)
-		self._lock.unlock()
+		self.lock.unlock()
 		return _sub
 	
-	if self._exception != null:
-		observer.on_error(self._exception)
+	if self.exception != null:
+		observer.on_error(self.exception)
 	else:
 		observer.on_completed()
-	self._lock.unlock()
+	self.lock.unlock()
 	return Disposable.new()
 
 ## Notifies all subscribed observers with the value
@@ -136,15 +136,15 @@ func _subscribe_core(
 ## [br]
 ##            [code]value[/code] The value to send to all subscribed observers.
 func on_next(__super : Callable, i):
-	self._lock.lock()
-	if check_disposed() != false: self._lock.unlock() ; return
-	self._lock.unlock()
+	self.lock.lock()
+	if not check_disposed(): self.lock.unlock() ; return
+	self.lock.unlock()
 	__super.call(i)
 
 func _on_next_core(__super : Callable, i):
-	self._lock.lock()
-	var observers : Array = self._observers.duplicate()
-	self._lock.unlock()
+	self.lock.lock()
+	var observers : Array = self.observers.duplicate()
+	self.lock.unlock()
 	
 	for ob in observers:
 		ob.on_next(i)
@@ -157,39 +157,39 @@ func _on_next_core(__super : Callable, i):
 ## [br]
 ##            [code]error[/code] The exception to send to all subscribed observers.
 func on_error(__super : Callable, e):
-	self._lock.lock()
-	if check_disposed() != false: self._lock.unlock() ; return
-	self._lock.unlock()
+	self.lock.lock()
+	if not check_disposed(): self.lock.unlock() ; return
+	self.lock.unlock()
 	__super.call(e)
 
 func _on_error_core(__super : Callable, e):
-	self._lock.lock()
-	var observers : Array = self._observers.duplicate()
-	self._lock.unlock()
+	self.lock.lock()
+	var observers : Array = self.observers.duplicate()
+	self.lock.unlock()
 	
 	for ob in observers:
 		ob.on_error(e)
 
 ## Notifies all subscribed observers of the end of the sequence.
 func on_completed(__super : Callable):
-	self._lock.lock()
-	if check_disposed() != false: self._lock.unlock() ; return
-	self._lock.unlock()
+	self.lock.lock()
+	if not check_disposed(): self.lock.unlock() ; return
+	self.lock.unlock()
 	__super.call()
 
 func _on_completed_core(__super : Callable):
-	self._lock.lock()
-	var observers : Array = self._observers.duplicate()
-	self._lock.unlock()
+	self.lock.lock()
+	var observers : Array = self.observers.duplicate()
+	self.lock.unlock()
 	
 	for ob in observers:
 		ob.on_completed()
 
 ## Unsubscribe all observers and release resources.
 func dispose(__super : Callable):
-	self._lock.lock()
-	self._is_disposed = true
-	self._observers = []
-	self._exception = []
+	self.lock.lock()
+	self.is_disposed = true
+	self.observers = []
+	self.exception = []
 	__super.call()
-	self._lock.unlock()
+	self.lock.unlock()

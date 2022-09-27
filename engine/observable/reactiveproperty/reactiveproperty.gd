@@ -22,7 +22,7 @@ var Value:
 		self._lock.lock()
 		if _disposed:
 			self._lock.unlock()
-			GDRx.exc.DisposedException.new().throw()
+			GDRx.exc.DisposedException.Throw()
 			return null
 		var _ret = _getter.call(Value)
 		self._lock.unlock()
@@ -38,7 +38,7 @@ var Value:
 		var tmp = Value
 		if _disposed:
 			self._lock.unlock()
-			GDRx.exc.DisposedException.new().throw()
+			GDRx.exc.DisposedException.Throw()
 			return
 		value = _setter.call(tmp, value)
 		Value = value

@@ -18,23 +18,23 @@ var _value
 ##                received by the subject yet.
 func _init(value):
 	super._init()
-	self._value = value
+	self.value = value
 
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
 	scheduler : SchedulerBase = null,
 ) -> DisposableBase:
-	self._lock.lock()
-	if check_disposed() != false: self._lock.unlock() ; return Disposable.new()
+	self.lock.lock()
+	if not check_disposed(): self.lock.unlock() ; return Disposable.new()
 	if not _OBV._is_stopped:
-		self._observers.append(observer)
-		observer.on_next(self._value)
+		self.observers.append(observer)
+		observer.on_next(self.value)
 		var sub_ = InnerSubscription.new(self, observer)
-		self._lock.unlock()
+		self.lock.unlock()
 		return sub_
-	var ex = self._exception
-	self._lock.unlock()
+	var ex = self.exception
+	self.lock.unlock()
 	
 	if ex != null:
 		observer.on_error(ex)
@@ -45,10 +45,10 @@ func _subscribe_core(
 
 ## Notifies all subscribed observers with the value.
 func _on_next_core(__super : Callable, i):
-	self._lock.lock()
-	var observers = self._observers.duplicate()
-	self._value = i
-	self._lock.unlock()
+	self.lock.lock()
+	var observers = self.observers.duplicate()
+	self.value = i
+	self.lock.unlock()
 	
 	for observer in observers:
 		observer.on_next(i)
@@ -58,7 +58,7 @@ func _on_next_core(__super : Callable, i):
 ## Releases all resources used by the current instance of the
 ## [BehaviorSubject] class and unsubscribe all observers.
 func dispose(__super : Callable):
-	self._lock.lock()
-	self._value = null
+	self.lock.lock()
+	self.value = null
 	__super.call()
-	self._lock.unlock()
+	self.lock.unlock()
