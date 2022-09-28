@@ -61,7 +61,7 @@ static func from_godot_signal_(
 				return Disposable.new()
 		
 		if not _scheduler is GodotSignalScheduler:
-			GDRx.raise(GDRx.exc.BadArgumentException.new("Scheduler must be GodotSignalScheduler"))
+			GDRx.exc.BadArgumentException.new("Scheduler must be GodotSignalScheduler").throw()
 			return Disposable.new()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler

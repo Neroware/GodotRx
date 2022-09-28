@@ -14,18 +14,19 @@ var _getter : Callable
 var _setter : Callable
 
 var _initialized : bool
-var _disposed : bool
+
+var is_disposed : bool
 
 ## The wrapped value
 var Value:
 	get:
-		self._lock.lock()
-		if _disposed:
-			self._lock.unlock()
+		self.lock.lock()
+		if is_disposed:
+			self.lock.unlock()
 			GDRx.exc.DisposedException.Throw()
 			return null
 		var _ret = _getter.call(Value)
-		self._lock.unlock()
+		self.lock.unlock()
 		return _ret
 	
 	set(value):
@@ -34,15 +35,15 @@ var Value:
 			_initialized = true
 			return
 		
-		self._lock.lock()
+		self.lock.lock()
 		var tmp = Value
-		if _disposed:
-			self._lock.unlock()
+		if is_disposed:
+			self.lock.unlock()
 			GDRx.exc.DisposedException.Throw()
 			return
 		value = _setter.call(tmp, value)
 		Value = value
-		self._lock.unlock()
+		self.lock.unlock()
 		_on_changed.emit(tmp, value)
 
 ## Returns the wrapped value
@@ -56,39 +57,41 @@ func setv(value):
 ## Sets a getter function which is called when the value is read before the
 ## item is emitted on the stream.
 func with_getter(getter : Callable = func(v): return v) -> ReactiveProperty:
-	self._lock.lock()
+	self.lock.lock()
 	self._getter = getter
-	self._lock.unlock()
+	self.lock.unlock()
 	return self
 
 ## Sets a setter function which is called when the value is updated before the
 ## item is emitted on the stream.
 func with_setter(setter : Callable = func(old_v, new_v): return new_v) -> ReactiveProperty:
-	self._lock.lock()
+	self.lock.lock()
 	self._setter = setter
-	self._lock.unlock()
+	self.lock.unlock()
 	return self
 
 ## Sets the condition whether an item is emitted when the value is updated.
 func with_condition(cond = func(v_old, v_new): return v_old != v_new) -> ReactiveProperty:
-	self._lock.lock()
+	self.lock.lock()
 	self._cond = cond
-	self._lock.unlock()
+	self.lock.unlock()
 	return self
 
 ## Disposes the reactive property. Reading the value afterwards will cause an error.
 func dispose():
-	self._lock.lock()
-	if not self._disposed:
-		self._disposed = true
+	self.lock.lock()
+	if not self.is_disposed:
+		self.is_disposed = true
 		_on_dispose.emit()
-	self._lock.unlock()
+	self.lock.unlock()
 
 func _init(value, cond = func(v_old, v_new): return v_old != v_new):
 	_initialized = false
 	_cond = cond
 	_getter = func(v): return v
 	_setter = func(old_v, new_v): return new_v
+	
+	is_disposed = false
 	
 	Value = value
 	

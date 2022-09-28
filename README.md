@@ -13,6 +13,6 @@ You can easily add GDRx to your Godot 4 project:
 5. GDRx should now be ready to use. Try creating a simple Observable using:
 
 ```csharp
-var obs : Observable = GDRx.ReturnValue(42) \
-    subscribe(func(i): print("The answer: " + str(i)))
+var obs : Observable = GDRx.just(42) \
+    .subscribe(func(i): print("The answer: " + str(i)))
 ```

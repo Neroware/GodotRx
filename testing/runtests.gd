@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -183,7 +183,7 @@ func _test_amb():
 	seq.compare(obs, self.sequence_finished)
 
 func _test_throw():
-	var obs = GDRx.Throw(GDRx.err.Error.new("Kill sequence"))
+	var obs = GDRx.Throw(GDRx.exc.Exception.new("Kill sequence"))
 	var seq = ObservableSequence.new([ERROR])
 	seq.compare(obs, self.sequence_finished)
 
@@ -221,4 +221,15 @@ func _test_new_thread_scheduler():
 	
 	var obs = GDRx.ReturnValue(42, scheduler)
 	var seq = ObservableSequence.new([42, COMPLETE])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_faulty_map():
+	var obs = GDRx.FromArray([1, 2, 3, 4, 5, 6]) \
+	.map(func(i):
+		if i < 5:
+			return 2 * i
+		else:
+			return GDRx.exc.Exception.new("Expected Error!").throw(-1)
+		)
+	var seq = ObservableSequence.new([2, 4, 6, 8, ERROR])
 	seq.compare(obs, self.sequence_finished)
