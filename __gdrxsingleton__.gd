@@ -55,37 +55,50 @@ var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
 # =========================================================================== #
 #  Helper functions
 # =========================================================================== #
+
+## Raises a [code]GDRx.exc.AssertionFailedException[/code] and returns [b]true[/b]
+## should the assertion fail.
 func assert_(assertion : bool) -> bool:
 	if not assertion: 
 		GDRx.exc.AssertionFailedException.Throw()
 	return not assertion
 
+## Creates a new [TryCatch] Statement
 func try(fun : Callable) -> TryCatch:
 	return TryCatch.new(fun)
 
+## Raises a [ThrowableBase]
 func raise(exc : ThrowableBase, default = null) -> Variant:
 	return ExceptionHandler.singleton().raise(exc, default)
 
+## Raises a [code]GDRx.exc.Exception[/code] containing the given message
 func raise_message(msg : String, default = null):
 	return exc.raise(msg, default)
 
+## Blocks access to the function [code]fun[/code] using the given lock [code]l[/code]
 func with(l, fun : Callable = func():return):
 	return concur.with(l, fun)
 
+## Creates an [ArrayIterator] from a given [Array]
 func iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:
 	return util.Iter(x, start, end)
 
+## Creates a [code]WhileIterator[/code] from a given condition and another iterator
 func take_while(cond : Callable, it : IterableBase) -> IterableBase:
 	return util.TakeWhile(cond, it)
 
+## Generates an infinite sequence of a given value
 func infinite(infval = NOT_SET) -> IterableBase:
 	return util.Infinite(infval)
 
+## NOT Set value
 var NOT_SET = util.GetNotSet()
 
+## NOT Set value
 func not_set():
 	return NOT_SET
 
+## Alias for [code]GDRx.util.AddRef()[/code]
 func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 	return util.AddRef(xs, r)
 
@@ -93,7 +106,7 @@ func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 func of(data : Array) -> Observable:
 	return self.FromArray(data)
 
-## Alias for GDRx.obs.return_value
+## Alias for [code]GDRx.obs.return_value[/code]
 func just(value, scheduler : SchedulerBase = null) -> Observable:
 	return self.ReturnValue(value, scheduler)
 
