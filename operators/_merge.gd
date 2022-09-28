@@ -37,7 +37,7 @@ static func merge_(
 				group.add(subscription)
 				
 				var on_completed = func():
-					source._lock.lock()
+					source.lock.lock()
 					group.remove(subscription)
 					if queue.size() > 0:
 						var s = queue.pop_front()
@@ -46,17 +46,17 @@ static func merge_(
 						active_count[0] -= 1
 						if is_stopped[0] and active_count[0] == 0:
 							observer.on_completed()
-					source._lock.unlock()
+					source.lock.unlock()
 				
-				var on_next = GDRx.concur.synchronized(source._lock, 1).call(observer.on_next)
-				var on_error = GDRx.concur.synchronized(source._lock, 0).call(observer.on_error)
-				subscription.set_disposable(xs.subscribe(
+				var on_next = GDRx.concur.synchronized(source.lock, 1).call(observer.on_next)
+				var on_error = GDRx.concur.synchronized(source.lock, 0).call(observer.on_error)
+				subscription.disposable = xs.subscribe(
 					on_next, on_error, on_completed,
 					scheduler
-				))
+				)
 			
 			var on_next = func(inner_source : Observable):
-				assert(max_concorrent > 0)
+				if GDRx.assert_(max_concorrent != 0): return
 				if active_count[0] < max_concorrent:
 					active_count[0] += 1
 					subscribe.call(inner_source, subscribe)
@@ -109,14 +109,14 @@ static func merge_all_() -> Callable:
 				group.add(inner_subscription)
 				
 				var on_completed = func():
-					source._lock.lock()
+					source.lock.lock()
 					group.remove(inner_subscription)
 					if is_stopped[0] and group.length == 1:
 						observer.on_completed()
-					source._lock.unlock()
+					source.lock.unlock()
 				
-				var on_next : Callable = GDRx.concur.synchronized(source._lock, 1).call(observer.on_next)
-				var on_error : Callable = GDRx.concur.synchronized(source._lock, 0).call(observer.on_error)
+				var on_next : Callable = GDRx.concur.synchronized(source.lock, 1).call(observer.on_next)
+				var on_error : Callable = GDRx.concur.synchronized(source.lock, 0).call(observer.on_error)
 				var subscription = inner_source.subscribe(
 					on_next, on_error, on_completed,
 					scheduler
@@ -128,10 +128,10 @@ static func merge_all_() -> Callable:
 				if group.length == 1:
 					observer.on_completed()
 			
-			m.set_disposable(source.subscribe(
+			m.disposable = source.subscribe(
 				on_next, observer.on_error, on_completed,
 				scheduler
-			))
+			)
 			return group
 		
 		return Observable.new(subscribe)

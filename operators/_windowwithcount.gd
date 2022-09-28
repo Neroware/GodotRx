@@ -18,12 +18,12 @@ static func window_with_count_(
 		An observable sequence of windows.
 	"""
 	if count <= 0:
-		GDRx.exc.ArgumentOutOfRangeException.new().throw()
+		GDRx.exc.ArgumentOutOfRangeException.Throw()
 		count = 1
 	
 	var skip_ : int = skip if skip != null else count
 	if skip_ <= 0:
-		GDRx.exc.ArgumentOutOfRangeException.new().throw()
+		GDRx.exc.ArgumentOutOfRangeException.Throw()
 		skip_ = 1
 	
 	var window_with_count = func(source : Observable) -> Observable:
@@ -66,10 +66,10 @@ static func window_with_count_(
 					q.pop_front().as_observer().on_completed()
 				observer.on_completed()
 			
-			m.set_disposable(source.subscribe(
+			m.disposable = source.subscribe(
 				on_next, on_error, on_completed,
 				scheduler
-			))
+			)
 			return refCountDisposable
 		
 		return Observable.new(subscribe)

@@ -19,12 +19,16 @@ static func filter_(predicate : Callable = func(x): return true) -> Callable:
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var on_next = func(value):
-				var should_run = predicate.call(value)
-				if not should_run is bool:
-					observer.on_error(GDRx.err.BadPredicateError.new())
-					return
+				var should_run = RefValue.Set(true)
+				if GDRx.try(func():
+					should_run.v = predicate.call(value)
+				) \
+				.catch("Exception", func(ex):
+					observer.on_error(ex)
+				) \
+				.end_try_catch(): return
 				
-				if should_run:
+				if should_run.v:
 					observer.on_next(value)
 			
 			return source.subscribe(

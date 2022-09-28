@@ -25,11 +25,15 @@ static func map_(
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var on_next = func(value):
-				var result = _mapper.call(value)
-				if result is GDRx.err.Error:
-					obv.on_error(result)
-				else:
-					obv.on_next(result)
+				var result = RefValue.Null()
+				if not GDRx.try(func():
+					result.v = _mapper.call(value)
+				) \
+				.catch("Exception", func(err):
+					obv.on_error(err)
+				) \
+				.end_try_catch():
+					obv.on_next(result.v)
 			
 			return source.subscribe(
 				on_next, obv.on_error, obv.on_completed,

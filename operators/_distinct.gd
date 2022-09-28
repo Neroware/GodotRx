@@ -52,13 +52,16 @@ func distinct_(
 			var hashset = HashSet.new(comparer_)
 			
 			var on_next = func(x):
-				var key = x
-				key = key_mapper.call(key)
-				if key is GDRx.err.Error:
-					observer.on_error(key)
-					return
+				var key = RefValue.Set(x)
+				if GDRx.try(func():
+					key.v = key_mapper.call(key.v)
+				) \
+				.catch("Exception", func(ex):
+					observer.on_error(ex)
+				) \
+				.end_try_catch(): return
 				
-				if hashset.push(key):
+				if hashset.push(key.v):
 					observer.on_next(x)
 			
 			return source.subscribe(

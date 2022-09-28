@@ -31,22 +31,22 @@ static func exclusive_() -> Callable:
 						if is_stopped[0] and g.length == 1:
 							observer.on_completed()
 					
-					inner_subscription.set_disposable(inner_source.subscribe(
+					inner_subscription.disposable = inner_source.subscribe(
 						observer.on_next,
 						observer.on_error,
 						on_completed_inner,
 						scheduler
-					))
+					)
 			
 			var on_completed = func():
 				is_stopped[0] = true
 				if not has_current[0] and g.length == 1:
 					observer.on_completed()
 			
-			m.set_disposable(source.subscribe(
+			m.disposable = source.subscribe(
 				on_next, observer.on_error, on_completed,
 				scheduler
-			))
+			)
 			return g
 		
 		return Observable.new(subscribe)

@@ -24,17 +24,20 @@ static func take_while_(
 			var running = RefValue.Set(true)
 			
 			var on_next = func(value):
-				source._lock.lock()
+				source.lock.lock()
 				if not running.v:
-					source._lock.unlock()
+					source.lock.unlock()
 					return
 				
-				running.v = predicate.call(value)
-				if not running.v is bool:
-					observer.on_error(running.v)
-					source._lock.unlock()
+				if GDRx.try(func():
+					running.v = predicate.call(value)
+				) \
+				.catch("Exception", func(exn):
+					observer.on_error(exn)
+				).end_try_catch():
+					source.lock.unlock()
 					return
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				if running.v:
 					observer.on_next(value)
@@ -80,18 +83,22 @@ static func take_while_indexed_(
 			var i = RefValue.Set(0)
 			
 			var on_next = func(value):
-				source._lock.lock()
+				source.lock.lock()
 				if not running.v:
-					source._lock.unlock()
+					source.lock.unlock()
 					return
 				
-				running.v = predicate.call(value, i.v)
-				if not running.v is bool:
-					observer.on_error(running.v)
-					source._lock.unlock()
+				if GDRx.try(func():
+					running.v = predicate.call(value, i.v)
+				) \
+				.catch("Exception", func(exn):
+					observer.on_error(exn)
+				).end_try_catch():
+					source.lock.unlock()
 					return
-				i.v += 1
-				source._lock.unlock()
+				else:
+					i.v += 1
+				source.lock.unlock()
 				
 				if running.v:
 					observer.on_next(value)

@@ -30,7 +30,7 @@ static func join_(
 			var right_id = RefValue.Set(0)
 			
 			var on_next_left = func(value):
-				var duration = null
+				var duration = RefValue.Null()
 				var current_id = left_id.v
 				left_id.v += 1
 				var md = SingleAssignmentDisposable.new()
@@ -46,18 +46,18 @@ static func join_(
 					
 					group.remove(md)
 				
-				duration = left_duration_mapper.call(value)
-				if duration is GDRx.err.Error:
-					observer.on_error(duration)
-					return
-				if not duration is Observable:
-					observer.on_error(GDRx.err.BadMappingException.new())
-					return
+				if GDRx.try(func():
+					duration.v = left_duration_mapper.call(value)
+				) \
+				.catch("Exception", func(exception):
+					observer.on_error(exception)
+				) \
+				.end_try_catch(): return
 				
-				md.set_disposable(duration.pipe1(GDRx.op.take(1)).subscribe(
+				md.disposable = duration.v.pipe1(GDRx.op.take(1)).subscribe(
 					func(__):return, observer.on_error, func(): expire.call(),
 					scheduler
-				))
+				)
 				
 				for val in right_map.values():
 					var result = Tuple.new([value, val])
@@ -78,7 +78,7 @@ static func join_(
 			)
 			
 			var on_next_right = func(value):
-				var duration = null
+				var duration = RefValue.Null()
 				var current_id = right_id.v
 				right_id.v += 1
 				var md = SingleAssignmentDisposable.new()
@@ -93,18 +93,18 @@ static func join_(
 					
 					group.remove(md)
 				
-				duration = right_duration_mapper.call(value)
-				if duration is GDRx.err.Error:
-					observer.on_error(duration)
-					return
-				if not duration is Observable:
-					observer.on_error(GDRx.err.BadMappingException.new())
-					return
+				if GDRx.try(func():
+					duration.v = right_duration_mapper.call(value)
+				) \
+				.catch("Exception", func(exception):
+					observer.on_error(exception)
+				) \
+				.end_try_catch(): return
 				
-				md.set_disposable(duration.pipe1(GDRx.op.take(1)).subscribe(
+				md.disposable = duration.v.pipe1(GDRx.op.take(1)).subscribe(
 					func(__):return, observer.on_error, func(): expire.call(),
 					scheduler
-				))
+				)
 				
 				for val in left_map.values():
 					var result = Tuple.new([val, value])

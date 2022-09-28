@@ -12,27 +12,34 @@ static func extrema_by(
 		var items = []
 		
 		var on_next = func(x):
-			var key = key_mapper.call(x)
-			if key is GDRx.err.Error:
-				observer.on_error(key)
-				return
+			var key = RefValue.Null()
+			if GDRx.try(func():
+				key.v = key_mapper.call(x)
+			) \
+			.catch("Exception", func(ex):
+				observer.on_error(ex)
+			) \
+			.end_try_catch(): return
 			
-			var comparison = 0
+			var comparison = RefValue.Set(0)
 			
 			if not has_value.v:
 				has_value.v = true
-				last_key.v = key
+				last_key.v = key.v
 			else:
-				comparison = comparer.call(key, last_key.v)
-				if comparison is GDRx.err.Error:
-					observer.on_error(comparison)
-					return
+				if GDRx.try(func():
+					comparison.v = comparer.call(key.v, last_key.v)
+				) \
+				.catch("Exception", func(ex):
+					observer.on_error(ex)
+				) \
+				.end_try_catch(): return
 			
-			if comparison > 0:
-				last_key.v = key
+			if comparison.v > 0:
+				last_key.v = key.v
 				items.clear()
 			
-			if comparison >= 0:
+			if comparison.v >= 0:
 				items.append(x)
 		
 		var on_completed = func():

@@ -19,10 +19,20 @@ static func finally_action_(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
-			var subscription = source.subscribe(observer, func(e):return, func():return, scheduler)
+			var subscription = RefValue.Null()
+			GDRx.try(func():
+				subscription.v = source.subscribe(observer, func(e):return, func():return, scheduler)
+			) \
+			.catch("Exception", func(e):
+				action.call()
+				GDRx.raise(e)
+			) \
+			.end_try_catch()
 			
 			var dispose = func():
-				subscription.dispose()
+				GDRx.try(func():
+					subscription.v.dispose()
+				).end_try_catch()
 				action.call()
 			
 			return Disposable.new(dispose)

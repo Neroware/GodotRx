@@ -39,14 +39,26 @@ static func group_join_(
 			var on_next_left = func(value):
 				var subject : Subject = Subject.new()
 				
-				left._lock.lock()
+				left.lock.lock()
 				var _id = left_id[0]
 				left_id[0] += 1
 				left_map[_id] = subject
-				left._lock.unlock()
+				left.lock.unlock()
 				
-				var result = Tuple.new([value, GDRx.util.AddRef(subject.as_observable(), rcd)])
-				observer.on_next(result)
+				var result = RefValue.Null()
+				if GDRx.try(func():
+					result.v = Tuple.new([value, GDRx.util.AddRef(subject.as_observable(), rcd)])
+				) \
+				.catch("Exception", func(e):
+					push_error("*** Exception: ", e)
+					for left_value in left_map.values():
+						left_value.on_error(e)
+					
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
+				
+				observer.on_next(result.v)
 				
 				for right_value in right_map.values():
 					subject.as_observer().on_next(right_value)
@@ -60,19 +72,17 @@ static func group_join_(
 						subject.as_observer().on_completed()
 					group.remove(md)
 				
-				var duration = left_duration_mapper.call(value)
-				if duration is GDRx.err.Error:
+				var duration = RefValue.Null()
+				if GDRx.try(func():
+					duration.v = left_duration_mapper.call(value)
+				) \
+				.catch("Exception", func(e):
 					for left_value in left_map.values():
-						left_value.as_observer().on_error(duration)
+						left_value.on_error(e)
 					
-					observer.on_error(duration)
-					return
-				if not duration is Observable:
-					for left_value in left_map.values():
-						left_value.as_observer().on_error(GDRx.err.BadMappingException.new())
-					
-					observer.on_error(GDRx.err.BadMappingException.new())
-					return
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
 				var on_error = func(error):
 					for left_value in left_map.values():
@@ -80,9 +90,9 @@ static func group_join_(
 					
 					observer.on_error(error)
 				
-				md.set_disposable(duration.pipe1(GDRx.op.take(1)).subscribe(
+				md.disposable = duration.v.pipe1(GDRx.op.take(1)).subscribe(
 					nothing, on_error, expire, scheduler
-				))
+				)
 			
 			var on_error_left = func(error):
 				for left_value in left_map.values():
@@ -100,11 +110,11 @@ static func group_join_(
 			)
 			
 			var send_right = func(value):
-				left._lock.lock()
+				left.lock.lock()
 				var _id = right_id[0]
 				right_id[0] += 1
 				right_map[_id] = value
-				left._lock.unlock()
+				left.lock.unlock()
 				
 				var md = SingleAssignmentDisposable.new()
 				group.add(md)
@@ -113,25 +123,33 @@ static func group_join_(
 					right_map.erase(_id)
 					group.remove(md)
 				
-				var duration = right_duration_mapper.call(value)
-				if duration is GDRx.err.Error:
+				var duration = RefValue.Null()
+				if GDRx.try(func():
+					duration.v = right_duration_mapper.call(value)
+				) \
+				.catch("Exception", func(e):
 					for left_value in left_map.values():
-						left_value.as_observer().on_error(duration)
+						left_value.on_error(e)
 					
-					observer.on_error(duration)
-					return
-				if not duration is Observable:
-					for left_value in left_map.values():
-						left_value.as_observer().on_error(GDRx.err.BadMappingException.new())
-					
-					observer.on_error(GDRx.err.BadMappingException.new())
-					return
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
 				var on_error = func(error):
-					left._lock.lock()
+					left.lock.lock()
 					for left_value in left_map.values():
 						left_value.as_observer().on_next(value)
-					left._lock.unlock()
+					left.lock.unlock()
+				
+				md.disposable = duration.v.pipe1(GDRx.obs.take(1)).subscribe(
+					nothing, on_error, expire,
+					scheduler
+				)
+				
+				left.lock.lock()
+				for left_value in left_map.values():
+					left_value.on_next(value)
+				left.lock.unlock()
 			
 			var on_error_right = func(error):
 				for left_value in left_map.values():

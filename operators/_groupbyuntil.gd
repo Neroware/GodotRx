@@ -52,61 +52,61 @@ static func group_by_until_(
 			var ref_count_disposable = RefCountDisposable.new(group_disposable)
 			
 			var on_next = func(x):
-				var writer : Subject = null
-				var key = null
+				var writer = RefValue.Null()
+				var key = RefValue.Null()
 				
-				key = key_mapper.call(x)
-				if key is GDRx.err.Error:
+				if GDRx.try(func():
+					key.v = key_mapper.call(x)
+				) \
+				.catch("Exception", func(e):
 					for wrt in writers.values():
-						wrt.as_observer().on_error(key)
-					observer.on_error(key)
-					return
+						wrt.as_observer().on_error(key.v)
+					observer.on_error(key.v)
+				) \
+				.end_try_catch(): return
 				
 				var fire_new_map_entry = false
-				writer = writers.get(key)
-				if writer == null:
-					writer = subject_mapper_.call()
-					if writer is GDRx.err.Error:
+				writer.v = writers.get(key.v)
+				if writer.v == null:
+					if GDRx.try(func():
+						writer.v = subject_mapper_.call()
+					) \
+					.catch("Exception", func(e):
 						for wrt in writers.values():
-							wrt.as_observer().on_error(writer)
-						observer.on_error(writer)
-						return
-					if not writer is Subject:
-						for wrt in writers.values():
-							wrt.as_observer().on_error(GDRx.err.BadMappingException.new())
-						observer.on_error(GDRx.err.BadMappingException.new())
-						return
+							wrt.as_observer().on_error(e)
+						observer.on_error(e)
+					) \
+					.end_try_catch(): return
 					
-					writers[key] = writer
+					writers[key.v] = writer.v
 					fire_new_map_entry = true
 				
 				if fire_new_map_entry:
 					var group : GroupedObservable = GroupedObservable.new(
-						key, writer.as_observable(), ref_count_disposable
+						key.v, writer.v.as_observable(), ref_count_disposable
 					)
 					var duration_group : GroupedObservable = GroupedObservable.new(
-						key, writer.as_observable()
+						key.v, writer.v.as_observable()
 					)
-					var duration = duration_mapper.call(duration_group)
-					if duration is GDRx.err.Error:
+					var duration = RefValue.Null()
+					if GDRx.try(func():
+						duration.v = duration_mapper.call(duration_group)
+					) \
+					.catch("Exception", func(e):
 						for wrt in writers.values():
-							wrt.as_observer().on_error(duration)
-						observer.on_error(duration)
-						return
-					if not duration is Observable:
-						for wrt in writers.values():
-							wrt.as_observer().on_error(GDRx.err.BadMappingException.new())
-						observer.on_error(GDRx.err.BadMappingException.new())
-						return
+							wrt.as_observer().on_error(e)
+						observer.on_error(e)
+					) \
+					.end_try_catch(): return
 					
 					observer.on_next(group)
 					var sad = SingleAssignmentDisposable.new()
 					group_disposable.add(sad)
 					
 					var expire = func():
-						if writers.get(key) != null:
-							writers.erase(key)
-							writer.as_observer().on_completed()
+						if writers.get(key.v) != null:
+							writers.erase(key.v)
+							writer.v.as_observer().on_completed()
 						
 						group_disposable.remove(sad)
 					
@@ -121,20 +121,24 @@ static func group_by_until_(
 					var on_completed = func():
 						expire.call()
 					
-					sad.set_disposable(duration.pipe1(
+					sad.disposable = duration.v.pipe1(
 						GDRx.op.take(1)
 					).subscribe(
 						on_next, on_error, on_completed, scheduler
-					))
+					)
 				
-				var element = element_mapper_.call(x)
-				if element is GDRx.err.Error:
+				var element = RefValue.Null()
+				if GDRx.try(func():
+					element.v = element_mapper_.call(x)
+				) \
+				.catch("Exception", func(e):
 					for wrt in writers.values():
-						wrt.as_observer().on_error(element)
-					observer.on_error(element)
-					return
+						wrt.as_observer().on_error(e)
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
-				writer.as_observer().on_next(element)
+				writer.v.as_observer().on_next(element.v)
 			
 			var on_error = func(ex):
 				for wrt in writers.values():

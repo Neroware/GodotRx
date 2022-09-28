@@ -10,13 +10,16 @@ static func find_value_(
 			var index = RefValue.Set(0)
 			
 			var on_next = func(x):
-				var should_run = false
-				should_run = predicate.call(x, index.v, source)
-				if should_run is GDRx.err.Error:
-					observer.on_error(should_run)
-					return
+				var should_run = RefValue.Set(false)
+				if GDRx.try(func():
+					should_run.v = predicate.call(x, index.v, source)
+				) \
+				.catch("Exception", func(ex):
+					observer.on_error(ex)
+				) \
+				.end_try_catch(): return
 				
-				if should_run:
+				if should_run.v:
 					observer.on_next(index.v if yield_index else x)
 					observer.on_completed()
 				else:

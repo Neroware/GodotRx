@@ -22,13 +22,13 @@ static func switch_latest_() -> Callable:
 			
 			var on_next = func(inner_source : Observable):
 				var d = SingleAssignmentDisposable.new()
-				source._lock.lock()
+				source.lock.lock()
 				latest[0] += 1
 				var _id = latest[0]
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				has_latest[0] = true
-				inner_subscription.set_disposable(d)
+				inner_subscription.disposable = d
 				
 				var obs = inner_source
 				
@@ -46,10 +46,10 @@ static func switch_latest_() -> Callable:
 						if is_stopped[0]:
 							observer.on_completed()
 				
-				d.set_disposable(obs.subscribe(
+				d.disposable = obs.subscribe(
 					on_next, on_error, on_completed,
 					scheduler
-				))
+				)
 			
 			var on_completed = func():
 				is_stopped[0] = true

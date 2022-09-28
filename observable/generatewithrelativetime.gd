@@ -66,7 +66,7 @@ static func generate_with_relative_time_(
 			.end_try_catch(): return
 			
 			if has_result.v:
-				assert(time.v != null)
+				if GDRx.assert_(time.v != null): return
 				mad.disposable = scheduler.scheduler_relative(time.v, action_.bind(action_))
 			else:
 				observer.on_completed()

@@ -25,11 +25,11 @@ static func observable_delay_timespan(
 		var on_next = func(notification : Tuple):
 			var should_run = false
 			
-			source._lock.lock()
+			source.lock.lock()
 			if notification.at(0) is OnErrorNotification:
 				queue.clear()
 				queue.append(notification)
-				exception.v = notification.at(0)._err
+				exception.v = notification.at(0).err
 				should_run = not running[0]
 			else:
 				queue.append(
@@ -40,20 +40,20 @@ static func observable_delay_timespan(
 				)
 				should_run = not active[0]
 				active[0] = true
-			source._lock.unlock()
+			source.lock.unlock()
 			
 			if should_run:
 				if exception.v != null:
 					observer.on_error(exception.v)
 				else:
 					var mad = MultipleAssignmentDisposable.new()
-					cancelable.set_disposable(mad)
+					cancelable.disposable = mad
 					
 					var action = func(scheduler : SchedulerBase, state = null, __action_rec : Callable = func(__, ___, ____): return null):
 						if exception.v != null:
 							return
 						
-						source._lock.lock()
+						source.lock.lock()
 						running[0] = true
 						while true:
 							var result : Notification = null
@@ -77,16 +77,16 @@ static func observable_delay_timespan(
 						
 						var ex = exception.v
 						running[0] = false
-						source._lock.unlock()
+						source.lock.unlock()
 						
 						if ex != null:
 							observer.on_error(ex)
 						elif should_continue:
-							mad.set_disposable(scheduler.schedule_relative(
+							mad.disposable = scheduler.schedule_relative(
 								recurse_duetime, __action_rec.bind(__action_rec)
-							))
+							)
 					
-					mad.set_disposable(_scheduler.schedule_relative(duetime_, action.bind(action)))
+					mad.disposable = _scheduler.schedule_relative(duetime_, action.bind(action))
 		
 		var subscription = source.pipe2(
 			GDRx.op.materialize(),

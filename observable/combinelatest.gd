@@ -72,11 +72,11 @@ static func combine_latest_(sources : Array[Observable]) -> Observable:
 				parent.lock.unlock()
 			
 			var subscription = subscriptions[i]
-			assert(subscription != null)
-			subscription.set_disposable(sources[i].subscribe(
+			if GDRx.assert_(subscription != null): return
+			subscription.disposable = sources[i].subscribe(
 				on_next, observer.on_error,
 				on_completed, scheduler
-			))
+			)
 		
 		for idx in range(n):
 			fun.call(idx)

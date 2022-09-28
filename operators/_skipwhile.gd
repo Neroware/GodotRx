@@ -26,15 +26,16 @@ static func skip_while_(predicate : Callable) -> Callable:
 			
 			var on_next = func(value):
 				if not running.v:
-					var pred_ = predicate.call(value)
-					if not pred_ is bool:
-						observer.on_error(GDRx.err.BadPredicateException.new())
-						return
-					running.v = not pred_
+					if GDRx.try(func():
+						running.v = not predicate.call(value)
+					) \
+					.catch("Exception", func(exn):
+						observer.on_error(exn)
+					) \
+					.end_try_catch(): return
 				
 				if running.v:
 					observer.on_next(value)
-				
 			
 			return source.subscribe(
 				on_next, observer.on_error, observer.on_completed, 

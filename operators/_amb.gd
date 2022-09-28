@@ -23,23 +23,23 @@ static func amb_(right_source : Observable) -> Callable:
 					left_subscription.dispose()
 			
 			var on_next_left = func(value):
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_left.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == left_choice:
 					observer.on_next(value)
 			
 			var on_error_left = func(err):
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_left.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == left_choice:
 					observer.on_error(err)
 			
 			var on_completed_left = func():
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_left.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == left_choice:
 					observer.on_completed()
 			
@@ -47,26 +47,26 @@ static func amb_(right_source : Observable) -> Callable:
 				on_next_left, on_error_left, on_completed_left,
 				scheduler
 			)
-			left_subscription.set_disposable(left_d)
+			left_subscription.disposable = left_d
 			
 			var on_next_right = func(value):
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_right.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == right_choice:
 					observer.on_next(value)
 			
 			var on_error_right = func(err):
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_right.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == right_choice:
 					observer.on_error(err)
 			
 			var on_completed_right = func():
-				left_source._lock.lock()
+				left_source.lock.lock()
 				choice_right.call()
-				left_source._lock.unlock()
+				left_source.lock.unlock()
 				if choice[0] == right_choice:
 					observer.on_completed()
 			
@@ -74,7 +74,7 @@ static func amb_(right_source : Observable) -> Callable:
 				on_next_right, on_error_right, on_completed_right,
 				scheduler
 			)
-			right_subscription.set_disposable(right_d)
+			right_subscription.disposable = right_d
 			return CompositeDisposable.new([left_subscription, right_subscription])
 		
 		return Observable.new(subscribe)

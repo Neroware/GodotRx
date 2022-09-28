@@ -20,17 +20,25 @@ static func to_dict_(
 		) -> DisposableBase:
 			
 			var on_next = func(x):
-				var key = key_mapper.call(x)
-				if key is GDRx.err.Error:
-					observer.on_error(key)
-					return
+				var key = RefValue.Null()
+				if GDRx.try(func():
+					key.v = key_mapper.call(x)
+				) \
+				.catch("Exception", func(e):
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
-				var element = element_mapper.call(x)
-				if key is GDRx.err.Error:
-					observer.on_error(key)
-					return
+				var element = RefValue.Null()
+				if GDRx.try(func():
+					element.v = element_mapper.call(x)
+				) \
+				.catch("Exception", func(e):
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
-				m.v[key] = element
+				m.v[key.v] = element.v
 			
 			var on_completed = func():
 				observer.on_next.call(m.v)

@@ -123,10 +123,14 @@ static func window_when_(closing_mapper : Callable) -> Callable:
 			)
 			
 			var create_window_on_completed = func(__rec_cb : Callable):
-				var window_close = closing_mapper.call()
-				if not window_close is Observable:
-					observer.on_error(GDRx.err.BadMappingException.new())
-					return
+				var window_close = RefValue.Null()
+				if GDRx.try(func():
+					window_close.v = closing_mapper.call()
+				) \
+				.catch("Exception", func(exception):
+					observer.on_error(exception)
+				) \
+				.end_try_catch(): return
 				
 				var on_completed_inner = func():
 					window.v.as_observer().on_completed()
@@ -135,10 +139,10 @@ static func window_when_(closing_mapper : Callable) -> Callable:
 					__rec_cb.bind(__rec_cb).call()
 				
 				var m1 = SingleAssignmentDisposable.new()
-				m.set_disposable(m1)
-				m1.set_disposable(window_close.pipe1(GDRx.op.take(1)).subscribe(
+				m.disposable = m1
+				m1.disposable = window_close.v.pipe1(GDRx.op.take(1)).subscribe(
 					func(__): return, on_error, on_completed_inner, scheduler
-				))
+				)
 			
 			create_window_on_completed.bind(create_window_on_completed).call()
 			return r

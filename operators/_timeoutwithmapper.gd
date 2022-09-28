@@ -42,7 +42,7 @@ static func timeout_with_mapper_(
 			var timer = SerialDisposable.new()
 			var original = SingleAssignmentDisposable.new()
 			
-			subscription.set_disposable(original)
+			subscription.disposable = original
 			
 			var switched = false
 			var _id = [0]
@@ -54,13 +54,13 @@ static func timeout_with_mapper_(
 					return _id[0] == my_id
 				
 				var d = SingleAssignmentDisposable.new()
-				timer.set_disposable(d)
+				timer.disposable = d
 				
 				var on_next = func(x):
 					if timer_wins.call():
-						subscription.set_disposable(other_.subscribe(
+						subscription.disposable = other_.subscribe(
 							observer, func(e):return, func():return, scheduler
-						))
+						)
 					
 					d.dispose()
 				
@@ -70,14 +70,14 @@ static func timeout_with_mapper_(
 				
 				var on_completed = func():
 					if timer_wins.call():
-						subscription.set_disposable(other_.subscribe(
+						subscription.disposable = other_.subscribe(
 							observer
-						))
+						)
 				
-				d.set_disposable(timeout.subscribe(
+				d.disposable = timeout.subscribe(
 					on_next, on_error, on_completed,
 					scheduler
-				))
+				)
 			
 			set_timer.call(first_timeout_)
 			
@@ -91,12 +91,16 @@ static func timeout_with_mapper_(
 			var on_next = func(x):
 				if observer_wins.call():
 					observer.on_next(x)
-					var timeout = null
-					timeout = timeout_duration_mapper.call(x)
-					if timeout is GDRx.err.Error:
-						observer.on_error(timeout)
-						return
-					set_timer.call(timeout)
+					var timeout = RefValue.Null()
+					if GDRx.try(func():
+						timeout.v = timeout_duration_mapper.call(x)
+					) \
+					.catch("Exception", func(e):
+						observer.on_error(e)
+					) \
+					.end_try_catch(): return
+					
+					set_timer.call(timeout.v)
 			
 			var on_error = func(error):
 				if observer_wins.call():
@@ -106,10 +110,10 @@ static func timeout_with_mapper_(
 				if observer_wins.call():
 					observer.on_completed()
 			
-			original.set_disposable(source.subscribe(
+			original.disposable = source.subscribe(
 				on_next, on_error, on_completed,
 				scheduler
-			))
+			)
 			return CompositeDisposable.new([subscription, timer])
 		
 		return Observable.new(subscribe)

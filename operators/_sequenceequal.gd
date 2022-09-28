@@ -46,12 +46,16 @@ static func sequence_equal_(
 			var on_next1 = func(x):
 				if qr.size() > 0:
 					var v = qr.pop_front()
-					var equal = comparer_.call(v, x)
-					if not equal is bool:
-						observer.on_error(GDRx.err.BadMappingException.new())
-						return
+					var equal = RefValue.Set(true)
+					if GDRx.try(func():
+						equal.v = comparer_.call(v, x)
+					) \
+					.catch("Exception", func(e):
+						observer.on_error(e)
+					) \
+					.end_try_catch(): return
 					
-					if not equal:
+					if not equal.v:
 						observer.on_next(false)
 						observer.on_completed()
 				
@@ -74,12 +78,16 @@ static func sequence_equal_(
 			var on_next2 = func(x):
 				if ql.size() > 0:
 					var v = ql.pop_front()
-					var equal = comparer_.call(v, x)
-					if not equal is bool:
-						observer.on_error(GDRx.err.BadMappingException.new())
-						return
+					var equal = RefValue.Set(true)
+					if GDRx.try(func():
+						equal.v = comparer_.call(v, x)
+					) \
+					.catch("Exception", func(e):
+						observer.on_error(e)
+					) \
+					.end_try_catch(): return
 					
-					if not equal:
+					if not equal.v:
 						observer.on_next(false)
 						observer.on_completed()
 				

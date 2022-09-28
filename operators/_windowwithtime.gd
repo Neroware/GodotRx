@@ -27,7 +27,7 @@ static func window_with_time_(
 			
 			var create_timer = func(__create_timer_rec : Callable):
 				var m = SingleAssignmentDisposable.new()
-				timer_d.set_disposable(m)
+				timer_d.disposable = m
 				var is_span = false
 				var is_shift = false
 				
@@ -48,7 +48,7 @@ static func window_with_time_(
 					next_shift[0] += timeshift
 				
 				var action = func(scheduler : SchedulerBase, state = null):
-					source._lock.lock()
+					source.lock.lock()
 					var s : Subject = null
 					
 					if is_shift:
@@ -61,33 +61,33 @@ static func window_with_time_(
 						s.as_observer().on_completed()
 					
 					__create_timer_rec.bind(__create_timer_rec).call()
-					source._lock.unlock()
+					source.lock.unlock()
 				
-				m.set_disposable(_scheduler.schedule_relative(ts, action))
+				m.disposable = _scheduler.schedule_relative(ts, action)
 			
 			queue.append(Subject.new())
 			observer.on_next(GDRx.util.AddRef(queue[0].as_observable(), ref_count_disposable))
 			create_timer.bind(create_timer).call()
 			
 			var on_next = func(x):
-				source._lock.lock()
+				source.lock.lock()
 				for s in queue:
 					s.as_observer().on_next(x)
-				source._lock.unlock()
+				source.lock.unlock()
 			
 			var on_error = func(e):
-				source._lock.lock()
+				source.lock.lock()
 				for s in queue:
 					s.as_observer().on_error(e)
 				observer.on_error(e)
-				source._lock.unlock()
+				source.lock.unlock()
 			
 			var on_completed = func():
-				source._lock.lock()
+				source.lock.lock()
 				for s in queue:
 					s.as_observer().on_completed()
 				observer.on_completed()
-				source._lock.unlock()
+				source.lock.unlock()
 			
 			group_disposable.add(source.subscribe(
 				on_next, on_error, on_completed,

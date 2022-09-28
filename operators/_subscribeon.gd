@@ -24,14 +24,14 @@ static func subscribe_on_(scheduler : SchedulerBase) -> Callable:
 		) -> DisposableBase:
 			var m = SingleAssignmentDisposable.new()
 			var d = SerialDisposable.new()
-			d.set_disposable(m)
+			d.disposable = m
 			
 			var action = func(scheduler : SchedulerBase, state = null):
-				d.set_disposable(ScheduledDisposable.new(
+				d.disposable = ScheduledDisposable.new(
 					scheduler, source.subscribe(observer)
-				))
+				)
 			
-			m.set_disposable(scheduler.schedulde(action))
+			m.disposable = scheduler.schedulde(action)
 			return d
 		
 		return Observable.new(subscribe)

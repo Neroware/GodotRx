@@ -37,7 +37,7 @@ static func timeout_(
 			var original = SingleAssignmentDisposable.new()
 			var subscription = SerialDisposable.new()
 			var timer = SerialDisposable.new()
-			subscription.set_disposable(original)
+			subscription.disposable = original
 			
 			var create_timer = func():
 				var my_id = _id[0]
@@ -46,14 +46,14 @@ static func timeout_(
 					switched[0] = _id[0] == my_id
 					var timer_wins = switched[0]
 					if timer_wins:
-						subscription.set_disposable(obs.subscribe(
+						subscription.disposable = obs.subscribe(
 							observer, func(e):return, func():return, scheduler
-						))
+						)
 				
 				if absolute:
-					timer.set_disposable(_scheduler.schedule_absolute(duetime, action))
+					timer.disposable = _scheduler.schedule_absolute(duetime, action)
 				else:
-					timer.set_disposable(_scheduler.schedule_relative(duetime, action))
+					timer.disposable = _scheduler.schedule_relative(duetime, action)
 			
 			create_timer.call()
 			
@@ -71,15 +71,15 @@ static func timeout_(
 					observer.on_error(error)
 			
 			var on_completed = func():
-				var on_completed_wins = switched[0]
+				var on_completed_wins = not switched[0]
 				if on_completed_wins:
 					_id[0] += 1
 					observer.on_completed()
 			
-			original.set_disposable(source.subscribe(
+			original.disposable = source.subscribe(
 				on_next, on_error, on_completed,
 				scheduler_
-			))
+			)
 			return CompositeDisposable.new([subscription, timer])
 		
 		return Observable.new(subscribe)

@@ -42,13 +42,16 @@ static func expand_(
 					
 					var on_next = func(value):
 						observer.on_next(value)
-						var result = null
-						result = mapper.call(value)
-						if result is GDRx.err.Error:
-							observer.on_error(result)
-							return
+						var result = RefValue.Null()
+						if GDRx.try(func():
+							result.v = mapper.call(value)
+						) \
+						.catch("Exception", func(ex):
+							observer.on_error(ex)
+						) \
+						.end_try_catch(): return
 						
-						queue.append(result)
+						queue.append(result.v)
 						active_count.v += 1
 						__ensure_active_rec.bind(__ensure_active_rec).call()
 					
@@ -58,14 +61,14 @@ static func expand_(
 						if active_count.v == 0:
 							observer.on_completed()
 					
-					sad.set_disposable(work.subscribe(
+					sad.disposable = work.subscribe(
 						on_next, observer.on_error, on_complete,
 						scheduler
-					))
-					m.set_disposable(scheduler.schedule(__action_rec.bind(__action_rec)))
+					)
+					m.disposable = scheduler.schedule(__action_rec.bind(__action_rec))
 				
 				if is_owner:
-					m.set_disposable(scheduler.schedule(action.bind(action)))
+					m.disposable = scheduler.schedule(action.bind(action))
 			
 			queue.append(source)
 			active_count.v += 1

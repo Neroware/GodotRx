@@ -35,14 +35,14 @@ static func debounce_(
 				_id[0] += 1
 				var current_id = _id[0]
 				var d = SingleAssignmentDisposable.new()
-				cancelable.set_disposable(d)
+				cancelable.disposable = d
 				
 				var action = func(scheduler : SchedulerBase, state = null):
 					if has_value[0] and _id[0] == current_id:
 						observer.on_next(value[0])
 					has_value[0] = false
 				
-				d.set_disposable(_scheduler.schedule_relative(duetime, action))
+				d.disposable = _scheduler.schedule_relative(duetime, action)
 			
 			var on_error = func(exception):
 				cancelable.dispose()
@@ -97,18 +97,21 @@ func throttle_with_mapper_(
 			var _id = [0]
 			
 			var on_next = func(x):
-				var throttle = null
-				throttle = throttle_duration_mapper.call(x)
-				if throttle is GDRx.err.Error:
-					observer.on_error(throttle)
-					return
+				var throttle = RefValue.Null()
+				if GDRx.try(func():
+					throttle.v = throttle_duration_mapper.call(x)
+				) \
+				.catch("Exception", func(e):
+					observer.on_error(e)
+				) \
+				.end_try_catch(): return
 				
 				has_value.v = true
 				value.v = x
 				_id[0] += 1
 				var current_id = _id[0]
 				var d = SingleAssignmentDisposable.new()
-				cancelable.set_disposable(d)
+				cancelable.disposable = d
 				
 				var on_next = func(x):
 					if has_value.v and _id[0] == current_id:
@@ -122,10 +125,10 @@ func throttle_with_mapper_(
 					has_value.v = false
 					d.dispose()
 				
-				d.set_disposable(throttle.subscribe(
+				d.disposable = throttle.v.subscribe(
 					on_next, observer.on_error, on_completed,
 					scheduler
-				))
+				)
 			
 			var on_error = func(e):
 				cancelable.dispose()

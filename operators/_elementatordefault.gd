@@ -15,12 +15,12 @@ static func element_at_or_default_(
 			
 			var on_next = func(x):
 				var found = false
-				source._lock.lock()
+				source.lock.lock()
 				if index_.v > 0:
 					index_.v -= 1
 				else:
 					found = true
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				if found:
 					observer.on_next(x)
@@ -28,7 +28,7 @@ static func element_at_or_default_(
 			
 			var on_completed = func():
 				if not has_default:
-					observer.on_error(GDRx.err.ArgumentOutOfRangeException.new())
+					observer.on_error(GDRx.exc.ArgumentOutOfRangeException.new())
 				else:
 					observer.on_next(default_value)
 					observer.on_completed()
@@ -38,6 +38,6 @@ static func element_at_or_default_(
 				scheduler
 			)
 		
-		return Observable.ne(subscribe)
+		return Observable.new(subscribe)
 	
 	return element_at_or_default

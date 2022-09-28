@@ -42,24 +42,24 @@ static func multicast_(
 				observer : ObserverBase,
 				scheduler : SchedulerBase = null
 			) -> DisposableBase:
-				assert(subject_factory is Callable)
+				if GDRx.assert_(subject_factory is Callable): return Disposable.new()
 				var connectable = source.pipe1(
 					GDRx.op.multicast(subject_factory.call(scheduler))
 				)
-				assert(mapper is Callable)
+				if GDRx.assert_(mapper is Callable): return Disposable.new()
 				var subscription = mapper.call(connectable).subscribe(
 					observer, func(e):return, func():return,
 					scheduler
 				)
 				
 				return CompositeDisposable.new([
-					subscription, connectable.connect(scheduler)
+					subscription, connectable.connect_observable(scheduler)
 				])
 			
 			return Observable.new(subscribe)
 		
 		if subject == null:
-			GDRx.exc.NullReferenceException.new().throw()
+			GDRx.exc.NullReferenceException.Throw()
 		var ret = ConnectableObservable.new(source, subject)
 		return ret
 	

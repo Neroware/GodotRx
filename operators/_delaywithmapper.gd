@@ -43,13 +43,15 @@ static func delay_with_mapper_(
 			
 			var start = func():
 				var on_next = func(x):
-					if mapper == null:
-						observer.on_error(GDRx.err.Error("Assertion failed! Mapper is null!"))
-						return
-					var delay = mapper.call(x)
-					if delay is GDRx.err.Error:
-						observer.on_error(delay)
-						return
+					var delay = RefValue.Null()
+					if GDRx.try(func():
+						if GDRx.assert_(mapper != null): return
+						delay.v = mapper.call(x)
+					) \
+					.catch("Exception", func(error):
+						observer.on_error(error)
+					) \
+					.end_try_catch(): return
 					
 					var d = SingleAssignmentDisposable.new()
 					delays.add(d)
@@ -64,10 +66,10 @@ static func delay_with_mapper_(
 						delays.remove(d)
 						done.call()
 					
-					d.set_disposable(delay.subscribe(
+					d.disposable = delay.v.subscribe(
 						on_next, observer.on_error, on_completed,
 						scheduler
-					))
+					)
 				
 				var on_completed = func():
 					at_end[0] = true

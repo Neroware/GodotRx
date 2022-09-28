@@ -37,21 +37,28 @@ func distinct_until_changed_(
 			var current_key = RefValue.Null()
 			
 			var on_next = func(value):
-				var comparer_equals = false
-				var key = key_mapper_.call(value)
-				if key is GDRx.err.Error:
-					observer.on_error(key)
-					return
+				var comparer_equals = RefValue.Set(false)
+				var key = RefValue.Null()
+				if GDRx.try(func():
+					key.v = key_mapper_.call(value)
+				) \
+				.catch("Exception", func(exception):
+					observer.on_error(exception)
+				) \
+				.end_try_catch(): return
 				
 				if has_current_key.v:
-					comparer_equals = comparer_.call(current_key.v, key)
-					if comparer_equals is GDRx.err.Error:
-						observer.on_error(comparer_equals)
-						return
+					if GDRx.try(func():
+						comparer_equals.v = comparer_.call(current_key.v, key.v)
+					) \
+					.catch("Exception", func(exception):
+						observer.on_error(exception)
+					) \
+					.end_try_catch(): return
 				
-				if not has_current_key.v or not comparer_equals:
+				if not has_current_key.v or not comparer_equals.v:
 					has_current_key.v = true
-					current_key.v = key
+					current_key.v = key.v
 					observer.on_next(value)
 			
 			return source.subscribe(

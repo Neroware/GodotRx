@@ -166,3 +166,14 @@ class BadArgumentException extends Exception:
 	
 	static func Throw(default = null) -> Variant:
 		return BadArgumentException.new().throw(default)
+
+class AssertionFailedException extends Exception:
+	func _init(msg = null):
+		if msg != null: super._init(str(msg))
+		else: super._init("Assertion failed!")
+	
+	func tags() -> Array[String]:
+		return ["Exception", "AssertionFailedException"]
+	
+	static func Throw(default = null) -> Variant:
+		return AssertionFailedException.new().throw(default)

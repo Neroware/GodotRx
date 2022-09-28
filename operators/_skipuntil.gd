@@ -45,10 +45,10 @@ static func skip_until_(other : Observable) -> Callable:
 			var on_completed2 = func():
 				right_subscription.dispose()
 			
-			right_subscription.set_disposable(obs.subscribe(
+			right_subscription.disposable = obs.subscribe(
 				on_next2, observer.on_error, on_completed2,
 				scheduler
-			))
+			)
 			
 			return subscriptions
 		

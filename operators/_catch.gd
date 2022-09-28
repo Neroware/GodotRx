@@ -9,24 +9,28 @@ static func catch_handler(
 		var d1 = SingleAssignmentDisposable.new()
 		var subscription = SerialDisposable.new()
 		
-		subscription.set_disposable(d1)
+		subscription.disposable = d1
 		
 		var on_error = func(exception):
-			var result = handler.call(exception, source)
-			if result is GDRx.err.Error:
-				observer.on_error(result)
-				return
+			var result = RefValue.Null()
+			if GDRx.try(func():
+				result.v = handler.call(exception, source)
+			) \
+			.catch("Exception", func(ex):
+				observer.on_error(ex)
+			) \
+			.end_try_catch(): return
 			
 			var d = SingleAssignmentDisposable.new()
-			subscription.set_disposable(d)
-			d.set_disposable(result.subscribe(
+			subscription.disposable = d
+			d.disposable = result.v.subscribe(
 				observer, func(e):return, func():return, scheduler
-			))
+			)
 		
-		d1.set_disposable(source.subscribe(
+		d1.disposable = source.subscribe(
 			observer.on_next, on_error, observer.on_completed,
 			scheduler
-		))
+		)
 		return subscription
 	
 	return Observable.new(subscribe)

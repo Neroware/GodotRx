@@ -11,14 +11,14 @@ static func single_or_default_async_(
 			
 			var on_next = func(x):
 				if seen_value.v:
-					observer.on_error(GDRx.op.Error.new("Sequence contains more than one element"))
+					observer.on_error(GDRx.exc.Exception.new("Sequence contains more than one element"))
 				else:
 					value.v = x
 					seen_value.v = true
 			
 			var on_completed = func():
 				if not seen_value.v and not has_default:
-					observer.on_error(GDRx.err.SequenceContainsNoElementsException.new())
+					observer.on_error(GDRx.exc.SequenceContainsNoElementsException.new())
 				else:
 					observer.on_next(value.v)
 					observer.on_completed()

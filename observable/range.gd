@@ -59,7 +59,7 @@ static func range_(
 			iterator : IterableBase,
 			action_ : Callable
 		):
-			assert(iterator != null)
+			if GDRx.assert_(iterator != null): return
 			var item = iterator.next()
 			if item is iterator.End:
 				observer.on_completed()

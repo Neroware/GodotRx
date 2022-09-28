@@ -24,11 +24,11 @@ static func skip_last_(count : int) -> Callable:
 			
 			var on_next = func(value):
 				var front = null
-				source._lock.lock()
+				source.lock.lock()
 				q.append(value)
 				if q.size() > count:
 					front = q.pop_front()
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				if front != null:
 					observer.on_next(front)

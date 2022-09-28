@@ -63,7 +63,7 @@ func fork_join(sources : Array[Observable]) -> Observable:
 	return _ForkJoin_.fork_join_(sources)
 
 ## See: [b]res://reactivex/observable/fromcallback.gd[/b]
-func from_callback(fun : Callable = func(args : Array, cb : Callable): return, mapper : Callable = func(args): return args) -> Callable:
+func from_callback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
 	return _FromCallback_.from_callback_(fun, mapper)
 
 ## See: [b]res://reactivex/observable/fromiterable.gd[/b]

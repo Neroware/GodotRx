@@ -27,11 +27,11 @@ static func take_last_buffer_(count : int) -> Callable:
 			var q : Array = []
 			
 			var on_next = func(x):
-				source._lock.lock()
+				source.lock.lock()
 				q.append(x)
 				if q.size() > count:
 					q.pop_front()
-				source._lock.unlock()
+				source.lock.unlock()
 			
 			var on_completed = func():
 				observer.on_next(q)

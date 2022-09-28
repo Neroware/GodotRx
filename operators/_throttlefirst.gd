@@ -24,18 +24,18 @@ static func throttle_first_(
 			
 			var duration = window_duration
 			if duration <= 0:
-				GDRx.exc.ArgumentOutOfRangeException.new().throw()
+				GDRx.exc.ArgumentOutOfRangeException.Throw()
 			var last_on_next = RefValue.Null()
 			
 			var on_next = func(x):
 				var emit = false
 				var now = _scheduler.now()
 				
-				source._lock.lock()
+				source.lock.lock()
 				if last_on_next.v == null or now - last_on_next.v >= duration:
 					last_on_next.v = now
 					emit = true
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				if emit:
 					observer.on_next(x)

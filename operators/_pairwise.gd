@@ -23,13 +23,13 @@ static func pairwise_() -> Callable:
 			var on_next = func(x):
 				var pair = null
 				
-				source._lock.lock()
+				source.lock.lock()
 				if has_previous.v:
 					pair = Tuple.new([previous.v, x])
 				else:
 					has_previous.v = true
 				previous.v = x
-				source._lock.unlock()
+				source.lock.unlock()
 				
 				if pair != null:
 					observer.on_next(pair)

@@ -55,6 +55,11 @@ var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
 # =========================================================================== #
 #  Helper functions
 # =========================================================================== #
+func assert_(assertion : bool) -> bool:
+	if not assertion: 
+		GDRx.exc.AssertionFailedException.Throw()
+	return not assertion
+
 func try(fun : Callable) -> TryCatch:
 	return TryCatch.new(fun)
 
@@ -171,7 +176,7 @@ func ForkJoin(sources : Array[Observable]) -> Observable:
 
 ## Creates a function which when called returns an observable which emits the
 ## functions's return value the stream.
-func BuildFromCallback(fun : Callable = func(args : Array, cb : Callable): return, mapper : Callable = func(args): return args) -> Callable:
+func BuildFromCallback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
 	return obs.from_callback(fun, mapper)
 
 ## Transforms an array into an observable sequence.

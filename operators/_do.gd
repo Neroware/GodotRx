@@ -35,21 +35,36 @@ static func do_action_(
 				if on_next == null:
 					observer.on_next(x)
 				else:
-					on_next.call(x)
+					GDRx.try(func():
+						on_next.call(x)
+					).catch("Exception", func(e):
+						observer.on_error(e)
+					).end_try_catch()
+					
 					observer.on_next(x)
 			
 			var _on_error = func(exception):
 				if on_error == null:
 					observer.on_error(exception)
 				else:
-					on_error.call(exception)
+					GDRx.try(func():
+						on_error.call(exception)
+					).catch("Exception", func(e):
+						observer.on_error(e)
+					).end_try_catch()
+					
 					observer.on_error(exception)
 			
 			var _on_completed = func():
 				if on_completed == null:
 					observer.on_completed()
 				else:
-					on_completed.call()
+					GDRx.try(func():
+						on_completed.call()
+					).catch("Exception", func(e):
+						observer.on_error(e)
+					).end_try_catch()
+					
 					observer.on_completed()
 			
 			return source.subscribe(
@@ -90,8 +105,12 @@ static func do_after_next(source : Observable, after_next : Callable) -> Observa
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		var on_next = func(value):
-			observer.on_next(value)
-			after_next.call(value)
+			GDRx.try(func():
+				observer.on_next(value)
+				after_next.call(value)
+			).catch("Exception", func(e):
+				observer.on_error(e)
+			).end_try_catch()
 		
 		return source.subscribe(on_next, observer.on_error, observer.on_completed)
 	
@@ -163,12 +182,20 @@ static func do_on_terminate(source : Observable, on_terminate : Callable) -> Obs
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		var on_completed = func():
-			on_terminate.call()
-			observer.on_completed()
+			if not GDRx.try(func():
+				on_terminate.call()
+			).catch("Exception", func(err):
+				observer.on_error(err)
+			).end_try_catch():
+				observer.on_completed()
 		
 		var on_error = func(exception):
-			on_terminate.call()
-			observer.on_error(exception)
+			if not GDRx.try(func():
+				on_terminate.call()
+			).catch("Exception", func(err):
+				observer.on_error(err)
+			).end_try_catch():
+				observer.on_error(exception)
 		
 		return source.subscribe(
 			observer.on_next, on_error, on_completed,
@@ -190,11 +217,19 @@ static func do_after_terminate(source : Observable, after_terminate : Callable) 
 	) -> DisposableBase:
 		var on_completed = func():
 			observer.on_completed()
-			after_terminate.call()
+			GDRx.try(func():
+				after_terminate.call()
+			).catch("Exception", func(err):
+				observer.on_error(err)
+			).end_try_catch()
 		
 		var on_error = func(exception):
 			observer.on_error(exception)
-			after_terminate.call()
+			GDRx.try(func():
+				after_terminate.call()
+			).catch("Exception", func(err):
+				observer.on_error(err)
+			).end_try_catch()
 		
 		return source.subscribe(
 			observer.on_next, on_error, on_completed,
@@ -239,15 +274,27 @@ static func do_finally(finally_action : Callable) -> Callable:
 			
 			var on_completed = func():
 				observer.on_completed()
-				if not was_invoked[0]:
-					finally_action.call()
-					was_invoked[0] = true
+				GDRx.try(func():
+					if not was_invoked[0]:
+						finally_action.call()
+						was_invoked[0] = true
+				) \
+				.catch("Exception", func(err):
+					observer.on_error(err)
+				) \
+				.end_try_catch()
 			
 			var on_error = func(exception):
 				observer.on_error(exception)
-				if not was_invoked[0]:
-					finally_action.call()
-					was_invoked[0] = true
+				GDRx.try(func():
+					if not was_invoked[0]:
+						finally_action.call()
+						was_invoked[0] = true
+				) \
+				.catch("Exception", func(err):
+					observer.on_error(err)
+				) \
+				.end_try_catch()
 			
 			var composite_disposable = CompositeDisposable.new()
 			composite_disposable.add(FinallyOnDispose.new(finally_action, was_invoked))

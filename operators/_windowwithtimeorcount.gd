@@ -23,7 +23,7 @@ static func window_with_time_or_count_(
 			
 			var create_timer = func(_id : int, __create_timer_rec : Callable):
 				var m = SingleAssignmentDisposable.new()
-				timer_d.v.set_disposable(m)
+				timer_d.v.disposable = m
 				
 				var action = func(scheduler : SchedulerBase, state = null):
 					if _id != window_id.v:
@@ -37,7 +37,7 @@ static func window_with_time_or_count_(
 					observer.on_next(GDRx.util.AddRef(s.v.as_observable(), ref_count_disposable))
 					__create_timer_rec.bind(__create_timer_rec).call(new_id)
 				
-				m.set_disposable(_scheduler.schedule_relative(timespan, action))
+				m.disposable = _scheduler.schedule_relative(timespan, action)
 			
 			observer.on_next(GDRx.util.AddRef(s.v.as_observable(), ref_count_disposable))
 			create_timer.bind(create_timer).call(0)
