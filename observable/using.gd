@@ -28,22 +28,26 @@ static func using_(
 		observer : ObservableBase,
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
-		var disp : DisposableBase = Disposable.new()
+		var disp = RefValue.Set(Disposable.new())
 		
-		var resource = resource_factory.call()
-		if resource is DisposableBase:
-			disp = resource
-		elif resource is GDRx.err.Error:
-			var d = GDRx.obs.throw(resource).subscribe(observer, func(e): return, func(): return, scheduler)
-			return CompositeDisposable.new([d, disp])
-		else:
-			disp = Disposable.Cast(resource)
-		
-		var source = observable_factory.call(resource)
+		var d = RefValue.Null()
+		var source = RefValue.Null()
+		if GDRx.try(func():
+			var resource = resource_factory.call()
+			if resource is DisposableBase:
+				disp.v = resource
+			
+			source.v = observable_factory.call(resource)
+		) \
+		.catch("Exception", func(exception):
+			d.v = GDRx.obs.throw(exception).subscribe(observer, func(e): return, func(): return, scheduler)
+		) \
+		.end_try_catch():
+			return CompositeDisposable.new([d.v, disp.v])
 		
 		return CompositeDisposable.new([
-			source.subscribe(observer, func(e): return, func(): return, scheduler),
-			disp
+			source.v.subscribe(observer, func(e): return, func(): return, scheduler),
+			disp.v
 		])
 	
 	return Observable.new(subscribe)

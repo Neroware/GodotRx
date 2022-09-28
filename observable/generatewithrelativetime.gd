@@ -48,28 +48,30 @@ static func generate_with_relative_time_(
 			if has_result.v:
 				observer.on_next(result.v)
 			
-			if first.v:
-				first.v = false
-			else:
-				state.v = iterate.call(state.v)
-			
-			has_result.v = condition.call(state.v)
-			
-			if has_result.v:
-				result.v = state.v
-				time.v = time_mapper.call(state.v)
-			
-			if result.v is GDRx.err.Error:
-				observer.on_error(result.v)
-				return
+			if GDRx.try(func():
+				if first.v:
+					first.v = false
+				else:
+					state.v = iterate.call(state.v)
+				
+				has_result.v = condition.call(state.v)
+				
+				if has_result.v:
+					result.v = state.v
+					time.v = time_mapper.call(state.v)
+			) \
+			.catch("Exception", func(e):
+				observer.on_error(e)
+			) \
+			.end_try_catch(): return
 			
 			if has_result.v:
 				assert(time.v != null)
-				mad.set_disposable(scheduler.scheduler_relative(time.v, action_.bind(action_)))
+				mad.disposable = scheduler.scheduler_relative(time.v, action_.bind(action_))
 			else:
 				observer.on_completed()
 		
-		mad.set_disposable(scheduler.schedule_relative(0, action.bind(action)))
+		mad.disposable = scheduler.schedule_relative(0, action.bind(action))
 		return mad
 	
 	return Observable.new(subscribe)

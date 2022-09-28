@@ -14,29 +14,31 @@ static func generate_(
 		var mad = MultipleAssignmentDisposable.new()
 		
 		var action = func(scheduler : SchedulerBase, state1, action_ : Callable):
-			var has_result = false
-			var result = null
+			var has_result = RefValue.Set(false)
+			var result = RefValue.Null()
 			
-			if first.v:
-				first.v = false
-			else:
-				state.v = iterate.call(state.v)
+			if GDRx.try(func():
+				if first.v:
+					first.v = false
+				else:
+					state.v = iterate.call(state.v)
+				
+				has_result.v = condition.call(state.v)
+				if has_result.v:
+					result.v = state.v
+			) \
+			.catch("Exception", func(exception):
+				observer.on_error(exception)
+			) \
+			.end_try_catch(): return
 			
-			has_result = condition.call(state.v)
-			if has_result:
-				result = state.v
-			
-			if result is GDRx.err.Error:
-				observer.on_error(result)
-				return
-			
-			if has_result:
-				observer.on_next(result)
-				mad.set_disposable(scheduler.schedule(action_.bind(action_)))
+			if has_result.v:
+				observer.on_next(result.v)
+				mad.disposable = scheduler.schedule(action_.bind(action_))
 			else:
 				observer.on_completed()
 		
-		mad.set_disposable(scheduler_.schedule(action.bind(action)))
+		mad.disposable = scheduler_.schedule(action.bind(action))
 		return mad
 	
 	return Observable.new(subscribe)

@@ -39,18 +39,17 @@ static func on_error_resume_next_(
 			var current : Observable = source
 			
 			var d = SingleAssignmentDisposable.new()
-			subscription.set_disposable(d)
+			subscription.disposable = d
 			
 			var on_resume = func(state = null):
 				scheduler.schedule(action_.bind(action_), state)
 			
-			d.set_disposable(current.subscribe(
-				observer.on_next,
-				on_resume,
-				on_resume
-			))
+			d.disposable = current.subscribe(
+				observer.on_next, on_resume,
+				on_resume, scheduler
+			)
 		
-		cancelable.set_disposable(scheduler_.schedule(action.bind(action)))
+		cancelable.disposable = scheduler_.schedule(action.bind(action))
 		return CompositeDisposable.new([subscription, cancelable])
 	
 	return Observable.new(subscribe)

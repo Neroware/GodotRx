@@ -38,10 +38,10 @@ static func observable_timer_duetime_and_period(duetime : float, time_absolute :
 			
 			observer.on_next(count.v)
 			count.v += 1
-			mad.set_disposable(scheduler.schedule_absolute(dt.v, action_.bind(action_)))
+			mad.disposable = scheduler.schedule_absolute(dt.v, action_.bind(action_))
 		action = action.bind(action)
 		
-		mad.set_disposable(_scheduler.schedule_absolute(dt.v, action))
+		mad.disposable = _scheduler.schedule_absolute(dt.v, action)
 		return mad
 	
 	return Observable.new(subscribe)

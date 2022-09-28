@@ -3,12 +3,14 @@ class_name Observable
 
 ## Observable base class.
 
-var _lock : RLock
+var lock : RLock
 var _subscribe : Callable
 
 func _init(subscribe : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: 
 	return Disposable.new()):
-		self._lock = RLock.new()
+		super._init()
+		
+		self.lock = RLock.new()
 		self._subscribe = subscribe
 
 func _subscribe_core(
@@ -83,8 +85,16 @@ func subscribe(
 			return Disposable.new(subscriber)
 		
 		var set_disposable = func(__ : SchedulerBase = null, ___ = null):
-			var subscriber = self._subscribe_core(auto_detach_observer, scheduler)
-			auto_detach_observer.set_disposable(fix_subscriber.call(subscriber))
+			var subscriber = RefValue.Null()
+			if not GDRx.try(func():
+				subscriber.v = self._subscribe_core(auto_detach_observer, scheduler)
+			) \
+			.catch("Exception", func(ex):
+				if not auto_detach_observer.fail(ex):
+					GDRx.raise(ex)
+			) \
+			.end_try_catch():
+				auto_detach_observer.subscription = fix_subscriber.call(subscriber.v)
 		
 		var current_thread_scheduler = CurrentThreadScheduler.singleton()
 		if current_thread_scheduler.schedule_required():
@@ -93,6 +103,10 @@ func subscribe(
 			set_disposable.call()
 		
 		return Disposable.new(auto_detach_observer.dispose)
+
+# ============================================================================ #
+# PIPE                                                                 #
+# ============================================================================ #
 
 ## Pipe operator
 func pipe0() -> Variant:

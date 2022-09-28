@@ -30,12 +30,16 @@ static func to_async_(
 		var subject = AsyncSubject.new()
 		
 		var action = func(scheduler : SchedulerBase, state = null):
-			var result = fun.call(args)
-			if result is GDRx.err.Error:
-				subject.as_observer().on_error(result)
-				return
+			var result = RefValue.Null()
+			if GDRx.try(func():
+				result.v = fun.call(args)
+			) \
+			.catch("Exception", func(ex):
+				subject.as_observer().on_error(ex)
+			) \
+			.end_try_catch(): return
 			
-			subject.as_observer().on_next(result)
+			subject.as_observer().on_next(result.v)
 			subject.as_observer().on_completed()
 		
 		_scheduler.schedule(action)

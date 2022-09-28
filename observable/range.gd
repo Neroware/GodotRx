@@ -65,11 +65,11 @@ static func range_(
 				observer.on_completed()
 			else:
 				observer.on_next(item)
-				sd.set_disposable(_scheduler.schedule(
+				sd.disposable = _scheduler.schedule(
 					action_.bind(action_), iterator
-				))
+				)
 		
-		sd.set_disposable(_scheduler.schedule(action.bind(action), GDRx.util.Iter(range_t)))
+		sd.disposable = _scheduler.schedule(action.bind(action), GDRx.util.Iter(range_t))
 		return sd
 	
 	return Observable.new(subscribe)

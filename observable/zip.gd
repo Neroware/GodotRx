@@ -30,10 +30,17 @@ static func zip_(sources : Array[Observable]) -> Observable:
 		var next_ = func(i : int):
 			lock.lock()
 			if queues.all(func(x): return x.size() > 0):
-				var queued_values = [] ; for x in queues: queued_values.append(x.pop_front())
-				var res = Tuple.new(queued_values)
+				var res = RefValue.Null()
+				if GDRx.try(func():
+					var queued_values = [] ; for x in queues: queued_values.append(x.pop_front())
+					res.v = Tuple.new(queued_values)
+				) \
+				.catch("Exception", func(ex):
+					observer.on_error(ex)
+				) \
+				.end_try_catch(): return
 				
-				observer.on_next(res)
+				observer.on_next(res.v)
 				
 				for idx in range(n):
 					var queue = queues[idx]
@@ -59,9 +66,9 @@ static func zip_(sources : Array[Observable]) -> Observable:
 				queues[i].append(x)
 				next_.call(i)
 			
-			sad.set_disposable(source.subscribe(
+			sad.disposable = source.subscribe(
 				on_next, observer.on_error, func(): completed.call(i), scheduler
-			))
+			)
 			subscriptions[i] = sad
 		
 		for idx in range(n):

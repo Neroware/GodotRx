@@ -40,12 +40,14 @@ static func from_callback_(supplier : Callable, scheduler : SchedulerBase = null
 		else: _scheduler = CurrentThreadScheduler.singleton()
 		
 		var action = func(__ : SchedulerBase, ___ = null):
-			var res_ = supplier.call()
-			if res_ is GDRx.err.Error:
-				observer.on_error(res_)
-			else:
-				observer.on_next(res_)
+			GDRx.try(func():
+				observer.on_next(supplier.call())
 				observer.on_completed()
+			) \
+			.catch("Exception", func(e):
+				observer.on_error(e)
+			) \
+			.end_try_catch()
 		
 		return _scheduler.schedule(action)
 	

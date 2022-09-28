@@ -20,25 +20,25 @@ static func with_latest_from_(
 				var subscription = SingleAssignmentDisposable.new()
 				
 				var on_next = func(value):
-					parent._lock.lock()
+					parent.lock.lock()
 					values[i] = value
-					parent._lock.unlock()
+					parent.lock.unlock()
 				
-				subscription.set_disposable(child.subscribe(
+				subscription.disposable = child.subscribe(
 					on_next, observer.on_error, func(): return, scheduler
-				))
+				)
 				return subscription
 			
 			var parent_subscription = SingleAssignmentDisposable.new()
 			
 			var on_next = func(value):
-				parent._lock.lock()
+				parent.lock.lock()
 				if NO_VALUE not in values:
 					var res_ = values.duplicate()
 					res_.push_front(value)
 					var result = Tuple.new(res_)
 					observer.on_next(result)
-				parent._lock.unlock()
+				parent.lock.unlock()
 			
 			var children_subscription = []
 			for i in range(children.size()):
@@ -48,7 +48,7 @@ static func with_latest_from_(
 				on_next, observer.on_error, 
 				observer.on_completed, scheduler
 			)
-			parent_subscription.set_disposable(disp)
+			parent_subscription.disposable = disp
 			
 			var ret : Array[SingleAssignmentDisposable] = children_subscription.duplicate()
 			ret.push_front(parent_subscription)
