@@ -40,16 +40,23 @@ var pipe = __init__.Pipe_.new()
 # =========================================================================== #
 #   Scheduler Singletons
 # =========================================================================== #
+
+## [ImmediateScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
 var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
+## [TimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
 var TimeoutScheduler_ : TimeoutScheduler = TimeoutScheduler.new("GDRx")
+## [GodotSignalScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
 var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
+## Global singleton of [CurrentThreadScheduler]
 var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
+## Thread local singleton of [CurrentThreadScheduler]
 var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #
 #   Exception Handler Singleton
 # =========================================================================== #
+## [ExceptionHandler] singleton [color=red]Leave it alone![/color]
 var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
 
 # =========================================================================== #
@@ -104,225 +111,202 @@ func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 
 ## Create an observable sequence from an array
 func of(data : Array) -> Observable:
-	return self.FromArray(data)
+	return self.from_array(data)
 
 ## Alias for [code]GDRx.obs.return_value[/code]
 func just(value, scheduler : SchedulerBase = null) -> Observable:
-	return self.ReturnValue(value, scheduler)
+	return self.return_value(value, scheduler)
 
 # =========================================================================== #
 #   Observable Constructors
 # =========================================================================== #
 
-## Create a new observable
-func Create(subscribe : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
-	return Observable.new(subscribe)
+## See: [b]res://reactivex/observable/amb.gd[/b]
+func amb(sources : Array[Observable]) -> Observable:
+	return obs.amb(sources)
 
-## Create an empty observable
-func Empty(scheduler : SchedulerBase = null) -> Observable:
-	return obs.empty(scheduler)
-
-## Create an observale which never emits an item.
-func Never(scheduler : SchedulerBase = null) -> Observable:
-	return obs.never()
-
-## Create an observable which throws an error.
-func Throw(err, scheduler : SchedulerBase = null) -> Observable:
-	return obs.throw(err, scheduler)
-
-## Create an observable which retuns a given value
-func ReturnValue(value, scheduler : SchedulerBase = null) -> Observable:
-	return obs.return_value(value, scheduler)
-
-## Create an observable from a callback function. Return value is given back on
-## the stream.
-func FromCallback(supplier : Callable, scheduler : SchedulerBase = null) -> Observable:
-	return obs.return_value_from_callback(supplier, scheduler)
-
-## Create an observable which only emits items from the observable sequence
-## which first emitted an item.
-func WinnerOf(observables : Array[Observable]) -> Observable:
-	return obs.amb(observables)
-
-## Builds a new observable from a factory-function. (See hot and cold observables)
-func BuildDeferred(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
-	return obs.defer(factory)
-
-## Creates an observable resembling a switch-case-statement.
-func SwitchCase(mapper : Callable, sources : Dictionary, default_source : Observable = null) -> Observable:
+## See: [b]res://reactivex/observable/case.gd[/b]
+func case(mapper : Callable, sources : Dictionary, default_source : Observable = null) -> Observable:
 	return obs.case(mapper, sources, default_source)
 
-## Creates an Observable that continues with the next observable in the given
-## array when an error is thrown.
-func CatchAndContinueWith(sources : Array[Observable]) -> Observable:
+## Create a new observable
+func create(subscribe : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
+	return Observable.new(subscribe)
+
+## See: [b]res://reactivex/observable/catch.gd[/b]
+func catch(sources : Array) -> Observable:
 	return obs.catch_with_iterable(GDRx.util.Iter(sources))
 
-## Creates an Observable that continues with the next observable in the given
-## iterable sequence when an error is thrown.
-func CatchAndContinueWithIterable(sources : IterableBase) -> Observable:
+## See: [b]res://reactivex/observable/catch.gd[/b]
+func catch_with_iterable(sources : IterableBase) -> Observable:
 	return obs.catch_with_iterable(sources)
 
-## Creates an Observable that combines all latest stream items of all given 
-## observables into [Tuple]s emitted on the stream.
-func CombineLatestOf(sources : Array[Observable]) -> Observable:
-	if sources.is_empty():
-		return Empty()
-	if sources.size() == 1:
-		return sources[0]
+## See: [b]res://reactivex/observable/combinelatest.gd[/b]
+func combine_latest(sources : Array[Observable]) -> Observable:
 	return obs.combine_latest(sources)
 
-## Creates an Observable that continues with the next observable in the given
-## array when the previous observable has finished.
-func ConcatStreams(sources : Array[Observable]) -> Observable:
+## See: [b]res://reactivex/observable/concat.gd[/b]
+func concat_streams(sources : Array) -> Observable:
 	return obs.concat_with_iterable(GDRx.util.Iter(sources))
 
-## Creates an Observable that continues with the next observable in the given
-## iterable sequence when the previous observable has finished.
-func ConcatStreamsWithIterable(sources : IterableBase) -> Observable:
+## See: [b]res://reactivex/observable/concat.gd[/b]
+func concat_with_iterable(sources : IterableBase) -> Observable:
 	return obs.concat_with_iterable(sources)
 
-## Creates an observable which emits all final items from all observable streams 
-## after all completed. If a sequence completes before emitting an item,
-## the join will also immediatly complete.
-func ForkJoin(sources : Array[Observable]) -> Observable:
+## See: [b]res://reactivex/observable/defer.gd[/b]
+func defer(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
+	return obs.defer(factory)
+
+## See: [b]res://reactivex/observable/empty.gd[/b]
+func empty(scheduler : SchedulerBase = null) -> Observable:
+	return obs.empty(scheduler)
+
+## See: [b]res://reactivex/observable/forkjoin.gd[/b]
+func fork_join(sources : Array[Observable]) -> Observable:
 	return obs.fork_join(sources)
 
-## Creates a function which when called returns an observable which emits the
-## functions's return value the stream.
-func BuildFromCallback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
+## See: [b]res://reactivex/observable/fromcallback.gd[/b]
+func from_callback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
 	return obs.from_callback(fun, mapper)
 
 ## Transforms an array into an observable sequence.
-func FromArray(array : Array) -> Observable:
+func from_array(array : Array) -> Observable:
 	return obs.from_iterable(GDRx.util.Iter(array))
 
-## Transforms an iterable into an observable sequence.
-func FromIterable(iterable : IterableBase) -> Observable:
-	return obs.from_iterable(iterable)
+## See: [b]res://reactivex/observable/fromiterable.gd[/b]
+func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) -> Observable:
+	return obs.from_iterable(iterable, scheduler)
 
-## Generates an Observable from a given state
-func GenerateFrom(initial_state, condition : Callable, iterate : Callable) -> Observable:
+## See: [b]res://reactivex/observable/generate.gd[/b]
+func generate(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state) -> Observable:
 	return obs.generate(initial_state, condition, iterate)
 
-## Generates an Observable from a given state using a time-mapper
-func GenerateWithRealtiveTime(initial_state, condition : Callable, iterate : Callable, time_mapper : Callable) -> Observable:
+## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
+func generate_with_relative_time(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
 	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
 
-## Creates an Observable that emits items of [code]then_source[/code] when 
-## the condition is met, otherwise items of [code]else_source[/code] are
-## emitted.
-func IfThenElse(then_source : Observable, else_source : Observable, condition : Callable = func() -> bool: return true) -> Observable:
+## See: [b]res://reactivex/observable/ifthen.gd[/b]
+func if_then(then_source : Observable, else_source : Observable = null, condition : Callable = func() -> bool: return true) -> Observable:
 	return obs.if_then(then_source, else_source, condition)
 
-## Creates an Observable that emits items of [code]then_source[/code] when 
-## the condition is met.
-func IfThen(then_source : Observable, condition : Callable = func() -> bool: return true) -> Observable:
-	return obs.if_then(then_source, null, condition)
+## See: [b]res://reactivex/observable/interval.gd[/b]
+func interval(period : float, scheduler : SchedulerBase = null) -> ObservableBase:
+	return obs.interval(period, scheduler)
 
-## Creates an Observable that continues with the next observable in the given
-## array when the previous is terminated.
-func ResumeAfterTerminationWith(sources : Array) -> Observable:
+## See: [b]res://reactivex/observable/merge.gd[/b]
+func merge(sources : Array[Observable]) -> Observable:
+	return obs.merge(sources)
+
+## See: [b]res://reactivex/observable/never.gd[/b]
+func never() -> Observable:
+	return obs.never()
+
+## See: [b]res://reactivex/observable/onerrorresumenext.gd[/b]
+func on_error_resume_next(sources : Array) -> Observable:
 	return obs.on_error_resume_next(sources)
 
-## Transforms a range into an observable sequence
-func FromRange(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
+## See: [b]res://reactivex/observable/range.gd[/b]
+func range(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
 	return obs.range(start, stop, step, scheduler)
 
-## Builds an observable using resources from a given resource factory.
-func BuildUsing(
-		resource_factory : Callable = func() -> DisposableBase: return null, 
-		observable_factory : Callable = func(disp : DisposableBase) -> DisposableBase: return GDRx.obs.empty()
-	) -> Observable:
-		return obs.using(resource_factory, observable_factory)
+## See: [b]res://reactivex/observable/repeat.gd[/b]
+func repeat_value(value, repeat_count = null) -> Observable:
+	return obs.repeat_value(value, repeat_count)
 
-## Creates an Observable that emits a tuple of the latest items emitted from
-## the sources.
-func WithLatestFrom(sources : Array[Observable]) -> Observable:
+## See: [b]res://reactivex/observable/returnvalue.gd[/b]
+func return_value(value, scheduler : SchedulerBase = null) -> Observable:
+	return obs.return_value(value, scheduler)
+
+## See: [b]res://reactivex/observable/returnvalue.gd[/b]
+func return_value_from_callback(supplier : Callable, scheduler : SchedulerBase = null) -> Observable:
+	return obs.return_value_from_callback(supplier, scheduler)
+
+## See: [b]res://reactivex/observable/throw.gd[/b]
+func throw(err, scheduler : SchedulerBase = null) -> Observable:
+	return obs.throw(err, scheduler)
+
+## See: [b]res://reactivex/observable/timer.gd[/b]
+func timer(duetime : float, time_absolute : bool, period = null, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(duetime, time_absolute, period, scheduler)
+
+## See: [b]res://reactivex/observable/toasync.gd[/b]
+func to_async(fun : Callable, scheduler : SchedulerBase = null) -> Callable:
+	return obs.to_async(fun, scheduler)
+
+## See: [b]res://reactivex/observable/using.gd[/b]
+func using(resource_factory : Callable, observable_factory : Callable,) -> Observable:
+	return obs.using(resource_factory, observable_factory)
+
+## See: [b]res://reactivex/observable/withlatestfrom.gd[/b]
+func with_latest_from(sources : Array[Observable]) -> Observable:
 	var _sources : Array[Observable] = sources.duplicate()
 	var parent = _sources.pop_front()
 	return obs.with_latest_from(parent, _sources)
 
-## Creates an Observable that emits tuples of the items with same order emitted 
-## by all sources.
-func Zip(sources : Array[Observable]) -> Observable:
+## See: [b]res://reactivex/observable/zip.gd[/b]
+func zip(sources : Array[Observable]) -> Observable:
 	return obs.zip(sources)
 
-## Creates an observale that repeats a given value for a certain amount.
-func RepeatValue(value, repeat_count = null) -> Observable:
-	return obs.repeat_value(value, repeat_count)
-
-## Merges an array of observable sequences into a new observable sequence.
-func Merge(sources : Array[Observable]) -> Observable:
-	return obs.merge(sources)
-
-func ToAsync(fun : Callable, scheduler : SchedulerBase = null) -> Callable:
-		return obs.to_async(fun, scheduler)
-
-## Creates an observable which emits an item every time a time period has passed.
-func Interval(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.interval(period_sec, scheduler)
-
-## Creates an observable timer
-func StartTimespan(timespan_sec : float) -> Observable:
-	return obs.timer(timespan_sec, false)
-
-## Creates an observable periodic timer
-func StartPeriodicTimer(period_sec : float) -> Observable:
-	return obs.timer(period_sec, false, period_sec)
-
-## Creates an observable periodic timer which starts after a timespan has passed
-func StartPeriodicTimerAfterTimespan(timespan_sec : float, period_sec : float) -> Observable:
-	return obs.timer(timespan_sec, false, period_sec)
-
-## Creates an observable timer
-func ScheduleDatetime(datetime_sec : float) -> Observable:
-	return obs.timer(datetime_sec, true)
-
-## Creates an observable periodic timer which starts at a given timestamp.
-func StartPeriodicTimerAtDatetime(datetime_sec : float, period_sec : float) -> Observable:
-	return obs.timer(datetime_sec, true, period_sec)
+# =========================================================================== #
+#   Godot-specific Observable Constructors
+# =========================================================================== #
 
 ## Creates an observable from a Godot Signal
-func FromGodotSignal(sig : Signal) -> Observable:
+func from_godot_signal(sig : Signal) -> Observable:
 	return gd.from_godot_signal(sig)
 
-## Adds user signal to node and creates an observable from it.
-#func CreateGodotUserSignal(conn : Object, signal_name : String, n_args : int, args : Array = []) -> Observable:
-#	if conn.has_signal(signal_name):
-#		return FromGodotSignal(conn.get(signal_name))
-#	var _args : Array = []
-#	if not args.is_empty() and n_args <= 0:
-#		_args = args
-#	else:
-#		for i in range(n_args):
-#			_args.append({"name":"arg" + str(i), "type":TYPE_MAX})
-#	conn.add_user_signal(signal_name, _args)
-#	return FromGodotSignal(conn.get(signal_name))
-
 ## Emits items from [method Node._process].
-func OnProcessAsObservable(conn : Node) -> Observable:
+func on_process_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 0)
 
 ## Emits items from [method Node._physics_process].
-func OnPhysicsProcessAsObservable(conn : Node) -> Observable:
+func on_physics_process_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 1)
 
 ## Emits items from [method Node._input].
-func OnInputAsObservable(conn : Node) -> Observable:
+func on_input_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 2)
 
 ## Emits items from [method Node._shortcut_input].
-func OnShortcutInputAsObservable(conn : Node) -> Observable:
+func on_shortcut_input_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 3)
 
 ## Emits items from [method Node._unhandled_input].
-func OnUnhandledInputAsObservable(conn : Node) -> Observable:
+func on_unhandled_input_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 4)
 
 ## Emits items from [method Node._unhandled_key_input].
-func OnUnhandledKeyInputAsObservable(conn : Node) -> Observable:
+func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 5)
 
 ## Tranforms an input action into an observable sequence emiting items on check.
-func FromGodotInputAction(input_action : String, checks : Observable) -> Observable:
+func input_action(input_action : String, checks : Observable) -> Observable:
 	return gd.from_godot_input_action(input_action, checks)
+
+## Creates a new [ReactiveProperty]
+func reactive_property(value = null) -> ReactiveProperty:
+	return ReactiveProperty.ChangedValue(value)
+
+## Transforms a [ReactiveProperty] into a [ReadOnlyReactiveProperty]
+func to_readonly(prop : ReactiveProperty) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(prop)
+
+## Creates an observable timer
+func start_timer(timespan_sec : float) -> Observable:
+	return obs.timer(timespan_sec, false)
+
+## Creates an observable periodic timer
+func start_periodic_timer(period_sec : float) -> Observable:
+	return obs.timer(period_sec, false, period_sec)
+
+## Creates an observable periodic timer which starts after a timespan has passed
+func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float) -> Observable:
+	return obs.timer(timespan_sec, false, period_sec)
+
+## Creates an observable timer
+func schedule_datetime(datetime_sec : float) -> Observable:
+	return obs.timer(datetime_sec, true)
+
+## Creates an observable periodic timer which starts at a given timestamp.
+func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float) -> Observable:
+	return obs.timer(datetime_sec, true, period_sec)

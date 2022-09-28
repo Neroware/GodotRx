@@ -146,7 +146,7 @@ func _ready():
 		else:
 			method.call()
 	
-	GDRx.FromGodotSignal(self.sequence_finished).subscribe(
+	GDRx.from_godot_signal(self.sequence_finished).subscribe(
 		func(tup : Tuple):
 			var result : ETestState = tup.at(0)
 			var remaining : int = tup.at(1)
@@ -175,25 +175,25 @@ var ERROR : ObservableSequence.Error = ObservableSequence.Error.new()
 # ============================================================================ #
 
 func _test_amb():
-	var obs1 : Observable = GDRx.StartPeriodicTimer(1.0).map(func(i): return "T1")
-	var obs2 : Observable = GDRx.StartTimespan(0.5).map(func(i): return "T2")
-	var obs3 : Observable = GDRx.StartPeriodicTimer(2.5).map(func(i): return "T3")
-	var obs = GDRx.WinnerOf([obs1, obs2, obs3])
+	var obs1 : Observable = GDRx.start_periodic_timer(1.0).map(func(i): return "T1")
+	var obs2 : Observable = GDRx.start_timer(0.5).map(func(i): return "T2")
+	var obs3 : Observable = GDRx.start_periodic_timer(2.5).map(func(i): return "T3")
+	var obs = GDRx.amb([obs1, obs2, obs3])
 	var seq = ObservableSequence.new(["T2", COMPLETE])
 	seq.compare(obs, self.sequence_finished)
 
 func _test_throw():
-	var obs = GDRx.Throw(GDRx.exc.Exception.new("Kill sequence"))
+	var obs = GDRx.throw(GDRx.exc.Exception.new("Kill sequence"))
 	var seq = ObservableSequence.new([ERROR])
 	seq.compare(obs, self.sequence_finished)
 
 func _test_range():
 	var seq = ObservableSequence.new([1, 3, 5, 7, 9, 11, COMPLETE])
-	var obs = GDRx.FromRange(1, 13, 2)
+	var obs = GDRx.range(1, 13, 2)
 	seq.compare(obs, self.sequence_finished)
 
 func _test_window_with_count():
-	var obs = GDRx.FromRange(16).window_with_count(5)
+	var obs = GDRx.range(16).window_with_count(5)
 	var seq = ObservableSequence.new([
 		ObservableSequence.new([0, 1, 2, 3, 4, COMPLETE]),
 		ObservableSequence.new([5, 6, 7, 8, 9, COMPLETE]),
@@ -211,7 +211,7 @@ func _test_compare_array():
 func _test_new_thread_scheduler():
 	var scheduler : NewThreadScheduler = NewThreadScheduler.new()
 	
-	var foo = GDRx.ReturnValue("foo").delay(1000.0)
+	var foo = GDRx.return_value("foo").delay(1000.0)
 	var d = foo.subscribe(
 		func(i): print("[ReactiveX]: This element was delayed: ", i), 
 		func(e): return, 
@@ -219,12 +219,12 @@ func _test_new_thread_scheduler():
 		scheduler
 	)
 	
-	var obs = GDRx.ReturnValue(42, scheduler)
+	var obs = GDRx.return_value(42, scheduler)
 	var seq = ObservableSequence.new([42, COMPLETE])
 	seq.compare(obs, self.sequence_finished)
 
 func _test_faulty_map():
-	var obs = GDRx.FromArray([1, 2, 3, 4, 5, 6]) \
+	var obs = GDRx.from_array([1, 2, 3, 4, 5, 6]) \
 	.map(func(i):
 		if i < 5:
 			return 2 * i
