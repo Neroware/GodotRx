@@ -252,8 +252,12 @@ func zip(sources : Array[Observable]) -> Observable:
 # =========================================================================== #
 
 ## Creates an observable from a Godot Signal
-func from_godot_signal(sig : Signal) -> Observable:
+func from_signal(sig : Signal) -> Observable:
 	return gd.from_godot_signal(sig)
+
+## Creates an observable from a Coroutine
+func from_coroutine(fun : Callable, bindings : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return gd.from_godot_coroutine(fun, bindings, scheduler)
 
 ## Emits items from [method Node._process].
 func on_process_as_observable(conn : Node) -> Observable:

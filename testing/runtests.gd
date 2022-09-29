@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -146,7 +146,7 @@ func _ready():
 		else:
 			method.call()
 	
-	GDRx.from_godot_signal(self.sequence_finished).subscribe(
+	GDRx.from_signal(self.sequence_finished).subscribe(
 		func(tup : Tuple):
 			var result : ETestState = tup.at(0)
 			var remaining : int = tup.at(1)
@@ -232,4 +232,15 @@ func _test_faulty_map():
 			return GDRx.exc.Exception.new("Expected Error!").throw(-1)
 		)
 	var seq = ObservableSequence.new([2, 4, 6, 8, ERROR])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_coroutine():
+	var coroutine = func (a, b, c):
+		print("[ReactiveX]: Running Coroutine before await...")
+		await get_tree().create_timer(0.01).timeout
+		print("[ReactiveX]: Running Coroutine after await...")
+		return a < b and b < c
+	
+	var obs = GDRx.from_coroutine(coroutine, [1, 2, 3])
+	var seq = ObservableSequence.new([true, COMPLETE])
 	seq.compare(obs, self.sequence_finished)

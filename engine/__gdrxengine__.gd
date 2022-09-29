@@ -9,6 +9,7 @@ class_name __GDRx_Engine__
 var _GodotSignal_ = load("res://reactivex/engine/observable/godotsignal.gd")
 var _GodotLifecycle_ = load("res://reactivex/engine/observable/godotnodelifecycle.gd")
 var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputaction.gd")
+var _GodotCoroutine_ = load("res://reactivex/engine/observable/godotcoroutine.gd")
 
 ## See: [b]res://reactivex/engine/observable/godotsignal.gd[/b]
 func from_godot_signal(sig : Signal, scheduler : SchedulerBase = null) -> Observable:
@@ -21,3 +22,7 @@ func from_godot_node_lifecycle_event(conn : Node, type : int) -> Observable:
 ## See: [b]res://reactivex/engine/observable/godotinputaction.gd[/b]
 func from_godot_input_action(input_action : String, checks : Observable) -> Observable:
 	return _GodotInputAction_.from_godot_input_action_(input_action, checks)
+
+## See: [b]res://reactivex/engine/observable/godotcoroutine.gd[/b]
+func from_godot_coroutine(fun : Callable, bindings : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return _GodotCoroutine_.from_godot_coroutine_(fun, bindings, scheduler)
