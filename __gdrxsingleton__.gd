@@ -41,6 +41,8 @@ class _MainThreadDummy extends Thread:
 	func start(_callable : Callable, _priority : int = 1) -> int:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
+	func _to_string():
+		return "MAIN_THREAD::" + str(GDRx.MAIN_THREAD_ID)
 ## ID of the main thread
 var MAIN_THREAD_ID = OS.get_thread_caller_id()
 ## Dummy instance for the Main Thread
