@@ -27,7 +27,7 @@ class StartableThread extends StartableBase:
 			self._target = GDRx.basic.noop
 		
 		self._started = true
-		self._thread.start(self._target, self._priority)
+		self._thread.start(action, self._priority)
 	
 	func join():
 		self._thread.wait_to_finish()

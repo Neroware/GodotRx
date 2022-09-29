@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -222,6 +222,17 @@ func _test_new_thread_scheduler():
 	var obs = GDRx.return_value(42, scheduler)
 	var seq = ObservableSequence.new([42, COMPLETE])
 	seq.compare(obs, self.sequence_finished)
+
+func _test_separate_thread():
+	var run = func():
+		var id = OS.get_thread_caller_id()
+		
+		var obs = GDRx.return_value(0).map(func(__): return OS.get_thread_caller_id())
+		var seq = ObservableSequence.new([id, COMPLETE])
+		seq.compare(obs, self.sequence_finished)
+	
+	var thread = GDRx.concur.StartableThread.new(run)
+	thread.start()
 
 func _test_faulty_map():
 	var obs = GDRx.from_array([1, 2, 3, 4, 5, 6]) \
