@@ -50,6 +50,7 @@ func schedule_periodic(
 		
 		var thread : StartableBase = self.thread_factory.call(run)
 		thread.start()
+		thread.on_finish.connect(thread.join)
 		
 		var dispose = func():
 			disposed.set_flag()
