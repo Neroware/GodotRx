@@ -21,7 +21,7 @@ var _tramps : WeakKeyDictionary
 ## [br]
 ##            The singleton [CurrentThreadScheduler] instance.
 static func singleton() -> CurrentThreadScheduler:
-	var thread = OS.get_thread_caller_id()
+	var thread = GDRx.get_current_thread()
 	var class_map = GDRx.CurrentThreadScheduler_global_.get(cls)
 	var class_map_ : WeakKeyDictionary
 	if class_map == null:
@@ -44,7 +44,7 @@ func _init():
 
 ## Returns a [Trampoline]
 func get_trampoline() -> Trampoline:
-	var thread = OS.get_thread_caller_id()
+	var thread = GDRx.get_current_thread()
 	var tramp = self._tramps.get(thread)
 	if tramp == null:
 		tramp = Trampoline.new()
@@ -55,7 +55,7 @@ class _Local:
 	var _tramp : Dictionary
 	
 	func _trampoline():
-		var id = OS.get_thread_caller_id()
+		var id = GDRx.get_current_thread()
 		if not id in self._tramp.keys():
 			self._tramp[id] = Trampoline.new()
 		return self._tramp[id]

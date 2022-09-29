@@ -1,6 +1,7 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread"
+#@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread"
+@export var tests : String = "separate_thread"
 
 enum ETestState {
 	SUCCESS = 1,
