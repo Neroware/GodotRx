@@ -211,9 +211,9 @@ func _test_compare_array():
 func _test_new_thread_scheduler():
 	var scheduler : NewThreadScheduler = NewThreadScheduler.new()
 	
-	var foo = GDRx.return_value("foo").delay(1000.0)
+	var foo = GDRx.return_value("foo").delay(10.0)
 	foo.subscribe(
-		func(i): print("[ReactiveX]: This element was delayed: ", i), 
+		func(i): print("[ReactiveX]: This element was delayed by 10 seconds on a separate thread: ", i), 
 		func(e): return, 
 		func(): return, 
 		scheduler

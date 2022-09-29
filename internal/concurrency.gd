@@ -3,20 +3,31 @@ class StartableThread extends StartableBase:
 	var _thread : Thread
 	var _target : Callable
 	var _priority : int
+	var _started : bool
 	
 	func _init(target : Callable, priority = Thread.PRIORITY_NORMAL):
 		self._thread = Thread.new()
 		self._target = target
 		self._priority = priority
+		self._started = false
 	
 	var thread : Thread:
 		get: return self._thread
 	
 	func start():
-		var action : Callable = func():
+		GDRx._register_thread(self._thread)
+		if self._started:
+			GDRx.raise_message("Thread already started!")
+			return
+		
+		var action = func():
+			GDRx._on_thread_launch(self._thread)
 			self._target.call()
-			on_finish.emit()
-		self._thread.start(action, self._priority)
+			self._thread = null
+			self._target = GDRx.basic.noop
+		
+		self._started = true
+		self._thread.start(self._target, self._priority)
 	
 	func join():
 		self._thread.wait_to_finish()

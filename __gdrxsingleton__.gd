@@ -38,6 +38,54 @@ var exc = __init__.Exception_.new()
 var pipe = __init__.Pipe_.new()
 
 # =========================================================================== #
+#   Multi-Threading
+# =========================================================================== #
+
+var _new_thread_lock : RLock = RLock.new()
+var _thread_ids : Dictionary = {} # ID -> Thread
+var _threads : Dictionary = {} # Thread -> ID
+
+func _register_thread(thread : Thread):
+	self._new_thread_lock.lock()
+	
+	for t in self._threads.keys():
+		if t.is_alive():
+			continue
+		var id = self._threads[t]
+		if id is GDRx.util.NotSet:
+			GDRx.raise_message("Thread did not notify singleton on launch!")
+			self._threads.erase(t)
+			continue
+		self._threads.erase(t)
+		self._thread_ids.erase(id)
+		t.wait_to_finish()
+	
+	self._threads[thread] = NOT_SET
+	
+	self._new_thread_lock.unlock()
+
+func _on_thread_launch(thread : Thread):
+	self._new_thread_lock.lock()
+	var id : int = OS.get_thread_caller_id()
+	self._thread_ids[id] = thread
+	self._threads[thread] = id
+	self._new_thread_lock.unlock()
+
+## Returns the caller's current [Thread]
+## If no thread object is registered this function returns [b]null[/b]
+## implying that the caller is the main thread.
+func get_current_thread() -> Thread:
+	var result : Thread = null
+	
+	self._new_thread_lock.lock()
+	var id : int = OS.get_thread_caller_id()
+	if id in self._thread_ids.keys():
+		result = self._thread_ids[id]
+	self._new_thread_lock.unlock()
+	
+	return result
+
+# =========================================================================== #
 #   Scheduler Singletons
 # =========================================================================== #
 
