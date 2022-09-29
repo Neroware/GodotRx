@@ -37,6 +37,15 @@ var exc = __init__.Exception_.new()
 ## Access to pipe operators
 var pipe = __init__.Pipe_.new()
 
+class _MainThreadDummy extends Thread:
+	func start(_callable : Callable, _priority : int = 1) -> int:
+		GDRx.raise_message("Do not launch the Main Thread Dummy!")
+		return -1
+## ID of the main thread
+var MAIN_THREAD_ID = OS.get_thread_caller_id()
+## Dummy instance for the Main Thread
+var MAIN_THREAD = _MainThreadDummy.new()
+
 # =========================================================================== #
 #   Multi-Threading
 # =========================================================================== #
@@ -65,8 +74,9 @@ func _register_thread(thread : Thread):
 	self._new_thread_lock.unlock()
 
 func _on_thread_launch(thread : Thread):
-	self._new_thread_lock.lock()
 	var id : int = OS.get_thread_caller_id()
+	
+	self._new_thread_lock.lock()
 	self._thread_ids[id] = thread
 	self._threads[thread] = id
 	self._new_thread_lock.unlock()
@@ -76,9 +86,11 @@ func _on_thread_launch(thread : Thread):
 ## implying that the caller is the main thread.
 func get_current_thread() -> Thread:
 	var result : Thread = null
+	var id : int = OS.get_thread_caller_id()
+	if id == MAIN_THREAD_ID:
+		return MAIN_THREAD
 	
 	self._new_thread_lock.lock()
-	var id : int = OS.get_thread_caller_id()
 	if id in self._thread_ids.keys():
 		result = self._thread_ids[id]
 	self._new_thread_lock.unlock()

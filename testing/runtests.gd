@@ -1,7 +1,6 @@
 extends Node
 
-#@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread"
-@export var tests : String = "separate_thread"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -234,6 +233,30 @@ func _test_separate_thread():
 	
 	var thread = GDRx.concur.StartableThread.new(run)
 	thread.start()
+
+func _test_threaded_try_catch():
+	GDRx.try(func():
+		GDRx.raise_message("Outer Error!")
+		var run = func():
+			var id = OS.get_thread_caller_id()
+			GDRx.try(func():
+				GDRx.raise_message("Error on Thread!")
+				var obs = GDRx.return_value(0).map(func(__): return OS.get_thread_caller_id())
+				var seq = ObservableSequence.new([id, COMPLETE])
+				seq.compare(obs, self.sequence_finished)
+			) \
+			.end_try_catch()
+	
+		GDRx.try(func():
+			GDRx.raise_message("Inner Error!")
+			var thread = GDRx.concur.StartableThread.new(run)
+			thread.start()
+		) \
+		.catch("Exception", func(e): print("[ReactiveX]: Inner ERROR: ", e)) \
+		.end_try_catch()
+	) \
+	.catch("Exception", func(e): print("[ReactiveX]: Outer ERROR: ", e)) \
+	.end_try_catch()
 
 func _test_faulty_map():
 	var obs = GDRx.from_array([1, 2, 3, 4, 5, 6]) \

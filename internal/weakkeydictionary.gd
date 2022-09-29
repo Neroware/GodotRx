@@ -97,7 +97,7 @@ func find_key(value, gc : bool = true) -> Variant:
 				return key
 	return null
 
-func get(key, default = null, gc : bool = true) -> Variant:
+func get_value(key, default = null, gc : bool = true) -> Variant:
 	if gc: _collect_garbage()
 	var idx = _hash_index(key)
 	var col_lst = self._data[idx]
@@ -151,7 +151,7 @@ func merge(dictionary : WeakKeyDictionary, overwrite : bool = false, gc : bool =
 	if gc: _collect_garbage()
 	for key in dictionary.keys():
 		if not has(key, false) or (has(key, false) and overwrite):
-			set_pair(key, dictionary.get(key, false), false)
+			set_pair(key, dictionary.get_value(key, false), false)
 
 func size(gc : bool = true) -> int:
 	return keys(gc).size()

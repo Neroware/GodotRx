@@ -28,9 +28,6 @@ class StartableThread extends StartableBase:
 		
 		self._started = true
 		self._thread.start(action, self._priority)
-	
-	func join():
-		self._thread.wait_to_finish()
 
 func default_thread_factory(target : Callable) -> StartableThread:
 	return StartableThread.new(target)

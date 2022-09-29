@@ -4,39 +4,53 @@ class_name ExceptionHandler
 ##
 ## Objects of type [ThrowableBase] are handled by this type's singleton
 
-var _try_catch_stack : Array[TryCatch]
+var _try_catch_stack : WeakKeyDictionary # WeakKeyDictionary{Thread -> Array[TryCatch]}
 var _has_failed : Dictionary
+var _lock : RLock
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
-	self._try_catch_stack = []
+	self._try_catch_stack = WeakKeyDictionary.new()
 	self._has_failed = {}
+	self._lock = RLock.new()
 
 static func singleton() -> ExceptionHandler:
 	return GDRx.ExceptionHandler_
 
 func run(stmt : TryCatch) -> bool:
+	var thread = GDRx.get_current_thread()
+	
+	self._lock.lock()
 	self._has_failed[stmt] = false
+	if not thread in self._try_catch_stack.keys():
+		self._try_catch_stack.set_pair(thread, [stmt])
+	else:
+		self._try_catch_stack.get_value(thread).push_back(stmt)
+	self._lock.unlock()
 	
-	self._try_catch_stack.push_back(stmt)
 	stmt.risky_code.call()
-	self._try_catch_stack.pop_back()
 	
+	self._lock.lock()
+	self._try_catch_stack.get_value(thread).pop_back()
 	var failed = self._has_failed[stmt]
 	self._has_failed.erase(stmt)
+	self._lock.unlock()
+	
 	return failed
 
 func raise(exc : ThrowableBase, default = null) -> Variant:
 	var handler : Callable = GDRx.basic.default_crash
+	var thread = GDRx.get_current_thread()
 	
-	if self._try_catch_stack.is_empty():
+	var current_thread_stack = self._try_catch_stack.get_value(thread)
+	if current_thread_stack == null or current_thread_stack.is_empty():
 		handler.call(exc)
 		return default
 	
 	handler = GDRx.basic.noop
 	
-	var stmt : TryCatch = self._try_catch_stack.pop_back()
+	var stmt : TryCatch = current_thread_stack.pop_back()
 	self._has_failed[stmt] = true
 	for type in exc.tags():
 		if type in stmt.caught_types:
@@ -44,5 +58,5 @@ func raise(exc : ThrowableBase, default = null) -> Variant:
 			break
 	
 	handler.call(exc)
-	self._try_catch_stack.push_back(stmt)
+	current_thread_stack.push_back(stmt)
 	return default
