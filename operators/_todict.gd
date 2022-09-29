@@ -3,15 +3,15 @@ static func to_dict_(
 	element_mapper : Callable = func(v): return v
 ) -> Callable:
 	var to_dict = func(source : Observable) -> Observable:
-		"""Converts the observable sequence to a Map if it exists.
-
-		Args:
-			source: Source observable to convert.
-
-		Returns:
-			An observable sequence with a single value of a dictionary
-			containing the values from the observable sequence.
-		"""
+#		"""Converts the observable sequence to a Map if it exists.
+#
+#		Args:
+#			source: Source observable to convert.
+#
+#		Returns:
+#			An observable sequence with a single value of a dictionary
+#			containing the values from the observable sequence.
+#		"""
 		var m = RefValue.Set({})
 		
 		var subscribe = func(

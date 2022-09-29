@@ -2,20 +2,20 @@ static func timestamp_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var timestamp = func(source : Observable) -> Observable:
-		"""Records the timestamp for each value in an observable sequence.
-
-		Examples:
-			>>> timestamp.call(source)
-
-		Produces objects with attributes `value` and `timestamp`, where
-		value is the original value.
-
-		Args:
-			source: Observable source to timestamp.
-
-		Returns:
-			An observable sequence with timestamp information on values.
-		"""
+#		"""Records the timestamp for each value in an observable sequence.
+#
+#		Examples:
+#			>>> timestamp.call(source)
+#
+#		Produces objects with attributes `value` and `timestamp`, where
+#		value is the original value.
+#
+#		Args:
+#			source: Observable source to timestamp.
+#
+#		Returns:
+#			An observable sequence with timestamp information on values.
+#		"""
 		var factory = func(scheduler_ : SchedulerBase = null):
 			var _scheduler : SchedulerBase
 			if scheduler != null: _scheduler = scheduler

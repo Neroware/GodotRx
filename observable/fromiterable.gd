@@ -36,7 +36,7 @@ static func from_iterable_(
 		var action = func(__ : SchedulerBase, ___ = null):
 			GDRx.try(func():
 				while not disposed.v:
-					var value = iterable.next()
+					var value = iterator.next()
 					if value is IterableBase.End:
 						observer.on_completed()
 					else:

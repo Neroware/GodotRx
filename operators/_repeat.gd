@@ -3,21 +3,21 @@ static func repeat_(
 ) -> Callable:
 	
 	var repeat = func(source : Observable) -> Observable:
-		"""Repeats the observable sequence a specified number of times.
-		If the repeat count is not specified, the sequence repeats
-		indefinitely.
-
-		Examples:
-			>>> var repeated = source.pipe1(GDRx.op.repeat())
-			>>> var repeated = source.pipe1(GDRx.op.repeat(42))
-
-		Args:
-			source: The observable source to repeat.
-
-		Returns:
-			The observable sequence producing the elements of the given
-			sequence repeatedly.
-		"""
+#		"""Repeats the observable sequence a specified number of times.
+#		If the repeat count is not specified, the sequence repeats
+#		indefinitely.
+#
+#		Examples:
+#			>>> var repeated = source.pipe1(GDRx.op.repeat())
+#			>>> var repeated = source.pipe1(GDRx.op.repeat(42))
+#
+#		Args:
+#			source: The observable source to repeat.
+#
+#		Returns:
+#			The observable sequence producing the elements of the given
+#			sequence repeatedly.
+#		"""
 		var gen : IterableBase
 		if repeat_count == null:
 			gen = GDRx.util.Infinite(source)

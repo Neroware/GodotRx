@@ -36,28 +36,28 @@ static func single_or_default_(
 	predicate = null,
 	default_value = null
 ) -> Callable:
-	"""Returns the only element of an observable sequence that matches
-	the predicate, or a default value if no such element exists this
-	method reports an exception if there is more than one element in the
-	observable sequence.
-
-	Examples:
-		>>> var res = GDRx.op.single_or_default()
-		>>> var res = GDRx.op.single_or_default(func(x): return x == 42)
-		>>> var res = GDRx.op.single_or_default(func(x): return x == 42, 0)
-		>>> var res = GDRx.op.single_or_default(null, 0)
-
-	Args:
-		predicate -- [Optional] A predicate function to evaluate for
-			elements in the source sequence.
-		default_value -- [Optional] The default value if the index is
-			outside the bounds of the source sequence.
-
-	Returns:
-		An observable Sequence containing the single element in the
-	observable sequence that satisfies the condition in the predicate,
-	or a default value if no such element exists.
-	"""
+#	"""Returns the only element of an observable sequence that matches
+#	the predicate, or a default value if no such element exists this
+#	method reports an exception if there is more than one element in the
+#	observable sequence.
+#
+#	Examples:
+#		>>> var res = GDRx.op.single_or_default()
+#		>>> var res = GDRx.op.single_or_default(func(x): return x == 42)
+#		>>> var res = GDRx.op.single_or_default(func(x): return x == 42, 0)
+#		>>> var res = GDRx.op.single_or_default(null, 0)
+#
+#	Args:
+#		predicate -- [Optional] A predicate function to evaluate for
+#			elements in the source sequence.
+#		default_value -- [Optional] The default value if the index is
+#			outside the bounds of the source sequence.
+#
+#	Returns:
+#		An observable Sequence containing the single element in the
+#	observable sequence that satisfies the condition in the predicate,
+#	or a default value if no such element exists.
+#	"""
 	if predicate != null:
 		var _predicate : Callable = predicate
 		return GDRx.pipe.compose2(

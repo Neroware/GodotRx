@@ -1,16 +1,16 @@
 static func switch_latest_() -> Callable:
 	var switch_latest = func(source : Observable) -> Observable:
-		"""Partially applied switch_latest operator.
-
-		Transforms an observable sequence of observable sequences into
-		an observable sequence producing values only from the most
-		recent observable sequence.
-
-		Returns:
-			An observable sequence that at any point in time produces
-			the elements of the most recent inner observable sequence
-			that has been received.
-		"""
+#		"""Partially applied switch_latest operator.
+#
+#		Transforms an observable sequence of observable sequences into
+#		an observable sequence producing values only from the most
+#		recent observable sequence.
+#
+#		Returns:
+#			An observable sequence that at any point in time produces
+#			the elements of the most recent inner observable sequence
+#			that has been received.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

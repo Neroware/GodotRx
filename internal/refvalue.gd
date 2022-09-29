@@ -10,12 +10,12 @@ class_name RefValue
 ## Wrapped value
 var v : Variant
 
-func _init(v : Variant = null):
-	self.v = v
+func _init(v_ : Variant = null):
+	self.v = v_
 
 ## Create a new RefValue with initial value
-static func Set(v : Variant = null) -> RefValue:
-	return RefValue.new(v)
+static func Set(v_ : Variant = null) -> RefValue:
+	return RefValue.new(v_)
 
 ## Create a new RefValue with initial value [code]null[/code]
 static func Null() -> RefValue:

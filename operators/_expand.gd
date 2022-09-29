@@ -2,16 +2,16 @@ static func expand_(
 	mapper : Callable
 ) -> Callable:
 	var expand = func(source : Observable) -> Observable:
-		"""Expands an observable sequence by recursively invoking
-		mapper.
-
-		Args:
-			source: Source obserable to expand.
-
-		Returns:
-			An observable sequence containing all the elements produced
-			by the recursive expansion.
-		"""
+#		"""Expands an observable sequence by recursively invoking
+#		mapper.
+#
+#		Args:
+#			source: Source obserable to expand.
+#
+#		Returns:
+#			An observable sequence containing all the elements produced
+#			by the recursive expansion.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase, scheduler : SchedulerBase = null
 		) -> DisposableBase:
@@ -68,7 +68,7 @@ static func expand_(
 					m.disposable = scheduler.schedule(__action_rec.bind(__action_rec))
 				
 				if is_owner:
-					m.disposable = scheduler.schedule(action.bind(action))
+					m.disposable = scheduler_.schedule(action.bind(action))
 			
 			queue.append(source)
 			active_count.v += 1

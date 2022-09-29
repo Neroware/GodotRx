@@ -21,9 +21,9 @@ class_name ObservableBase
 ##		var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
 ##		[/codeblock]
 func subscribe(
-	on_next, # Callable or Observer or Object with callbacks
-	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return,
-	scheduler : SchedulerBase = null) -> DisposableBase:
+	_on_next, # Callable or Observer or Object with callbacks
+	_on_error : Callable = func(e): return,
+	_on_completed : Callable = func(): return,
+	_scheduler : SchedulerBase = null) -> DisposableBase:
 		GDRx.exc.NotImplementedException.Throw()
 		return null

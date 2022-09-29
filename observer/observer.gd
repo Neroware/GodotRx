@@ -7,13 +7,13 @@ var _handler_on_completed : Callable
 var is_stopped : bool
 
 func _init(
-	on_next : Callable = func(i): return,
-	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return):
+	on_next_ : Callable = func(i): return,
+	on_error_ : Callable = func(e): return,
+	on_completed_ : Callable = func(): return):
 		self.is_stopped = false
-		self._handler_on_next = on_next
-		self._handler_on_error = on_error
-		self._handler_on_completed = on_completed
+		self._handler_on_next = on_next_
+		self._handler_on_error = on_error_
+		self._handler_on_completed = on_completed_
 
 func on_next(i):
 	if not self.is_stopped:

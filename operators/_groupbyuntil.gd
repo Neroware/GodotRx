@@ -5,41 +5,42 @@ static func group_by_until_(
 	subject_mapper = null
 ) -> Callable:
 	
-	"""Groups the elements of an observable sequence according to a
-	specified key mapper function. A duration mapper function is used
-	to control the lifetime of groups. When a group expires, it receives
-	an OnCompleted notification. When a new element with the same key
-	value as a reclaimed group occurs, the group will be reborn with a
-	new lifetime request.
-
-	Examples:
-		>>> GDRx.op.group_by_until(func(x): return x.id, null, func() : return GDRx.obs.never())
-		>>> GDRx.op.group_by_until(
-			func(x): return x.id, func(x): return x.name, func(grp): return GDRx.obs.never()
-		)
-		>>> GDRx.op.group_by_until(
-			func(x): return x.id,
-			func(x): return x.name,
-			func(grp): return GDRx.obs.never(),
-			func(): return ReplaySubject.new()
-		)
-
-	Args:
-		key_mapper: A function to extract the key for each element.
-		duration_mapper: A function to signal the expiration of a group.
-		subject_mapper: A function that returns a subject used to initiate
-			a grouped observable. Default mapper returns a Subject object.
-
-	Returns: a sequence of observable groups, each of which corresponds to
-	a unique key value, containing all elements that share that same key
-	value. If a group's lifetime expires, a new group with the same key
-	value can be created once an element with such a key value is
-	encountered.
-	"""
+#	"""Groups the elements of an observable sequence according to a
+#	specified key mapper function. A duration mapper function is used
+#	to control the lifetime of groups. When a group expires, it receives
+#	an OnCompleted notification. When a new element with the same key
+#	value as a reclaimed group occurs, the group will be reborn with a
+#	new lifetime request.
+#
+#	Examples:
+#		>>> GDRx.op.group_by_until(func(x): return x.id, null, func() : return GDRx.obs.never())
+#		>>> GDRx.op.group_by_until(
+#			func(x): return x.id, func(x): return x.name, func(grp): return GDRx.obs.never()
+#		)
+#		>>> GDRx.op.group_by_until(
+#			func(x): return x.id,
+#			func(x): return x.name,
+#			func(grp): return GDRx.obs.never(),
+#			func(): return ReplaySubject.new()
+#		)
+#
+#	Args:
+#		key_mapper: A function to extract the key for each element.
+#		duration_mapper: A function to signal the expiration of a group.
+#		subject_mapper: A function that returns a subject used to initiate
+#			a grouped observable. Default mapper returns a Subject object.
+#
+#	Returns: a sequence of observable groups, each of which corresponds to
+#	a unique key value, containing all elements that share that same key
+#	value. If a group's lifetime expires, a new group with the same key
+#	value can be created once an element with such a key value is
+#	encountered.
+#	"""
 	
 	var element_mapper_ : Callable = element_mapper if element_mapper != null else GDRx.basic.identity
 	
 	var default_subject_mapper = func(): return Subject.new()
+	@warning_ignore(incompatible_ternary)
 	var subject_mapper_ : Callable = subject_mapper if subject_mapper != null else default_subject_mapper
 	
 	var group_by_until = func(source : Observable) -> Observable:

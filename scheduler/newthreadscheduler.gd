@@ -5,9 +5,9 @@ class_name NewThreadScheduler
 
 var thread_factory : Callable
 
-func _init(thread_factory : Callable = GDRx.concur.default_thread_factory):
+func _init(thread_factory_ : Callable = GDRx.concur.default_thread_factory):
 	super._init()
-	self.thread_factory = thread_factory
+	self.thread_factory = thread_factory_
 
 ## Schedule a new action for future execution
 func schedule(action : Callable, state = null) -> DisposableBase:

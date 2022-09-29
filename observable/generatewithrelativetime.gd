@@ -36,7 +36,7 @@ static func generate_with_relative_time_(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
-		var scheduler_ : SchedulerBase = scheduler if scheduler != null else CurrentThreadScheduler.singleton()
+		var _scheduler : SchedulerBase = scheduler if scheduler != null else TimeoutScheduler.singleton()
 		var mad = MultipleAssignmentDisposable.new()
 		var state = RefValue.Set(initial_state)
 		var has_result = RefValue.Set(false)
@@ -71,7 +71,7 @@ static func generate_with_relative_time_(
 			else:
 				observer.on_completed()
 		
-		mad.disposable = scheduler.schedule_relative(0, action.bind(action))
+		mad.disposable = _scheduler.schedule_relative(0, action.bind(action))
 		return mad
 	
 	return Observable.new(subscribe)

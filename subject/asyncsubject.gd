@@ -20,7 +20,7 @@ func _init():
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
-	scheduler : SchedulerBase = null,
+	_scheduler : SchedulerBase = null,
 ) -> DisposableBase:
 	self.lock.lock()
 	if not check_disposed(): self.lock.unlock() ; return
@@ -31,14 +31,14 @@ func _subscribe_core(
 		return ret_
 	
 	var ex = self.exception
-	var has_value = self.has_value
-	var value = self.value
+	var has_value_ = self.has_value
+	var value_ = self.value
 	self.lock.unlock()
 	
 	if ex != null:
 		observer.on_error(ex)
-	elif has_value:
-		observer.on_next(value)
+	elif has_value_:
+		observer.on_next(value_)
 		observer.on_completed()
 	else:
 		observer.on_completed()
@@ -62,19 +62,19 @@ func _on_next_core(__super : Callable, i):
 ## subscribed observers.
 func _on_completed_core(__super : Callable):
 	self.lock.lock()
-	var observers = self.observers.duplicate()
+	var observers_ = self.observers.duplicate()
 	self.observers.clear()
-	var value = self.value
-	var has_value = self.has_value
+	var value_ = self.value
+	var has_value_ = self.has_value
 	self.lock.unlock()
 	
-	if has_value:
-		for obs in observers:
-			obs.on_next(value)
-			obs.on_completed()
+	if has_value_:
+		for o in observers_:
+			o.on_next(value_)
+			o.on_completed()
 	else:
-		for obs in observers:
-			obs.on_completed()
+		for o in observers_:
+			o.on_completed()
 
 ## Unsubscribe all observers and release resources.
 func dispose(__super : Callable):

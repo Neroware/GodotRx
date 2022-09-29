@@ -1,12 +1,12 @@
 static func to_iterable_() -> Callable:
 	var to_iterable = func(source : Observable) -> Observable:
-		"""Creates an iterable from an observable sequence.
-
-		Returns:
-			An observable sequence containing a single element with an
-			iterable containing all the elements of the source
-			sequence.
-		"""
+#		"""Creates an iterable from an observable sequence.
+#
+#		Returns:
+#			An observable sequence containing a single element with an
+#			iterable containing all the elements of the source
+#			sequence.
+#		"""
 		var _source = RefValue.Set(source)
 		
 		var subscribe = func(

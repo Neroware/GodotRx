@@ -8,10 +8,10 @@ class_name GodotSignalSchedulerBase
 ## Schedule a periodic action for repeated execution every time a Godot [Signal]
 ## is emitted.
 func schedule_signal(
-	sig : Signal,
-	n_args : int,
-	action : Callable, 
-	state = null
+	_sig : Signal,
+	_n_args : int,
+	_action : Callable, 
+	_state = null
 ) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null

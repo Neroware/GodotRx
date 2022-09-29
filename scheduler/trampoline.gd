@@ -37,7 +37,7 @@ func run(item : ScheduledItem):
 	self._lock.unlock()
 
 func _run():
-	var ready : Array[ScheduledItem]
+	var ready : Array[ScheduledItem] = []
 	while true:
 		self._lock.lock()
 		while(self._queue.size() > 0):

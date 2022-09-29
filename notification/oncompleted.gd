@@ -8,8 +8,8 @@ func _init():
 	self.kind = "C"
 
 func _accept(
-	on_next : Callable,
-	on_error : Callable = func(e): return,
+	_on_next : Callable,
+	_on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return):
 		return on_completed.call()
 

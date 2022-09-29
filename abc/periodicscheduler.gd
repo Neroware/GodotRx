@@ -8,8 +8,8 @@ class_name PeriodicSchedulerBase
 ## Schedule a periodic action for repeated execution every time
 ## [code]period[/code] seconds have expired.
 func schedule_periodic(
-	period : float,
-	action : Callable,
-	state = null) -> DisposableBase:
+	_period : float,
+	_action : Callable,
+	_state = null) -> DisposableBase:
 		GDRx.exc.NotImplementedException.Throw()
 		return null

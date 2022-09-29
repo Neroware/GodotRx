@@ -3,30 +3,30 @@ static func do_action_(
 ) -> Callable:
 	
 	var do_action = func(source : Observable) -> Observable:
-		"""Invokes an action for each element in the observable
-		sequence and invokes an action on graceful or exceptional
-		termination of the observable sequence. This method can be used
-		for debugging, logging, etc. of query behavior by intercepting
-		the message stream to run arbitrary actions for messages on the
-		pipeline.
-
-		Examples:
-			>>> do_action(send).call(observable)
-			>>> do_action(on_next, on_error).call(observable)
-			>>> do_action(on_next, on_error, on_completed).call(observable)
-
-		Args:
-			on_next: [Optional] Action to invoke for each element in
-				the observable sequence.
-			on_error: [Optional] Action to invoke on exceptional
-				termination of the observable sequence.
-			on_completed: [Optional] Action to invoke on graceful
-				termination of the observable sequence.
-
-		Returns:
-			An observable source sequence with the side-effecting
-			behavior applied.
-		"""
+#		"""Invokes an action for each element in the observable
+#		sequence and invokes an action on graceful or exceptional
+#		termination of the observable sequence. This method can be used
+#		for debugging, logging, etc. of query behavior by intercepting
+#		the message stream to run arbitrary actions for messages on the
+#		pipeline.
+#
+#		Examples:
+#			>>> do_action(send).call(observable)
+#			>>> do_action(on_next, on_error).call(observable)
+#			>>> do_action(on_next, on_error, on_completed).call(observable)
+#
+#		Args:
+#			on_next: [Optional] Action to invoke for each element in
+#				the observable sequence.
+#			on_error: [Optional] Action to invoke on exceptional
+#				termination of the observable sequence.
+#			on_completed: [Optional] Action to invoke on graceful
+#				termination of the observable sequence.
+#
+#		Returns:
+#			An observable source sequence with the side-effecting
+#			behavior applied.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
@@ -77,30 +77,30 @@ static func do_action_(
 	return do_action
 
 static func do_(observer : ObserverBase) -> Callable:
-	"""Invokes an action for each element in the observable sequence and
-	invokes an action on graceful or exceptional termination of the
-	observable sequence. This method can be used for debugging, logging,
-	etc. of query behavior by intercepting the message stream to run
-	arbitrary actions for messages on the pipeline.
-
-	>>> do(observer)
-
-	Args:
-		observer: Observer
-
-	Returns:
-		An operator function that takes the source observable and
-		returns the source sequence with the side-effecting behavior
-		applied.
-	"""
+#	"""Invokes an action for each element in the observable sequence and
+#	invokes an action on graceful or exceptional termination of the
+#	observable sequence. This method can be used for debugging, logging,
+#	etc. of query behavior by intercepting the message stream to run
+#	arbitrary actions for messages on the pipeline.
+#
+#	>>> do(observer)
+#
+#	Args:
+#		observer: Observer
+#
+#	Returns:
+#		An operator function that takes the source observable and
+#		returns the source sequence with the side-effecting behavior
+#		applied.
+#	"""
 	return do_action_(observer.on_next, observer.on_error, observer.on_completed)
 
 static func do_after_next(source : Observable, after_next : Callable) -> Observable:
-	"""Invokes an action with each element after it has been emitted downstream.
-	This can be helpful for debugging, logging, and other side effects.
-
-	after_next -- Action to invoke on each element after it has been emitted
-	"""
+#	"""Invokes an action with each element after it has been emitted downstream.
+#	This can be helpful for debugging, logging, and other side effects.
+#
+#	after_next -- Action to invoke on each element after it has been emitted
+#	"""
 	var subscribe = func(
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
@@ -117,14 +117,14 @@ static func do_after_next(source : Observable, after_next : Callable) -> Observa
 	return Observable.new(subscribe)
 
 static func do_on_subscribe(source : Observable, on_subscribe : Callable) -> Observable:
-	"""Invokes an action on subscription.
-
-	This can be helpful for debugging, logging, and other side effects
-	on the start of an operation.
-
-	Args:
-		on_subscribe: Action to invoke on subscription
-	"""
+#	"""Invokes an action on subscription.
+#
+#	This can be helpful for debugging, logging, and other side effects
+#	on the start of an operation.
+#
+#	Args:
+#		on_subscribe: Action to invoke on subscription
+#	"""
 	var subscribe = func(
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
@@ -140,20 +140,20 @@ static func do_on_subscribe(source : Observable, on_subscribe : Callable) -> Obs
 
 class OnDispose extends DisposableBase:
 	var on_dispose : Callable
-	func _init(on_dispose : Callable):
-		self.on_dispose = on_dispose
+	func _init(on_dispose_ : Callable):
+		self.on_dispose = on_dispose_
 	func dispose():
 		self.on_dispose.call()
 
 static func do_on_dispose(source : Observable, on_dispose : Callable) -> Observable:
-	"""Invokes an action on disposal.
-
-	 This can be helpful for debugging, logging, and other side effects
-	 on the disposal of an operation.
-
-	Args:
-		on_dispose: Action to invoke on disposal
-	"""
+#	"""Invokes an action on disposal.
+#
+#	 This can be helpful for debugging, logging, and other side effects
+#	 on the disposal of an operation.
+#
+#	Args:
+#		on_dispose: Action to invoke on disposal
+#	"""
 	var subscribe = func(
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
@@ -171,13 +171,13 @@ static func do_on_dispose(source : Observable, on_dispose : Callable) -> Observa
 	return Observable.new(subscribe)
 
 static func do_on_terminate(source : Observable, on_terminate : Callable) -> Observable:
-	"""Invokes an action on an on_complete() or on_error() event.
-	 This can be helpful for debugging, logging, and other side effects
-	 when completion or an error terminates an operation.
-
-
-	on_terminate -- Action to invoke when on_complete or throw is called
-	"""
+#	"""Invokes an action on an on_complete() or on_error() event.
+#	 This can be helpful for debugging, logging, and other side effects
+#	 when completion or an error terminates an operation.
+#
+#
+#	on_terminate -- Action to invoke when on_complete or throw is called
+#	"""
 	var subscribe = func(
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
@@ -205,13 +205,13 @@ static func do_on_terminate(source : Observable, on_terminate : Callable) -> Obs
 	return Observable.new(subscribe)
 
 static func do_after_terminate(source : Observable, after_terminate : Callable) -> Observable:
-	"""Invokes an action after an on_complete() or on_error() event.
-	 This can be helpful for debugging, logging, and other side effects
-	 when completion or an error terminates an operation
-
-
-	on_terminate -- Action to invoke after on_complete or throw is called
-	"""
+#	"""Invokes an action after an on_complete() or on_error() event.
+#	 This can be helpful for debugging, logging, and other side effects
+#	 when completion or an error terminates an operation
+#
+#
+#	on_terminate -- Action to invoke after on_complete or throw is called
+#	"""
 	var subscribe = func(
 		observer : ObserverBase, scheduler : SchedulerBase = null
 	) -> DisposableBase:
@@ -242,9 +242,9 @@ class FinallyOnDispose extends DisposableBase:
 	var finally_action : Callable
 	var was_invoked : Array[bool]
 	
-	func _init(finally_action : Callable, was_invoked : Array[bool]):
-		self.finally_action = finally_action
-		self.was_invoked = was_invoked
+	func _init(finally_action_ : Callable, was_invoked_ : Array[bool]):
+		self.finally_action = finally_action_
+		self.was_invoked = was_invoked_
 	
 	func dispose():
 		if not self.was_invoked[0]:
@@ -252,19 +252,19 @@ class FinallyOnDispose extends DisposableBase:
 			self.was_invoked[0] = true
 
 static func do_finally(finally_action : Callable) -> Callable:
-	"""Invokes an action after an on_complete(), on_error(), or disposal
-	event occurs.
-
-	This can be helpful for debugging, logging, and other side effects
-	when completion, an error, or disposal terminates an operation.
-
-	Note this operator will strive to execute the finally_action once,
-	and prevent any redudant calls
-
-	Args:
-		finally_action -- Action to invoke after on_complete, on_error,
-		or disposal is called
-	"""
+#	"""Invokes an action after an on_complete(), on_error(), or disposal
+#	event occurs.
+#
+#	This can be helpful for debugging, logging, and other side effects
+#	when completion, an error, or disposal terminates an operation.
+#
+#	Note this operator will strive to execute the finally_action once,
+#	and prevent any redudant calls
+#
+#	Args:
+#		finally_action -- Action to invoke after on_complete, on_error,
+#		or disposal is called
+#	"""
 	var partial = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase, scheduler : SchedulerBase = null

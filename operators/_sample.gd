@@ -45,17 +45,17 @@ static func sample_(
 	sampler_time : float = NAN,
 	scheduler : SchedulerBase = null
 ) -> Callable:
-	"""Samples the observable sequence at each interval.
-
-		Examples:
-			>>> var res = sample.call(source)
-
-		Args:
-			source: Source sequence to sample.
-
-		Returns:
-			Sampled observable sequence.
-		"""
+#	"""Samples the observable sequence at each interval.
+#
+#		Examples:
+#			>>> var res = sample.call(source)
+#
+#		Args:
+#			source: Source sequence to sample.
+#
+#		Returns:
+#			Sampled observable sequence.
+#		"""
 	var sample = func(source : Observable) -> Observable:
 		if sampler_time != NAN:
 			return sample_observable(

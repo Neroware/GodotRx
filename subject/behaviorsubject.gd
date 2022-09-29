@@ -16,14 +16,14 @@ var value
 ## [br]
 ##            [code]value[/code] Initial value sent to observers when no other value has been
 ##                received by the subject yet.
-func _init(value):
+func _init(value_):
 	super._init()
-	self.value = value
+	self.value = value_
 
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
-	scheduler : SchedulerBase = null,
+	_scheduler : SchedulerBase = null,
 ) -> DisposableBase:
 	self.lock.lock()
 	if not check_disposed(): self.lock.unlock() ; return Disposable.new()
@@ -46,11 +46,11 @@ func _subscribe_core(
 ## Notifies all subscribed observers with the value.
 func _on_next_core(__super : Callable, i):
 	self.lock.lock()
-	var observers = self.observers.duplicate()
+	var observers_ = self.observers.duplicate()
 	self.value = i
 	self.lock.unlock()
 	
-	for observer in observers:
+	for observer in observers_:
 		observer.on_next(i)
 
 ## Release all resources.

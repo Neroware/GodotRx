@@ -7,28 +7,28 @@ func distinct_until_changed_(
 	var comparer_ = comparer
 	
 	var distinct_until_changed = func(source : Observable) -> Observable:
-		"""Returns an observable sequence that contains only distinct
-		contiguous elements according to the key_mapper and the
-		comparer.
-
-		Examples:
-			>>> op = GDRx.op.distinct_until_changed()
-			>>> op = GDRx.op.distinct_until_changed(func(x): return x.id)
-			>>> op = GDRx.op.distinct_until_changed(func(x): return x.id, func(x, y): return x == y)
-
-		Args:
-			key_mapper: [Optional] A function to compute the comparison
-				key for each element. If not provided, it projects the
-				value.
-			comparer: [Optional] Equality comparer for computed key
-				values. If not provided, defaults to an equality
-				comparer function.
-
-		Returns:
-			An observable sequence only containing the distinct
-			contiguous elements, based on a computed key value, from
-			the source sequence.
-		"""
+#		"""Returns an observable sequence that contains only distinct
+#		contiguous elements according to the key_mapper and the
+#		comparer.
+#
+#		Examples:
+#			>>> op = GDRx.op.distinct_until_changed()
+#			>>> op = GDRx.op.distinct_until_changed(func(x): return x.id)
+#			>>> op = GDRx.op.distinct_until_changed(func(x): return x.id, func(x, y): return x == y)
+#
+#		Args:
+#			key_mapper: [Optional] A function to compute the comparison
+#				key for each element. If not provided, it projects the
+#				value.
+#			comparer: [Optional] Equality comparer for computed key
+#				values. If not provided, defaults to an equality
+#				comparer function.
+#
+#		Returns:
+#			An observable sequence only containing the distinct
+#			contiguous elements, based on a computed key value, from
+#			the source sequence.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

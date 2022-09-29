@@ -57,23 +57,23 @@ static func min_by_(
 	key_mapper : Callable,
 	comparer = null
 ) -> Callable:
-	"""The `min_by` operator.
-
-	Returns the elements in an observable sequence with the minimum key
-	value according to the specified comparer.
-
-	Examples:
-		>>> var res = GDRx.op.min_by(func(x): return x.value)
-		>>> var res = GDRx.op.min_by(func(x): return x.value, func(x, y): return x - y)
-
-	Args:
-		key_mapper: Key mapper function.
-		comparer: [Optional] Comparer used to compare key values.
-
-	Returns:
-		An observable sequence containing a list of zero or more
-		elements that have a minimum key value.
-	"""
+#	"""The `min_by` operator.
+#
+#	Returns the elements in an observable sequence with the minimum key
+#	value according to the specified comparer.
+#
+#	Examples:
+#		>>> var res = GDRx.op.min_by(func(x): return x.value)
+#		>>> var res = GDRx.op.min_by(func(x): return x.value, func(x, y): return x - y)
+#
+#	Args:
+#		key_mapper: Key mapper function.
+#		comparer: [Optional] Comparer used to compare key values.
+#
+#	Returns:
+#		An observable sequence containing a list of zero or more
+#		elements that have a minimum key value.
+#	"""
 	var cmp = comparer if comparer != null else GDRx.basic.default_sub_comparer
 	
 	var min_by = func(source : Observable) -> Observable:

@@ -1,22 +1,22 @@
 static func skip_while_(predicate : Callable) -> Callable:
 	var skip_while = func(source : Observable) -> Observable:
 		
-		"""Bypasses elements in an observable sequence as long as a
-		specified condition is true and then returns the remaining
-		elements. The element's index is used in the logic of the
-		predicate function.
-
-		Example:
-			>>> skip_while.call(source)
-
-		Args:
-			source: The source observable to skip elements from.
-
-		Returns:
-			An observable sequence that contains the elements from the
-			input sequence starting at the first element in the linear
-			series that does not pass the test specified by predicate.
-		"""
+#		"""Bypasses elements in an observable sequence as long as a
+#		specified condition is true and then returns the remaining
+#		elements. The element's index is used in the logic of the
+#		predicate function.
+#
+#		Example:
+#			>>> skip_while.call(source)
+#
+#		Args:
+#			source: The source observable to skip elements from.
+#
+#		Returns:
+#			An observable sequence that contains the elements from the
+#			input sequence starting at the first element in the linear
+#			series that does not pass the test specified by predicate.
+#		"""
 		
 		var subscribe = func(
 			observer : ObserverBase,

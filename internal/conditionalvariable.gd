@@ -5,8 +5,8 @@ class_name ConditionalVariable
 var _lock
 var _waiting_queue : Array
 
-func _init(lock = null):
-	self._lock = lock if lock != null else RLock.new()
+func _init(lock_ = null):
+	self._lock = lock_ if lock_ != null else RLock.new()
 	self._waiting_queue = []
 
 func lock():

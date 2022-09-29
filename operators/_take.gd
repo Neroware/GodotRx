@@ -4,17 +4,17 @@ static func take_(count : int) -> Callable:
 		count = 0
 	
 	var take = func(source : Observable) -> Observable:
-		"""Returns a specified number of contiguous elements from the start of
-		an observable sequence.
-
-		>>> take.call(source)
-
-		Keyword arguments:
-		count -- The number of elements to return.
-
-		Returns an observable sequence that contains the specified number of
-		elements from the start of the input sequence.
-		"""
+#		"""Returns a specified number of contiguous elements from the start of
+#		an observable sequence.
+#
+#		>>> take.call(source)
+#
+#		Keyword arguments:
+#		count -- The number of elements to return.
+#
+#		Returns an observable sequence that contains the specified number of
+#		elements from the start of the input sequence.
+#		"""
 		if count == 0:
 			return GDRx.obs.empty()
 		

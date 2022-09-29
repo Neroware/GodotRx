@@ -1,26 +1,27 @@
 static func window_with_count_(
 	count : int, skip = null
 ) -> Callable:
-	"""Projects each element of an observable sequence into zero or more
-	windows which are produced based on element count information.
-
-	Examples:
-		>>> GDRx.op.window_with_count(10)
-		>>> GDRx.op.window_with_count(10, 1)
-
-	Args:
-		count: Length of each window.
-		skip: [Optional] Number of elements to skip between creation of
-			consecutive windows. If not specified, defaults to the
-			count.
-
-	Returns:
-		An observable sequence of windows.
-	"""
+#	"""Projects each element of an observable sequence into zero or more
+#	windows which are produced based on element count information.
+#
+#	Examples:
+#		>>> GDRx.op.window_with_count(10)
+#		>>> GDRx.op.window_with_count(10, 1)
+#
+#	Args:
+#		count: Length of each window.
+#		skip: [Optional] Number of elements to skip between creation of
+#			consecutive windows. If not specified, defaults to the
+#			count.
+#
+#	Returns:
+#		An observable sequence of windows.
+#	"""
 	if count <= 0:
 		GDRx.exc.ArgumentOutOfRangeException.Throw()
 		count = 1
 	
+	@warning_ignore(incompatible_ternary)
 	var skip_ : int = skip if skip != null else count
 	if skip_ <= 0:
 		GDRx.exc.ArgumentOutOfRangeException.Throw()

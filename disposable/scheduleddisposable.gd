@@ -6,10 +6,10 @@ var scheduler : SchedulerBase
 var disposable : SingleAssignmentDisposable
 var lock : RLock
 
-func _init(scheduler : SchedulerBase, disposable : DisposableBase):
-	self.scheduler = scheduler
+func _init(scheduler_ : SchedulerBase, disposable_ : DisposableBase):
+	self.scheduler = scheduler_
 	self.disposable = SingleAssignmentDisposable.new()
-	self.disposable.disposable = disposable
+	self.disposable.disposable = disposable_
 	self.lock = RLock.new()
 	
 	super._init()

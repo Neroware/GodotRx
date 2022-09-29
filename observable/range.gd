@@ -33,7 +33,9 @@ static func range_(
 	scheduler : SchedulerBase = null
 ) -> Observable:
 	
+	@warning_ignore(incompatible_ternary)
 	var _stop : int = MAX_SIZE if stop == null else stop
+	@warning_ignore(incompatible_ternary)
 	var _step : int = 1 if step == null else step
 	
 	var range_t : Array

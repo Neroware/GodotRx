@@ -6,12 +6,12 @@ class_name Observable
 var lock : RLock
 var _subscribe : Callable
 
-func _init(subscribe : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: 
+func _init(subscribe_ : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: 
 	return Disposable.new()):
 		super._init()
 		
 		self.lock = RLock.new()
-		self._subscribe = subscribe
+		self._subscribe = subscribe_
 
 func _subscribe_core(
 	observer : ObserverBase,
@@ -265,16 +265,16 @@ func buffer_toggle(openings : Observable, closing_mapper : Callable) -> Observab
 	return GDRx.op.buffer_toggle(openings, closing_mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_buffer.gd[/b]
-func buffer_with_count(count : int, skip = null) -> Observable:
-	return GDRx.op.buffer_with_count(count, skip).call(self)
+func buffer_with_count(count_ : int, skip_ = null) -> Observable:
+	return GDRx.op.buffer_with_count(count_, skip_).call(self)
 
 ## See: [b]res://reactivex/operators/_bufferwithtime.gd[/b]
 func buffer_with_time(timespan : float, timeshift = null, scheduler : SchedulerBase = null) -> Observable:
 	return GDRx.op.buffer_with_time(timespan, timeshift, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_bufferwithtimeourcount.gd[/b]
-func buffer_with_time_or_count(timespan : float, count : int, scheduler : SchedulerBase = null) -> Observable:
-	return GDRx.op.buffer_with_time_or_count(timespan, count, scheduler).call(self)
+func buffer_with_time_or_count(timespan : float, count_ : int, scheduler : SchedulerBase = null) -> Observable:
+	return GDRx.op.buffer_with_time_or_count(timespan, count_, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_catch.gd[/b]
 func catch_handler(handler : Callable) -> Observable:
@@ -369,8 +369,8 @@ func do_after_terminate(after_terminate : Callable) -> Observable:
 	return GDRx.op.do_after_terminate(self, after_terminate)
 
 ## See: [b]res://reactivex/operators/_do.gd[/b]
-func do_finally(finally_action : Callable) -> Observable:
-	return GDRx.op.do_finally(finally_action).call(self)
+func do_finally(finally_action_ : Callable) -> Observable:
+	return GDRx.op.do_finally(finally_action_).call(self)
 
 ## See: [b]res://reactivex/operators/_dowhile.gd[/b]
 func do_while(condition : Callable) -> Observable:
@@ -481,6 +481,7 @@ func materialize() -> Observable:
 	return GDRx.op.materialize().call(self)
 
 ## See: [b]res://reactivex/operators/_max.gd[/b]
+@warning_ignore(shadowed_global_identifier)
 func max(comparer = null) -> Observable:
 	return GDRx.op.max(comparer).call(self)
 
@@ -497,6 +498,7 @@ func merge_all() -> Observable:
 	return GDRx.op.merge_all().call(self)
 
 ## See: [b]res://reactivex/operators/_min.gd[/b]
+@warning_ignore(shadowed_global_identifier)
 func min(comparer = null) -> Observable:
 	return GDRx.op.min(comparer).call(self)
 
@@ -553,16 +555,16 @@ func publish_value(initial_value, mapper = null) -> Observable:
 	return GDRx.op.publish_value(initial_value, mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_reduce.gd[/b]
-func reduce(accumulator : Callable, seed = GDRx.util.GetNotSet()) -> Observable:
-	return GDRx.op.reduce(accumulator, seed).call(self)
+func reduce(accumulator : Callable, seed_ = GDRx.util.GetNotSet()) -> Observable:
+	return GDRx.op.reduce(accumulator, seed_).call(self)
 
 ## See: [b]res://reactivex/operators/_repeat.gd[/b]
 func repeat(repeat_count = null) -> Observable:
 	return GDRx.op.repeat(repeat_count).call(self)
 
 ## See: [b]res://reactivex/operators/_replay.gd[/b]
-func replay(mapper = null, buffer_size = null, window = null, scheduler : SchedulerBase = null) -> Observable:
-	return GDRx.op.replay(mapper, buffer_size, window, scheduler).call(self)
+func replay(mapper = null, buffer_size = null, window_ = null, scheduler : SchedulerBase = null) -> Observable:
+	return GDRx.op.replay(mapper, buffer_size, window_, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_retry.gd[/b]
 func retry(retry_count : int = -1) -> Observable:
@@ -577,8 +579,8 @@ func sample(sampler : Observable, sampler_time : float = NAN, scheduler : Schedu
 	return GDRx.op.sample(sampler, sampler_time, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_scan.gd[/b]
-func scan(accumulator : Callable, seed = GDRx.util.GetNotSet()) -> Observable:
-	return GDRx.op.scan(accumulator, seed).call(self)
+func scan(accumulator : Callable, seed_ = GDRx.util.GetNotSet()) -> Observable:
+	return GDRx.op.scan(accumulator, seed_).call(self)
 
 ## See: [b]res://reactivex/operators/_sequenceequal.gd[/b]
 func sequence_equal(second, comparer  = null, second_it : IterableBase = null) -> Observable:
@@ -597,12 +599,12 @@ func single_or_default(predicate = null, default_value = null) -> Observable:
 	return GDRx.op.single_or_default(predicate, default_value).call(self)
 
 ## See: [b]res://reactivex/operators/_skip.gd[/b]
-func skip(count : int) -> Observable:
-	return GDRx.op.skip(count).call(self)
+func skip(count_ : int) -> Observable:
+	return GDRx.op.skip(count_).call(self)
 
 ## See: [b]res://reactivex/operators/_skiplast.gd[/b]
-func skip_last(count : int) -> Observable:
-	return GDRx.op.skip_last(count).call(self)
+func skip_last(count_ : int) -> Observable:
+	return GDRx.op.skip_last(count_).call(self)
 
 ## See: [b]res://reactivex/operators/_skiplastwithtime.gd[/b]
 func skip_last_with_time(duration : float, scheduler : SchedulerBase = null) -> Observable:
@@ -653,16 +655,16 @@ func switch_latest() -> Observable:
 	return GDRx.op.switch_latest().call(self)
 
 ## See: [b]res://reactivex/operators/_take.gd[/b]
-func take(count : int) -> Observable:
-	return GDRx.op.take(count).call(self)
+func take(count_ : int) -> Observable:
+	return GDRx.op.take(count_).call(self)
 
 ## See: [b]res://reactivex/operators/_takelast.gd[/b]
-func take_last(count : int) -> Observable:
-	return GDRx.op.take_last(count).call(self)
+func take_last(count_ : int) -> Observable:
+	return GDRx.op.take_last(count_).call(self)
 
 ## See: [b]res://reactivex/operators/_takelastbuffer.gd[/b]
-func take_last_buffer(count : int) -> Observable:
-	return GDRx.op.take_last_buffer(count).call(self)
+func take_last_buffer(count_ : int) -> Observable:
+	return GDRx.op.take_last_buffer(count_).call(self)
 
 ## See: [b]res://reactivex/operators/_takelastwithtime.gd[/b]
 func take_last_with_time(duration : float, scheduler : SchedulerBase = null) -> Observable:
@@ -741,16 +743,16 @@ func window_when(closing_mapper : Callable) -> Observable:
 	return GDRx.op.window_when(closing_mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_windowwithcount.gd[/b]
-func window_with_count(count : int, skip = null) -> Observable:
-	return GDRx.op.window_with_count(count, skip).call(self)
+func window_with_count(count_ : int, skip_ = null) -> Observable:
+	return GDRx.op.window_with_count(count_, skip_).call(self)
 
 ## See: [b]res://reactivex/operators/_windowwithtime.gd[/b]
 func window_with_time(timespan : float, timeshift = null, scheduler : SchedulerBase = null) -> Observable:
 	return GDRx.op.window_with_time(timespan, timeshift, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_windowwithtimeorcount.gd[/b]
-func window_with_time_or_count(timespan : float, count : int, scheduler : SchedulerBase = null) -> Observable:
-	return GDRx.op.window_with_time_or_count(timespan, count, scheduler).call(self)
+func window_with_time_or_count(timespan : float, count_ : int, scheduler : SchedulerBase = null) -> Observable:
+	return GDRx.op.window_with_time_or_count(timespan, count_, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_withlatestfrom.gd[/b]
 func with_latest_from(sources : Array[Observable]) -> Observable:

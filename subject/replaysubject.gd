@@ -11,9 +11,9 @@ class RemovableDisposable extends DisposableBase:
 	var subject : Subject
 	var observer : Observer
 	
-	func _init(subject : Subject, observer : Observer):
-		self.subject = subject
-		self.observer = observer
+	func _init(subject_ : Subject, observer_ : Observer):
+		self.subject = subject_
+		self.observer = observer_
 	
 	func dispose():
 		self.observer.dispose()
@@ -21,8 +21,8 @@ class RemovableDisposable extends DisposableBase:
 			self.subject.observers.erase(self.observer)
 
 class QueueItem extends Tuple:
-	func _init(interval : float, value):
-		super._init([interval, value])
+	func _init(interval_ : float, value_):
+		super._init([interval_, value_])
 	var interval : float:
 		get: return self.at(0)
 	var value:
@@ -45,20 +45,20 @@ var queue : Array
 ## [br]
 ##            [code]scheduler[/code] [Optional] Scheduler the observers are invoked on.
 func _init(
-	buffer_size : int = GDRx.util.MAX_SIZE,
-	window : float = GDRx.util.MAX_SIZE,
-	scheduler : SchedulerBase = null
+	buffer_size_ : int = GDRx.util.MAX_SIZE,
+	window_ : float = GDRx.util.MAX_SIZE,
+	scheduler_ : SchedulerBase = null
 ):
 	super._init()
-	self.buffer_size = buffer_size
-	self.scheduler = scheduler if scheduler != null else CurrentThreadScheduler.singleton()
-	self.window = window
+	self.buffer_size = buffer_size_
+	self.scheduler = scheduler_ if scheduler_ != null else CurrentThreadScheduler.singleton()
+	self.window = window_
 	self.queue = []
 
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
-	scheduler : SchedulerBase = null,
+	_scheduler : SchedulerBase = null,
 ) -> DisposableBase:
 	var so = ScheduledObserver.new(self.scheduler, observer)
 	var subscription = RemovableDisposable.new(self, so)
@@ -90,47 +90,47 @@ func _trim(now : float):
 ## Notifies all subscribed observers with the value.
 func _on_next_core(__super : Callable, i):
 	self.lock.lock()
-	var observers = self.observers.duplicate()
+	var observers_ = self.observers.duplicate()
 	var now = self.scheduler.now()
 	self.queue.append(QueueItem.new(now, i))
 	self._trim(now)
 	self.lock.unlock()
 	
-	for observer in observers:
+	for observer in observers_:
 		observer.on_next(i)
 	
-	for observer in observers:
-		var obv : ScheduledObserver = observer
-		obv.ensure_active()
+	for observer in observers_:
+		var so : ScheduledObserver = observer
+		so.ensure_active()
 
 ## Notifies all subscribed observers with the exception.
 func _on_error_core(__super : Callable, e):
 	self.lock.lock()
-	var observers = self.observers.duplicate()
+	var observers_ = self.observers.duplicate()
 	self.observers.clear()
 	self.exception = e
 	var now = self.scheduler.now()
 	self._trim(now)
 	self.lock.unlock()
 	
-	for observer in observers:
+	for observer in observers_:
 		observer.on_error(e)
-		var obv : ScheduledObserver = observer
-		obv.ensure_active()
+		var so : ScheduledObserver = observer
+		so.ensure_active()
 
 ## Notifies all subscribed observers of the end of the sequence.
 func _on_completed_core(__super : Callable):
 	self.lock.lock()
-	var observers = self.observers.duplicate()
+	var observers_ = self.observers.duplicate()
 	self.observers.clear()
 	var now = self.scheduler.now()
 	self._trim(now)
 	self.lock.unlock()
 	
-	for observer in observers:
+	for observer in observers_:
 		observer.on_completed()
-		var obv : ScheduledObserver = observer
-		obv.ensure_active()
+		var so : ScheduledObserver = observer
+		so.ensure_active()
 
 ## Releases all resources used by the current instance of the
 ## [ReplaySubject] class and unsubscribe all observers.

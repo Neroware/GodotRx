@@ -4,26 +4,26 @@ static func skip_until_with_time_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var skip_until_with_time = func(source : Observable) -> Observable:
-		"""Skips elements from the observable source sequence until the
-		specified start time.
-
-		Errors produced by the source sequence are always forwarded to
-		the result sequence, even if the error occurs before the start
-		time.
-
-		Examples:
-			>>> var res = source.pipe1(GDRx.op.skip_until_with_time(datetime))
-			>>> var res = source.pipe1(GDRx.op.skip_until_with_time(5.0))
-
-		Args:
-			start_time: Time to start taking elements from the source
-				sequence. If this value is less than or equal to
-				`datetime.utcnow`, no elements will be skipped.
-
-		Returns:
-			An observable sequence with the elements skipped until the
-			specified start time.
-		"""
+#		"""Skips elements from the observable source sequence until the
+#		specified start time.
+#
+#		Errors produced by the source sequence are always forwarded to
+#		the result sequence, even if the error occurs before the start
+#		time.
+#
+#		Examples:
+#			>>> var res = source.pipe1(GDRx.op.skip_until_with_time(datetime))
+#			>>> var res = source.pipe1(GDRx.op.skip_until_with_time(5.0))
+#
+#		Args:
+#			start_time: Time to start taking elements from the source
+#				sequence. If this value is less than or equal to
+#				`datetime.utcnow`, no elements will be skipped.
+#
+#		Returns:
+#			An observable sequence with the elements skipped until the
+#			specified start time.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler_ : SchedulerBase = null

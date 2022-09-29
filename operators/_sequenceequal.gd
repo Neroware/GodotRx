@@ -11,27 +11,27 @@ static func sequence_equal_(
 		second_ = second if second_it == null else GDRx.obs.from_iterable(second_it)
 	
 	var sequence_equal = func(source : Observable) -> Observable:
-		"""Determines whether two sequences are equal by comparing the
-		elements pairwise using a specified equality comparer.
-
-		Examples:
-			>>> var res = sequence_equal([1,2,3])
-			>>> var res = sequence_equal([{ "value": 42 }], func(x, y): return x.value == y.value)
-			>>> var res = sequence_equal(GDRx.obs.return_value(42))
-			>>> var res = sequence_equal(
-				GDRx.obs.return_value({ "value": 42 }),
-				func(x, y): return x.value == y.value
-			)
-
-		Args:
-			source: Source obserable to compare.
-
-		Returns:
-			An observable sequence that contains a single element which
-		indicates whether both sequences are of equal length and their
-		corresponding elements are equal according to the specified
-		equality comparer.
-		"""
+#		"""Determines whether two sequences are equal by comparing the
+#		elements pairwise using a specified equality comparer.
+#
+#		Examples:
+#			>>> var res = sequence_equal([1,2,3])
+#			>>> var res = sequence_equal([{ "value": 42 }], func(x, y): return x.value == y.value)
+#			>>> var res = sequence_equal(GDRx.obs.return_value(42))
+#			>>> var res = sequence_equal(
+#				GDRx.obs.return_value({ "value": 42 }),
+#				func(x, y): return x.value == y.value
+#			)
+#
+#		Args:
+#			source: Source obserable to compare.
+#
+#		Returns:
+#			An observable sequence that contains a single element which
+#		indicates whether both sequences are of equal length and their
+#		corresponding elements are equal according to the specified
+#		equality comparer.
+#		"""
 		var first = source
 		
 		var subscribe = func(

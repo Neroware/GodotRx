@@ -4,22 +4,22 @@ static func group_join_(
 	right_duration_mapper : Callable
 ) -> Callable:
 	
-	"""Correlates the elements of two sequences based on overlapping
-	durations, and groups the results.
-
-	Args:
-		right: The right observable sequence to join elements for.
-		left_duration_mapper: A function to select the duration (expressed
-			as an observable sequence) of each element of the left observable
-			sequence, used to determine overlap.
-		right_duration_mapper: A function to select the duration (expressed
-			as an observable sequence) of each element of the right observable
-			sequence, used to determine overlap.
-
-	Returns:
-		An observable sequence that contains elements combined into a tuple
-	from source elements that have an overlapping duration.
-	"""
+#	"""Correlates the elements of two sequences based on overlapping
+#	durations, and groups the results.
+#
+#	Args:
+#		right: The right observable sequence to join elements for.
+#		left_duration_mapper: A function to select the duration (expressed
+#			as an observable sequence) of each element of the left observable
+#			sequence, used to determine overlap.
+#		right_duration_mapper: A function to select the duration (expressed
+#			as an observable sequence) of each element of the right observable
+#			sequence, used to determine overlap.
+#
+#	Returns:
+#		An observable sequence that contains elements combined into a tuple
+#	from source elements that have an overlapping duration.
+#	"""
 	
 	var nothing = func(__):
 		return null

@@ -18,6 +18,7 @@ var Value:
 func _init(prop : ReactiveProperty):
 	self._prop = prop
 	
+	@warning_ignore(shadowed_variable)
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null

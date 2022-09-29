@@ -37,25 +37,25 @@ static func catch_handler(
 
 static func catch_(handler) -> Callable:
 	var catch = func(source : Observable) -> Observable:
-		"""Continues an observable sequence that is terminated by an
-		exception with the next observable sequence.
-
-		Examples:
-			>>> var op = catch.call(ys)
-			>>> var op = catch.call(func(ex, src): return ys(ex))
-
-		Args:
-			handler: Second observable sequence used to produce
-				results when an error occurred in the first sequence, or an
-				exception handler function that returns an observable sequence
-				given the error and source observable that occurred in the
-				first sequence.
-
-		Returns:
-			An observable sequence containing the first sequence's
-			elements, followed by the elements of the handler sequence
-			in case an exception occurred.
-		"""
+#		"""Continues an observable sequence that is terminated by an
+#		exception with the next observable sequence.
+#
+#		Examples:
+#			>>> var op = catch.call(ys)
+#			>>> var op = catch.call(func(ex, src): return ys(ex))
+#
+#		Args:
+#			handler: Second observable sequence used to produce
+#				results when an error occurred in the first sequence, or an
+#				exception handler function that returns an observable sequence
+#				given the error and source observable that occurred in the
+#				first sequence.
+#
+#		Returns:
+#			An observable sequence containing the first sequence's
+#			elements, followed by the elements of the handler sequence
+#			in case an exception occurred.
+#		"""
 		if handler is Callable:
 			return catch_handler(source, handler)
 		else:

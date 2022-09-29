@@ -37,7 +37,7 @@ static func fork_join_(sources : Array[Observable]) -> Observable:
 				else:
 					observer.on_completed()
 		
-		var subscriptions : Array[SingleAssignmentDisposable]
+		var subscriptions : Array[SingleAssignmentDisposable] = []
 		for __ in range(n): subscriptions.append(null)
 		
 		var _subscribe = func(i : int):

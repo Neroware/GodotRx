@@ -5,15 +5,15 @@ class_name OnErrorNotification
 
 var err
 
-func _init(err):
+func _init(err_):
 	super._init()
-	self.err = err
+	self.err = err_
 	self.kind = "E"
 
 func _accept(
-	on_next : Callable,
+	_on_next : Callable,
 	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return):
+	_on_completed : Callable = func(): return):
 		return on_error.call(self.err)
 
 func _accept_observer(observer : ObserverBase):

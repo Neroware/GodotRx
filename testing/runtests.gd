@@ -17,14 +17,14 @@ class ObservableSequence extends ArrayIterator:
 		pass
 	class UnsubscribeOn:
 		var value = null
-		func _init(value):
-			self.value = value
+		func _init(value_):
+			self.value = value_
 	
 	var seq : Array
 	
-	func _init(seq : Array):
-		self.seq = seq
-		super._init(seq)
+	func _init(seq_ : Array):
+		self.seq = seq_
+		super._init(seq_)
 	
 	func count_internal_sequences() -> int:
 		var count = 0
@@ -108,7 +108,7 @@ func _ready():
 	for t in test_names:
 		test_results[t] = ETestState.SUCCESS
 	
-	var tests = ArrayIterator.new(test_names)
+	var tests_it = ArrayIterator.new(test_names)
 	var current_test = RefValue.Null()
 	var test_counter = RefValue.Set(0)
 	var n_tests = test_names.size()
@@ -134,9 +134,9 @@ func _ready():
 		print("[ReactiveX]: SKIPPED ", n_skipped)
 	
 	var next_test = func():
-		current_test.v = tests.next()
+		current_test.v = tests_it.next()
 		test_counter.v += 1
-		if current_test.v is tests.End:
+		if current_test.v is tests_it.End:
 			print_results.call()
 			return
 		print("[ReactiveX]: Running test '", current_test, "' . . . (", test_counter, " / ", n_tests, ")")
@@ -212,7 +212,7 @@ func _test_new_thread_scheduler():
 	var scheduler : NewThreadScheduler = NewThreadScheduler.new()
 	
 	var foo = GDRx.return_value("foo").delay(1000.0)
-	var d = foo.subscribe(
+	foo.subscribe(
 		func(i): print("[ReactiveX]: This element was delayed: ", i), 
 		func(e): return, 
 		func(): return, 
@@ -237,8 +237,8 @@ func _test_faulty_map():
 func _test_coroutine():
 	var coroutine = func (a, b, c):
 		print("[ReactiveX]: Running Coroutine before await...")
-		await get_tree().create_timer(0.01).timeout
-		print("[ReactiveX]: Running Coroutine after await...")
+		await get_tree().create_timer(0.05).timeout
+		print("[ReactiveX]: Continue Coroutine after await...")
 		return a < b and b < c
 	
 	var obs = GDRx.from_coroutine(coroutine, [1, 2, 3])

@@ -140,16 +140,16 @@ func buffer_toggle(openings : Observable, closing_mapper : Callable) -> Callable
 	return _Buffer_.buffer_toggle_(openings, closing_mapper)
 
 ## See: [b]res://reactivex/operators/_buffer.gd[/b]
-func buffer_with_count(count : int, skip = null) -> Callable:
-	return _Buffer_.buffer_with_count_(count, skip)
+func buffer_with_count(count_ : int, skip_ = null) -> Callable:
+	return _Buffer_.buffer_with_count_(count_, skip_)
 
 ## See: [b]res://reactivex/operators/_bufferwithtime.gd[/b]
 func buffer_with_time(timespan : float, timeshift = null, scheduler : SchedulerBase = null) -> Callable:
 	return _BufferWithTime_.buffer_with_time_(timespan, timeshift, scheduler)
 
 ## See: [b]res://reactivex/operators/_bufferwithtimeourcount.gd[/b]
-func buffer_with_time_or_count(timespan : float, count : int, scheduler : SchedulerBase = null) -> Callable:
-	return _BufferWithTimeOrCount_.buffer_with_time_or_count_(timespan, count, scheduler)
+func buffer_with_time_or_count(timespan : float, count_ : int, scheduler : SchedulerBase = null) -> Callable:
+	return _BufferWithTimeOrCount_.buffer_with_time_or_count_(timespan, count_, scheduler)
 
 ## See: [b]res://reactivex/operators/_catch.gd[/b]
 func catch_handler(source : Observable, handler : Callable) -> Observable:
@@ -244,8 +244,8 @@ func do_after_terminate(source : Observable, after_terminate : Callable) -> Obse
 	return _Do_.do_after_terminate(source, after_terminate)
 
 ## See: [b]res://reactivex/operators/_do.gd[/b]
-func do_finally(finally_action : Callable) -> Callable:
-	return _Do_.do_finally(finally_action)
+func do_finally(finally_action_ : Callable) -> Callable:
+	return _Do_.do_finally(finally_action_)
 
 ## See: [b]res://reactivex/operators/_dowhile.gd[/b]
 func do_while(condition : Callable) -> Callable:
@@ -356,6 +356,7 @@ func materialize() -> Callable:
 	return _Materialize_.materialize_()
 
 ## See: [b]res://reactivex/operators/_max.gd[/b]
+@warning_ignore(shadowed_global_identifier)
 func max(comparer = null) -> Callable:
 	return _Max_.max_(comparer)
 
@@ -372,6 +373,7 @@ func merge_all() -> Callable:
 	return _Merge_.merge_all_()
 
 ## See: [b]res://reactivex/operators/_min.gd[/b]
+@warning_ignore(shadowed_global_identifier)
 func min(comparer = null) -> Callable:
 	return _Min_.min_(comparer)
 
@@ -428,16 +430,16 @@ func publish_value(initial_value, mapper = null) -> Callable:
 	return _PublishValue_.publish_value_(initial_value, mapper)
 
 ## See: [b]res://reactivex/operators/_reduce.gd[/b]
-func reduce(accumulator : Callable, seed = GDRx.util.GetNotSet()) -> Callable:
-	return _Reduce_.reduce_(accumulator, seed)
+func reduce(accumulator : Callable, seed_ = GDRx.util.GetNotSet()) -> Callable:
+	return _Reduce_.reduce_(accumulator, seed_)
 
 ## See: [b]res://reactivex/operators/_repeat.gd[/b]
 func repeat(repeat_count = null) -> Callable:
 	return _Repeat_.repeat_(repeat_count)
 
 ## See: [b]res://reactivex/operators/_replay.gd[/b]
-func replay(mapper = null, buffer_size = null, window = null, scheduler : SchedulerBase = null) -> Callable:
-	return _Replay_.replay_(mapper, buffer_size, window, scheduler)
+func replay(mapper = null, buffer_size = null, window_ = null, scheduler : SchedulerBase = null) -> Callable:
+	return _Replay_.replay_(mapper, buffer_size, window_, scheduler)
 
 ## See: [b]res://reactivex/operators/_retry.gd[/b]
 func retry(retry_count : int = -1) -> Callable:
@@ -452,8 +454,8 @@ func sample(sampler : Observable, sampler_time : float = NAN, scheduler : Schedu
 	return _Sample_.sample_(sampler, sampler_time, scheduler)
 
 ## See: [b]res://reactivex/operators/_scan.gd[/b]
-func scan(accumulator : Callable, seed = GDRx.util.GetNotSet()) -> Callable:
-	return _Scan_.scan_(accumulator, seed)
+func scan(accumulator : Callable, seed_ = GDRx.util.GetNotSet()) -> Callable:
+	return _Scan_.scan_(accumulator, seed_)
 
 ## See: [b]res://reactivex/operators/_sequenceequal.gd[/b]
 func sequence_equal(second, comparer  = null, second_it : IterableBase = null) -> Callable:
@@ -472,12 +474,12 @@ func single_or_default(predicate = null, default_value = null) -> Callable:
 	return _SingleOrDefault_.single_or_default_(predicate, default_value)
 
 ## See: [b]res://reactivex/operators/_skip.gd[/b]
-func skip(count : int) -> Callable:
-	return _Skip_.skip_(count)
+func skip(count_ : int) -> Callable:
+	return _Skip_.skip_(count_)
 
 ## See: [b]res://reactivex/operators/_skiplast.gd[/b]
-func skip_last(count : int) -> Callable:
-	return _SkipLast_.skip_last_(count)
+func skip_last(count_ : int) -> Callable:
+	return _SkipLast_.skip_last_(count_)
 
 ## See: [b]res://reactivex/operators/_skiplastwithtime.gd[/b]
 func skip_last_with_time(duration : float, scheduler : SchedulerBase = null) -> Callable:
@@ -528,16 +530,16 @@ func switch_latest() -> Callable:
 	return _SwitchLatest_.switch_latest_()
 
 ## See: [b]res://reactivex/operators/_take.gd[/b]
-func take(count : int) -> Callable:
-	return _Take_.take_(count)
+func take(count_ : int) -> Callable:
+	return _Take_.take_(count_)
 
 ## See: [b]res://reactivex/operators/_takelast.gd[/b]
-func take_last(count : int) -> Callable:
-	return _TakeLast_.take_last_(count)
+func take_last(count_ : int) -> Callable:
+	return _TakeLast_.take_last_(count_)
 
 ## See: [b]res://reactivex/operators/_takelastbuffer.gd[/b]
-func take_last_buffer(count : int) -> Callable:
-	return _TakeLastBuffer_.take_last_buffer_(count)
+func take_last_buffer(count_ : int) -> Callable:
+	return _TakeLastBuffer_.take_last_buffer_(count_)
 
 ## See: [b]res://reactivex/operators/_takelastwithtime.gd[/b]
 func take_last_with_time(duration : float, scheduler : SchedulerBase = null) -> Callable:
@@ -616,16 +618,16 @@ func window_when(closing_mapper : Callable) -> Callable:
 	return _Window_.window_when_(closing_mapper)
 
 ## See: [b]res://reactivex/operators/_windowwithcount.gd[/b]
-func window_with_count(count : int, skip = null) -> Callable:
-	return _WindowWithCount_.window_with_count_(count, skip)
+func window_with_count(count_ : int, skip_ = null) -> Callable:
+	return _WindowWithCount_.window_with_count_(count_, skip_)
 
 ## See: [b]res://reactivex/operators/_windowwithtime.gd[/b]
 func window_with_time(timespan : float, timeshift = null, scheduler : SchedulerBase = null) -> Callable:
 	return _WindowWithTime_.window_with_time_(timespan, timeshift, scheduler)
 
 ## See: [b]res://reactivex/operators/_windowwithtimeorcount.gd[/b]
-func window_with_time_or_count(timespan : float, count : int, scheduler : SchedulerBase = null) -> Callable:
-	return _WindowWithTimeOrCount_.window_with_time_or_count_(timespan, count, scheduler)
+func window_with_time_or_count(timespan : float, count_ : int, scheduler : SchedulerBase = null) -> Callable:
+	return _WindowWithTimeOrCount_.window_with_time_or_count_(timespan, count_, scheduler)
 
 ## See: [b]res://reactivex/operators/_withlatestfrom.gd[/b]
 func with_latest_from(sources : Array[Observable]) -> Callable:

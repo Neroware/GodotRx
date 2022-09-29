@@ -75,8 +75,8 @@ func try(fun : Callable) -> TryCatch:
 	return TryCatch.new(fun)
 
 ## Raises a [ThrowableBase]
-func raise(exc : ThrowableBase, default = null) -> Variant:
-	return ExceptionHandler.singleton().raise(exc, default)
+func raise(exc_ : ThrowableBase, default = null) -> Variant:
+	return ExceptionHandler.singleton().raise(exc_, default)
 
 ## Raises a [code]GDRx.exc.Exception[/code] containing the given message
 func raise_message(msg : String, default = null):
@@ -206,6 +206,7 @@ func on_error_resume_next(sources : Array) -> Observable:
 	return obs.on_error_resume_next(sources)
 
 ## See: [b]res://reactivex/observable/range.gd[/b]
+@warning_ignore(shadowed_global_identifier)
 func range(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
 	return obs.range(start, stop, step, scheduler)
 
@@ -284,8 +285,8 @@ func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
 	return gd.from_godot_node_lifecycle_event(conn, 5)
 
 ## Tranforms an input action into an observable sequence emiting items on check.
-func input_action(input_action : String, checks : Observable) -> Observable:
-	return gd.from_godot_input_action(input_action, checks)
+func input_action(input_action_ : String, checks : Observable) -> Observable:
+	return gd.from_godot_input_action(input_action_, checks)
 
 ## Creates a new [ReactiveProperty]
 func reactive_property(value = null) -> ReactiveProperty:

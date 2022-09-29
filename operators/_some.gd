@@ -2,23 +2,23 @@ static func some_(
 	predicate = null
 ) -> Callable:
 	var some = func(source : Observable) -> Observable:
-		"""Partially applied operator.
-
-		Determines whether some element of an observable sequence satisfies a
-		condition if present, else if some items are in the sequence.
-
-		Example:
-			>>> var obs = some.call(source)
-
-		Args:
-			predicate -- A function to test each element for a condition.
-
-		Returns:
-			An observable sequence containing a single element
-			determining whether some elements in the source sequence
-			pass the test in the specified predicate if given, else if
-			some items are in the sequence.
-		"""
+#		"""Partially applied operator.
+#
+#		Determines whether some element of an observable sequence satisfies a
+#		condition if present, else if some items are in the sequence.
+#
+#		Example:
+#			>>> var obs = some.call(source)
+#
+#		Args:
+#			predicate -- A function to test each element for a condition.
+#
+#		Returns:
+#			An observable sequence containing a single element
+#			determining whether some elements in the source sequence
+#			pass the test in the specified predicate if given, else if
+#			some items are in the sequence.
+#		"""
 		var subscribe = func(
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null

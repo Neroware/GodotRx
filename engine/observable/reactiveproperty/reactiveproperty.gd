@@ -95,6 +95,7 @@ func _init(value, cond = func(v_old, v_new): return v_old != v_new):
 	
 	Value = value
 	
+	@warning_ignore(shadowed_variable)
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null

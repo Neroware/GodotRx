@@ -101,19 +101,19 @@ static func delay_(
 	duetime : float, scheduler : SchedulerBase = null
 ) -> Callable:
 	var delay = func(source : Observable) -> Observable:
-		"""Time shifts the observable sequence.
-
-		A partially applied delay operator function.
-
-		Examples:
-			>>> var res = delay.call(source)
-
-		Args:
-			source: The observable sequence to delay.
-
-		Returns:
-			A time-shifted observable sequence.
-		"""
+#		"""Time shifts the observable sequence.
+#
+#		A partially applied delay operator function.
+#
+#		Examples:
+#			>>> var res = delay.call(source)
+#
+#		Args:
+#			source: The observable sequence to delay.
+#
+#		Returns:
+#			A time-shifted observable sequence.
+#		"""
 		return observable_delay_timespan(source, duetime, scheduler)
 	
 	return delay

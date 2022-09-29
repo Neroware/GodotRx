@@ -67,8 +67,8 @@ func clear():
 	self.disposable = []
 	self.lock.unlock()
 	
-	for disposable in current_disposable:
-		disposable.dispose()
+	for _disposable in current_disposable:
+		_disposable.dispose()
 
 func contains(item : DisposableBase) -> bool:
 	return item in self.disposable

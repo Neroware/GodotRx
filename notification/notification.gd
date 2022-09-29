@@ -45,12 +45,12 @@ func accept(
 		return self._accept(on_next, on_error, on_completed)
 
 func _accept(
-	on_next : Callable,
-	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return):
+	_on_next : Callable,
+	_on_error : Callable = func(e): return,
+	_on_completed : Callable = func(): return):
 		GDRx.exc.NotImplementedException.Throw()
 
-func _accept_observer(observer : ObserverBase):
+func _accept_observer(_observer : ObserverBase):
 	GDRx.exc.NotImplementedException.Throw()
 
 ## Returns an observable sequence with a single notification,

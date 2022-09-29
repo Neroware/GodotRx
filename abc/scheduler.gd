@@ -11,21 +11,21 @@ func now() -> float:
 	return -1.0
 
 ## Schedule a new action for future execution
-func schedule(action : Callable, state = null) -> DisposableBase:
+func schedule(_action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 
 ## Schedule a new action for future execution in [code]duetime[/code] seconds.
-func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
+func schedule_relative(_duetime, _action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 
 ## Schedule a new action for future execution at [code]duetime[/code].
-func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
+func schedule_absolute(_duetime, _action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 
 ## Converts a timestamp-dictionary to Unix-time
-static func to_seconds(datetime : Dictionary) -> float:
+static func to_seconds(_datetime : Dictionary) -> float:
 	GDRx.exc.NotImplementedException.Throw()
 	return -1.0

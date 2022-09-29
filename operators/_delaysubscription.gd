@@ -4,17 +4,17 @@ static func delay_subscription_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	var delay_subscription = func(source : Observable) -> Observable:
-		"""Time shifts the observable sequence by delaying the subscription.
-
-		Examples.
-			>>> var res = source.pipe1(GDRx.op.delay_subscription(5))
-
-		Args:
-			source: Source subscription to delay.
-
-		Returns:
-			Time-shifted sequence.
-		"""
+#		"""Time shifts the observable sequence by delaying the subscription.
+#
+#		Examples.
+#			>>> var res = source.pipe1(GDRx.op.delay_subscription(5))
+#
+#		Args:
+#			source: Source subscription to delay.
+#
+#		Returns:
+#			Time-shifted sequence.
+#		"""
 		var mapper = func(__) -> Observable:
 			return GDRx.obs.empty()
 		

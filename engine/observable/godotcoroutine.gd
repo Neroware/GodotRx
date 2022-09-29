@@ -22,6 +22,12 @@ static func from_godot_coroutine_(
 			var res = RefValue.Null()
 			
 			if GDRx.try(func():
+				# WARNING! This await is not redundant as it seems.
+				# At this point we do not know if 'coroutine' really is a 
+				# Coroutine but either way should this code work! If 'coroutine'
+				# was a member function Godot would throw an error telling us
+				# that this is, in fact, a coroutine if it contains an 'await'.
+				@warning_ignore(redundant_await)
 				res.v = await coroutine.call()
 				observer.on_next(res.v)
 				observer.on_completed()

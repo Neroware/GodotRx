@@ -1,11 +1,11 @@
 static func ignore_elements_() -> Callable:
-	"""Ignores all elements in an observable sequence leaving only the
-	termination messages.
-
-	Returns:
-		An empty observable {Observable} sequence that signals
-		termination, successful or exceptional, of the source sequence.
-	"""
+#	"""Ignores all elements in an observable sequence leaving only the
+#	termination messages.
+#
+#	Returns:
+#		An empty observable {Observable} sequence that signals
+#		termination, successful or exceptional, of the source sequence.
+#	"""
 	var ignore_elements = func(source : Observable) -> Observable:
 		var subscribe = func(
 			observer : ObserverBase, 

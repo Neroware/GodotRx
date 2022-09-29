@@ -23,23 +23,23 @@ var _dispose_with : Dictionary
 ## [br]
 ##            The disposable object that runs the given action upon
 ##            disposal.
-func _init(action : Callable = func(): return):
+func _init(action_ : Callable = func(): return):
 	self.is_disposed = false
-	self.action = action
+	self.action = action_
 	self.lock = RLock.new()
 	
 	super._init()
 
 ## Performs the task of cleaning up resources.
 func dispose():
-	var dispose = false
+	var disposed = false
 	self.lock.lock()
 	if not self.is_disposed:
-		dispose = true
+		disposed = true
 		self.is_disposed = true
 	self.lock.unlock()
 	
-	if dispose:
+	if disposed:
 		self.action.call()
 
 ## Links disposable to [Node] lifetime in scene-tree via [signal Node.tree_exiting].

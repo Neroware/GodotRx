@@ -18,10 +18,10 @@ var _OBV : _Observer
 class _Observable extends Observable:
 	var _subject : WeakRef
 	
-	func _init(subject : Subject, lock : RLock):
+	func _init(subject : Subject, lock_ : RLock):
 		super._init()
 		self._subject = weakref(subject)
-		self.lock = lock
+		self.lock = lock_
 	
 	func _subscribe_core(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
 		if self._subject.get_ref() == null:
@@ -111,7 +111,7 @@ func check_disposed():
 func _subscribe_core(
 	__super : Callable,
 	observer : ObserverBase,
-	scheduler : SchedulerBase = null,
+	_scheduler : SchedulerBase = null,
 ) -> DisposableBase:
 	self.lock.lock()
 	if not check_disposed(): self.lock.unlock() ; return
@@ -143,10 +143,10 @@ func on_next(__super : Callable, i):
 
 func _on_next_core(__super : Callable, i):
 	self.lock.lock()
-	var observers : Array = self.observers.duplicate()
+	var observers_ : Array = self.observers.duplicate()
 	self.lock.unlock()
 	
-	for ob in observers:
+	for ob in observers_:
 		ob.on_next(i)
 
 ## Notifies all subscribed observers with the exception.
@@ -164,12 +164,12 @@ func on_error(__super : Callable, e):
 
 func _on_error_core(__super : Callable, e):
 	self.lock.lock()
-	var observers : Array = self.observers.duplicate()
+	var observers_ : Array = self.observers.duplicate()
 	self.observers.clear()
 	self.exception = e
 	self.lock.unlock()
 	
-	for ob in observers:
+	for ob in observers_:
 		ob.on_error(e)
 
 ## Notifies all subscribed observers of the end of the sequence.
@@ -181,11 +181,11 @@ func on_completed(__super : Callable):
 
 func _on_completed_core(__super : Callable):
 	self.lock.lock()
-	var observers : Array = self.observers.duplicate()
+	var observers_ : Array = self.observers.duplicate()
 	self.observers.clear()
 	self.lock.unlock()
 	
-	for ob in observers:
+	for ob in observers_:
 		ob.on_completed()
 
 ## Unsubscribe all observers and release resources.

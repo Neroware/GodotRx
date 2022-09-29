@@ -11,11 +11,11 @@ var has_subscription : bool
 var subscription : DisposableBase
 var source : ObservableBase
 
-func _init(source : ObservableBase, subject : SubjectBase):
-	self.subject = subject
+func _init(source_ : ObservableBase, subject_ : SubjectBase):
+	self.subject = subject_
 	self.has_subscription = false
 	self.subscription = null
-	self.source = source
+	self.source = source_
 	
 	super._init()
 
@@ -33,8 +33,8 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 		var dispose = func():
 			self.has_subscription = false
 		
-		var subscription = self.source.subscribe(self.subject.as_observer(), func(e): return, func(): return, scheduler)
-		self.subscription = CompositeDisposable.new([subscription, Disposable.new(dispose)])
+		var subscription_ = self.source.subscribe(self.subject.as_observer(), func(e): return, func(): return, scheduler)
+		self.subscription = CompositeDisposable.new([subscription_, Disposable.new(dispose)])
 	
 	return self.subscription
 
@@ -46,27 +46,31 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 ##        subscribers.
 func auto_connect_observable(subscriber_count : int = 1) -> Observable:
 	var connectable_subscription : Array[DisposableBase] = [null]
+	@warning_ignore(shadowed_variable)
 	var count = [0]
+	@warning_ignore(shadowed_variable)
 	var source = self
+	@warning_ignore(shadowed_variable_base_class)
 	var is_connected = [false]
 	
 	if subscriber_count == 0:
 		connectable_subscription[0] = source.connect_observable()
 		is_connected[0] = true
 	
+	@warning_ignore(shadowed_variable)
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		count[0] += 1
 		var should_connect = count[0] == subscriber_count and not is_connected[0]
-		var subscription = source.subscribe(observer)
+		var _subscription = source.subscribe(observer)
 		if should_connect:
 			connectable_subscription[0] = source.connect_observable(scheduler)
 			is_connected[0] = true
 		
 		var dispose = func():
-			subscription.dispose()
+			_subscription.dispose()
 			count[0] -= 1
 			is_connected[0] = false
 		

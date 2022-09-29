@@ -14,7 +14,7 @@ func schedule_periodic(
 			if disp.is_disposed:
 				return null
 			
-			var now : float = scheduler.now()
+			var _now : float = scheduler.now()
 			
 			var state_res = RefValue.Null()
 			if not GDRx.try(func():
@@ -26,7 +26,7 @@ func schedule_periodic(
 			) \
 			.end_try_catch(): state = state_res.v 
 			
-			var time = seconds - (scheduler.now() - now)
+			var time = seconds - (scheduler.now() - _now)
 			disp.disposable = scheduler.schedule_relative(time, periodic_.bind(periodic_), state)
 			
 			return null

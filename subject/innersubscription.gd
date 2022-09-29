@@ -6,9 +6,9 @@ var observer
 var lock : RLock
 
 
-func _init(subject, observer = null):
-	self.subject = subject
-	self.observer = observer
+func _init(subject_, observer_ = null):
+	self.subject = subject_
+	self.observer = observer_
 	self.lock = RLock.new()
 
 func dispose():

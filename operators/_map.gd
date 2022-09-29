@@ -4,22 +4,22 @@ static func map_(
 	var _mapper = mapper
 	
 	var map = func(source : Observable) -> Observable:
-		"""Partially applied map operator.
-
-		Project each element of an observable sequence into a new form
-		by incorporating the element's index.
-
-		Example:
-			>>> map.call(source)
-
-		Args:
-			source: The observable source to transform.
-
-		Returns:
-			Returns an observable sequence whose elements are the
-			result of invoking the transform function on each element
-			of the source.
-		"""
+#		"""Partially applied map operator.
+#
+#		Project each element of an observable sequence into a new form
+#		by incorporating the element's index.
+#
+#		Example:
+#			>>> map.call(source)
+#
+#		Args:
+#			source: The observable source to transform.
+#
+#		Returns:
+#			Returns an observable sequence whose elements are the
+#			result of invoking the transform function on each element
+#			of the source.
+#		"""
 		var subscribe = func(
 			obv : ObserverBase,
 			scheduler : SchedulerBase = null

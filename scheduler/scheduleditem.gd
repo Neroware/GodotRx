@@ -9,11 +9,11 @@ var action : Callable
 var duetime : float
 var disposable : SingleAssignmentDisposable
 
-func _init(scheduler : Scheduler, duetime : float, state = null, action : Callable = func(scheduler : Scheduler, state = null): return):
-	self.scheduler = scheduler
-	self.state = state
-	self.action = action
-	self.duetime = duetime
+func _init(scheduler_ : Scheduler, duetime_ : float, state_ = null, action_ : Callable = func(scheduler : Scheduler, state = null): return):
+	self.scheduler = scheduler_
+	self.state = state_
+	self.action = action_
+	self.duetime = duetime_
 	self.disposable = SingleAssignmentDisposable.new()
 
 func invoke():

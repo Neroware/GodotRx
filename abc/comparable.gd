@@ -5,15 +5,15 @@ class_name Comparable
 ## This interface provides comparison functions. It is needed because GDScript
 ## does not allow defining custom operators.
 
-func eq(other) -> bool:
+func eq(_other) -> bool:
 	GDRx.exc.NotImplementedException.Throw()
 	return false
 
-func lt(other) -> bool:
+func lt(_other) -> bool:
 	GDRx.exc.NotImplementedException.Throw()
 	return false
 
-func gt(other) -> bool:
+func gt(_other) -> bool:
 	GDRx.exc.NotImplementedException.Throw()
 	return false
 

@@ -9,11 +9,11 @@ var has_faulted : bool
 var queue : Array[Callable]
 var disposable : SerialDisposable
 
-func _init(scheduler : SchedulerBase, observer : ObserverBase):
+func _init(scheduler_ : SchedulerBase, observer_ : ObserverBase):
 	super._init()
 	
-	self.scheduler = scheduler
-	self.observer = observer
+	self.scheduler = scheduler_
+	self.observer = observer_
 	
 	self.lock = RLock.new()
 	self.is_acquired = false
@@ -48,7 +48,7 @@ func ensure_active():
 	if is_owner:
 		self.disposable.disposable = self.scheduler.schedule(self.run)
 
-func run(scheduler : SchedulerBase, state = null):
+func run(_scheduler : SchedulerBase, _state = null):
 	var parent = self
 	
 	self.lock.lock()

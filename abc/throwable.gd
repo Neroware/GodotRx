@@ -5,7 +5,7 @@ class_name ThrowableBase
 ## Objects that implement this interface can be used within a try-catch-
 ## structure.
 
-func throw(default = null) -> Variant:
+func throw(_default = null) -> Variant:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 

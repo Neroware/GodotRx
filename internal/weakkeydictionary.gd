@@ -13,14 +13,14 @@ class _Pair:
 	var _value : Variant
 	var _wrapped : bool
 	
-	func _init(key, value):
-		if key is Object:
+	func _init(key_, value_):
+		if key_ is Object:
 			self._wrapped = true
-			self._key = weakref(key)
+			self._key = weakref(key_)
 		else:
 			self._wrapped = false
-			self._key = key
-		self._value = value
+			self._key = key_
+		self._value = value_
 	
 	func key():
 		if self._wrapped:
@@ -123,28 +123,29 @@ func has(key, gc : bool = true) -> bool:
 			return true
 	return false
 
-func has_all(keys : Array, gc : bool = true):
+func has_all(keys_ : Array, gc : bool = true):
 	if gc: _collect_garbage()
-	return keys.all(func(elem): return has(elem, false))
+	return keys_.all(func(elem): return has(elem, false))
 
+@warning_ignore(shadowed_global_identifier)
 func hash() -> int:
 	return self._data.hash()
 
 func is_empty(gc : bool = true) -> bool:
 	if gc: _collect_garbage()
-	return self._data.all(func(elem): elem == null or elem.is_empty())
+	return self._data.all(func(elem): return (elem == null or elem.is_empty()))
 
 func keys(gc : bool = true) -> Array:
 	if gc: _collect_garbage()
-	var keys = []
+	var _keys = []
 	for col_lst in self._data:
 		if col_lst == null:
 			continue
 		for pair in col_lst:
 			var key = pair.key()
 			if !(key is _Pair.LostRef):
-				keys.append(key)
-	return keys
+				_keys.append(key)
+	return _keys
 
 func merge(dictionary : WeakKeyDictionary, overwrite : bool = false, gc : bool = true):
 	if gc: _collect_garbage()
