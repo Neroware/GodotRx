@@ -23,7 +23,7 @@ func run(stmt : TryCatch) -> bool:
 	
 	self._lock.lock()
 	self._has_failed[stmt] = false
-	if not thread in self._try_catch_stack.keys():
+	if not self._try_catch_stack.has_key(thread):
 		self._try_catch_stack.set_pair(thread, [stmt])
 	else:
 		self._try_catch_stack.get_value(thread).push_back(stmt)
