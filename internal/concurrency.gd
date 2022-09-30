@@ -15,14 +15,14 @@ class StartableThread extends StartableBase:
 		get: return self._thread
 	
 	func start():
-		GDRx._register_thread(self._thread)
 		if self._started:
 			GDRx.raise_message("Thread already started!")
 			return
 		
 		var action = func():
-			GDRx._on_thread_launch(self._thread)
+			GDRx.register_thread(self._thread)
 			self._target.call()
+			GDRx.deregister_thread(self._thread)
 			self._thread = null
 			self._target = GDRx.basic.noop
 		

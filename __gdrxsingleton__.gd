@@ -37,54 +37,70 @@ var exc = __init__.Exception_.new()
 ## Access to pipe operators
 var pipe = __init__.Pipe_.new()
 
+# =========================================================================== #
+#   Multi-Threading
+# =========================================================================== #
+
+## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
 	func start(_callable : Callable, _priority : int = 1) -> int:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
 	func _to_string():
 		return "MAIN_THREAD::" + str(GDRx.MAIN_THREAD_ID)
+
 ## ID of the main thread
 var MAIN_THREAD_ID = OS.get_thread_caller_id()
 ## Dummy instance for the Main Thread
 var MAIN_THREAD = _MainThreadDummy.new()
 
-# =========================================================================== #
-#   Multi-Threading
-# =========================================================================== #
+## ID -> [Thread]
+var running_threads : Dictionary = {}
+## All registered [Thread] instances ready for joining stored as their id
+var finished_threads : Array[int]
 
-var _new_thread_lock : RLock = RLock.new()
-var _thread_ids : Dictionary = {} # ID -> Thread
-var _threads : Dictionary = {} # Thread -> ID
+## Re-entrant lock maintained by the singleton
+var lock : RLock = RLock.new()
 
-func _register_thread(thread : Thread):
-	self._new_thread_lock.lock()
-	
-	for t in self._threads.keys():
-		if t.is_alive():
-			continue
-		var id = self._threads[t]
-		if id is GDRx.util.NotSet:
-			GDRx.raise_message("Thread did not notify singleton on launch!")
-			self._threads.erase(t)
-			continue
-		self._threads.erase(t)
-		self._thread_ids.erase(id)
-		t.wait_to_finish()
-	
-	self._threads[thread] = NOT_SET
-	
-	self._new_thread_lock.unlock()
-
-func _on_thread_launch(thread : Thread):
+## Registeres a new [Thread]. 
+## This means it is known to GDRx and can be returned by [method get_current_thread]
+func register_thread(thread : Thread):
 	var id : int = OS.get_thread_caller_id()
+	assert_(thread.get_id() == str(id))
 	
-	self._new_thread_lock.lock()
-	self._thread_ids[id] = thread
-	self._threads[thread] = id
-	self._new_thread_lock.unlock()
+	self.lock.lock()
+	self.running_threads[id] = thread
+	self.lock.unlock()
+
+## Schedules a [Thread] for automatic join. Afterwards it cannot be retuned by 
+## [method get_current_thread] anymore
+func deregister_thread(thread : Thread):
+	var id : int = OS.get_thread_caller_id()
+	assert_(thread.get_id() == str(id))
+	
+	self.lock.lock()
+	self.finished_threads.append(id)
+	self.lock.unlock()
+
+func _join_finished_threads():
+	var finished_threads_ : Array[Thread]
+	
+	self.lock.lock()
+	finished_threads_ = self.finished_threads.duplicate().map(
+		func(id): return self.running_threads[id])
+	for id in self.finished_threads:
+		self.running_threads.erase(id)
+	self.finished_threads.clear()
+	self.lock.unlock()
+	
+	for t in finished_threads_:
+		t.wait_to_finish()
+
+func _process(_delta):
+	_join_finished_threads()
 
 ## Returns the caller's current [Thread]
-## If no thread object is registered this function returns [b]null[/b]
+## If no thread object is registered this function returns [b]MAIN_THREAD[/b]
 ## implying that the caller is the main thread.
 func get_current_thread() -> Thread:
 	var result : Thread = null
@@ -92,10 +108,9 @@ func get_current_thread() -> Thread:
 	if id == MAIN_THREAD_ID:
 		return MAIN_THREAD
 	
-	self._new_thread_lock.lock()
-	if id in self._thread_ids.keys():
-		result = self._thread_ids[id]
-	self._new_thread_lock.unlock()
+	self.lock.lock()
+	result = self.running_threads[id]
+	self.lock.unlock()
 	
 	return result
 
@@ -172,8 +187,8 @@ func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 	return util.AddRef(xs, r)
 
 ## Create an observable sequence from an array
-func of(data : Array) -> Observable:
-	return self.from_array(data)
+func of(data : Array, scheduler : SchedulerBase = null) -> Observable:
+	return self.from_array(data, scheduler)
 
 ## Alias for [code]GDRx.obs.return_value[/code]
 func just(value, scheduler : SchedulerBase = null) -> Observable:
@@ -232,8 +247,8 @@ func from_callback(fun : Callable = func(args : Array, cb : Callable): return, m
 	return obs.from_callback(fun, mapper)
 
 ## Transforms an array into an observable sequence.
-func from_array(array : Array) -> Observable:
-	return obs.from_iterable(GDRx.util.Iter(array))
+func from_array(array : Array, scheduler : SchedulerBase = null) -> Observable:
+	return obs.from_iterable(GDRx.util.Iter(array), scheduler)
 
 ## See: [b]res://reactivex/observable/fromiterable.gd[/b]
 func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) -> Observable:

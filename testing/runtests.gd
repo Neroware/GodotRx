@@ -102,68 +102,82 @@ class ObservableSequence extends ArrayIterator:
 		
 		obs.subscribe(on_next, on_error, on_completed)
 
+var _next_sequence : bool
+
+var _test_names : PackedStringArray
+var _test_it : ArrayIterator
+var _current_test
+var _test_counter : int
+var _n_tests : int
+
+var test_results : Dictionary = {}
+
 func _ready():
-	var test_results = {}
-	var test_names = self.tests.split(",")
-	for t in test_names:
+	self._test_names = self.tests.split(",", false)
+	for t in self._test_names:
 		test_results[t] = ETestState.SUCCESS
 	
-	var tests_it = ArrayIterator.new(test_names)
-	var current_test = RefValue.Null()
-	var test_counter = RefValue.Set(0)
-	var n_tests = test_names.size()
+	self._next_sequence = false
 	
-	var print_results = func():
-		var n_passed = 0
-		var n_skipped = 0
-		var n_failed = 0
-		for t in test_names:
-			var res = "success"
-			if test_results[t] == ETestState.FAILED:
-				res = "failed"
-				n_failed += 1
-			elif test_results[t] == ETestState.MISSING:
-				res = "skipped"
-				n_skipped += 1
-			else:
-				n_passed += 1
-			print("[ReactiveX]: ", t, ": ", res)
-		print("\n[ReactiveX]: =====================")
-		print("[ReactiveX]: PASSED ", n_passed)
-		print("[ReactiveX]: FAILED ", n_failed)
-		print("[ReactiveX]: SKIPPED ", n_skipped)
+	self._test_it = ArrayIterator.new(self._test_names)
+	self._current_test = ""
+	self._test_counter = 0
+	self._n_tests = self._test_names.size()
 	
-	var next_test = func():
-		current_test.v = tests_it.next()
-		test_counter.v += 1
-		if current_test.v is tests_it.End:
-			print_results.call()
-			return
-		print("[ReactiveX]: Running test '", current_test, "' . . . (", test_counter, " / ", n_tests, ")")
-		var method = get("_test_" + current_test.v)
+	self.sequence_finished.connect(
+		func(result : ETestState, remaining : int):
+			if result == ETestState.FAILED:
+				print("[ReactiveX]: FAILED\n")
+				self.test_results[self._current_test] = ETestState.FAILED
+				_next_test()
+			elif result == ETestState.MISSING:
+				print("[ReactiveX]: SKIPPED\n")
+				self.test_results[self._current_test] = ETestState.MISSING
+				_next_test()
+			elif remaining == 0:
+				print("[ReactiveX]: SUCCESS\n")
+				_next_test()
+			)
+	
+	self._next_test()
+
+func _print_results():
+	var n_passed = 0
+	var n_skipped = 0
+	var n_failed = 0
+	for t in self._test_names:
+		var res = "success"
+		if test_results[t] == ETestState.FAILED:
+			res = "failed"
+			n_failed += 1
+		elif test_results[t] == ETestState.MISSING:
+			res = "skipped"
+			n_skipped += 1
+		else:
+			n_passed += 1
+		print("[ReactiveX]: ", t, ": ", res)
+	print("\n[ReactiveX]: =====================")
+	print("[ReactiveX]: PASSED ", n_passed)
+	print("[ReactiveX]: FAILED ", n_failed)
+	print("[ReactiveX]: SKIPPED ", n_skipped)
+
+func _next_test():
+	self._current_test = self._test_it.next()
+	self._test_counter += 1
+	if self._current_test is self._test_it.End:
+		_print_results()
+		return
+	print("[ReactiveX]: Running test '", self._current_test, "' . . . (", self._test_counter, " / ", self._n_tests, ")")
+	self._next_sequence = true
+
+func _process(delta):
+	if self._next_sequence:
+		self._next_sequence = false
+		var method = get("_test_" + self._current_test)
 		if method == null:
 			sequence_finished.emit(ETestState.MISSING, -1)
 		else:
 			method.call()
-	
-	GDRx.from_signal(self.sequence_finished).subscribe(
-		func(tup : Tuple):
-			var result : ETestState = tup.at(0)
-			var remaining : int = tup.at(1)
-			if result == ETestState.FAILED:
-				print("[ReactiveX]: FAILED\n")
-				test_results[current_test.v] = ETestState.FAILED
-				next_test.call()
-			elif result == ETestState.MISSING:
-				print("[ReactiveX]: SKIPPED\n")
-				test_results[current_test.v] = ETestState.MISSING
-				next_test.call()
-			elif remaining == 0:
-				print("[ReactiveX]: SUCCESS\n")
-				next_test.call()
-	)
-	
-	next_test.call()
 
 static func UNSUB(v) -> ObservableSequence.UnsubscribeOn:
 	return ObservableSequence.UnsubscribeOn.new(v)
