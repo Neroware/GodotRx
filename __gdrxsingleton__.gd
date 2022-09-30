@@ -57,7 +57,7 @@ var MAIN_THREAD = _MainThreadDummy.new()
 ## ID -> [Thread]
 var running_threads : Dictionary = {}
 ## All registered [Thread] instances ready for joining stored as their id
-var finished_threads : Array[int]
+var finished_threads : Array[Thread]
 
 ## Re-entrant lock maintained by the singleton
 var lock : RLock = RLock.new()
@@ -66,8 +66,6 @@ var lock : RLock = RLock.new()
 ## This means it is known to GDRx and can be returned by [method get_current_thread]
 func register_thread(thread : Thread):
 	var id : int = OS.get_thread_caller_id()
-	assert_(thread.get_id() == str(id))
-	
 	self.lock.lock()
 	self.running_threads[id] = thread
 	self.lock.unlock()
@@ -76,21 +74,19 @@ func register_thread(thread : Thread):
 ## [method get_current_thread] anymore
 func deregister_thread(thread : Thread):
 	var id : int = OS.get_thread_caller_id()
-	assert_(thread.get_id() == str(id))
-	
 	self.lock.lock()
-	self.finished_threads.append(id)
+	self.running_threads.erase(id)
+	self.finished_threads.append(thread)
 	self.lock.unlock()
 
 func _join_finished_threads():
-	var finished_threads_ : Array[Thread]
+	var finished_threads_ : Array[Thread] = []
 	
 	self.lock.lock()
-	finished_threads_ = self.finished_threads.duplicate().map(
-		func(id): return self.running_threads[id])
-	for id in self.finished_threads:
-		self.running_threads.erase(id)
-	self.finished_threads.clear()
+	for thread in self.finished_threads.duplicate():
+		if thread.is_started():
+			finished_threads_.append(thread)
+		self.finished_threads.erase(thread)
 	self.lock.unlock()
 	
 	for t in finished_threads_:
