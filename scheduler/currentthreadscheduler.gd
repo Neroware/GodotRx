@@ -52,13 +52,16 @@ func get_trampoline() -> Trampoline:
 	return tramp
 
 class _Local:
-	var _tramp : Dictionary
+	var _tramp : WeakKeyDictionary
+	
+	func _init():
+		self._tramp = WeakKeyDictionary.new()
 	
 	func _trampoline():
-		var id = GDRx.get_current_thread()
-		if not id in self._tramp.keys():
-			self._tramp[id] = Trampoline.new()
-		return self._tramp[id]
+		var thread = GDRx.get_current_thread()
+		if not thread in self._tramp.keys():
+			self._tramp.set_pair(thread, Trampoline.new())
+		return self._tramp.get_value(thread)
 	
 	var tramp : Trampoline: get = _trampoline
 

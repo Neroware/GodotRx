@@ -170,7 +170,7 @@ func _next_test():
 	print("[ReactiveX]: Running test '", self._current_test, "' . . . (", self._test_counter, " / ", self._n_tests, ")")
 	self._next_sequence = true
 
-func _process(delta):
+func _process(_delta):
 	if self._next_sequence:
 		self._next_sequence = false
 		var method = get("_test_" + self._current_test)
