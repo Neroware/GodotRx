@@ -70,7 +70,7 @@ func register_thread(thread : Thread):
 	self.running_threads[id] = thread
 	self.lock.unlock()
 
-## Schedules a [Thread] for automatic join. Afterwards it cannot be retuned by 
+## Schedules a [Thread] for automatic join. Afterwards it cannot be returned by 
 ## [method get_current_thread] anymore
 func deregister_thread(thread : Thread):
 	var id : int = OS.get_thread_caller_id()
@@ -130,7 +130,7 @@ var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 #   Exception Handler Singleton
 # =========================================================================== #
 ## [ExceptionHandler] singleton [color=red]Leave it alone![/color]
-var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
+var ExceptionHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
 
 # =========================================================================== #
 #  Helper functions
