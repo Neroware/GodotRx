@@ -5,11 +5,11 @@ class_name ExceptionHandler
 ## Objects of type [ThrowableBase] are handled by this type's singleton
 
 var _try_catch_stack : Array[TryCatch]
-var _has_failed : bool
+var _has_failed : Dictionary
 
 func _init():
 	self._try_catch_stack = []
-	self._has_failed = false
+	self._has_failed = {}
 
 static func singleton() -> ExceptionHandler:
 	var thread = GDRx.get_current_thread()
@@ -19,13 +19,15 @@ static func singleton() -> ExceptionHandler:
 	return GDRx.ExceptionHandler_.get_value(thread)
 
 func run(stmt : TryCatch) -> bool:
-	self._has_failed = false
+	self._has_failed[stmt] = false
 	
 	self._try_catch_stack.push_back(stmt)
 	stmt.risky_code.call()
 	self._try_catch_stack.pop_back()
 	
-	return self._has_failed
+	var res = self._has_failed[stmt]
+	self._has_failed.erase(stmt)
+	return res
 
 func raise(exc : ThrowableBase, default = null) -> Variant:
 	var handler : Callable = GDRx.basic.default_crash
@@ -37,7 +39,7 @@ func raise(exc : ThrowableBase, default = null) -> Variant:
 	handler = GDRx.basic.noop
 	
 	var stmt : TryCatch = self._try_catch_stack.pop_back()
-	self._has_failed = true
+	self._has_failed[stmt] = true
 	for type in exc.tags():
 		if type in stmt.caught_types:
 			handler = stmt.caught_types[type]

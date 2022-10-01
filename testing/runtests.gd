@@ -295,7 +295,7 @@ func _test_faulty_map_new_thread():
 	seq.compare(obs, self.sequence_finished)
 
 func _test_coroutine():
-	var coroutine = func (a, b, c):
+	var coroutine = func(a, b, c):
 		print("[ReactiveX]: Running Coroutine before await...")
 		await get_tree().create_timer(0.05).timeout
 		print("[ReactiveX]: Continue Coroutine after await...")
