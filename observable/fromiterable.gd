@@ -30,7 +30,7 @@ static func from_iterable_(
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = CurrentThreadScheduler.singleton()
 		
-		var iterator = iterable
+		var iterator = iterable.iter()
 		var disposed = RefValue.Set(false)
 		
 		var action = func(__ : SchedulerBase, ___ = null):

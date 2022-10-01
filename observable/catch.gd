@@ -17,6 +17,8 @@
 ##        successfully.
 static func catch_with_iterable_(sources : IterableBase) -> Observable:
 	
+	var sources_ : IterableBase = sources.iter()
+	
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:
 		var _scheduler = scheduler_ if scheduler_ != null else CurrentThreadScheduler.singleton()
 		
@@ -35,14 +37,14 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 			
 			var current = RefValue.Null()
 			if GDRx.try(func():
-				current.v = sources.next()
+				current.v = sources_.next()
 			) \
 			.catch("Exception", func(ex):
 				observer.on_error(ex)
 			) \
 			.end_try_catch():
 				pass
-			elif current.v is sources.End:
+			elif current.v is sources_.End:
 				if last_exception.v != null:
 					observer.on_error(last_exception.v)
 				else:

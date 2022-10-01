@@ -21,3 +21,6 @@ func next() -> Variant:
 		return self.End.new()
 	self._index += 1
 	return self._x[self._index - 1]
+
+func iter() -> IterableBase:
+	return Iterator.new(ArrayIterator.new(self._x))

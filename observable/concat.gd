@@ -3,6 +3,8 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:
 		var _scheduler = scheduler_ if scheduler_ != null else CurrentThreadScheduler.singleton()
 		
+		var sources_ : IterableBase = sources.iter()
+		
 		var subscription = SerialDisposable.new()
 		var cancelable = SerialDisposable.new()
 		var is_disposed = RefValue.Set(false)
@@ -16,14 +18,14 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 			
 			var current = RefValue.Null()
 			if GDRx.try(func():
-				current.v = sources.next()
+				current.v = sources_.next()
 			) \
 			.catch("Exception", func(ex):
 				observer.on_error(ex)
 			) \
 			.end_try_catch():
 				pass
-			elif current.v is sources.End:
+			elif current.v is sources_.End:
 				observer.on_completed()
 			else:
 				var d = SingleAssignmentDisposable.new()
