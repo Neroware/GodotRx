@@ -67,7 +67,7 @@ static func group_join_(
 				group.add(md)
 				
 				var expire = func():
-					if _id in left_map.keys():
+					if left_map.has(_id):
 						left_map.erase(_id)
 						subject.as_observer().on_completed()
 					group.remove(md)

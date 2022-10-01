@@ -9,7 +9,7 @@ static func case_(
 	var factory = func(__ : SchedulerBase) -> Observable:
 		var key_ = mapper.call()
 		var result
-		if not key_ in sources.keys():
+		if not sources.has(key_):
 			result = default_source_
 		else:
 			result = sources[key_]

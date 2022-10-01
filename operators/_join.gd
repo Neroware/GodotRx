@@ -39,7 +39,7 @@ static func join_(
 				group.add(md)
 				
 				var expire = func():
-					if current_id in left_map.keys():
+					if left_map.has(current_id):
 						left_map.erase(current_id)
 					if left_map.is_empty() and left_done.v:
 						observer.on_completed()
@@ -86,7 +86,7 @@ static func join_(
 				group.add(md)
 				
 				var expire = func():
-					if current_id in right_map.keys():
+					if right_map.has(current_id):
 						right_map.erase(current_id)
 					if right_map.is_empty() and right_done.v:
 						observer.on_completed()

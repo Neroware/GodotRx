@@ -11,14 +11,14 @@ func end_try_catch() -> bool:
 	return ExceptionHandler.singleton().run(self)
 
 func catch(type : String, fun : Callable = func(__):return) -> TryCatch:
-	if type in self.caught_types.keys():
+	if self.caught_types.has(type):
 		return
 	self.caught_types[type] = fun
 	return self
 
 func catch_all(types : Array[String], fun : Callable = func(__):return) -> TryCatch:
 	for type in types:
-		if type in self.caught_types.keys():
+		if self.caught_types.has(type):
 			continue
 		self.caught_types[type] = fun
 	return self

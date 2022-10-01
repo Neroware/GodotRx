@@ -138,9 +138,9 @@ var ExceptionHandler_ : ExceptionHandler = ExceptionHandler.new("GDRx")
 
 ## Raises a [code]GDRx.exc.AssertionFailedException[/code] and returns [b]true[/b]
 ## should the assertion fail.
-func assert_(assertion : bool) -> bool:
+func assert_(assertion : bool, message : String = "Assertion failed!") -> bool:
 	if not assertion: 
-		GDRx.exc.AssertionFailedException.Throw()
+		GDRx.exc.AssertionFailedException.new(message).throw()
 	return not assertion
 
 ## Creates a new [TryCatch] Statement

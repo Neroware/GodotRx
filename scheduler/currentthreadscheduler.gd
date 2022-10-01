@@ -30,7 +30,7 @@ static func singleton() -> CurrentThreadScheduler:
 		class_map_ = class_map
 	
 	var self_
-	if not thread in class_map_.keys():
+	if not class_map_.has_key(thread):
 		self_ = CurrentThreadSchedulerSingleton.new()
 		class_map_.set_pair(thread, self_)
 	else:
@@ -58,7 +58,7 @@ class _Local:
 	
 	func _trampoline():
 		var thread = GDRx.get_current_thread()
-		if not thread in self._tramp.keys():
+		if not self._tramp.has_key(thread):
 			self._tramp.set_pair(thread, Trampoline.new())
 		return self._tramp.get_value(thread)
 	

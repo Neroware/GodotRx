@@ -30,7 +30,7 @@ func unlock():
 	if self._counter == 0:
 		self._mutex.unlock()
 		GDRx.exc.LockNotAquiredException.new(
-			"Lock was released but nobody aquired it!").throw()
+			"RLock was released but nobody aquired it!").throw()
 		return
 	self._counter -= 1
 	if self._counter == 0:
