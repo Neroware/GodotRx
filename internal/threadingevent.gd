@@ -49,7 +49,7 @@ func clear():
 ## This method returns the internal flag on exit, so it will always return
 ## [b]true[/b] except if a timeout is given and the operation times out.
 ##
-func wait(timeout : float = -1.0):
+func wait(timeout = null):
 	self._cond.lock()
 	var signaled = self._flag
 	if not signaled:
