@@ -22,7 +22,6 @@ class StartableThread extends StartableBase:
 		var action = func():
 			GDRx.register_thread(self._thread)
 			self._target.call()
-			GDRx.deregister_thread(self._thread)
 			self._thread = null
 			self._target = GDRx.basic.noop
 		

@@ -41,59 +41,65 @@ var pipe = __init__.Pipe_.new()
 #   Multi-Threading
 # =========================================================================== #
 
+## Dummy instance for the Main Thread
+var MAIN_THREAD = _MainThreadDummy.new()
+## ID of the main thread
+var MAIN_THREAD_ID = OS.get_thread_caller_id()
+## Interval in which GDRx checks whether registered threads are finished and
+## can be joined.
+const THREAD_JOIN_INTERVAL : float = 1.0
+
 ## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
 	func start(_callable : Callable, _priority : int = 1) -> int:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
+	func wait_to_finish() -> Variant:
+		GDRx.raise_message("Do not join the Main Thread Dummy!")
+		return null
 	func _to_string():
 		return "MAIN_THREAD::" + str(GDRx.MAIN_THREAD_ID)
-
-## ID of the main thread
-var MAIN_THREAD_ID = OS.get_thread_caller_id()
-## Dummy instance for the Main Thread
-var MAIN_THREAD = _MainThreadDummy.new()
+	func get_id() -> String:
+		return str(GDRx.MAIN_THREAD_ID)
+	func is_started() -> bool:
+		return true
+	func is_alive() -> bool:
+		return true
 
 ## ID -> [Thread]
-var running_threads : Dictionary = {}
-## All registered [Thread] instances ready for joining stored as their id
-var finished_threads : Array[Thread]
-
+var _running_thread_ids : Dictionary = {}
+## [Thread] -> ID
+var _registered_threads : Dictionary = {}
 ## Re-entrant lock maintained by the singleton
-var lock : RLock = RLock.new()
+var _lock : RLock = RLock.new()
 
 ## Registeres a new [Thread]. 
 ## This means it is known to GDRx and can be returned by [method get_current_thread]
+## It is also automatically joined when not alive anymore.
 func register_thread(thread : Thread):
 	var id : int = OS.get_thread_caller_id()
-	self.lock.lock()
-	self.running_threads[id] = thread
-	self.lock.unlock()
-
-## Schedules a [Thread] for automatic join. Afterwards it cannot be returned by 
-## [method get_current_thread] anymore
-func deregister_thread(thread : Thread):
-	var id : int = OS.get_thread_caller_id()
-	self.lock.lock()
-	self.running_threads.erase(id)
-	self.finished_threads.append(thread)
-	self.lock.unlock()
+	self._lock.lock()
+	self._running_thread_ids[id] = thread
+	self._registered_threads[thread] = id
+	self._lock.unlock()
 
 func _join_finished_threads():
-	var finished_threads_ : Array[Thread] = []
-	
-	self.lock.lock()
-	for thread in self.finished_threads.duplicate():
-		if thread.is_started():
-			finished_threads_.append(thread)
-		self.finished_threads.erase(thread)
-	self.lock.unlock()
-	
-	for t in finished_threads_:
-		t.wait_to_finish()
+	self._lock.lock()
+	var registered_threads_ = self._registered_threads.keys()
+	for thread in registered_threads_:
+		var tid : int = self._registered_threads[thread]
+		if thread.is_started() and not thread.is_alive():
+			thread.wait_to_finish()
+			self._registered_threads.erase(thread)
+			if self._running_thread_ids[tid] == thread:
+				self._running_thread_ids.erase(tid)
+	self._lock.unlock()
 
-func _process(_delta):
-	_join_finished_threads()
+func _ready():
+	var action = func(__ = null, ___ = null):
+		_join_finished_threads()
+	Disposable.new(TimeoutScheduler.singleton().schedule_periodic(
+		THREAD_JOIN_INTERVAL, action, 0).dispose).dispose_with(self)
 
 ## Returns the caller's current [Thread]
 ## If no thread object is registered this function returns [b]MAIN_THREAD[/b]
@@ -104,9 +110,9 @@ func get_current_thread() -> Thread:
 	if id == MAIN_THREAD_ID:
 		return MAIN_THREAD
 	
-	self.lock.lock()
-	result = self.running_threads[id]
-	self.lock.unlock()
+	self._lock.lock()
+	result = self._running_thread_ids[id]
+	self._lock.unlock()
 	
 	return result
 
