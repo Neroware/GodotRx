@@ -4,42 +4,31 @@ class_name Lock
 ## A lock which can only be aquired and released once by any thread.
 
 var _aquired_thread
-var _mutex : Mutex
+var _semaphore : Semaphore
 
 func _init():
 	self._aquired_thread = null
-	self._mutex = Mutex.new()
+	self._semaphore = Semaphore.new()
+	self._semaphore.post()
 
 func lock():
-	self._mutex.lock()
-	while self._aquired_thread != null:
-		self._mutex.unlock()
-		OS.delay_usec((randi() % 10) + 1)
-		self._mutex.lock()
+	self._semaphore.wait()
 	self._aquired_thread = OS.get_thread_caller_id()
-	self._mutex.unlock()
 
 func unlock():
-	self._mutex.lock()
 	if self._aquired_thread == null:
 		GDRx.exc.LockNotAquiredException.new(
 			"Lock was released but nobody aquired it!").throw()
+		return
 	self._aquired_thread = null
-	self._mutex.unlock()
+	self._semaphore.post()
 
 func try_lock() -> bool:
-	var result : bool
-	self._mutex.lock()
-	result = self._aquired_thread == null
-	self._mutex.unlock()
-	return result
+	return self._semaphore.try_wait() == OK
 
 func is_locking_thread() -> bool:
-	var result : bool
-	self._mutex.lock()
-	result = OS.get_thread_caller_id() == self._aquired_thread
-	self._mutex.unlock()
-	return result
+	var id = OS.get_thread_caller_id()
+	return self._aquired_thread == id
 
 func _unlock_and_store_recursion_depth():
 	self.unlock()

@@ -31,7 +31,9 @@ func _collect_lost_references():
 		self._data.erase(hkey)
 
 func set_pair(key, value):
-	if GDRx.assert_(key is Object, "Key needs to be of type 'Object'!"):
+	if GDRx.assert_(key != null, "Key is NULL!"):
+		return
+	if GDRx.assert_(key is Object, "Key needs to be of type 'Object'"):
 		return
 	
 	if self._weakkeys.size() > GARBAGE_COLLECTION_SIZE:
