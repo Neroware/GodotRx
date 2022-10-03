@@ -1,14 +1,14 @@
 extends PeriodicScheduler
-class_name TimeoutScheduler
-## A scheduler that schedules work via a timer
+class_name ThreadedTimeoutScheduler
+## A scheduler that schedules work via a threaded timer.
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 
 ## Returns singleton
-static func singleton() -> TimeoutScheduler:
-	return GDRx.TimeoutScheduler_
+static func singleton() -> ThreadedTimeoutScheduler:
+	return GDRx.ThreadedTimeoutScheduler_
 
 ## Schedules an action to be executed.
 ## [br]
@@ -23,9 +23,24 @@ static func singleton() -> TimeoutScheduler:
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
 func schedule(action : Callable, state = null) -> DisposableBase:
-	if OS.get_thread_caller_id() == GDRx.MAIN_THREAD_ID:
-		return SceneTreeTimeoutScheduler.singleton().schedule(action, state)
-	return ThreadedTimeoutScheduler.singleton().schedule(action, state)
+	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
+	
+	var interval = func():
+		sad.disposable = self.invoke_action(action, state)
+	
+	var disposed = RefValue.Set(false)
+	var dispose = func():
+		disposed.v = true
+	
+	var timer_thread : Thread = Thread.new()
+	var timer = func():
+		GDRx.register_thread(timer_thread)
+		OS.delay_msec(0.0)
+		if not disposed.v:
+			interval.call()
+	timer_thread.start(timer)
+	
+	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
 ## Schedules an action to be executed after duetime.
 ## [br]
@@ -43,9 +58,28 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
-	if OS.get_thread_caller_id() == GDRx.MAIN_THREAD_ID:
-		return SceneTreeTimeoutScheduler.singleton().schedule_relative(duetime, action, state)
-	return ThreadedTimeoutScheduler.singleton().schedule_relative(duetime, action, state)
+	var seconds = self.to_seconds(duetime)
+	if seconds <= 0.0:
+		return self.schedule(action, state)
+	
+	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
+	
+	var interval = func():
+		sad.disposable = self.invoke_action(action, state)
+	
+	var disposed = RefValue.Set(false)
+	var dispose = func():
+		disposed.v = true
+	
+	var timer_thread : Thread = Thread.new()
+	var timer = func():
+		GDRx.register_thread(timer_thread)
+		OS.delay_msec(1000.0 * seconds)
+		if not disposed.v:
+			interval.call()
+	timer_thread.start(timer)
+	
+	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
 ## Schedules an action to be executed at duetime.
 ## [br]
@@ -63,6 +97,5 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
-	if OS.get_thread_caller_id() == GDRx.MAIN_THREAD_ID:
-		return SceneTreeTimeoutScheduler.singleton().schedule_absolute(duetime, action, state)
-	return ThreadedTimeoutScheduler.singleton().schedule_absolute(duetime, action, state)
+	duetime = self.to_seconds(duetime)
+	return self.schedule_relative(duetime - self.now(), action, state)

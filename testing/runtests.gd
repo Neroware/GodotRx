@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -78,7 +78,7 @@ class ObservableSequence extends ArrayIterator:
 			elif cmp.call(expected, i) == ETestState.FAILED:
 				end_sequence.call(ETestState.FAILED)
 		
-		var on_error = func(__):
+		var on_error = func(err):
 			if seq_remaining.v <= 0:
 				return
 			
@@ -86,7 +86,7 @@ class ObservableSequence extends ArrayIterator:
 			if expected is ObservableSequence.Error:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
-				print("[ReactiveX]: Expected error as end of sequence!")
+				print("[ReactiveX]: Sequence failed with unexpected error: ", err)
 				end_sequence.call(ETestState.FAILED)
 		
 		var on_completed = func():
@@ -97,7 +97,7 @@ class ObservableSequence extends ArrayIterator:
 			if expected is ObservableSequence.Complete:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
-				print("[ReactiveX]: Expected end of sequence!")
+				print("[ReactiveX]: Sequence completed unexpected!")
 				end_sequence.call(ETestState.FAILED)
 		
 		obs.subscribe(on_next, on_error, on_completed)
@@ -303,4 +303,15 @@ func _test_coroutine():
 	
 	var obs = GDRx.from_coroutine(coroutine, [1, 2, 3])
 	var seq = ObservableSequence.new([true, COMPLETE])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_timer_faulty_filter():
+	var obs = GDRx.start_periodic_timer(0.05).filter(
+		func(i):
+			if i == 3:
+				GDRx.raise_message("Expected Error in Filter")
+				return false
+			return true
+	)
+	var seq = ObservableSequence.new([0, 1, 2, ERROR])
 	seq.compare(obs, self.sequence_finished)
