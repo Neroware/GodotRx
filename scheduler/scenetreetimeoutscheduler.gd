@@ -1,14 +1,14 @@
 extends PeriodicScheduler
-class_name TimeoutScheduler
-## A scheduler that schedules work via a threaded timer.
+class_name SceneTreeTimeoutScheduler
+## A scheduler that schedules work via a [SceneTreeTimer].
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
 
 ## Returns singleton
-static func singleton() -> TimeoutScheduler:
-	return GDRx.TimeoutScheduler_
+static func singleton() -> SceneTreeTimeoutScheduler:
+	return GDRx.SceneTreeTimeoutScheduler_
 
 ## Schedules an action to be executed.
 ## [br]
@@ -28,17 +28,11 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	var interval = func():
 		sad.disposable = self.invoke_action(action, state)
 	
-	var disposed = RefValue.Set(false)
-	var dispose = func():
-		disposed.v = true
+	var timer : SceneTreeTimer = GDRx.get_tree().create_timer(0.0)
+	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
 	
-	var timer_thread : Thread = Thread.new()
-	var timer = func():
-		GDRx.register_thread(timer_thread)
-		OS.delay_msec(0.0)
-		if not disposed.v:
-			interval.call()
-	timer_thread.start(timer)
+	var dispose = func():
+		_cancel_timer(timer)
 	
 	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
@@ -67,17 +61,11 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 	var interval = func():
 		sad.disposable = self.invoke_action(action, state)
 	
-	var disposed = RefValue.Set(false)
-	var dispose = func():
-		disposed.v = true
+	var timer = GDRx.get_tree().create_timer(seconds)
+	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
 	
-	var timer_thread : Thread = Thread.new()
-	var timer = func():
-		GDRx.register_thread(timer_thread)
-		OS.delay_msec(1000.0 * seconds)
-		if not disposed.v:
-			interval.call()
-	timer_thread.start(timer)
+	var dispose = func():
+		_cancel_timer(timer)
 	
 	return CompositeDisposable.new([sad, Disposable.new(dispose)])
 
@@ -99,3 +87,8 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
 	duetime = self.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)
+
+## Utility function to cancel a timer
+func _cancel_timer(timer : SceneTreeTimer):
+	for conn in timer.timeout.get_connections():
+		timer.timeout.disconnect(conn["callable"])

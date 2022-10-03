@@ -98,7 +98,7 @@ func _join_finished_threads():
 func _ready():
 	var action = func(__ = null, ___ = null):
 		_join_finished_threads()
-	Disposable.new(TimeoutScheduler.singleton().schedule_periodic(
+	Disposable.new(SceneTreeTimeoutScheduler.singleton().schedule_periodic(
 		THREAD_JOIN_INTERVAL, action, 0).dispose).dispose_with(self)
 
 ## Returns the caller's current [Thread]
@@ -124,6 +124,8 @@ func get_current_thread() -> Thread:
 var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
 ## [TimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
 var TimeoutScheduler_ : TimeoutScheduler = TimeoutScheduler.new("GDRx")
+## [SceneTreeTimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+var SceneTreeTimeoutScheduler_ : SceneTreeTimeoutScheduler = SceneTreeTimeoutScheduler.new("GDRx")
 ## [GodotSignalScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
 var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
