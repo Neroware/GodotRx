@@ -158,15 +158,15 @@ func _ready():
 	var AnimOnProcess = GDRx.on_process_as_observable(anim)
 ```
 
-*** Subscription Management ***
+** Subscription Management **
 
 It is important to note, that if an objects is deleted and not all subscriptions
 are disposed, this could lead to memory leaks. To account for this, the resulting
 subscription (an instance of type DisposableBase) can be linked to an object's
-lifetime via `DisposableBase.dispose_with(obj : Object, disp : DisposableBase)`.
+lifetime via `DisposableBase.dispose_with(obj : Object)`.
 
 However, you need to account for recievers only, not senders, when it comes to 
-Signals and Lifecycle Events
+Signals and Lifecycle Events.
 
 ```csharp
 # Dispose when reciever 'self' is deleted, sender 'anim' already accounted!
@@ -178,3 +178,36 @@ GDRx.on_process_as_observable(self).subscribe()
 *Also a huge shoutout to (https://github.com/semickolon/GodotRx) for his amazing
 hack which automatically disposes subscriptions on instance death. Good on ya!*
 
+### Reactive Properties
+
+This part is not fully fleshed out and I do not have to time at the moment sadly
+to extend it. But nontheless GDRx supports Reactive Properties.
+
+```
+# Fires, when value is changed.
+@onready var _attack_state : ReactiveProperty = ReactiveProperty.ChangedValue("idle")
+@onready var attack_state : ReadOnlyReactiveProperty = GDRx.to_readonly(self._attack_state)
+# Fires when value falls to or below zero.
+@onready var _life_points : ReactiveProperty = ReactiveProperty.LessEquals(100, 0)
+@onready var life_points : ReadOnlyReactiveProperty = GDRx.to_readonly(self._life_points)
+
+func _ready():
+	print("Atk>> ", self.attack_state.Value)
+	print("HP>>> ", self.life_points.Value)
+	# Causes exception because read-only!
+	self.life_points.Value = 0
+```
+
+### Operators
+
+A large set of functional operator can be used to transform Observables to 
+create new ones. **Be careful! I have not tested them all...!**
+For more info, also check out the comments in the operator scripts!
+
+## Final Thoughts
+
+I do not know if this library is useful in the case of Godot 4 but if you are
+familiar with and into ReactiveX, go for it!
+
+## License
+Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/master/LICENSE).
