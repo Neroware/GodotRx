@@ -200,8 +200,7 @@ func _ready():
 
 ### Operators
 
-A large set of functional operator can be used to transform Observables to 
-create new ones. **Be careful! I have not tested them all...!**
+A large set of functional operators can be used to transform observables into new ones. **Be careful! I have not tested them all...!**
 For more info, also check out the comments in the operator scripts!
 
 ## Final Thoughts
