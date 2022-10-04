@@ -9,13 +9,15 @@ var _data : Dictionary
 var _weakkeys : Dictionary
 var _lock : ReadWriteLock
 
-## At this size, a garbage collection step is performed when a pair is added
-const GARBAGE_COLLECTION_SIZE : int = 1000
+## After this amount of pair insertions, a garbage collection step is performed.
+const GARBAGE_COLLECTION_STEP : int = 100
+var _garbage_collection_state : int
 
 func _init(from : Dictionary = {}):
 	self._data = {}
 	self._weakkeys = {}
 	self._lock = ReadWriteLock.new()
+	self._garbage_collection_state = 0
 	for key in from.keys():
 		set_pair(key, from[key])
 
@@ -36,16 +38,15 @@ func set_pair(key, value):
 	if GDRx.assert_(key is Object, "Key needs to be of type 'Object'"):
 		return
 	
-	if self._weakkeys.size() > GARBAGE_COLLECTION_SIZE:
-		self._lock.w_lock()
-		_collect_lost_references()
-		self._lock.w_unlock()
-	
 	var hkey = self._hash_key(key)
 	
 	self._lock.w_lock()
 	self._data[hkey] = value
 	self._weakkeys[hkey] = weakref(key)
+	self._garbage_collection_state += 1
+	if self._garbage_collection_state > GARBAGE_COLLECTION_STEP:
+		self._collect_lost_references()
+		self._garbage_collection_state = 0
 	self._lock.w_unlock()
 
 func get_value(key, default = null) -> Variant:
