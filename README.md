@@ -143,3 +143,38 @@ func _ready():
 
 What I do know however is, that the Integer-division operator crashes if you 
 were to divide by zero ;)
+
+### Signals & Node Lifecycle Events
+
+In the world of GDRx, signals and node lifecycle events are all Observables.
+
+```csharp
+func _ready():
+	var OnPhysicsProcess = GDRx.on_physics_process_as_observable(self)
+	var OnInput = GDRx.on_input_as_observable(self)
+	
+	var anim : AnimationPlayer = $AnimationPlayer
+	var AnimationFinished : Observable = GDRx.from_signal(anim.animation_finished)
+	var AnimOnProcess = GDRx.on_process_as_observable(anim)
+```
+
+*** Subscription Management ***
+
+It is important to note, that if an objects is deleted and not all subscriptions
+are disposed, this could lead to memory leaks. To account for this, the resulting
+subscription (an instance of type DisposableBase) can be linked to an object's
+lifetime via `DisposableBase.dispose_with(obj : Object, disp : DisposableBase)`.
+
+However, you need to account for recievers only, not senders, when it comes to 
+Signals and Lifecycle Events
+
+```csharp
+# Dispose when reciever 'self' is deleted, sender 'anim' already accounted!
+GDRx.from_signal(anim.animation_finished).subscribe().dispose_with(self)
+# No dispose_with() needed!
+GDRx.on_process_as_observable(self).subscribe()
+```
+
+*Also a huge shoutout to (https://github.com/semickolon/GodotRx) for his amazing
+hack which automatically disposes subscriptions on instance death. Good on ya!*
+
