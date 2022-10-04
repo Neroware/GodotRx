@@ -380,21 +380,21 @@ func to_readonly(prop : ReactiveProperty) -> ReadOnlyReactiveProperty:
 	return ReadOnlyReactiveProperty.new(prop)
 
 ## Creates an observable timer
-func start_timer(timespan_sec : float) -> Observable:
-	return obs.timer(timespan_sec, false)
+func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, null, scheduler)
 
 ## Creates an observable periodic timer
-func start_periodic_timer(period_sec : float) -> Observable:
-	return obs.timer(period_sec, false, period_sec)
+func start_periodic_timer(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(period_sec, false, period_sec, scheduler)
 
 ## Creates an observable periodic timer which starts after a timespan has passed
-func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float) -> Observable:
-	return obs.timer(timespan_sec, false, period_sec)
+func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, period_sec, scheduler)
 
 ## Creates an observable timer
-func schedule_datetime(datetime_sec : float) -> Observable:
-	return obs.timer(datetime_sec, true)
+func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, null, scheduler)
 
 ## Creates an observable periodic timer which starts at a given timestamp.
-func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float) -> Observable:
-	return obs.timer(datetime_sec, true, period_sec)
+func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, period_sec, scheduler)

@@ -103,3 +103,21 @@ func coroutine3():
 As you can see, coroutine1() now only contains code bound to the task it should
 run. Remember: In good code design, each function should execute a single 
 computational step only.
+
+## Timers
+Timers were already easy using coroutines but when timing on a separate thread,
+things get a bit tricky. Godot 4 appears to not support signals on separate 
+threads. Also, periodic timers only exist as Node objects. GDRx drastically
+simplifies creating timers.
+
+```csharp
+func _ready():
+	# Main Thread via Scene Tree Timer
+	GDRx.start_periodic_timer(1.0).subscribe(func(i): print("Periodic: ", i))
+	GDRx.start_timer(2.0).subscribe(func(i): print("One shot: ", i))
+	# Multi-threaded via threaded timer
+	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
+		.subscribe(func(i): print("Threaded one shot: ", i))
+	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
+		.subscribe(func(i): print("Threaded periodic: ", i))
+```
