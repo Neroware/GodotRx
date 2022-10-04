@@ -69,9 +69,14 @@ func schedule_signal(
 				"Only up to 8 signal parameters supported! Use lists instead!"))
 			return null
 	
+	var obj = instance_from_id(sig.get_object_id())
+	
 	var dispose = func():
-		if sig.get_object() != null:
+		if obj != null:
 			sig.disconnect(signal_callback)
 	
 	sig.connect(signal_callback)
-	return CompositeDisposable.new([mad, Disposable.new(dispose)])
+	
+	var cd : CompositeDisposable = CompositeDisposable.new([mad, Disposable.new(dispose)])
+	AutoDisposer.Add(obj, cd)
+	return cd

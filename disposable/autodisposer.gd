@@ -13,5 +13,7 @@ func _notification(what):
 
 static func Add(obj : Object, disp : DisposableBase) -> AutoDisposer:
 	var auto_disposer : AutoDisposer = AutoDisposer.new(disp)
-	obj.set_meta("dispose_with", auto_disposer)
+	var id = disp.get_instance_id()
+	var meta_entry = "dispose_with_" + (str(id) if id > 0 else "neg" + str(abs(id)))
+	obj.set_meta(meta_entry, auto_disposer)
 	return auto_disposer

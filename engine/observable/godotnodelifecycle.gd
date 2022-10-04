@@ -53,6 +53,8 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 				5:
 					listener.v = _ListenerOnUnhandledKeyInput.new()
 			listener.v.name = "_GDRxListener" + str(conn.get_instance_id())
+			listener.v.process_priority = conn.process_priority
+			listener.v.process_mode = conn.process_mode
 			conn.call_deferred("add_child", listener.v)
 		count.v += 1
 		
@@ -65,7 +67,9 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 			observer, func(e):return, func():return,
 			scheduler
 		)
-		var disp = Disposable.new(dispose)
-		return CompositeDisposable.new([subscription, disp])
+		
+		var cd : CompositeDisposable = CompositeDisposable.new([subscription, Disposable.new(dispose)])
+		AutoDisposer.Add(conn, cd)
+		return cd
 	
 	return Observable.new(subscribe)
