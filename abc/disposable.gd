@@ -9,8 +9,7 @@ class_name DisposableBase
 func dispose():
 	GDRx.exc.NotImplementedException.Throw()
 
-## Links the disposable to a [Node]'s lifetime in the scene-tree.
-## When [signal Node.tree_exiting] is emited by the [Node], the disposable is disposed.
-func dispose_with(_node : Node) -> DisposableBase:
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null

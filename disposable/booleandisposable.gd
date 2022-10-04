@@ -12,3 +12,8 @@ func _init():
 
 func dispose():
 	self.is_disposed = true
+
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
+	return self

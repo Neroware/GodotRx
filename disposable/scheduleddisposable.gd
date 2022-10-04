@@ -21,3 +21,8 @@ func dispose():
 	var action = func(scheduler : SchedulerBase, state):
 		self.disposable.dispose()
 	self.scheduler.schedule(action)
+
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
+	return self

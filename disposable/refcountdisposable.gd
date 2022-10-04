@@ -79,3 +79,8 @@ func get_disposable() -> DisposableBase:
 
 var disposable : DisposableBase: 
 	get: return get_disposable()
+
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
+	return self

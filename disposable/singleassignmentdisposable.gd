@@ -45,3 +45,8 @@ func dispose():
 	
 	if old != null:
 		old.dispose()
+
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
+	return self

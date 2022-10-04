@@ -70,7 +70,8 @@ func schedule_signal(
 			return null
 	
 	var dispose = func():
-		sig.disconnect(signal_callback)
+		if sig.get_object() != null:
+			sig.disconnect(signal_callback)
 	
 	sig.connect(signal_callback)
 	return CompositeDisposable.new([mad, Disposable.new(dispose)])

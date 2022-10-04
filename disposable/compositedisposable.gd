@@ -80,3 +80,8 @@ func size() -> int:
 	return self.disposable.size()
 
 var length : int: get = size
+
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
+	return self

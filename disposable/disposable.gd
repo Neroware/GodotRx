@@ -9,8 +9,6 @@ var action : Callable
 
 var lock : RLock
 
-var _dispose_with : Dictionary
-
 ## Creates a disposable object that invokes the specified
 ##        action when disposed.
 ## [br]
@@ -42,15 +40,9 @@ func dispose():
 	if disposed:
 		self.action.call()
 
-## Links disposable to [Node] lifetime in scene-tree via [signal Node.tree_exiting].
-func dispose_with(node : Node) -> DisposableBase:
-	self.lock.lock()
-	self._dispose_with[node] = func():
-		self.dispose()
-		node.disconnect("tree_exiting", self._dispose_with[node])
-	self.lock.unlock()
-	
-	node.connect("tree_exiting", self._dispose_with[node])
+## Links disposable to [Object] lifetime via an [AutoDisposer]
+func dispose_with(obj : Object) -> DisposableBase:
+	AutoDisposer.Add(obj, self)
 	return self
 
 ## Casts any object with [code]dispose()[/code] to a [DisposableBase].
