@@ -56,10 +56,12 @@ func _subscribe_core(
 ##            Disposable object representing an observer's subscription to
 ##            the observable sequence.
 func subscribe(
-	on_next, # Callable or Observer or Object with callbacks
+	on_next = null, # Callable or Observer or Object with callbacks
 	on_error : Callable = func(e): return,
 	on_completed : Callable = func(): return,
 	scheduler : SchedulerBase = null) -> DisposableBase:
+		if on_next == null:
+			on_next = GDRx.basic.noop
 		
 		if on_next is ObserverBase:
 			var obv : ObserverBase = on_next

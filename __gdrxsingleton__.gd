@@ -269,8 +269,8 @@ func generate_with_relative_time(initial_state, condition : Callable = func(stat
 	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
 
 ## See: [b]res://reactivex/observable/ifthen.gd[/b]
-func if_then(then_source : Observable, else_source : Observable = null, condition : Callable = func() -> bool: return true) -> Observable:
-	return obs.if_then(then_source, else_source, condition)
+func if_then(condition : Callable = func() -> bool: return true, then_source : Observable = null, else_source : Observable = null) -> Observable:
+	return obs.if_then(condition, then_source, else_source)
 
 ## See: [b]res://reactivex/observable/interval.gd[/b]
 func interval(period : float, scheduler : SchedulerBase = null) -> ObservableBase:
