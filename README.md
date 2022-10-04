@@ -104,7 +104,7 @@ As you can see, coroutine1() now only contains code bound to the task it should
 run. Remember: In good code design, each function should execute a single 
 computational step only.
 
-## Timers
+### Timers
 Timers were already easy using coroutines but when timing on a separate thread,
 things get a bit tricky. Godot 4 appears to not support signals on separate 
 threads. Also, periodic timers only exist as Node objects. GDRx drastically
@@ -121,3 +121,25 @@ func _ready():
 	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
 		.subscribe(func(i): print("Threaded periodic: ", i))
 ```
+
+### Error handling
+In my endless sanity, I throw my own custom exception handling into the ring. 
+When an exception is thrown, the observers should be notified via their 
+on_error() contract. If this works all the time, I do not know at this point.
+
+```csharp
+func division(n1 : int, n2 : int) -> int:
+	if n2 == 0:
+		GDRx.exc.Exception.new("Divided by zero!").throw()
+		return -1 # The -1 only stops control flow but will be discarded.
+	return n1 / n2
+
+func _ready():
+	GDRx.from_array([0, 1, 2, 8]) \
+		.pairwise() \
+		.map(func(i : Tuple): return division(i.at(1), i.at(0))) \
+		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e))
+```
+
+What I do know however is, that the Integer-division operator crashes if you 
+were to divide by zero ;)
