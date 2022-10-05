@@ -257,7 +257,7 @@ computed ReadOnlyReactiveProperty emits an item accordingly. A computed
 ReadOnlyReactiveProperty can be created via the `ReactiveProperty.Computed{n}()`
 constructor.
 
-```
+```csharp
 var Stamina : ReadOnlyReactiveProperty = _Stamina.to_readonly()
 var _AttackDamage : ReactiveProperty = ReactiveProperty.FromMember(
 	self, "_attack_damage")
