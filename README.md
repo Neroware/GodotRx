@@ -131,7 +131,7 @@ on_error() contract. If this works all the time, I do not know at this point.
 func division(n1 : int, n2 : int) -> int:
 	if n2 == 0:
 		GDRx.exc.Exception.new("Divided by zero!").throw()
-		return -1 # The -1 only stops control flow but will be discarded.
+		return -1 # Stops control flow, the -1 has no meaning and is discarded.
 	return n1 / n2
 
 func _ready():
@@ -180,8 +180,8 @@ hack which automatically disposes subscriptions on instance death. Good on ya!*
 
 ### Reactive Properties
 
-This part is not fully fleshed out and I do not have to time at the moment sadly
-to extend it. But nontheless GDRx supports Reactive Properties.
+This part is not fully fleshed out and sadly I do not have the time at the moment
+to extend it. But nontheless, GDRx supports Reactive Properties.
 
 ```
 # Fires, when value is changed.
