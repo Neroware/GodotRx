@@ -35,7 +35,7 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	var timer_thread : Thread = Thread.new()
 	var timer = func():
 		GDRx.register_thread(timer_thread)
-		OS.delay_msec(0.0)
+		OS.delay_msec(0)
 		if not disposed.v:
 			interval.call()
 	timer_thread.start(timer)
@@ -74,7 +74,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 	var timer_thread : Thread = Thread.new()
 	var timer = func():
 		GDRx.register_thread(timer_thread)
-		OS.delay_msec(1000.0 * seconds)
+		OS.delay_msec((1000.0 * seconds) as int)
 		if not disposed.v:
 			interval.call()
 	timer_thread.start(timer)

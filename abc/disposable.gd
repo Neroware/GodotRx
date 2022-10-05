@@ -10,6 +10,6 @@ func dispose():
 	GDRx.exc.NotImplementedException.Throw()
 
 ## Links disposable to [Object] lifetime via an [AutoDisposer]
-func dispose_with(obj : Object) -> DisposableBase:
+func dispose_with(_obj : Object) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null

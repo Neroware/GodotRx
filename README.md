@@ -180,22 +180,55 @@ hack which automatically disposes subscriptions on instance death. Good on ya!*
 
 ### Reactive Properties
 
-This part is not fully fleshed out and sadly I do not have the time at the moment
-to extend it. But nontheless, GDRx supports Reactive Properties.
+GDRx supports Reactive Properties. Here are some examples on how they are used:
 
-```
-# Fires, when value is changed.
-@onready var _attack_state : ReactiveProperty = ReactiveProperty.ChangedValue("idle")
-@onready var attack_state : ReadOnlyReactiveProperty = GDRx.to_readonly(self._attack_state)
-# Fires when value falls to or below zero.
-@onready var _life_points : ReactiveProperty = ReactiveProperty.LessEquals(100, 0)
-@onready var life_points : ReadOnlyReactiveProperty = GDRx.to_readonly(self._life_points)
+```csharp
+var _hp : int = 100
+
+var _stamina : float = 1.0
+var _attack_damage : int = 100
 
 func _ready():
-	print("Atk>> ", self.attack_state.Value)
-	print("HP>>> ", self.life_points.Value)
-	# Causes exception because read-only!
-	self.life_points.Value = 0
+	# Create ReactiveProperty from member
+	var _Hp : ReactiveProperty = ReactiveProperty.FromMember(self, "_hp")
+	_Hp.subscribe(func(i): print("Changed Hp ", i))
+	_Hp.Value += 10
+	print("Reflected: ", self._hp)
+	
+	# To ReadOnlyReactiveProperty
+	var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
+	
+	# Reading from ReadOnlyReactiveProperty causes an exception
+	GDRx.try(func(): 
+		Hp.Value = -100
+	) \
+	.catch("Exception", func(exc):
+		print("Err: ", exc)
+	) \
+	.end_try_catch()
+	
+	# Create ReactiveProperty from getter and setter
+	var set_stamina = func(v : int):
+		self._stamina = v / 100.0
+	var get_stamina = func() -> float:
+		return self._stamina
+	var _Stamina = ReactiveProperty.FromGetSet(get_stamina, set_stamina)
+	_Stamina.Value = 80 # %
+	print("Reflected> ", self._stamina)
+
+	var Stamina : ReadOnlyReactiveProperty = _Stamina.to_readonly()
+	var _AttackDamage : ReactiveProperty = ReactiveProperty.FromMember(
+		self, "_attack_damage")
+	var AttackDamage : ReadOnlyReactiveProperty = _AttackDamage.to_readonly()
+	
+	# Create a computed ReadOnlyReactiveProperty
+	var TrueDamage : ReadOnlyReactiveProperty = ReactiveProperty.Computed2(
+		Stamina, AttackDamage,
+		func(st : float, ad : int): return (st * ad) as int
+	)
+	TrueDamage.subscribe(func(i): print("True Damage: ", i))
+	_Stamina.Value = 20
+	_AttackDamage.Value = 90
 ```
 
 ### Operators

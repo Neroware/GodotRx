@@ -47,7 +47,7 @@ func wait(time_sec = null) -> bool:
 	if time_sec != null:
 		var time_sec_ : float = time_sec
 		var timeout_interval = func():
-			OS.delay_msec(1000.0 * time_sec_)
+			OS.delay_msec((1000.0 * time_sec_) as int)
 			self._lock.lock()
 			if thread_lock in self._waiting_queue:
 				thread_lock.unlock()

@@ -13,7 +13,6 @@ func _init():
 
 static func singleton() -> ExceptionHandler:
 	var thread = GDRx.get_current_thread()
-	var handler : ExceptionHandler
 	if not GDRx.ExceptionHandler_.has_key(thread):
 		GDRx.ExceptionHandler_.set_pair(thread, ExceptionHandler.new())
 	return GDRx.ExceptionHandler_.get_value(thread)

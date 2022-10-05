@@ -3,169 +3,233 @@ class_name ReactiveProperty
 
 ## An observable property.
 ##
-## Wraps a value and emits an item whenever it is changed under a specified 
-## condition. The item is of type [Tuple] containing the old and new value.
+## Wraps a value and emits an item whenever it is changed.
+## The emitted item is the new value of the [ReactiveProperty].
 
-signal _on_changed(v_old, v_new)
-signal _on_dispose()
+var _latest_value
+var _source_subscription : DisposableBase
+var _observers : Array[ObserverBase]
+var _distinct_until_changed : bool
+var _raise_latest_value_on_subscribe : bool
 
-var _cond : Callable
-var _getter : Callable
-var _setter : Callable
-
-var _initialized : bool
+var _rwlock : ReadWriteLock
 
 var is_disposed : bool
-
-## The wrapped value
+## Wrapped value
 var Value:
-	get:
-		self.lock.lock()
-		if is_disposed:
-			self.lock.unlock()
-			GDRx.exc.DisposedException.Throw()
-			return null
-		var _ret = _getter.call(Value)
-		self.lock.unlock()
-		return _ret
+	get: return self._latest_value
 	
 	set(value):
-		if not _initialized:
-			Value = value
-			_initialized = true
+		if self._distinct_until_changed and self._latest_value == value:
 			return
+		self._latest_value = value
 		
-		self.lock.lock()
-		var tmp = Value
-		if is_disposed:
-			self.lock.unlock()
-			GDRx.exc.DisposedException.Throw()
-			return
-		value = _setter.call(tmp, value)
-		Value = value
-		self.lock.unlock()
-		_on_changed.emit(tmp, value)
+		var observers_ : Array[ObserverBase]
+		self._rwlock.r_lock()
+		observers_ = self._observers.duplicate()
+		self._rwlock.r_unlock()
+		for obs in observers_:
+			obs.on_next(value)
 
-## Returns the wrapped value
-func getv():
-	return Value
-
-## Sets the wrapped value
-func setv(value):
-	Value = value
-
-## Sets a getter function which is called when the value is read before the
-## item is emitted on the stream.
-func with_getter(getter : Callable = func(v): return v) -> ReactiveProperty:
-	self.lock.lock()
-	self._getter = getter
-	self.lock.unlock()
-	return self
-
-## Sets a setter function which is called when the value is updated before the
-## item is emitted on the stream.
-func with_setter(setter : Callable = func(old_v, new_v): return new_v) -> ReactiveProperty:
-	self.lock.lock()
-	self._setter = setter
-	self.lock.unlock()
-	return self
-
-## Sets the condition whether an item is emitted when the value is updated.
-func with_condition(cond = func(v_old, v_new): return v_old != v_new) -> ReactiveProperty:
-	self.lock.lock()
-	self._cond = cond
-	self.lock.unlock()
-	return self
-
-## Disposes the reactive property. Reading the value afterwards will cause an error.
-func dispose():
-	self.lock.lock()
-	if not self.is_disposed:
-		self.is_disposed = true
-		_on_dispose.emit()
-	self.lock.unlock()
-
-func _init(value, cond = func(v_old, v_new): return v_old != v_new):
-	_initialized = false
-	_cond = cond
-	_getter = func(v): return v
-	_setter = func(old_v, new_v): return new_v
+func _init(
+	initial_value_,
+	distinct_until_changed_ : bool = true,
+	raise_latest_value_on_subscribe_ : bool = true,
+	source : Observable = null
+):
+	self._observers = []
+	self._rwlock = ReadWriteLock.new()
 	
-	is_disposed = false
+	self._latest_value = initial_value_
+	self._distinct_until_changed = distinct_until_changed_
+	self._raise_latest_value_on_subscribe = raise_latest_value_on_subscribe_
 	
-	Value = value
+	if source != null:
+		self._source_subscription = source.subscribe(func(i): Value = i)
 	
 	@warning_ignore(shadowed_variable)
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null
 	) -> DisposableBase:
-		
-		var on_dispose = func(__):
+		if self.is_disposed:
 			observer.on_completed()
+			return Disposable.new()
 		
-		var sub = GDRx.gd.from_godot_signal(self._on_changed).subscribe(observer)
-		var d = GDRx.gd.from_godot_signal(self._on_dispose).subscribe(on_dispose)
+		self._rwlock.w_lock()
+		self._observers.push_back(observer)
+		self._rwlock.w_unlock()
 		
-		return CompositeDisposable.new([sub, d])
+		if self._raise_latest_value_on_subscribe:
+			observer.on_next(self._latest_value)
+		
+		var dispose_ = func():
+			self._rwlock.w_lock()
+			self._observers.erase(observer)
+			self._rwlock.w_unlock()
+		
+		return Disposable.new(dispose_)
 	
 	super._init(subscribe)
 
-## Creates a reactive property that emits an item when the updated value differs.
-static func ChangedValue(value = null):
-	return ReactiveProperty.new(value, func(o, n): return o != n)
+func dispose():
+	if self.is_disposed:
+		return
+	
+	self.is_disposed = true
+	
+	var observers_ : Array[ObserverBase]
+	self._rwlock.r_lock()
+	observers_ = self._observers.duplicate()
+	self._rwlock.r_unlock()
+	for obs in observers_:
+		obs.on_completed()
+	
+	self._rwlock.w_lock()
+	self._observers.clear()
+	self._rwlock.w_unlock()
+	
+	if self._source_subscription != null:
+		self._source_subscription.dispose()
 
-## Creates a reactive property that emits an item when the updated value is in 
-## a collection.
-static func ValueInCollection(value = null, collection = []):
-	return ReactiveProperty.new(value, func(__, n): return n in collection)
+func to_readonly() -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		self, Value, self._distinct_until_changed, 
+		self._raise_latest_value_on_subscribe
+	)
 
-## Creates a reactive property that emits an item when the updated value is not 
-## in a collection.
-static func NotValueInCollection(value = null, collection = []):
-	return ReactiveProperty.new(value, func(__, n): return not n in collection)
+static func FromGetSet(
+	getter : Callable,
+	setter : Callable,
+	distinct_until_changed_ : bool = true,
+	raise_latest_value_on_subscribe_ : bool = true
+) -> ReactiveProperty:
+	var prop = ReactiveProperty.new(
+		getter.call(),
+		distinct_until_changed_,
+		raise_latest_value_on_subscribe_
+	)
+	
+	prop.subscribe(func(x): setter.call(x))
+	return prop
 
-## Creates a reactive property that emits an item when the updated value is 
-## greater than a specified value.
-static func GreaterThan(value = null, what = 0):
-	return ReactiveProperty.new(value, func(__, n): return n > what)
+static func FromMember(
+	target,
+	member_name : StringName,
+	convert_cb = func(x): return x,
+	convert_back_cb = func(x): return x,
+	distinct_until_changed_ : bool = true,
+	raise_latest_value_on_subscribe_ : bool = true
+) -> ReactiveProperty:
+	
+	var getter = func():
+		return target.get(member_name)
+	var setter = func(v):
+		target.set(member_name, v)
+	
+	return FromGetSet(
+		func(): return convert_cb.call(getter.call()),
+		func(x): setter.call(convert_back_cb.call(x)),
+		distinct_until_changed_,
+		raise_latest_value_on_subscribe_
+	)
 
-## Creates a reactive property that emits an item when the updated value is 
-## greater than or equals a specified value.
-static func GreaterEquals(value = null, what = 0):
-	return ReactiveProperty.new(value, func(__, n): return n >= what)
+static func Derived(p : ReadOnlyReactiveProperty, fn : Callable) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p.map(fn),
+		fn.call(p.Value)
+	)
 
-## Creates a reactive property that emits an item when the updated value is 
-## less than a specified value.
-static func LessThan(value = null, what = 0):
-	return ReactiveProperty.new(value, func(__, n): return n < what)
+static func Computed1(p : ReadOnlyReactiveProperty, fn : Callable) -> ReadOnlyReactiveProperty:
+	return Derived(p, fn)
 
-## Creates a reactive property that emits an item when the updated value is 
-## less than or equals a specified value.
-static func LessEquals(value = null, what = 0):
-	return ReactiveProperty.new(value, func(__, n): return n <= what)
+static func Computed2(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1))),
+		fn.call(p1.Value, p2.Value)
+	)
 
-## Creates a reactive property that emits an item when the updated value is 
-## less than or equals a specified value.
-static func NotEquals(value = null, what = 0):
-	return ReactiveProperty.new(value, func(__, n): return n != what)
+static func Computed3(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2))),
+		fn.call(p1.Value, p2.Value, p3.Value)
+	)
 
-## Creates a reactive property that emits an item when the updated value is 
-## within a certain range.
-static func InsideRange(value = 0, r_min = -1, r_max = 1):
-	return ReactiveProperty.new(value, func(__, n): 
-		return n >= r_min and n <= r_max)
+static func Computed4(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	p4 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable, p4 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2), tup.at(3))),
+		fn.call(p1.Value, p2.Value, p3.Value, p4.Value)
+	)
 
-## Creates a reactive property that emits an item when the updated value is 
-## outside a certain range.
-static func OutsideRange(value = 0, r_min = -1, r_max = 1):
-	return ReactiveProperty.new(value, func(__, n): 
-		return not (n >= r_min and n <= r_max))
+static func Computed5(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	p4 : ReadOnlyReactiveProperty,
+	p5 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable, p4 as Observable, p5 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2), tup.at(3), tup.at(4))),
+		fn.call(p1.Value, p2.Value, p3.Value, p4.Value, p5.Value)
+	)
 
-## Creates a reactive property that emits an item when the given condition
-## applies.
-static func With(value = null, cond = func(o, n): return o != n):
-	return ReactiveProperty.new(value, cond)
+static func Computed6(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	p4 : ReadOnlyReactiveProperty,
+	p5 : ReadOnlyReactiveProperty,
+	p6 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable, p4 as Observable, p5 as Observable, p6 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2), tup.at(3), tup.at(4), tup.at(5))),
+		fn.call(p1.Value, p2.Value, p3.Value, p4.Value, p5.Value, p6.Value)
+	)
 
-func _to_string():
-	return str(Value)
+static func Computed7(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	p4 : ReadOnlyReactiveProperty,
+	p5 : ReadOnlyReactiveProperty,
+	p6 : ReadOnlyReactiveProperty,
+	p7 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable, p4 as Observable, p5 as Observable, p6 as Observable, p7 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2), tup.at(3), tup.at(4), tup.at(5), tup.at(6))),
+		fn.call(p1.Value, p2.Value, p3.Value, p4.Value, p5.Value, p6.Value, p7.Value)
+	)
+
+static func Computed8(
+	p1 : ReadOnlyReactiveProperty,
+	p2 : ReadOnlyReactiveProperty,
+	p3 : ReadOnlyReactiveProperty,
+	p4 : ReadOnlyReactiveProperty,
+	p5 : ReadOnlyReactiveProperty,
+	p6 : ReadOnlyReactiveProperty,
+	p7 : ReadOnlyReactiveProperty,
+	p8 : ReadOnlyReactiveProperty,
+	fn : Callable
+) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(
+		p1.combine_latest([p2 as Observable, p3 as Observable, p4 as Observable, p5 as Observable, p6 as Observable, p7 as Observable, p8 as Observable]).map(func(tup : Tuple): return fn.call(tup.at(0), tup.at(1), tup.at(2), tup.at(3), tup.at(4), tup.at(5), tup.at(6), tup.at(7))),
+		fn.call(p1.Value, p2.Value, p3.Value, p4.Value, p5.Value, p6.Value, p7.Value, p8.Value)
+	)

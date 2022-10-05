@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -314,4 +314,18 @@ func _test_timer_faulty_filter():
 			return true
 	)
 	var seq = ObservableSequence.new([0, 1, 2, ERROR])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_reactive_property():
+	var prop1 = ReactiveProperty.new(10)
+	var prop2 = ReactiveProperty.new(20)
+	var prop3 = ReactiveProperty.new(30)
+	
+	var obs = ReactiveProperty.Computed3(
+		prop1.to_readonly(),
+		prop2.to_readonly(),
+		prop3.to_readonly(),
+		func(x, y, z): return x + y + z
+	)
+	var seq = ObservableSequence.new([UNSUB(60)])
 	seq.compare(obs, self.sequence_finished)

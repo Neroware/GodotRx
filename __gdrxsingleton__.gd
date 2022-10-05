@@ -371,14 +371,6 @@ func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
 func input_action(input_action_ : String, checks : Observable) -> Observable:
 	return gd.from_godot_input_action(input_action_, checks)
 
-## Creates a new [ReactiveProperty]
-func reactive_property(value = null) -> ReactiveProperty:
-	return ReactiveProperty.ChangedValue(value)
-
-## Transforms a [ReactiveProperty] into a [ReadOnlyReactiveProperty]
-func to_readonly(prop : ReactiveProperty) -> ReadOnlyReactiveProperty:
-	return ReadOnlyReactiveProperty.new(prop)
-
 ## Creates an observable timer
 func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
 	return obs.timer(timespan_sec, false, null, scheduler)
