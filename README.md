@@ -180,7 +180,27 @@ hack which automatically disposes subscriptions on instance death. Good on ya!*
 
 ### Reactive Properties
 
-GDRx supports Reactive Properties. Here are some examples on how they are used:
+Reactive Properties are a special kind of Observable which emit items whenever
+their value is changed. This is very useful e.g. for UI implementations.
+Creating a ReactiveProperty instance is straight forward. Access its contents
+via the `Value` property inside the ReactiveProperty instance.
+
+```csharp
+var prop = ReactiveProperty.new(42)
+prop.subscribe(func(i): print(">> ", i))
+
+# Emits an item on the stream
+prop.Value += 42 
+
+# Sends completion notification to observers and disposes the ReactiveProperty
+prop.dispose()
+
+```
+
+Sometimes we want to construct a ReactiveProperty from a class member. This can
+be done via the `ReactiveProperty.FromMember()` constructor. The changed value 
+is reflected onto the class member, though changing the member will NOT change
+the value of the ReactiveProperty.
 
 ```csharp
 var _hp : int = 100
@@ -194,41 +214,63 @@ func _ready():
 	_Hp.subscribe(func(i): print("Changed Hp ", i))
 	_Hp.Value += 10
 	print("Reflected: ", self._hp)
-	
-	# To ReadOnlyReactiveProperty
-	var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
-	
-	# Reading from ReadOnlyReactiveProperty causes an exception
-	GDRx.try(func(): 
-		Hp.Value = -100
-	) \
-	.catch("Exception", func(exc):
-		print("Err: ", exc)
-	) \
-	.end_try_catch()
-	
-	# Create ReactiveProperty from getter and setter
-	var set_stamina = func(v : int):
-		self._stamina = v / 100.0
-	var get_stamina = func() -> float:
-		return self._stamina
-	var _Stamina = ReactiveProperty.FromGetSet(get_stamina, set_stamina)
-	_Stamina.Value = 80 # %
-	print("Reflected> ", self._stamina)
+```
 
-	var Stamina : ReadOnlyReactiveProperty = _Stamina.to_readonly()
-	var _AttackDamage : ReactiveProperty = ReactiveProperty.FromMember(
-		self, "_attack_damage")
-	var AttackDamage : ReadOnlyReactiveProperty = _AttackDamage.to_readonly()
-	
-	# Create a computed ReadOnlyReactiveProperty
-	var TrueDamage : ReadOnlyReactiveProperty = ReactiveProperty.Computed2(
-		Stamina, AttackDamage,
-		func(st : float, ad : int): return (st * ad) as int
-	)
-	TrueDamage.subscribe(func(i): print("True Damage: ", i))
-	_Stamina.Value = 20
-	_AttackDamage.Value = 90
+A ReadOnlyReactiveProperty with read-only access can be created via the
+`ReactiveProperty.to_readonly()` method. Trying to set the value will throw
+an exception.
+
+```csharp
+# To ReadOnlyReactiveProperty
+var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
+
+# Reading from ReadOnlyReactiveProperty causes an exception
+GDRx.try(func(): 
+	Hp.Value = -100
+) \
+.catch("Exception", func(exc):
+	print("Err: ", exc)
+) \
+.end_try_catch()
+```
+
+A ReactiveProperty can also be created from a Setter and a Getter function
+
+```csharp
+# Create Reactive Property from getter and setter
+var set_stamina = func(v):
+	print("Setter Callback")
+	self._stamina = v
+
+var get_stamina = func() -> float:
+	print("Getter Callback")
+	return self._stamina
+
+var _Stamina = ReactiveProperty.FromGetSet(get_stamina, set_stamina)
+_Stamina.Value = 0.8
+print("Reflected> ", self._stamina)
+```
+
+A ReadOnlyReactiveProperty can also represent a computational step from a set
+of other properties. When one of the underlying properties is changed, the 
+computed ReadOnlyReactiveProperty emits an item accordingly. A computed
+ReadOnlyReactiveProperty can be created via the `ReactiveProperty.Computed{n}()`
+constructor.
+
+```
+var Stamina : ReadOnlyReactiveProperty = _Stamina.to_readonly()
+var _AttackDamage : ReactiveProperty = ReactiveProperty.FromMember(
+	self, "_attack_damage")
+var AttackDamage : ReadOnlyReactiveProperty = _AttackDamage.to_readonly()
+
+# Create a computed ReadOnlyReactiveProperty
+var TrueDamage : ReadOnlyReactiveProperty = ReactiveProperty.Computed2(
+	Stamina, AttackDamage,
+	func(st : float, ad : int): return (st * ad) as int
+)
+TrueDamage.subscribe(func(i): print("True Damage: ", i))
+_Stamina.Value = 0.2
+_AttackDamage.Value = 90
 ```
 
 ### Operators
