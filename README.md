@@ -134,11 +134,15 @@ a list with various versions of the SceneTreeTimeoutScheduler for this. Access
 it like this:
 
 ```csharp
-	# Always running at process timestep and no timescale accounted.
+	# Set timescale
+	Engine.time_scale = 0.5
+	# Always running with `Engine.time_scale` at process timestep. Due to the
+	# given timescale of 0.5, it will take 10 seconds to finish.
 	GDRx.start_timer(5.0, GDRx.timeout.Default) \
 		.subscribe(func(i): print("Never pauses: ", i))
-	# Inherit means running at process timestep unless paused and no timescale.
-	GDRx.start_timer(5.0, GDRx.timeout.Inherit) \
+	# Inherit means running unless paused. Fixed means no timescale.
+	# This timer will therefore finish after 5 seconds.
+	GDRx.start_timer(5.0, GDRx.timeout.InheritFixed) \
 		.subscribe(func(i): print("Pauses: ", i))
 ```
 
