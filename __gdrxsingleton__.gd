@@ -490,13 +490,15 @@ func on_joypad_button_released() -> Observable:
 #   Frame Events
 # =========================================================================== #
 
-## Emits items in idle frame events.
+## Emits items on idle frame events.
 func on_idle_frame() -> Observable:
-	return from_signal(self.get_tree().process_frame)
+	return from_signal(self.get_tree().process_frame) \
+		.map(func(__): return get_process_delta_time())
 
-## Emits items in physics frame events.
+## Emits items on physics frame events.
 func on_physics_step() -> Observable:
-	return from_signal(self.get_tree().physics_frame)
+	return from_signal(self.get_tree().physics_frame) \
+		.map(func(__): return get_physics_process_delta_time())
 
 ## Emits an item when the scene tree has changed.
 func on_tree_changed() -> Observable:
