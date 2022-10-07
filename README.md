@@ -306,19 +306,19 @@ For more info, also check out the comments in the operator scripts!
 A small set of very frequent input events is included as observables as well:
 
 ```csharp
-	GDRx.on_mouse_down() \
-		.filter(func(ev : InputEventMouseButton): return ev.button_index == 1) \
-		.subscribe(func(__): print("Left Mouse Down!")) \
-		.dispose_with(self)
-	
-	GDRx.on_mouse_double_click() \
-		.filter(func(ev : InputEventMouseButton): return ev.button_index == 1) \
-		.subscribe(func(__): print("Left Mouse Double-Click!")) \
-		.dispose_with(self)
-	
-	GDRx.on_key_pressed(KEY_W) \
-		.subscribe(func(__): print("W")) \
-		.dispose_with(self)
+GDRx.on_mouse_down() \
+	.filter(func(ev : InputEventMouseButton): return ev.button_index == 1) \
+	.subscribe(func(__): print("Left Mouse Down!")) \
+	.dispose_with(self)
+
+GDRx.on_mouse_double_click() \
+	.filter(func(ev : InputEventMouseButton): return ev.button_index == 1) \
+	.subscribe(func(__): print("Left Mouse Double-Click!")) \
+	.dispose_with(self)
+
+GDRx.on_key_pressed(KEY_W) \
+	.subscribe(func(__): print("W")) \
+	.dispose_with(self)
 ```
 
 ### Frame Events
@@ -326,25 +326,25 @@ A small set of very frequent input events is included as observables as well:
 Main frame events can be directly accessed as Observables as well:
 
 ```csharp
-	# Do stuff before `_process(delta)` calls.
-	GDRx.on_idle_frame() \
-		.subscribe(func(delta : float): print("delta> ", delta)) \
-		.dispose_with(self)
-	
-	# Do stuff before `_physics_process(delta)` calls.
-	GDRx.on_physics_step() \
-		.subscribe(func(delta : float): print("delta> ", delta)) \
-		.dispose_with(self)
-	
-	# Emits items at pre-draw
-	GDRx.on_frame_pre_draw() \
-		.subscribe(func(__): print("Pre Draw!")) \
-		.dispose_with(self)
-	
-	# Emits items at post-draw
-	GDRx.on_frame_post_draw() \
-		.subscribe(func(__): print("Post Draw!")) \
-		.dispose_with(self)
+# Do stuff before `_process(delta)` calls.
+GDRx.on_idle_frame() \
+	.subscribe(func(delta : float): print("delta> ", delta)) \
+	.dispose_with(self)
+
+# Do stuff before `_physics_process(delta)` calls.
+GDRx.on_physics_step() \
+	.subscribe(func(delta : float): print("delta> ", delta)) \
+	.dispose_with(self)
+
+# Emits items at pre-draw
+GDRx.on_frame_pre_draw() \
+	.subscribe(func(__): print("Pre Draw!")) \
+	.dispose_with(self)
+
+# Emits items at post-draw
+GDRx.on_frame_post_draw() \
+	.subscribe(func(__): print("Post Draw!")) \
+	.dispose_with(self)
 ```
 
 ## Final Thoughts
