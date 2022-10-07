@@ -2,6 +2,50 @@ extends PeriodicScheduler
 class_name TimeoutScheduler
 ## A scheduler that schedules work via a timer
 
+## A list of [SceneTreeTimeoutScheduler]s
+##
+## A selection of schedulers for each type of timeout (pause mode, process mode 
+## & time scale)
+class TimeoutType:
+	
+	var _special_timeouts = {
+		"default":SceneTreeTimeoutScheduler.new("GDRx", true, false, false),
+		"physics":SceneTreeTimeoutScheduler.new("GDRx", true, true, false),
+		"inherit":SceneTreeTimeoutScheduler.new("GDRx", false, false, false),
+		"physics_inherit":SceneTreeTimeoutScheduler.new("GDRx", false, true, false),
+		"timescale":SceneTreeTimeoutScheduler.new("GDRx", true, false, false),
+		"physics_timescale":SceneTreeTimeoutScheduler.new("GDRx", true, true, false),
+		"inherit_timescale":SceneTreeTimeoutScheduler.new("GDRx", false, false, false),
+		"physics_inherit_timescale":SceneTreeTimeoutScheduler.new("GDRx", false, true, false)
+	}
+	
+	## The default [SceneTreeTimeoutScheduler]: Timeout runs always with process 
+	## timestep, timescale is ignored.
+	var Default : SceneTreeTimeoutScheduler: 
+		get: return self._special_timeouts["default"]
+	## Timer runs always with physics timestep, timescale is ignored.
+	var Physics : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["physics"]
+	## Timer runs unless paused, timescale is ignored.
+	var Inherit : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["inherit"]
+	## Timer runs unless paused with physics timestep, timescale is ignored.
+	var PhysicsInherit : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["physics_inherit"]
+	## Timer runs always with [code]Engine.Timescale[/code]
+	var Timescale : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["timescale"]
+	## Timer runs always with [code]Engine.Timescale[/code] and physics timestep.
+	var PhysicsTimescale : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["physics_timescale"]
+	## Timer runs unless paused with [code]Engine.Timescale[/code]
+	var InheritTimescale : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["physics_timescale"]
+	## Timer runs unless paused with [code]Engine.Timescale[/code] and physics 
+	## timestep.
+	var PhysicsInheritTimescale : SceneTreeTimeoutScheduler:
+		get: return self._special_timeouts["physics_inherit_timescale"]
+
 func _init(verify_ = null):
 	if not verify_ == "GDRx":
 		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")

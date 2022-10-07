@@ -120,15 +120,15 @@ func get_current_thread() -> Thread:
 #   Scheduler Singletons
 # =========================================================================== #
 
-## [ImmediateScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+## [ImmediateScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
-## [TimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+## [TimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var TimeoutScheduler_ : TimeoutScheduler = TimeoutScheduler.new("GDRx")
-## [SceneTreeTimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+## [SceneTreeTimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var SceneTreeTimeoutScheduler_ : SceneTreeTimeoutScheduler = SceneTreeTimeoutScheduler.new("GDRx")
-## [ThreadedTimeoutScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+## [ThreadedTimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutScheduler.new("GDRx")
-## [GodotSignalScheduler] Singleton [color=red]Do [b]NOT[/b] access directly![/color]
+## [GodotSignalScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
 ## Global singleton of [CurrentThreadScheduler]
@@ -139,7 +139,7 @@ var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 # =========================================================================== #
 #   Exception Handler Singleton
 # =========================================================================== #
-## [ExceptionHandler] singleton [color=red]Leave it alone![/color]
+## [ExceptionHandler] singleton; [color=red]Leave it alone![/color]
 var ExceptionHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
 
 # =========================================================================== #
@@ -335,6 +335,13 @@ func zip(sources : Array[Observable]) -> Observable:
 #   Timers
 # =========================================================================== #
 
+var _timeout = TimeoutScheduler.TimeoutType.new()
+
+## Collection of [SceneTreeTimeoutScheduler]s, see: [TimeoutScheduler.TimeoutType]
+## for more information!
+var timeout:
+	get: return self._timeout
+
 ## Creates an observable timer
 func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
 	return obs.timer(timespan_sec, false, null, scheduler)
@@ -399,67 +406,81 @@ func input_action(input_action_ : String, checks : Observable) -> Observable:
 #   Some useful Input Observables
 # =========================================================================== #
 
+## Emits item when mouse button is just pressed
 func on_mouse_down() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
 		.filter(func(ev : InputEventMouseButton): return ev.is_pressed())
 
+## Emits item when mouse button is just released
 func on_mouse_up() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
 		.filter(func(ev : InputEventMouseButton): return not ev.is_pressed())
 
+## Emits item on mouse double-click
 func on_mouse_double_click() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
 		.filter(func(ev : InputEventMouseButton): return ev.is_pressed() and ev.double_click)
 
+## Emits items on mouse motion
 func on_mouse_motion() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion)
 
+## Emits the relative mouse motion as a [Vector2].
 func relative_mouse_movement_as_observable() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion) \
 		.map(func(ev : InputEventMouseMotion): return ev.relative)
 
+## Emits an item when the given keycode is just pressed.
 func on_key_just_pressed(key : int) -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventKey) \
 		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed and not ev.echo)
 
+## Emits an item when the given keycode is pressed.
 func on_key_pressed(key : int) -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventKey) \
 		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed)
 
+## Emits an item when the given keycode is just released.
 func on_key_just_released(key : int) -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventKey) \
 		.filter(func(ev : InputEventKey): return ev.keycode == key and not ev.pressed)
 
+## Emits an item, when the screen is touched (touch devices).
 func on_screen_touch() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventScreenTouch)
 
+## Emits an item, when the touch screen notices a drag gesture (touch devices)
 func on_screen_drag() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventScreenDrag)
 
+## Emits an item on Midi event.
 func on_midi_event() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventMIDI)
 
+## Emits an item, when a joypad button is just pressed.
 func on_joypad_button_down() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
 		.filter(func(ev : InputEventJoypadButton): return not ev.is_echo() and ev.is_pressed())
 
+## Emits an item, when a joypad button is pressed.
 func on_joypad_button_pressed() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
 		.filter(func(ev : InputEventJoypadButton): return ev.is_pressed())
 
+## Emits an item, when a joypad button is just released.
 func on_joypad_button_released() -> Observable:
 	return on_input_as_observable(self) \
 		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
@@ -469,17 +490,22 @@ func on_joypad_button_released() -> Observable:
 #   Frame Events
 # =========================================================================== #
 
+## Emits items in idle frame events.
 func on_idle_frame() -> Observable:
 	return from_signal(self.get_tree().process_frame)
 
+## Emits items in physics frame events.
 func on_physics_step() -> Observable:
 	return from_signal(self.get_tree().physics_frame)
 
+## Emits an item when the scene tree has changed.
 func on_tree_changed() -> Observable:
 	return from_signal(self.get_tree().tree_changed)
 
+## Emits an item at post-draw frame event.
 func on_frame_post_draw() -> Observable:
 	return from_signal(RenderingServer.frame_post_draw)
 
+## Emits an item at pre-draw frame event.
 func on_frame_pre_draw() -> Observable:
 	return from_signal(RenderingServer.frame_pre_draw)

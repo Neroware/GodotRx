@@ -2,9 +2,20 @@ extends PeriodicScheduler
 class_name SceneTreeTimeoutScheduler
 ## A scheduler that schedules work via a [SceneTreeTimer].
 
-func _init(verify_ = null):
-	if not verify_ == "GDRx":
-		push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
+var _process_always : bool
+var _process_in_physics : bool
+var _ignore_time_scale : bool
+
+func _init(
+	verify_ = null, 
+	process_always : bool = true, 
+	process_in_physics : bool = false, 
+	ignore_time_scale : bool = false):
+		if not verify_ == "GDRx":
+			push_warning("Warning! Must only instance Scheduler from GDRx singleton!")
+		self._process_always = process_always
+		self._process_in_physics = process_in_physics
+		self._ignore_time_scale = ignore_time_scale
 
 ## Returns singleton
 static func singleton() -> SceneTreeTimeoutScheduler:
@@ -28,7 +39,8 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	var interval = func():
 		sad.disposable = self.invoke_action(action, state)
 	
-	var timer : SceneTreeTimer = GDRx.get_tree().create_timer(0.0)
+	var timer : SceneTreeTimer = GDRx.get_tree().create_timer(
+			0.0, self._process_always, self._process_in_physics, self._ignore_time_scale)
 	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
 	
 	var dispose = func():
@@ -61,7 +73,8 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 	var interval = func():
 		sad.disposable = self.invoke_action(action, state)
 	
-	var timer = GDRx.get_tree().create_timer(seconds)
+	var timer = GDRx.get_tree().create_timer(
+		seconds, self._process_always, self._process_in_physics, self._ignore_time_scale)
 	timer.connect("timeout", func(): interval.call() ; _cancel_timer(timer))
 	
 	var dispose = func():
