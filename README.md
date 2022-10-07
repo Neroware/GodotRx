@@ -112,10 +112,9 @@ simplifies creating timers.
 
 ```csharp
 func _ready():
-	# Main Thread via Scene Tree Timer
+	# Main Thread via SceneTreeTimer
 	GDRx.start_periodic_timer(1.0).subscribe(func(i): print("Periodic: ", i))
 	GDRx.start_timer(2.0).subscribe(func(i): print("One shot: ", i))
-	# Multi-threaded via threaded timer
 ```
 
 If you want to schedule a timer running on a separate thread, the 
@@ -123,6 +122,7 @@ ThreadedTimeoutScheduler Singleton allows you to do so. Careful: Once the thread
 is started it will not stop until the interval has passed!
 
 ```csharp
+	# Multi-threaded via threaded timer
 	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
 		.subscribe(func(i): print("Threaded one shot: ", i))
 	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
@@ -134,16 +134,16 @@ a list with various versions of the SceneTreeTimeoutScheduler for this. Access
 it like this:
 
 ```csharp
-	## Always running and no timescale at process timestep.
+	# Always running at process timestep and no timescale accounted.
 	GDRx.start_timer(5.0, GDRx.timeout.Default) \
 		.subscribe(func(i): print("Never pauses: ", i))
-	## Inherit means running unless paused and no timescale at process timestep.
+	# Inherit means running at process timestep unless paused and no timescale.
 	GDRx.start_timer(5.0, GDRx.timeout.Inherit) \
 		.subscribe(func(i): print("Pauses: ", i))
 ```
 
 Note that 'Default' is the one used in the default TimeoutScheduler singleton.
-It is processed ignoring time scale and pause mode at process time.
+It is processed at process time ignoring time scale and pause mode.
 
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 
@@ -326,21 +326,25 @@ A small set of very frequent input events is included as observables as well:
 Main frame events can be directly accessed as Observables as well:
 
 ```csharp
-	## Do stuff before `_process(delta)` calls.
+	# Do stuff before `_process(delta)` calls.
 	GDRx.on_idle_frame() \
-		.subscribe(func(delta : float): print("delta> ", delta))
+		.subscribe(func(delta : float): print("delta> ", delta)) \
+		.dispose_with(self)
 	
-	## Do stuff before `_physics_process(delta)` calls.
+	# Do stuff before `_physics_process(delta)` calls.
 	GDRx.on_physics_step() \
-		.subscribe(func(delta : float): print("delta> ", delta))
+		.subscribe(func(delta : float): print("delta> ", delta)) \
+		.dispose_with(self)
 	
-	## Emits items at pre-draw
+	# Emits items at pre-draw
 	GDRx.on_frame_pre_draw() \
-		.subscribe(func(__): print("Pre Draw!"))
+		.subscribe(func(__): print("Pre Draw!")) \
+		.dispose_with(self)
 	
-	## Emits items at post-draw
+	# Emits items at post-draw
 	GDRx.on_frame_post_draw() \
-		.subscribe(func(__): print("Post Draw!"))
+		.subscribe(func(__): print("Post Draw!")) \
+		.dispose_with(self)
 ```
 
 ## Final Thoughts
