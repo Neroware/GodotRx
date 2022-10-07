@@ -318,7 +318,7 @@ func to_async(fun : Callable, scheduler : SchedulerBase = null) -> Callable:
 	return obs.to_async(fun, scheduler)
 
 ## See: [b]res://reactivex/observable/using.gd[/b]
-func using(resource_factory : Callable, observable_factory : Callable,) -> Observable:
+func using(resource_factory : Callable, observable_factory : Callable) -> Observable:
 	return obs.using(resource_factory, observable_factory)
 
 ## See: [b]res://reactivex/observable/withlatestfrom.gd[/b]
@@ -330,6 +330,30 @@ func with_latest_from(sources : Array[Observable]) -> Observable:
 ## See: [b]res://reactivex/observable/zip.gd[/b]
 func zip(sources : Array[Observable]) -> Observable:
 	return obs.zip(sources)
+
+# =========================================================================== #
+#   Timers
+# =========================================================================== #
+
+## Creates an observable timer
+func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, null, scheduler)
+
+## Creates an observable periodic timer
+func start_periodic_timer(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(period_sec, false, period_sec, scheduler)
+
+## Creates an observable periodic timer which starts after a timespan has passed
+func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, period_sec, scheduler)
+
+## Creates an observable timer
+func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, null, scheduler)
+
+## Creates an observable periodic timer which starts at a given timestamp.
+func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, period_sec, scheduler)
 
 # =========================================================================== #
 #   Godot-specific Observable Constructors
@@ -371,22 +395,91 @@ func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
 func input_action(input_action_ : String, checks : Observable) -> Observable:
 	return gd.from_godot_input_action(input_action_, checks)
 
-## Creates an observable timer
-func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.timer(timespan_sec, false, null, scheduler)
+# =========================================================================== #
+#   Some useful Input Observables
+# =========================================================================== #
 
-## Creates an observable periodic timer
-func start_periodic_timer(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.timer(period_sec, false, period_sec, scheduler)
+func on_mouse_down() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return ev.is_pressed())
 
-## Creates an observable periodic timer which starts after a timespan has passed
-func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.timer(timespan_sec, false, period_sec, scheduler)
+func on_mouse_up() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return not ev.is_pressed())
 
-## Creates an observable timer
-func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.timer(datetime_sec, true, null, scheduler)
+func on_mouse_double_click() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return ev.is_pressed() and ev.double_click)
 
-## Creates an observable periodic timer which starts at a given timestamp.
-func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-	return obs.timer(datetime_sec, true, period_sec, scheduler)
+func on_mouse_motion() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion)
+
+func relative_mouse_movement_as_observable() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion) \
+		.map(func(ev : InputEventMouseMotion): return ev.relative)
+
+func on_key_just_pressed(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed and not ev.echo)
+
+func on_key_pressed(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed)
+
+func on_key_just_released(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and not ev.pressed)
+
+func on_screen_touch() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventScreenTouch)
+
+func on_screen_drag() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventScreenDrag)
+
+func on_midi_event() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMIDI)
+
+func on_joypad_button_down() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return not ev.is_echo() and ev.is_pressed())
+
+func on_joypad_button_pressed() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return ev.is_pressed())
+
+func on_joypad_button_released() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return not ev.is_pressed())
+
+# =========================================================================== #
+#   Frame Events
+# =========================================================================== #
+
+func on_idle_frame() -> Observable:
+	return from_signal(self.get_tree().process_frame)
+
+func on_physics_step() -> Observable:
+	return from_signal(self.get_tree().physics_frame)
+
+func on_tree_changed() -> Observable:
+	return from_signal(self.get_tree().tree_changed)
+
+func on_frame_post_draw() -> Observable:
+	return from_signal(RenderingServer.frame_post_draw)
+
+func on_frame_pre_draw() -> Observable:
+	return from_signal(RenderingServer.frame_pre_draw)
