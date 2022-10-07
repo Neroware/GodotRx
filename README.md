@@ -149,7 +149,7 @@ it like this:
 ```
 
 Note that 'Default' is the one used in the default TimeoutScheduler singleton.
-It is processed at process time accounting time scale and pause mode.
+It always runs at process timestep, scaling with `Engine.time_scale`.
 
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 
