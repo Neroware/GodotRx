@@ -24,7 +24,7 @@ attacking an enemy or an item which is picked up.
 
 Rx extends this idea by turning all forms of data within the program like 
 GD-signals, GD-lifecycle events, callbacks, data structures, coroutines etc. 
-into observable data streams which emit items. These data streams, refered to as 
+into observable data streams which emit items. These data streams, referred to as
 Observables, can be transformed using concepts from the world of functional 
 programming. (Say hello to Flat-Map, Reduce and friends!)
 
@@ -224,7 +224,7 @@ an exception.
 # To ReadOnlyReactiveProperty
 var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
 
-# Reading from ReadOnlyReactiveProperty causes an exception
+# Writing to ReadOnlyReactiveProperty causes an exception
 GDRx.try(func(): 
 	Hp.Value = -100
 ) \
