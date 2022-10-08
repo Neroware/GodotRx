@@ -402,6 +402,10 @@ func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
 func input_action(input_action_ : String, checks : Observable) -> Observable:
 	return gd.from_godot_input_action(input_action_, checks)
 
+## Creates a new Compute Shader as [Observable].
+func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return gd.from_compute_shader(shader_path, rd, work_groups, uniform_sets, scheduler)
+
 # =========================================================================== #
 #   Some useful Input Observables
 # =========================================================================== #

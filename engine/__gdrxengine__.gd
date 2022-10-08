@@ -10,6 +10,7 @@ var _GodotSignal_ = load("res://reactivex/engine/observable/godotsignal.gd")
 var _GodotLifecycle_ = load("res://reactivex/engine/observable/godotnodelifecycle.gd")
 var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputaction.gd")
 var _GodotCoroutine_ = load("res://reactivex/engine/observable/godotcoroutine.gd")
+var _ComputeShader_ = load("res://reactivex/engine/observable/computeshader.gd")
 
 ## See: [b]res://reactivex/engine/observable/godotsignal.gd[/b]
 func from_godot_signal(sig : Signal, scheduler : SchedulerBase = null) -> Observable:
@@ -26,3 +27,7 @@ func from_godot_input_action(input_action : String, checks : Observable) -> Obse
 ## See: [b]res://reactivex/engine/observable/godotcoroutine.gd[/b]
 func from_godot_coroutine(fun : Callable, bindings : Array = [], scheduler : SchedulerBase = null) -> Observable:
 	return _GodotCoroutine_.from_godot_coroutine_(fun, bindings, scheduler)
+
+## See: [b]"res://reactivex/engine/observable/computeshader.gd"[/b]
+func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return _ComputeShader_.from_compute_shader_(shader_path, rd, work_groups, uniform_sets, scheduler)
