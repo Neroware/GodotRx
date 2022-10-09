@@ -352,11 +352,133 @@ GDRx.on_frame_post_draw() \
 	.subscribe(func(__): print("Post Draw!")) \
 	.dispose_with(self)
 ```
+## Compute Shaders
+
+With GDRx it is quite easy to implement an async interface between GPU and CPU.
+This allows some nice implementations of Compute Shaders. For this example, I 
+follow the tutorial from (https://www.youtube.com/watch?v=5CKvGYqagyI) and his
+shader code. 
+In this scenario, we want to sample a texture and count the amount of pixels
+with red and blue color. A nice task for GPUs!
+
+The shader code can be found here: https://pastebin.com/pbGGjrE8
+
+```csharp
+extends Node
+
+@export var texture : Texture2D
+
+@onready var _nts : NewThreadScheduler = NewThreadScheduler.new()
+
+var ComputeResult : ReadOnlyReactiveProperty
+var _compute_result : ReactiveProperty
+
+
+func _ready():
+	# Let's schedule a new Thread for our Compute Shader
+	self._compute_result = ReactiveProperty.new(Vector2i(0, 0))
+	self.ComputeResult = self._compute_result.to_readonly()
+	self._nts.schedule(func(__, ___): self._compute_shader_thread())
+```
+Notice that we schedule the CPU-side on a separate Thread using the 
+NewThreadScheduler private member. To get the boilerplate out of the way, let's
+create our uniforms from a RenderingDevice and a defined buffer. This helper
+function returns our uniform set (we only have a single one with `set = 0`)
+
+```csharp
+## Helper function to generate the uniform set with id 0 for our shader.
+## This represents bindings for 'buffer MyDataBuffer' and 'uniform sampler2D tex'
+func _get_uniform_set(rd : RenderingDevice, buffer) -> Array[RDUniform]:
+	var buffer_uniform = RDUniform.new()
+	buffer_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	buffer_uniform.binding = 0
+	buffer_uniform.add_id(buffer)
+	
+	var img = texture.get_image()
+	var img_pba = img.get_data()
+	
+	var fmt = RDTextureFormat.new()
+	fmt.width = 2048
+	fmt.height = 2048
+	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	fmt.format = RenderingDevice.DATA_FORMAT_R8G8B8A8_SRGB
+	
+	var v_tex = rd.texture_create(fmt, RDTextureView.new(), [img_pba])
+	var samp_state = RDSamplerState.new()
+	samp_state.unnormalized_uvw = true
+	var samp = rd.sampler_create(samp_state)
+	
+	var tex_uniform = RDUniform.new()
+	tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
+	tex_uniform.binding = 1
+	tex_uniform.add_id(samp)
+	tex_uniform.add_id(v_tex)
+	
+	return [buffer_uniform, tex_uniform]
+```
+With that out of the way, we now get to the spicy part. Setting up our computation
+loop and compute shader. First, we create our compute shader as an observable.
+Please notice that it is a COLD observable which performs a computation on subscribe,
+emits the RenderingDevice as item and then finishes.
+
+```csharp
+## Runs on separate thread
+func _compute_shader_thread():
+	var rd = RenderingServer.create_local_rendering_device()
+	var pba = PackedInt32Array([0,0]).to_byte_array()
+	var buffer = rd.storage_buffer_create(pba.size(), pba)
+	
+	# Get Uniform Set with id 0
+	var uniform_set0 = self._get_uniform_set(rd, buffer)
+	
+	# Create the Observable from the compute shader
+	var obs_shader = GDRx.from_compute_shader(
+		"res://compute_shaders/test_compute_shader.glsl",
+		rd, Vector3i(2048/8, 2048/8, 1),
+		[uniform_set0]
+	)
+```
+
+Then, it is only a matter of binding it all together. Let's break this down, shall we?
+
+First, we create an endless loop on our separate Thread using `repeat_value`. This
+will effectively block the thread until disposed. 
+
+Using `flat_map`, for each repeat, we let a new computation commence. 
+
+After the compute shader finishes, we map the results from the RenderingDevice 
+into a Vector2i data structure. This is useful, because simple equality works. 
+
+Then, we set the value of the ReactiveProperty to our result and dispose the 
+subscription, when the underlying Node of this script is destroyed.
+
+```csharp
+# Create the source of our computational value
+	var source = GDRx.repeat_value(0) \
+		.flat_map(func(__): return obs_shader) \
+		.map(
+			func(rd : RenderingDevice):
+				var byte_data = rd.buffer_get_data(buffer)
+				var output = byte_data.to_int32_array()
+				var pb = PackedInt32Array([0,0])
+				var pbb = pb.to_byte_array()
+				rd.buffer_update(buffer, 0, pbb.size(), pbb)
+				return Vector2i(output[0], output[1])
+				) \
+		.subscribe(func(result : Vector2i): self._compute_result.Value = result) \
+		.dispose_with(self)
+```
+
+This way, any observer on any thread subscribing to `ComputeResult` is immediatly
+notified when the computation results in a new value.
 
 ## Final Thoughts
 
 I do not know if this library is useful in the case of Godot 4 but if you are
-familiar with and into ReactiveX, go for it!
+familiar with and into ReactiveX, go for it! I got some backlash from the Godot
+Community, who thought I was trying to argue against Godot's event system.
+
+I hope I could clarify the usage of GDRx a bit using some of these examples.
 
 ## License
 Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/master/LICENSE).

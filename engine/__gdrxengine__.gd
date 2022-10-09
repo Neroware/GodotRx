@@ -29,5 +29,5 @@ func from_godot_coroutine(fun : Callable, bindings : Array = [], scheduler : Sch
 	return _GodotCoroutine_.from_godot_coroutine_(fun, bindings, scheduler)
 
 ## See: [b]"res://reactivex/engine/observable/computeshader.gd"[/b]
-func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
+func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3i, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
 	return _ComputeShader_.from_compute_shader_(shader_path, rd, work_groups, uniform_sets, scheduler)

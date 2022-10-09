@@ -25,7 +25,7 @@
 static func from_compute_shader_(
 	shader_path : String,
 	rd : RenderingDevice,
-	work_groups : Vector3,
+	work_groups : Vector3i,
 	uniform_sets : Array = [],
 	scheduler : SchedulerBase = null
 ) -> Observable:
