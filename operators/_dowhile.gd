@@ -14,11 +14,11 @@ static func do_while_(
 #	"""
 	var do_while = func(source : Observable) -> Observable:
 		return source.pipe1(
-			GDRx.pipe.concat1(
+			GDRx.op.concat([
 				source.pipe1(
 					GDRx.op.while_do(condition)
-				)
-			)
+				) as Observable
+			])
 		)
 	
 	return do_while

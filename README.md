@@ -352,7 +352,7 @@ GDRx.on_frame_post_draw() \
 	.subscribe(func(__): print("Post Draw!")) \
 	.dispose_with(self)
 ```
-## Compute Shaders
+### Compute Shaders
 
 With GDRx it is quite easy to implement an async interface between GPU and CPU.
 This allows some nice implementations of Compute Shaders. For this example, I 
