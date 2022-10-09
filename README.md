@@ -443,7 +443,7 @@ Then, it is only a matter of binding it all together. Let's break this down, sha
 
 First, we create an endless loop on our separate Thread using `while_do`. In this
 very scenario, since the condition is always 'true', we could also use `repeat_value`,
-but we want to be able to complete the sequence.
+but we want to be able to terminate the sequence.
 
 Using `flat_map`, for each repeat, we let a new computation commence. 
 
@@ -474,11 +474,10 @@ notified when the computation results in a new value.
 
 ## Final Thoughts
 
-I do not know if this library is useful in the case of Godot 4 but if you are
-familiar with and into ReactiveX, go for it! I got some backlash from the Godot
-Community, who thought I was trying to argue against Godot's event system.
-
 I hope I could clarify the usage of GDRx a bit using some of these examples.
+
+I do not know if this library is useful in the case of Godot 4 but if you are
+familiar with and into ReactiveX, go for it!
 
 ## License
 Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/master/LICENSE).
