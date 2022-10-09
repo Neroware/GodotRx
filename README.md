@@ -441,20 +441,21 @@ func _compute_shader_thread():
 
 Then, it is only a matter of binding it all together. Let's break this down, shall we?
 
-First, we create an endless loop on our separate Thread using `repeat_value`. This
-will effectively block the thread until disposed. 
+First, we create an endless loop on our separate Thread using `while_do`. In this
+very scenario, since the condition is always 'true', we could also use `repeat_value`,
+but we want to be able to complete the sequence.
 
 Using `flat_map`, for each repeat, we let a new computation commence. 
 
-After the compute shader finishes, we map the results from the RenderingDevice 
+After the compute shader finishes, we `map` the results from the RenderingDevice 
 into a Vector2i data structure. This is useful, because simple equality works. 
 
-Then, we set the value of the ReactiveProperty to our result and dispose the 
-subscription, when the underlying Node of this script is destroyed.
+Then, we set the value of the ReactiveProperty to our result.
 
 ```csharp
-# Create the source of our computational value
-	var source = GDRx.repeat_value(0) \
+	# Create the source of our computational value
+	GDRx.just(0) \
+		.while_do(func(): return true) \
 		.flat_map(func(__): return obs_shader) \
 		.map(
 			func(rd : RenderingDevice):
@@ -465,8 +466,7 @@ subscription, when the underlying Node of this script is destroyed.
 				rd.buffer_update(buffer, 0, pbb.size(), pbb)
 				return Vector2i(output[0], output[1])
 				) \
-		.subscribe(func(result : Vector2i): self._compute_result.Value = result) \
-		.dispose_with(self)
+		.subscribe(func(result : Vector2i): self._compute_result.Value = result)
 ```
 
 This way, any observer on any thread subscribing to `ComputeResult` is immediatly
