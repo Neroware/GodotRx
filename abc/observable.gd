@@ -27,3 +27,8 @@ func subscribe(
 	_scheduler : SchedulerBase = null) -> DisposableBase:
 		GDRx.exc.NotImplementedException.Throw()
 		return null
+
+## Shortcut leaving out the [code]on_error[/code] and [code]on_completed[/code]
+## contracts.
+func subscribe_obs(obs = null, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(obs, func(e):pass, func():pass, _scheduler)
