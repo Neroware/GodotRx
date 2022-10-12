@@ -767,3 +767,15 @@ func zip(args : Array[Observable]) -> Observable:
 ## See: [b]res://reactivex/operators/_zip.gd[/b]
 func zip_with_iterable(seq : IterableBase) -> Observable:
 	return GDRx.op.zip_with_iterable(seq).call(self)
+
+# =========================================================================== #
+#   Godot-specific Operators
+# =========================================================================== #
+
+## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
+func process_time_interval(initial_time : float = 0.0) -> Observable:
+	return GDRx.gd.process_time_interval(initial_time).call(self)
+
+## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
+func physics_time_interval(initial_time : float = 0.0) -> Observable:
+	return GDRx.gd.physics_time_interval(initial_time).call(self)

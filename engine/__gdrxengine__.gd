@@ -12,6 +12,8 @@ var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputactio
 var _GodotCoroutine_ = load("res://reactivex/engine/observable/godotcoroutine.gd")
 var _ComputeShader_ = load("res://reactivex/engine/observable/computeshader.gd")
 
+var _ProcessTimeInterval_ = load("res://reactivex/engine/operators/_processtimeinterval.gd")
+
 ## See: [b]res://reactivex/engine/observable/godotsignal.gd[/b]
 func from_godot_signal(sig : Signal, scheduler : SchedulerBase = null) -> Observable:
 	return _GodotSignal_.from_godot_signal_(sig, scheduler)
@@ -31,3 +33,11 @@ func from_godot_coroutine(fun : Callable, bindings : Array = [], scheduler : Sch
 ## See: [b]"res://reactivex/engine/observable/computeshader.gd"[/b]
 func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3i, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
 	return _ComputeShader_.from_compute_shader_(shader_path, rd, work_groups, uniform_sets, scheduler)
+
+## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
+func process_time_interval(initial_time : float = 0.0) -> Callable:
+	return _ProcessTimeInterval_.process_time_interval_(initial_time)
+
+## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
+func physics_time_interval(initial_time : float = 0.0) -> Callable:
+	return _ProcessTimeInterval_.physics_time_interval_(initial_time)
