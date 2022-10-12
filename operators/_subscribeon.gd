@@ -31,7 +31,7 @@ static func subscribe_on_(scheduler : SchedulerBase) -> Callable:
 					scheduler, source.subscribe(observer)
 				)
 			
-			m.disposable = scheduler.schedulde(action)
+			m.disposable = scheduler.schedule(action)
 			return d
 		
 		return Observable.new(subscribe)
