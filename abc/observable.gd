@@ -30,5 +30,5 @@ func subscribe(
 
 ## Shortcut leaving out the [code]on_error[/code] and [code]on_completed[/code]
 ## contracts.
-func subscribe_obs(obs = null, _scheduler : SchedulerBase = null) -> DisposableBase:
-	return self.subscribe(obs, func(e):pass, func():pass, _scheduler)
+func subscribe_obv(obv = null, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(obv, func(e):return, func():return, _scheduler)
