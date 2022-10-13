@@ -61,8 +61,8 @@ static func from_godot_signal_(
 				return Disposable.new()
 		
 		if not _scheduler is GodotSignalScheduler:
-			GDRx.exc.BadArgumentException.new("Scheduler must be GodotSignalScheduler").throw()
-			return Disposable.new()
+			push_warning("[ReactiveX]: Scheduler not a GodotSignalScheduler! Using singleton!")
+			_scheduler = GodotSignalScheduler.singleton()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler
 		return godot_signal_scheduler.schedule_signal(sig, n_args, action)
