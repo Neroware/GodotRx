@@ -529,7 +529,7 @@ func pairwise() -> Observable:
 	return GDRx.op.pairwise().call(self)
 
 ## See: [b]res://reactivex/operators/_partiton.gd[/b]
-func partition(predicate : Callable = func(x): return true) -> Observable:
+func partition(predicate : Callable = func(x): return true) -> Array[Observable]:
 	return GDRx.op.partition(predicate).call(self)
 
 ## See: [b]res://reactivex/operators/_partition.gd[/b]

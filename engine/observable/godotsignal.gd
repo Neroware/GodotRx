@@ -61,7 +61,6 @@ static func from_godot_signal_(
 				return Disposable.new()
 		
 		if not _scheduler is GodotSignalScheduler:
-			push_warning("[ReactiveX]: Scheduler not a GodotSignalScheduler! Using singleton!")
 			_scheduler = GodotSignalScheduler.singleton()
 		
 		var godot_signal_scheduler : GodotSignalScheduler = _scheduler
