@@ -42,6 +42,29 @@ GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ```
 
 ## Usage
+
+### Type Fixation
+GDScript is a fully dynamically typed language. This has many advantages, however, 
+at some point, we might want to fix types of a certain computation, 
+after all, variables can get type hints as well! Since Godot does not support
+generic types of Observables, we can still fix the type of an observable sequence with the
+`oftype` operator. Now we can be sure to always receive items of the wanted type.
+Generating a wrong type will cause an error notification via the `on_error` contract. Per
+default, it also notifies the programmer via a push-error message in the engine.
+
+This would be a good style, I think:
+```csharp
+var Obs1 : Observable#[int]
+var Obs2 : Observable#[RefValue]
+
+func _ready():
+	var _obs1 : Observable = GDRx.from_array([1, 2, 3])
+	var _obs2 : Observable = GDRx.just(RefValue.Set(42))
+
+	self.Obs1 = _obs1.oftype(TYPE_INT)
+	self.Obs2 = _obs2.oftype(RefValue)
+```
+
 ### Coroutines
 Assume we have a coroutine which executes code, awaits a signal and then continues
 by calling a second coroutine (in another instance for example) if a condition
