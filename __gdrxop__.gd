@@ -54,6 +54,7 @@ var _Min_ = load("res://reactivex/operators/_min.gd")
 var _MinBy_ = load("res://reactivex/operators/_minby.gd")
 var _Multicast_ = load("res://reactivex/operators/_multicast.gd")
 var _ObserveOn_ = load("res://reactivex/operators/_observeon.gd")
+var _OfType_ = load("res://reactivex/operators/_oftype.gd")
 var _OnErrorResumeNext_ = load("res://reactivex/operators/_onerrorresumenext.gd")
 var _Pairwise_ = load("res://reactivex/operators/_pairwise.gd")
 var _Partition_ = load("res://reactivex/operators/_partition.gd")
@@ -392,6 +393,10 @@ func multicast(subject : SubjectBase = null, subject_factory = null, mapper = nu
 ## See: [b]res://reactivex/operators/_observeon.gd[/b]
 func observe_on(scheduler : SchedulerBase) -> Callable:
 	return _ObserveOn_.observe_on_(scheduler)
+
+## See: [b]res://reactivex/operators/_oftype.gd[/b]
+func oftype(type, push_err : bool = true) -> Callable:
+	return _OfType_.oftype_(type, push_err)
 
 ## See: [b]res://reactivex/operators/_onerrorresumenext.gd[/b]
 func on_error_resume_next(second : Observable) -> Callable:

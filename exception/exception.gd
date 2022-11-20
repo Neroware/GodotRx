@@ -177,3 +177,16 @@ class AssertionFailedException extends Exception:
 	
 	static func Throw(default = null) -> Variant:
 		return AssertionFailedException.new().throw(default)
+
+class TypeMismatchException extends Exception:
+	func _init(item):
+		var msg : String = "Type mismatch in observable sequence! Got '" + \
+			str(item) + \
+			"' which is of wrong type!"
+		super._init(msg)
+	
+	func tags() -> Array[String]:
+		return ["Exception", "TypeMismatchException"]
+	
+	static func Throw(item = null) -> Variant:
+		return TypeMismatchException.new(item).throw(null)

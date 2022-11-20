@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property"
+@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -328,4 +328,25 @@ func _test_reactive_property():
 		func(x, y, z): return x + y + z
 	)
 	var seq = ObservableSequence.new([UNSUB(60)])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_fix_type_basic():
+	var prop = ReactiveProperty.new(42).oftype(TYPE_INT)
+	var seq = ObservableSequence.new([UNSUB(42)])
+	seq.compare(prop, self.sequence_finished)
+
+func _test_fix_type_class():
+	var obs = GDRx.from_array([
+		RefValue.Set(0), 
+		RefValue.Set(1), 
+		RefValue.Set(2),
+		func(): return 3,
+		RefValue.Set(4)
+	]).oftype(RefValue, false).map(func(i : RefValue): return i.v)
+	var seq = ObservableSequence.new([0, 1, 2, ERROR])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_fix_type_mismatch_basic():
+	var obs = GDRx.from_array([1, 2, 3, "4", 5, 6]).oftype(TYPE_INT, false)
+	var seq = ObservableSequence.new([1, 2, 3, ERROR])
 	seq.compare(obs, self.sequence_finished)

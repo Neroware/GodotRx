@@ -520,6 +520,10 @@ func multicast(subject : SubjectBase = null, subject_factory = null, mapper = nu
 func observe_on(scheduler : SchedulerBase) -> Observable:
 	return GDRx.op.observe_on(scheduler).call(self)
 
+## See: [b]res://reactivex/operators/_oftype.gd[/b]
+func oftype(type, push_err : bool = true) -> Observable:
+	return GDRx.op.oftype(type, push_err).call(self)
+
 ## See: [b]res://reactivex/operators/_onerrorresumenext.gd[/b]
 func on_error_resume_next(second : Observable) -> Observable:
 	return GDRx.op.on_error_resume_next(second).call(self)
