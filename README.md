@@ -37,7 +37,7 @@ You can add GDRx to your Godot 4 project as followed:
 4. Add the singleton script with name 'GDRx' to autoload (`res://reactivex//__gdrxsingleton__.gd`)
 5. GDRx should now be ready to use. Try creating a simple Observable using:
 
-```csharp
+```swift
 GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ```
 
@@ -53,16 +53,18 @@ Generating a wrong type will cause an error notification via the `on_error` cont
 default, it also notifies the programmer via a push-error message in the engine.
 
 This would be a good style, I think:
-```csharp
-var Obs1 : Observable#[int]
-var Obs2 : Observable#[RefValue]
+```swift
+var _obs1 : Observable
+var _obs2 : Observable
+
+var Obs1 : Observable : #[int]
+	get: return self._obs1.oftype(TYPE_INT)
+var Obs2 : Observable : #[RefValue]
+	get: return self._obs2.oftype(RefValue)
 
 func _ready():
-	var _obs1 : Observable = GDRx.from_array([1, 2, 3])
-	var _obs2 : Observable = GDRx.just(RefValue.Set(42))
-
-	self.Obs1 = _obs1.oftype(TYPE_INT)
-	self.Obs2 = _obs2.oftype(RefValue)
+	self._obs1 : Observable = GDRx.from_array([1, 2, 3])
+	self._obs2 : Observable = GDRx.just(RefValue.Set(42))
 ```
 
 ### Coroutines
@@ -70,7 +72,7 @@ Assume we have a coroutine which executes code, awaits a signal and then continu
 by calling a second coroutine (in another instance for example) if a condition
 is met.
 
-```csharp
+```swift
 var _reference
 
 func _ready():
@@ -97,7 +99,7 @@ specific task, however, the first coroutine is also tasked with handling control
 flow (null check of self._reference). GDRx allows us to easily coordinate 
 these program parts by providing a declarative execution plan.
 
-```csharp
+```swift
 var _reference
 
 func _ready():
@@ -133,7 +135,7 @@ things get a bit tricky. Godot 4 appears to not support signals on separate
 threads. Also, periodic timers only exist as Node objects. GDRx drastically
 simplifies creating timers.
 
-```csharp
+```swift
 func _ready():
 	# Main Thread via SceneTreeTimer
 	GDRx.start_periodic_timer(1.0).subscribe(func(i): print("Periodic: ", i))
@@ -144,7 +146,7 @@ If you want to schedule a timer running on a separate thread, the
 ThreadedTimeoutScheduler Singleton allows you to do so. Careful: Once the thread
 is started it will not stop until the interval has passed!
 
-```csharp
+```swift
 	# Multi-threaded via threaded timer
 	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
 		.subscribe(func(i): print("Threaded one shot: ", i))
@@ -156,7 +158,7 @@ Additionally, various process and pause modes are possible. I created
 a list with various versions of the SceneTreeTimeoutScheduler for this. Access
 it like this:
 
-```csharp
+```swift
 	# Set timescale
 	Engine.time_scale = 0.5
 
@@ -179,7 +181,7 @@ In my endless sanity, I throw my own custom exception handling into the ring.
 When an exception is thrown, the observers should be notified via their 
 on_error() contract. If this works all the time, I do not know at this point.
 
-```csharp
+```swift
 func division(n1 : int, n2 : int) -> int:
 	if n2 == 0:
 		GDRx.exc.Exception.new("Divided by zero!").throw()
@@ -200,7 +202,7 @@ were to divide by zero ;)
 
 In the world of GDRx, signals and node lifecycle events are all Observables.
 
-```csharp
+```swift
 func _ready():
 	var OnPhysicsProcess = GDRx.on_physics_process_as_observable(self)
 	var OnInput = GDRx.on_input_as_observable(self)
@@ -220,7 +222,7 @@ lifetime via `DisposableBase.dispose_with(obj : Object)`.
 However, you need to account for recievers only, not senders, when it comes to 
 Signals and Lifecycle Events.
 
-```csharp
+```swift
 # Dispose when reciever 'self' is deleted, sender 'anim' already accounted!
 GDRx.from_signal(anim.animation_finished).subscribe().dispose_with(self)
 # No dispose_with() needed!
@@ -237,7 +239,7 @@ their value is changed. This is very useful e.g. for UI implementations.
 Creating a ReactiveProperty instance is straight forward. Access its contents
 via the `Value` property inside the ReactiveProperty instance.
 
-```csharp
+```swift
 var prop = ReactiveProperty.new(42)
 prop.subscribe(func(i): print(">> ", i))
 
@@ -254,7 +256,7 @@ be done via the `ReactiveProperty.FromMember()` constructor. The changed value
 is reflected onto the class member, though changing the member will NOT change
 the value of the ReactiveProperty.
 
-```csharp
+```swift
 var _hp : int = 100
 
 var _stamina : float = 1.0
@@ -272,7 +274,7 @@ A ReadOnlyReactiveProperty with read-only access can be created via the
 `ReactiveProperty.to_readonly()` method. Trying to set the value will throw
 an exception.
 
-```csharp
+```swift
 # To ReadOnlyReactiveProperty
 var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
 
@@ -288,7 +290,7 @@ GDRx.try(func():
 
 A ReactiveProperty can also be created from a Setter and a Getter function
 
-```csharp
+```swift
 # Create Reactive Property from getter and setter
 var set_stamina = func(v):
 	print("Setter Callback")
@@ -309,7 +311,7 @@ computed ReadOnlyReactiveProperty emits an item accordingly. A computed
 ReadOnlyReactiveProperty can be created via the `ReactiveProperty.Computed{n}()`
 constructor.
 
-```csharp
+```swift
 var Stamina : ReadOnlyReactiveProperty = _Stamina.to_readonly()
 var _AttackDamage : ReactiveProperty = ReactiveProperty.FromMember(
 	self, "_attack_damage")
@@ -332,9 +334,9 @@ For more info, also check out the comments in the operator scripts!
 
 ### Input Events
 
-A small set of very frequent input events is included as observables as well:
+Very frequent input events are included as observables:
 
-```csharp
+```swift
 GDRx.on_mouse_down() \
 	.filter(func(ev : InputEventMouseButton): return ev.button_index == 1) \
 	.subscribe(func(__): print("Left Mouse Down!")) \
@@ -354,7 +356,7 @@ GDRx.on_key_pressed(KEY_W) \
 
 Main frame events can be directly accessed as Observables as well:
 
-```csharp
+```swift
 # Do stuff before `_process(delta)` calls.
 GDRx.on_idle_frame() \
 	.subscribe(func(delta : float): print("delta> ", delta)) \
@@ -386,7 +388,7 @@ with red and blue color. A nice task for GPUs!
 
 The shader code can be found here: https://pastebin.com/pbGGjrE8
 
-```csharp
+```swift
 extends Node
 
 @export var texture : Texture2D
@@ -408,7 +410,7 @@ NewThreadScheduler private member. To get the boilerplate out of the way, let's
 create our uniforms from a RenderingDevice and a defined buffer. This helper
 function returns our uniform set (we only have a single one with `set = 0`)
 
-```csharp
+```swift
 ## Helper function to generate the uniform set with id 0 for our shader.
 ## This represents bindings for 'buffer MyDataBuffer' and 'uniform sampler2D tex'
 func _get_uniform_set(rd : RenderingDevice, buffer) -> Array[RDUniform]:
@@ -444,7 +446,7 @@ loop and compute shader. First, we create our compute shader as an observable.
 Please notice that it is a COLD observable which performs a computation on subscribe,
 emits the RenderingDevice as item and then finishes.
 
-```csharp
+```swift
 ## Runs on separate thread
 func _compute_shader_thread():
 	var rd = RenderingServer.create_local_rendering_device()
@@ -475,7 +477,7 @@ into a Vector2i data structure. This is useful, because simple equality works.
 
 Then, we set the value of the ReactiveProperty to our result.
 
-```csharp
+```swift
 	# Create the source of our computational value
 	GDRx.just(0) \
 		.while_do(func(): return true) \
