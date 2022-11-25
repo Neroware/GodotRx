@@ -1,7 +1,7 @@
 # GodotRx - Reactive Extensions for the Godot Game Engine version 4 (GDRx)
 
 ## Warning
-**Untested** While this is almost a direct port of RxPY, this library has not 
+**Untested** While it is almost a direct port of RxPY, this library has not 
 yet been fully tested in action. Proceed with caution!
 
 ## What is GodotRx?
@@ -16,11 +16,11 @@ and low coupling rendering the code more easily readable and extendable.
 
 The Godot Engine brings a well thought-out event system as well as
 a nice implementation of coroutines to the table. It allows you to easily 
-implement asynchronous code execution, meaning basically that code is not run in
-the sequence order which it is written in. A so-called Observer listens to an 
-Observable event which fires when something important happens in the program 
+implement asynchronous code execution, meaning that code is not run in
+the sequence order which it is written in. A so-called 'observer' listens to an 
+'observable' event which fires when something important happens in the program 
 resulting in side-effects for the connected instances, this can be e.g. a player
-attacking an enemy or an item which is picked up.
+attacking an enemy or an item, which is picked up.
 
 Rx extends this idea by turning all forms of data within the program like 
 GD-signals, GD-lifecycle events, callbacks, data structures, coroutines etc. 
@@ -45,12 +45,12 @@ GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 
 ### Type Fixation
 GDScript is a fully dynamically typed language. This has many advantages, however, 
-at some point, we might want to fix types of a certain computation, 
-after all, variables can get type hints as well! Since Godot does not support
-generic types of Observables, we can still fix the type of an observable sequence with the
-`oftype` operator. Now we can be sure to always receive items of the wanted type.
+at some point, we might want to fix types of a certain computation. 
+Variables can get type hints as well, after all! Since Godot does not support
+generic types of Observables, we can still fix the type of a sequence with the
+`oftype` operator. Now observers can be sure to always receive items of the wanted type.
 Generating a wrong type will cause an error notification via the `on_error` contract. Per
-default, it also notifies the programmer via a push-error message in the engine.
+default, it also notifies the programmer via a push-error message in the editor.
 
 This would be a good style, I think:
 ```swift
@@ -94,7 +94,7 @@ func coroutine3():
 	await get_tree().create_timer(1.0).timeout
 	print("Done.")
 ```
-Following a good coding style, each of these three coroutines execute one 
+Following a good coding style, each of these three coroutines executes one 
 specific task, however, the first coroutine is also tasked with handling control
 flow (null check of self._reference). GDRx allows us to easily coordinate 
 these program parts by providing a declarative execution plan.
@@ -127,10 +127,10 @@ func coroutine3():
 ```
 As you can see, coroutine1() now only contains code bound to the task it should
 run. Remember: In good code design, each function should execute a single 
-computational step only.
+task step only!
 
 ### Timers
-Timers were already easy using coroutines but when timing on a separate thread,
+Timers were already possible with coroutines but when running on a separate thread,
 things get a bit tricky. Godot 4 appears to not support signals on separate 
 threads. Also, periodic timers only exist as Node objects. GDRx drastically
 simplifies creating timers.
@@ -179,7 +179,7 @@ It always runs at process timestep, scaling with `Engine.time_scale`.
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 
 When an exception is thrown, the observers should be notified via their 
-on_error() contract. If this works all the time, I do not know at this point.
+`on_error()` contract. If this works all the time, I do not know at this point.
 
 ```swift
 func division(n1 : int, n2 : int) -> int:
@@ -195,7 +195,7 @@ func _ready():
 		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e))
 ```
 
-What I do know however is, that the Integer-division operator crashes if you 
+However, what I do know is, that the Integer-division operator crashes if you 
 were to divide by zero ;)
 
 ### Signals & Node Lifecycle Events
@@ -216,14 +216,14 @@ func _ready():
 
 It is important to note, that if an objects is deleted and not all subscriptions
 are disposed, this could lead to memory leaks. To account for this, the resulting
-subscription (an instance of type DisposableBase) can be linked to an object's
-lifetime via `DisposableBase.dispose_with(obj : Object)`.
-
-However, you need to account for recievers only, not senders, when it comes to 
-Signals and Lifecycle Events.
+subscription (an instance of type `DisposableBase`) can be linked to an object's
+lifetime via `DisposableBase.dispose_with(obj : Object)`. Doing so, will cause
+the subscription to be disposed, when the receiver in `dispose_with` is deleted.
+Only the receiver needs to be linked explicitly. Senders are already considered
+automatically by observables representing signals and lifecycle events.
 
 ```swift
-# Dispose when reciever 'self' is deleted, sender 'anim' already accounted!
+# Dispose when receiver 'self' is deleted, sender 'anim' already accounted!
 GDRx.from_signal(anim.animation_finished).subscribe().dispose_with(self)
 # No dispose_with() needed!
 GDRx.on_process_as_observable(self).subscribe()
