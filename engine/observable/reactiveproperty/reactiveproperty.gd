@@ -31,6 +31,11 @@ var Value:
 		for obs in observers_:
 			obs.on_next(value)
 
+func _to_string() -> String:
+	if self.is_disposed:
+		return "<<Disposed ReactiveProperty>>"
+	return str(self._latest_value)
+
 func _init(
 	initial_value_,
 	distinct_until_changed_ : bool = true,

@@ -54,6 +54,8 @@ class ObservableSequence extends ArrayIterator:
 				return ETestState.SUCCESS
 			if expected is Array and expected.hash() == check.hash():
 				return ETestState.SUCCESS
+			if expected is Comparable and expected.eq(check):
+				return ETestState.SUCCESS
 			if expected == check:
 				return ETestState.SUCCESS
 			print("[ReactiveX]: Equality check failed: ", expected, " != ", check, ".")
