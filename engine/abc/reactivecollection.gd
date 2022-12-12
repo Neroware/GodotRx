@@ -182,6 +182,19 @@ func replace_at(index : int, item) -> Variant:
 	self._data[index] = item
 	return value
 
+func swap(idx1 : int, idx2 : int):
+	var tmp = self._data[idx1]
+	self._data[idx1] = self._data[idx2]
+
+func move_to(curr_index : int, new_index : int):
+	var tmp = self._data[curr_index]
+	self._data.remove_at(curr_index)
+	self._data.insert(new_index, tmp)
+
+func insert_at(index : int, elem):
+	self._data.insert(index, elem)
+	self._count += 1
+
 func at(index : int):
 	return self._data[index]
 

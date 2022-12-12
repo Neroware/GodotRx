@@ -115,6 +115,48 @@ func replace_at(index : int, item) -> Variant:
 	self._notify_all(CollectionReplaceEvent, event_replace)
 	return value
 
+func swap(idx1 : int, idx2 : int):
+	if self.is_disposed:
+		return GDRx.exc.DisposedException.Throw()
+	var elem1 = self._data[idx1]
+	var elem2 = self._data[idx2]
+	if elem1 == elem2 || (elem1 is Comparable and elem1.eq(elem2)):
+		return
+	var event_move1 = CollectionMoveEvent.new(idx1, idx2, elem1)
+	var event_move2 = CollectionMoveEvent.new(idx2, idx1, elem2)
+	super.swap(idx1, idx2)
+	self._notify_all(CollectionMoveEvent, event_move1)
+	self._notify_all(CollectionMoveEvent, event_move2)
+
+func move_to(old_index : int, new_index : int):
+	if self.is_disposed:
+		return GDRx.exc.DisposedException.Throw()
+	var moved = self._data[old_index]
+	var replaced = self._data[new_index]
+	if moved == replaced || (moved is Comparable and moved.eq(replaced)):
+		return
+	super.move_to(old_index, new_index)
+	var event_move = CollectionMoveEvent.new(old_index, new_index, moved)
+	self._notify_all(CollectionMoveEvent, event_move)
+	if old_index < new_index:
+		for i in range(old_index + 1, new_index):
+			var event_move_casc = CollectionMoveEvent.new(i, i - 1, self._data[i - 1])
+			self._notify_all(CollectionMoveEvent, event_move_casc)
+	elif new_index < old_index:
+		for i in range(new_index + 1, old_index):
+			var event_move_casc = CollectionMoveEvent.new(i, i + 1, self._data[i + 1])
+			self._notify_all(CollectionMoveEvent, event_move_casc)
+
+func insert_at(index : int, elem):
+	if self.is_disposed:
+		return GDRx.exc.DisposedException.Throw()
+	super.insert_at(index, elem)
+	var event_add = CollectionAddEvent.new(index, elem)
+	self._notify_all(CollectionAddEvent, event_add)
+	for i in range(index, self._data.size()):
+		var event_move_casc = CollectionMoveEvent.new(i, i + 1, self._data[i + 1])
+		self._notify_all(CollectionMoveEvent, event_move_casc)
+
 func at(index : int):
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
