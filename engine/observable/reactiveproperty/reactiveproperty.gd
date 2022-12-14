@@ -77,6 +77,11 @@ func _init(
 	
 	super._init(subscribe)
 
+func eq(other) -> bool:
+	if self.is_disposed:
+		return false
+	return GDRx.eq(Value, other)
+
 func dispose():
 	if self.is_disposed:
 		return

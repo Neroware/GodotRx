@@ -8,7 +8,7 @@ var _Heap = GDRx.heap
 
 const MIN_COUNT = 9223372036854775807
 
-var _items : Array[Comparable]
+var _items : Array
 var _count : int
 
 func _init():

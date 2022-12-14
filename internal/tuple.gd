@@ -21,23 +21,23 @@ func at(i : int):
 func as_list() -> Array:
 	return _x.duplicate()
 
+func is_empty() -> bool:
+	return self._x.is_empty()
+
 func gt(other) -> bool:
-	if not other is Tuple:
+	if not (other is Tuple):
 		return false
-	if _x[0] is Comparable:
-		return _x[0].gt(other.at(0))
-	return _x[0] > other.at(0)
+	return (self._x.is_empty() and other._x.is_empty()) \
+	or GDRx.gt(self._x[0], other._x[0])
 
 func eq(other) -> bool:
-	if not other is Tuple:
+	if not (other is Tuple):
 		return false
-	if _x[0] is Comparable:
-		return _x[0].eq(other.at(0))
-	return _x[0] == other.at(0)
+	return (self._x.is_empty() and other._x.is_empty()) \
+	or GDRx.eq(self._x[0], other._x[0])
 
 func lt(other) -> bool:
-	if not other is Tuple:
+	if not (other is Tuple):
 		return false
-	if _x[0] is Comparable:
-		return _x[0].lt(other.at(0))
-	return _x[0] < other.at(0)
+	return (self._x.is_empty() and other._x.is_empty()) \
+	or GDRx.lt(self._x[0], other._x[0])

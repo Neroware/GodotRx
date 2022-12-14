@@ -1,3 +1,4 @@
+extends Comparable
 class_name StreamItem
 
 ## GDRx-own item type
@@ -24,5 +25,14 @@ func get_payload():
 func is_unit() -> bool:
 	return false
 
+func eq(other) -> bool:
+	if not (other is StreamItem):
+		return GDRx.eq(self._payload, other)
+	return (self.is_unit() and other.is_unit()) \
+	or GDRx.eq(self._payload, other._payload)
+
 static func Unit() -> _Unit:
 	return _Unit.new()
+
+func _to_string():
+	return str(self._payload)

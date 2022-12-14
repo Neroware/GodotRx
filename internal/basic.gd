@@ -8,7 +8,7 @@ func default_now() -> Dictionary:
 	return Time.get_datetime_dict_from_system(true)
 
 func default_comparer(x, y) -> bool:
-	return x == y
+	return x.eq(y) if x.has_method("eq") else x == y
 
 func default_sub_comparer(x, y):
 	return x - y
@@ -19,11 +19,10 @@ func default_key_serializer(x) -> String:
 func default_error(err):
 	if err is ThrowableBase:
 		err.throw()
-	
 	GDRx.raise(GDRx.exc.Exception.new(err))
 
 func default_crash(e):
-	OS.alert("Unhandled exception: " + str(e))
-	#push_error("Unhandled exception: " + str(e))
+	#OS.alert("Unhandled exception: " + str(e))
+	push_error("Unhandled exception: " + str(e))
 	print_stack()
 	GDRx.get_tree().quit(1)
