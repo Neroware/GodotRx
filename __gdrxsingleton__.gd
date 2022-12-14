@@ -154,16 +154,16 @@ func neq(x, y) -> bool:
 	return !eq(x, y)
 ## Less than operator
 func lt(x, y) -> bool:
-	return x.lt(y) if x.has_method("lt") else x < y
+	return x.lt(y) if (x is Object and x.has_method("lt")) else x < y
 ## Greater than operator
 func gt(x, y) -> bool:
-	return x.gt(y) if x.has_method("gt") else x > y
+	return x.gt(y) if (x is Object and x.has_method("gt")) else x > y
 ## Greater than equals operator
 func gte(x, y) -> bool:
-	return x.gte(y) if x.has_method("gte") else x >= y
+	return x.gte(y) if (x is Object and x.has_method("gte")) else x >= y
 ## Less than equals operator
 func lte(x, y) -> bool:
-	return x.lte(y) if x.has_method("gte") else x <= y
+	return x.lte(y) if (x is Object and x.has_method("lte")) else x <= y
 
 ## Raises a [code]GDRx.exc.AssertionFailedException[/code] and returns [b]true[/b]
 ## should the assertion fail.

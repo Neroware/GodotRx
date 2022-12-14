@@ -80,6 +80,8 @@ func _init(
 func eq(other) -> bool:
 	if self.is_disposed:
 		return false
+	if other is ReactiveProperty:
+		return GDRx.eq(Value, other.Value)
 	return GDRx.eq(Value, other)
 
 func dispose():

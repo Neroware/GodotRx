@@ -21,9 +21,7 @@ class CollectionAddEvent extends Comparable:
 		var other = other_ as ReactiveCollectionBase.CollectionAddEvent
 		if index != other.index:
 			return false
-		if value is Comparable:
-			return value.eq(other.value)
-		return value == other.value
+		return GDRx.eq(value, other.value)
 
 class CollectionRemoveEvent extends Comparable:
 	var index : int
@@ -33,7 +31,7 @@ class CollectionRemoveEvent extends Comparable:
 		self.index = index
 		self.value = value
 	
-	func  _to_string() -> String:
+	func _to_string() -> String:
 		return "Index: " + str(index) + " Value: " + str(value)
 	
 	func get_hash_code() -> int:
@@ -45,9 +43,7 @@ class CollectionRemoveEvent extends Comparable:
 		var other = other_ as ReactiveCollectionBase.CollectionRemoveEvent
 		if index != other.index:
 			return false
-		if value is Comparable:
-			return value.eq(other.value)
-		return value == other.value
+		return GDRx.eq(value, other.value)
 
 class CollectionMoveEvent extends Comparable:
 	var old_index : int
@@ -72,9 +68,7 @@ class CollectionMoveEvent extends Comparable:
 		var other = other_ as ReactiveCollectionBase.CollectionMoveEvent
 		if old_index != other.old_index || new_index != other.new_index:
 			return false
-		if value is Comparable:
-			return value.eq(other.value)
-		return value == other.value
+		return GDRx.eq(value, other.value)
 
 class CollectionReplaceEvent extends Comparable:
 	var index : int
@@ -99,15 +93,7 @@ class CollectionReplaceEvent extends Comparable:
 		var other = other_ as ReactiveCollectionBase.CollectionReplaceEvent
 		if index != other.index:
 			return false
-		if old_value is Comparable && !old_value.eq(other.old_value):
-			return false
-		if old_value != other.old_value:
-			return false
-		if new_value is Comparable && !new_value.eq(other.new_value):
-			return false
-		if new_value != other.new_value:
-			return false
-		return true
+		return GDRx.eq(old_value, other.old_value) and GDRx.eq(new_value, other.new_value)
 
 var _count : int = 0
 var _data : Array = []
@@ -120,9 +106,14 @@ var ObserveAdd : Observable:
 	get: return self._observe_add.oftype(ReactiveCollectionBase.CollectionAddEvent)
 var _observe_add : Observable
 
-## [Observable]<[int]>
+## Creates an [Observable] which emits the collection's current element count
+## when the size changes.
 func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
 	return GDRx.exc.NotImplementedException.Throw(false)
+
+## [Observable]<[int]>
+var ObserveCount : Observable:
+	get: return ObserveCountChanged(true).oftype(TYPE_INT)
 
 ## [Observable]<[ReactiveCollectionBase.CollectionMoveEvent]>
 var ObserveMove : Observable:
@@ -145,11 +136,10 @@ var ObserveReset : Observable:
 var _observe_reset : Observable
 
 ## Override from [Comparable]
-func eq(other_ : Comparable) -> bool:
-	if not (other_ is ReactiveCollectionBase):
-		return false
-	var other : ReactiveCollectionBase = other_ as ReactiveCollectionBase
-	return self._data.hash() == other._data.hash()
+func eq(other) -> bool:
+	if other is ReactiveCollectionBase:
+		return self._data.hash() == other.hash()
+	return self._data.hash() == other.hash()
 
 func add_item(item) -> int:
 	self._data.append(item)
@@ -160,38 +150,48 @@ func remove_item(item) -> int:
 	var index = self._data.find(item)
 	if index >= 0:
 		self._data.remove_at(index)
-	self._count = self._data.size()
+		self._count -= 1
 	return index
 
 func remove_at(index : int) -> Variant:
+	if index >= self._count:
+		return null
 	var value = self._data[index]
 	self._data.remove_at(index)
-	self._count = self._data.size()
+	self._count -= 1
 	return value
 
-func replace_item(item) -> Tuple:
+func replace_item(item, with) -> int:
 	var index = self._data.find(item)
-	if index < 0:
+	if index >= 0:
+		self._data[index] = with
+	return index
+
+func replace_at(index : int, item) -> Variant:
+	if index >= self._count:
 		return null
 	var value = self._data[index]
 	self._data[index] = item
-	return Tuple.new([index, value])
-
-func replace_at(index : int, item) -> Variant:
-	var value = self._data[index]
-	self._data[index] = item
 	return value
 
-func swap(idx1 : int, idx2 : int):
+func swap(idx1 : int, idx2 : int) -> Tuple:
+	if idx1 >= self._count or idx2 >= self._count:
+		return null
 	var tmp = self._data[idx1]
 	self._data[idx1] = self._data[idx2]
+	self._data[idx2] = tmp
+	return Tuple.new([self._data[idx2], self._data[idx1]])
 
 func move_to(curr_index : int, new_index : int):
+	if curr_index >= self._count or new_index >= self._count:
+		return
 	var tmp = self._data[curr_index]
 	self._data.remove_at(curr_index)
 	self._data.insert(new_index, tmp)
 
 func insert_at(index : int, elem):
+	if index > self._count:
+		return
 	self._data.insert(index, elem)
 	self._count += 1
 

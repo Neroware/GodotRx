@@ -8,7 +8,7 @@ func default_now() -> Dictionary:
 	return Time.get_datetime_dict_from_system(true)
 
 func default_comparer(x, y) -> bool:
-	return x.eq(y) if x.has_method("eq") else x == y
+	return x.eq(y) if (x is Object and x.has_method("eq")) else x == y
 
 func default_sub_comparer(x, y):
 	return x - y
