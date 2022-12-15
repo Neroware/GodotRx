@@ -21,5 +21,8 @@ static func Set(v_ : Variant = null) -> RefValue:
 static func Null() -> RefValue:
 	return RefValue.new()
 
+func eq(other) -> bool:
+	return GDRx.eq(v, other.v) if other is RefValue else GDRx.eq(v, other)
+
 func _to_string():
 	return str(v)

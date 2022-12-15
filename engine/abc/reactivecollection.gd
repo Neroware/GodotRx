@@ -109,7 +109,7 @@ var _observe_add : Observable
 ## Creates an [Observable] which emits the collection's current element count
 ## when the size changes.
 func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
-	return GDRx.exc.NotImplementedException.Throw(false)
+	return GDRx.exc.NotImplementedException.Throw(Observable.new())
 
 ## [Observable]<[int]>
 var ObserveCount : Observable:

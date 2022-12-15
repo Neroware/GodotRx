@@ -199,6 +199,9 @@ func dispose():
 	self._count = -1
 	self._observers = {}
 
+func to_readonly() -> ReadOnlyReactiveCollection:
+	return ReadOnlyReactiveCollection.new(self)
+
 func _to_string() -> String:
 	if self.is_disposed:
 		return "<<Disposed ReactiveCollection>>"
