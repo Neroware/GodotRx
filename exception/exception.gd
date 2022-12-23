@@ -190,3 +190,22 @@ class TypeMismatchException extends Exception:
 	
 	static func Throw(item = null) -> Variant:
 		return TypeMismatchException.new(item).throw(null)
+
+class HttpsRequestFailedException extends Exception:
+	var url : String
+	var error_code : int
+	var error_message : String
+	
+	func _init(url : String, error_code : int, error_message : String):
+		self.url = url
+		self.error_code = error_code
+		self.error_message = error_message
+		var msg = "HTTP Request to host '" + url + "' failed! " \
+			+ "(" + error_message + ")"
+		super._init(msg)
+	
+	func tags() -> Array[String]:
+		return ["Exception", "HttpsRequestFailedException"]
+	
+	static func Throw(item = null) -> Variant:
+		return NotImplementedException.Throw()
