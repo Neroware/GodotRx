@@ -11,9 +11,9 @@ var _GodotLifecycle_ = load("res://reactivex/engine/observable/godotnodelifecycl
 var _GodotInputAction_ = load("res://reactivex/engine/observable/godotinputaction.gd")
 var _GodotCoroutine_ = load("res://reactivex/engine/observable/godotcoroutine.gd")
 var _ComputeShader_ = load("res://reactivex/engine/observable/computeshader.gd")
+var _HttpRequest_ = load("res://reactivex/engine/observable/httprequest.gd")
 
 var _ProcessTimeInterval_ = load("res://reactivex/engine/operators/_processtimeinterval.gd")
-var _HttpRequest_ = load("res://reactivex/engine/observable/httprequest.gd")
 
 ## See: [b]res://reactivex/engine/observable/godotsignal.gd[/b]
 func from_godot_signal(sig : Signal, scheduler : SchedulerBase = null) -> Observable:
@@ -35,6 +35,10 @@ func from_godot_coroutine(fun : Callable, bindings : Array = [], scheduler : Sch
 func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3i, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
 	return _ComputeShader_.from_compute_shader_(shader_path, rd, work_groups, uniform_sets, scheduler)
 
+## See: [b]"res://reactivex/engine/observable/httprequest.gd"[/b]
+func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = 0) -> Observable:
+	return _HttpRequest_.from_http_request_(url, request_data, raw, encoding, requester, custom_headers, tls_validate_domain, method)
+
 ## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
 func process_time_interval(initial_time : float = 0.0) -> Callable:
 	return _ProcessTimeInterval_.process_time_interval_(initial_time)
@@ -42,11 +46,3 @@ func process_time_interval(initial_time : float = 0.0) -> Callable:
 ## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]
 func physics_time_interval(initial_time : float = 0.0) -> Callable:
 	return _ProcessTimeInterval_.physics_time_interval_(initial_time)
-
-## See: [b]"res://reactivex/engine/observable/httprequest.gd"[/b]
-func from_http_request(url : String, request_data : String = "", encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true,  method : HTTPClient.Method = 0) -> Observable:
-	return _HttpRequest_.from_http_request_(url, request_data, encoding, requester, custom_headers, tls_validate_domain, method)
-
-## See: [b]"res://reactivex/engine/observable/httprequest.gd"[/b]
-func from_http_request_raw(url : String, request_data : PackedByteArray, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true,  method : HTTPClient.Method = 0) -> Observable:
-	return _HttpRequest_.from_http_request_raw_(url, request_data, encoding, requester, custom_headers, tls_validate_domain, method)

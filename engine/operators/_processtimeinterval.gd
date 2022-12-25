@@ -37,7 +37,7 @@ static func process_time_interval_(initial_time : float = 0.0) -> Callable:
 ## The emitted item is a [Tuple] containing the real item as first and the 
 ## time delta as second component.
 static func physics_time_interval_(initial_time : float = 0.0) -> Callable:
-	var physics_time_interval_ = func(source : Observable) -> Observable:
+	var physics_time_interval = func(source : Observable) -> Observable:
 		
 		var subscribe = func(
 			observer : ObserverBase,
@@ -66,4 +66,4 @@ static func physics_time_interval_(initial_time : float = 0.0) -> Callable:
 		
 		return Observable.new(subscribe)
 	
-	return physics_time_interval_
+	return physics_time_interval

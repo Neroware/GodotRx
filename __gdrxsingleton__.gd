@@ -438,12 +438,8 @@ func on_tree_exiting_as_observable(node : Node) -> Observable:
 	return from_signal(node.tree_exiting)
 
 ## Creates an HTTP Request
-func from_http_request(url : String, request_data : String = "", encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true,  method : HTTPClient.Method = 0) -> Observable:
-	return gd.from_http_request(url, request_data, encoding, requester, custom_headers, tls_validate_domain, method)
-
-## Creates an HTTP Request
-func from_http_request_raw(url : String, request_data : PackedByteArray, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true,  method : HTTPClient.Method = 0) -> Observable:
-	return gd.from_http_request_raw(url, request_data, encoding, requester, custom_headers, tls_validate_domain, method)
+func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = 0) -> Observable:
+	return gd.from_http_request(url, request_data, raw, encoding, requester, custom_headers, tls_validate_domain, method)
 
 # =========================================================================== #
 #   Some useful Input Observables
