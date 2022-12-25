@@ -17,15 +17,15 @@ and low coupling rendering the code more easily readable and extendable.
 The Godot Engine brings a well thought-out event system as well as
 a nice implementation of coroutines to the table. It allows you to easily 
 implement asynchronous code execution, meaning that code is not run in
-the sequence order which it is written in. A so-called 'observer' listens to an 
-'observable' event which fires when something important happens in the program 
+the sequence order which it is written in. An observer listens to an 
+observable event which fires when something important happens in the program 
 resulting in side-effects for the connected instances, this can be e.g. a player
 attacking an enemy or an item, which is picked up.
 
 Rx extends this idea by turning all forms of data within the program like 
 GD-signals, GD-lifecycle events, callbacks, data structures, coroutines etc. 
 into observable data streams which emit items. These data streams, referred to as
-Observables, can be transformed using concepts from the world of functional 
+'Observables', can be transformed using concepts from the world of functional 
 programming. (Say hello to Flat-Map, Reduce and friends!)
 
 ## Installation
@@ -46,7 +46,7 @@ GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ### Type Fixation
 GDScript is a fully dynamically typed language. This has many advantages, however, 
 at some point, we might want to fix types of a certain computation. 
-Variables can get type hints as well, after all! Since Godot does not support
+After all, variables can get type hints as well! Since Godot does not support
 generic types of Observables, we can still fix the type of a sequence with the
 `oftype` operator. Now observers can be sure to always receive items of the wanted type.
 Generating a wrong type will cause an error notification via the `on_error` contract. Per
@@ -126,11 +126,11 @@ func coroutine3():
 	print("Done.")
 ```
 As you can see, coroutine1() now only contains code bound to the task it should
-run. Remember: In good code design, each function should execute a single 
-task step only!
+perform. Remember: In good code design, each function should execute a single 
+task only!
 
 ### Timers
-Timers were already possible with coroutines but when running on a separate thread,
+Timers were already possible with coroutines but when running on a separate thread
 things get a bit tricky. Godot 4 appears to not support signals on separate 
 threads. Also, periodic timers only exist as Node objects. GDRx drastically
 simplifies creating timers.
@@ -178,7 +178,7 @@ It always runs at process timestep, scaling with `Engine.time_scale`.
 
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 
-When an exception is thrown, the observers should be notified via their 
+When an exception is thrown, the Observers should be notified via their 
 `on_error()` contract. If this works all the time, I do not know at this point.
 
 ```swift
@@ -195,8 +195,37 @@ func _ready():
 		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e))
 ```
 
-However, what I do know is, that the Integer-division operator crashes if you 
+However, what I do know is that the Integer-division operator crashes if you 
 were to divide by zero ;)
+
+This error handling can be especially useful when executing code which can 
+generate some form of fail-state like e.g. an HTTPRequest. In this example
+we decide what to do if we do not receive the wanted data from our http server.
+Using `catch` we can declare alternatives should a specific sequence terminate
+with an error.
+
+```swift
+func _ready():
+	var parser_cb = func(i : String):
+		var parser = JSON.new()
+		if parser.parse(i):
+			return GDRx.raise_message(str(parser.get_error_line()) + ":" + parser.get_error_message())
+		return parser.data
+	
+	var obs : Observable = GDRx.catch([
+		GDRx.from_http_request("http://www.mocky.io/v2/5185415ba171ea3a00704eed", "", false, "utf8") \
+			.map(func(i): return parser_cb.call(i.decoded)),
+		GDRx.from_http_request("https://this.url.should.not.exist.1234567890.de", "", false, "utf8") \
+			.map(func(i): return parser_cb.call(i.decoded)),
+		GDRx.just({"hello":"world"})
+	])
+	
+	obs.subscribe(func(i): print("hello> ", i["hello"])).dispose_with(self)
+```
+
+Do you notice how expressive this approach is? In defining the single higher-order
+Observable `obs`, we could implement the concept of a try-catch-like structure just
+by listing our alternatives.
 
 ### Signals & Node Lifecycle Events
 
@@ -214,7 +243,7 @@ func _ready():
 
 ** Subscription Management **
 
-It is important to note, that if an objects is deleted and not all subscriptions
+It is important to note that if an object is deleted and not all subscriptions
 are disposed, this could lead to memory leaks. To account for this, the resulting
 subscription (an instance of type `DisposableBase`) can be linked to an object's
 lifetime via `DisposableBase.dispose_with(obj : Object)`. Doing so, will cause
@@ -327,9 +356,20 @@ _Stamina.Value = 0.2
 _AttackDamage.Value = 90
 ```
 
+### Reactive Collections
+
+A ReactiveCollection works similar to a ReactiveProperty with the main difference
+that it represents not a single value but a listing of values.
+
+```swift
+var collection : ReactiveCollection = ReactiveCollection.new(["a", "b", "c", "d", "e", "f"])
+```
+
+(I should probably make it support constructor arguments of type `IterableBase` as well...)
+
 ### Operators
 
-A large set of functional operators can be used to transform observables into new ones. **Be careful! I have not tested them all...!**
+A large set of functional operators can be used to transform observables. **Be careful! I have not tested them all...!**
 For more info, also check out the comments in the operator scripts!
 
 ### Input Events
@@ -354,7 +394,7 @@ GDRx.on_key_pressed(KEY_W) \
 
 ### Frame Events
 
-Main frame events can be directly accessed as Observables as well:
+Main frame events can be directly accessed as observables as well:
 
 ```swift
 # Do stuff before `_process(delta)` calls.
