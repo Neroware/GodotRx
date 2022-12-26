@@ -30,10 +30,11 @@ static func from_http_request_(
 		
 		var _requester : HTTPRequest = requester if requester != null else HTTPRequest.new()
 		if requester == null: GDRx.add_child(_requester)
+		var n_bytes = _requester.get_downloaded_bytes()
 		
 		var action = func(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray):
 			if requester == null: _requester.queue_free()
-			if _requester.get_downloaded_bytes() == 0:
+			if _requester.get_downloaded_bytes() - n_bytes == 0:
 				observer.on_error(GDRx.exc.HttpsRequestFailedException.new(url, 0, "No data received"))
 				return
 			var http_request_result : HttpRequestResult = HttpRequestResult.new()
