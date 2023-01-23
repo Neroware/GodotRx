@@ -11,8 +11,8 @@ func _init(value_):
 
 func _accept(
 	on_next : Callable,
-	_on_error : Callable = func(e): return,
-	_on_completed : Callable = func(): return):
+	_on_error : Callable = GDRx.basic.noop,
+	_on_completed : Callable = GDRx.basic.noop):
 		return on_next.call(self.value)
 
 func _accept_observer(observer : ObserverBase):

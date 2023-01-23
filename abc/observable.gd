@@ -20,15 +20,38 @@ class_name ObservableBase
 ##		var disp = obs.subscribe(observer)
 ##		var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
 ##		[/codeblock]
+## [br]
+## Since GDScript has no overloading to this date, use [code]subscribe{n}(...)[/code]
+## for faster access!
 func subscribe(
 	_on_next, # Callable or Observer or Object with callbacks
-	_on_error : Callable = func(e): return,
-	_on_completed : Callable = func(): return,
+	_on_error : Callable = GDRx.basic.noop,
+	_on_completed : Callable = GDRx.basic.noop,
 	_scheduler : SchedulerBase = null) -> DisposableBase:
 		GDRx.exc.NotImplementedException.Throw()
 		return null
 
-## Shortcut leaving out the [code]on_error[/code] and [code]on_completed[/code]
-## contracts.
-func subscribe_obv(obv = null, _scheduler : SchedulerBase = null) -> DisposableBase:
-	return self.subscribe(obv, func(e):return, func():return, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe1(obv : ObserverBase = null, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(obv, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe2(on_next : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(on_next, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe3(on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, on_error, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe4(on_completed : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, GDRx.basic.noop, on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe5(on_next : Callable = GDRx.basic.noop, on_completed : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(on_next, GDRx.basic.noop, on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe6(on_next : Callable = GDRx.basic.noop, on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(on_next, on_error, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe7(on_completed : Callable = GDRx.basic.noop, on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, on_error, on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe8(_scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, GDRx.basic.noop, GDRx.basic.noop, _scheduler)

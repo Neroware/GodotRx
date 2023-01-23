@@ -21,7 +21,7 @@ var lock : RLock
 ## [br]
 ##            The disposable object that runs the given action upon
 ##            disposal.
-func _init(action_ : Callable = func(): return):
+func _init(action_ : Callable = GDRx.basic.noop):
 	self.is_disposed = false
 	self.action = action_
 	self.lock = RLock.new()

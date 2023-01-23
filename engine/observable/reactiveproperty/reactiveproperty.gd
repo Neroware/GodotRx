@@ -128,8 +128,8 @@ static func FromGetSet(
 static func FromMember(
 	target,
 	member_name : StringName,
-	convert_cb = func(x): return x,
-	convert_back_cb = func(x): return x,
+	convert_cb = GDRx.basic.identity,
+	convert_back_cb = GDRx.basic.identity,
 	distinct_until_changed_ : bool = true,
 	raise_latest_value_on_subscribe_ : bool = true
 ) -> ReactiveProperty:

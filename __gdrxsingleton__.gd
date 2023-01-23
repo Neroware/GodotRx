@@ -219,6 +219,14 @@ func of(data : Array, scheduler : SchedulerBase = null) -> Observable:
 func just(value, scheduler : SchedulerBase = null) -> Observable:
 	return self.return_value(value, scheduler)
 
+## Empty operation as defined in [code]GDRx.basic.noop[/code]
+func noop(__ = null, ___ = null):
+	GDRx.basic.noop(__, ___)
+
+## Identity mapping as defined in [code]GDRx.basic.identity[/code]
+func identity(x):
+	return GDRx.basic.identity(x)
+
 # =========================================================================== #
 #   Observable Constructors
 # =========================================================================== #

@@ -26,3 +26,6 @@ func default_crash(e):
 	push_error("Unhandled exception: " + str(e))
 	print_stack()
 	GDRx.get_tree().quit(1)
+
+func default_condition(__ = null) -> bool:
+	return false

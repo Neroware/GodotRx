@@ -37,8 +37,8 @@ func _init():
 ##            Result produced by the observation.
 func accept(
 	on_next, # Callable or ObserverBase
-	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return):
+	on_error : Callable = GDRx.basic.noop,
+	on_completed : Callable = GDRx.basic.noop):
 		if on_next is ObserverBase:
 			return self._accept_observer(on_next)
 		
@@ -46,8 +46,8 @@ func accept(
 
 func _accept(
 	_on_next : Callable,
-	_on_error : Callable = func(e): return,
-	_on_completed : Callable = func(): return):
+	_on_error : Callable = GDRx.basic.noop,
+	_on_completed : Callable = GDRx.basic.noop):
 		GDRx.exc.NotImplementedException.Throw()
 
 func _accept_observer(_observer : ObserverBase):

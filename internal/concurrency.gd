@@ -76,7 +76,7 @@ func synchronized(lock : RLock, n_args : int) -> Callable:
 	
 	return wrapper
 
-func with(l, fun : Callable = func():return):
+func with(l, fun : Callable = GDRx.basic.noop):
 	var ret = null
 	if l.has_method("lock"):
 		l.lock()

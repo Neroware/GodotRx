@@ -57,8 +57,8 @@ func _subscribe_core(
 ##            the observable sequence.
 func subscribe(
 	on_next = null, # Callable or Observer or Object with callbacks
-	on_error : Callable = func(e): return,
-	on_completed : Callable = func(): return,
+	on_error : Callable = GDRx.basic.noop,
+	on_completed : Callable = GDRx.basic.noop,
 	scheduler : SchedulerBase = null) -> DisposableBase:
 		if on_next == null:
 			on_next = GDRx.basic.noop
