@@ -16,7 +16,7 @@
 ##    [br]
 ##        An observable sequence whose observers trigger an invocation
 ##        of the given observable factory function.
-static func defer_(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
+static func defer_(factory : Callable = GDRx.basic.default_factory) -> Observable:
 	
 	var subscribe = func(
 		observer : ObserverBase, 

@@ -1,7 +1,7 @@
 func noop(__ = null, ___ = null):
 	pass
 
-func identity(x):
+func identity(x, __ = null):
 	return x
 
 func default_now() -> Dictionary:
@@ -27,5 +27,8 @@ func default_crash(e):
 	print_stack()
 	GDRx.get_tree().quit(1)
 
-func default_condition(__ = null) -> bool:
-	return false
+func default_condition(__ = null, ___ = null) -> bool:
+	return true
+
+func default_factory(__ : SchedulerBase) -> Observable:
+	return GDRx.obs.empty()

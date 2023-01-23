@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
+@export var tests : String = "identity,amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -189,6 +189,11 @@ var ERROR : ObservableSequence.Error = ObservableSequence.Error.new()
 # ============================================================================ #
 # 								Test Suit									   #
 # ============================================================================ #
+
+func _test_identity():
+	var obs = GDRx.just(42).map()
+	var seq = ObservableSequence.new([42, COMPLETE])
+	seq.compare(obs, self.sequence_finished)
 
 func _test_amb():
 	var obs1 : Observable = GDRx.start_periodic_timer(1.0).map(func(i): return "T1")

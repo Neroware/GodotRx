@@ -1,6 +1,6 @@
 static func to_dict_(
 	key_mapper : Callable, 
-	element_mapper : Callable = func(v): return v
+	element_mapper : Callable = GDRx.basic.identity
 ) -> Callable:
 	var to_dict = func(source : Observable) -> Observable:
 #		"""Converts the observable sequence to a Map if it exists.

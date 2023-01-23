@@ -391,11 +391,11 @@ func expand(mapper : Callable) -> Observable:
 	return GDRx.op.expand(mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_filter.gd[/b]
-func filter(predicate : Callable = func(x): return true) -> Observable:
+func filter(predicate : Callable = GDRx.basic.default_condition) -> Observable:
 	return GDRx.op.filter(predicate).call(self)
 
 ## See: [b]res://reactivex/operators/_filter.gd[/b]
-func filter_indexed(predicate : Callable = func(x, index): return true) -> Observable:
+func filter_indexed(predicate : Callable = GDRx.basic.default_condition) -> Observable:
 	return GDRx.op.filter_indexed(predicate).call(self)
 
 ## See: [b]res://reactivex/operators/_finallyaction.gd[/b]
@@ -475,7 +475,7 @@ func map(mapper : Callable = GDRx.basic.identity) -> Observable:
 	return GDRx.op.map(mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_map.gd[/b]
-func map_indexed(mapper_indexed : Callable = func(value, idx : int): return value) -> Observable:
+func map_indexed(mapper_indexed : Callable = GDRx.basic.identity) -> Observable:
 	return GDRx.op.map_indexed(mapper_indexed).call(self)
 
 ## See: [b]res://reactivex/operators/_materialize.gd[/b]
@@ -533,11 +533,11 @@ func pairwise() -> Observable:
 	return GDRx.op.pairwise().call(self)
 
 ## See: [b]res://reactivex/operators/_partiton.gd[/b]
-func partition(predicate : Callable = func(x): return true) -> Array[Observable]:
+func partition(predicate : Callable = GDRx.basic.default_condition) -> Array[Observable]:
 	return GDRx.op.partition(predicate).call(self)
 
 ## See: [b]res://reactivex/operators/_partition.gd[/b]
-func partition_indexed(predicate_indexed : Callable = func(x, i : int): return true) -> Observable:
+func partition_indexed(predicate_indexed : Callable = GDRx.basic.default_condition) -> Observable:
 	return GDRx.op.partition_indexed(predicate_indexed).call(self)
 
 ## See: [b]res://reactivex/operators/_pluck.gd[/b]
@@ -685,11 +685,11 @@ func take_until_with_time(end_time : float, absolute : bool = false, scheduler :
 	return GDRx.op.take_until_with_time(end_time, absolute, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_takewhile.gd[/b]
-func take_while(predicate : Callable = func(value) -> bool: return true, inclusive : bool = false) -> Observable:
+func take_while(predicate : Callable = GDRx.basic.default_condition, inclusive : bool = false) -> Observable:
 	return GDRx.op.take_while(predicate, inclusive).call(self)
 
 ## See: [b]res://reactivex/operators/_takewhile.gd[/b]
-func take_while_indexed(predicate : Callable = func(value, index) -> bool: return true, inclusive : bool = false) -> Observable:
+func take_while_indexed(predicate : Callable = GDRx.basic.default_condition, inclusive : bool = false) -> Observable:
 	return GDRx.op.take_while_indexed(predicate, inclusive).call(self)
 
 ## See: [b]res://reactivex/operators/_takewithtime.gd[/b]
@@ -717,7 +717,7 @@ func timestamp(scheduler : SchedulerBase = null) -> Observable:
 	return GDRx.op.timestamp(scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_todict.gd[/b]
-func to_dict(key_mapper : Callable, element_mapper : Callable = func(v): return v) -> Observable:
+func to_dict(key_mapper : Callable, element_mapper : Callable = GDRx.basic.identity) -> Observable:
 	return GDRx.op.to_dict(key_mapper, element_mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_toiterable.gd[/b]
@@ -733,7 +733,7 @@ func to_set() -> Observable:
 	return GDRx.op.to_set().call(self)
 
 ## See: [b]res://reactivex/operators/_whiledo.gd[/b]
-func while_do(condition : Callable = func(): return true) -> Observable:
+func while_do(condition : Callable = GDRx.basic.default_condition) -> Observable:
 	return GDRx.op.while_do(condition).call(self)
 
 ## See: [b]res://reactivex/operators/_window.gd[/b]

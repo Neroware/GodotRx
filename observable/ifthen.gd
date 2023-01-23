@@ -24,7 +24,7 @@
 ##        An observable sequence which is either the [code]then_source[/code] or
 ##        [code]else_source[/code].
 static func if_then_(
-	condition : Callable = func() -> bool: return true,
+	condition : Callable = GDRx.basic.default_condition,
 	then_source : Observable = null,
 	else_source : Observable = null
 ) -> Observable:

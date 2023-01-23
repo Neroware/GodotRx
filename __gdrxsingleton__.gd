@@ -224,8 +224,8 @@ func noop(__ = null, ___ = null):
 	GDRx.basic.noop(__, ___)
 
 ## Identity mapping as defined in [code]GDRx.basic.identity[/code]
-func identity(x):
-	return GDRx.basic.identity(x)
+func identity(x, __ = null):
+	return GDRx.basic.identity(x, __)
 
 # =========================================================================== #
 #   Observable Constructors
@@ -264,7 +264,7 @@ func concat_with_iterable(sources : IterableBase) -> Observable:
 	return obs.concat_with_iterable(sources)
 
 ## See: [b]res://reactivex/observable/defer.gd[/b]
-func defer(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
+func defer(factory : Callable = GDRx.basic.default_factory) -> Observable:
 	return obs.defer(factory)
 
 ## See: [b]res://reactivex/observable/empty.gd[/b]
@@ -288,15 +288,15 @@ func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) ->
 	return obs.from_iterable(iterable, scheduler)
 
 ## See: [b]res://reactivex/observable/generate.gd[/b]
-func generate(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state) -> Observable:
+func generate(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity) -> Observable:
 	return obs.generate(initial_state, condition, iterate)
 
 ## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
-func generate_with_relative_time(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
+func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
 	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
 
 ## See: [b]res://reactivex/observable/ifthen.gd[/b]
-func if_then(condition : Callable = func() -> bool: return true, then_source : Observable = null, else_source : Observable = null) -> Observable:
+func if_then(condition : Callable = GDRx.basic.default_condition, then_source : Observable = null, else_source : Observable = null) -> Observable:
 	return obs.if_then(condition, then_source, else_source)
 
 ## See: [b]res://reactivex/observable/interval.gd[/b]

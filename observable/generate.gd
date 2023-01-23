@@ -1,7 +1,7 @@
 static func generate_(
 	initial_state,
-	condition : Callable = func(state) -> bool: return true,
-	iterate : Callable = func(state): return state
+	condition : Callable = GDRx.basic.default_condition,
+	iterate : Callable = GDRx.basic.identity
 ) -> Observable:
 	
 	var subscribe = func(

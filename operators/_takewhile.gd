@@ -1,5 +1,5 @@
 static func take_while_(
-	predicate : Callable = func(value) -> bool: return true,
+	predicate : Callable = GDRx.basic.default_condition,
 	inclusive : bool = false
 ) -> Callable:
 	var take_while = func(source : Observable) -> Observable:
@@ -56,7 +56,7 @@ static func take_while_(
 	return take_while
 
 static func take_while_indexed_(
-	predicate : Callable = func(value, index) -> bool: return true,
+	predicate : Callable = GDRx.basic.default_condition,
 	inclusive : bool = false
 ) -> Callable:
 	var take_while_indexed = func(source : Observable) -> Observable:

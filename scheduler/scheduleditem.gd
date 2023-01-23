@@ -9,7 +9,7 @@ var action : Callable
 var duetime : float
 var disposable : SingleAssignmentDisposable
 
-func _init(scheduler_ : Scheduler, duetime_ : float, state_ = null, action_ : Callable = func(scheduler : Scheduler, state = null): return):
+func _init(scheduler_ : Scheduler, duetime_ : float, state_ = null, action_ : Callable = GDRx.basic.noop):
 	self.scheduler = scheduler_
 	self.state = state_
 	self.action = action_

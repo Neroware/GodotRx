@@ -27,8 +27,8 @@
 ##        The generated sequence.
 static func generate_with_relative_time_(
 	initial_state,
-	condition : Callable = func(state) -> bool: return true,
-	iterate : Callable = func(state): return state,
+	condition : Callable = GDRx.basic.default_condition,
+	iterate : Callable = GDRx.basic.identity,
 	time_mapper : Callable = func(state) -> float: return 1.0
 ) -> Observable:
 	

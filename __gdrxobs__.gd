@@ -51,7 +51,7 @@ func concat_with_iterable(sources : IterableBase) -> Observable:
 	return _Concat_.concat_with_iterable_(sources)
 
 ## See: [b]res://reactivex/observable/defer.gd[/b]
-func defer(factory : Callable = func(scheduler : SchedulerBase) -> Observable: return null) -> Observable:
+func defer(factory : Callable = GDRx.basic.default_factory) -> Observable:
 	return _Defer_.defer_(factory)
 
 ## See: [b]res://reactivex/observable/empty.gd[/b]
@@ -71,15 +71,15 @@ func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) ->
 	return _FromIterable_.from_iterable_(iterable, scheduler)
 
 ## See: [b]res://reactivex/observable/generate.gd[/b]
-func generate(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state) -> Observable:
+func generate(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity) -> Observable:
 	return _Generate_.generate_(initial_state, condition, iterate)
 
 ## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
-func generate_with_relative_time(initial_state, condition : Callable = func(state) -> bool: return true, iterate : Callable = func(state): return state, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
+func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
 	return _GenerateWithRealtiveTime_.generate_with_relative_time_(initial_state, condition, iterate, time_mapper)
 
 ## See: [b]res://reactivex/observable/ifthen.gd[/b]
-func if_then(condition : Callable = func() -> bool: return true, then_source : Observable = null, else_source : Observable = null) -> Observable:
+func if_then(condition : Callable = GDRx.basic.default_condition, then_source : Observable = null, else_source : Observable = null) -> Observable:
 	return _IfThen_.if_then_(condition, then_source, else_source)
 
 ## See: [b]res://reactivex/observable/interval.gd[/b]

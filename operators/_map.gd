@@ -45,7 +45,7 @@ static func map_(
 	return map
 
 static func map_indexed_(
-	mapper_indexed : Callable = func(value, idx : int): return value
+	mapper_indexed : Callable = GDRx.basic.identity
 ) -> Callable:
 	var _mapper_indexed = mapper_indexed
 	

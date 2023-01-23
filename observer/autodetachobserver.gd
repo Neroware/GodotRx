@@ -10,9 +10,9 @@ var _subscription : SingleAssignmentDisposable
 var is_stopped : bool
 
 func _init(
-	on_next_ : Callable = func(i): return,
-	on_error_ : Callable = func(e): return,
-	on_completed_ : Callable = func(): return):
+	on_next_ : Callable = GDRx.basic.noop,
+	on_error_ : Callable = GDRx.basic.noop,
+	on_completed_ : Callable = GDRx.basic.noop):
 		self._on_next = on_next_
 		self._on_error = on_error_
 		self._on_completed = on_completed_

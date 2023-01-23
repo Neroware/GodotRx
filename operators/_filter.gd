@@ -1,4 +1,4 @@
-static func filter_(predicate : Callable = func(x): return true) -> Callable:
+static func filter_(predicate : Callable = GDRx.basic.default_condition) -> Callable:
 	var filter = func(source : Observable) -> Observable:
 #		"""Partially applied filter operator.
 #
@@ -40,7 +40,7 @@ static func filter_(predicate : Callable = func(x): return true) -> Callable:
 	
 	return filter
 
-static func filter_indexed_(predicate : Callable = func(x, index): return true) -> Callable:
+static func filter_indexed_(predicate : Callable = GDRx.basic.default_condition) -> Callable:
 	var filter_indexed = func(source : Observable) -> Observable:
 #		"""Partially applied indexed filter operator.
 #

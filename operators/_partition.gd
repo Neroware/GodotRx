@@ -1,5 +1,5 @@
 static func partition_(
-	predicate : Callable = func(x): return true
+	predicate : Callable = GDRx.basic.default_condition
 ) -> Callable:
 	
 	var partition = func(source : Observable) -> Array[Observable]:
@@ -37,7 +37,7 @@ static func partition_(
 	return partition
 
 static func partition_indexed_(
-	predicate_indexed : Callable = func(x): return true
+	predicate_indexed : Callable = GDRx.basic.default_condition
 ) -> Callable:
 	
 	var partition_indexed = func(source : Observable) -> Array[Observable]:

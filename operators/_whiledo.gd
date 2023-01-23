@@ -1,5 +1,5 @@
 static func while_do_(
-	condition : Callable = func(): return true
+	condition : Callable = GDRx.basic.default_condition
 ) -> Callable:
 	var while_do = func(source : Observable) -> Observable:
 #		"""Repeats source as long as condition holds emulating a while
