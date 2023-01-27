@@ -46,18 +46,18 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 ##        subscribers.
 func auto_connect_observable(subscriber_count : int = 1) -> Observable:
 	var connectable_subscription : Array[DisposableBase] = [null]
-	@warning_ignore(shadowed_variable)
+	@warning_ignore("shadowed_variable")
 	var count = [0]
-	@warning_ignore(shadowed_variable)
+	@warning_ignore("shadowed_variable")
 	var source = self
-	@warning_ignore(shadowed_variable_base_class)
+	@warning_ignore("shadowed_variable_base_class")
 	var is_connected = [false]
 	
 	if subscriber_count == 0:
 		connectable_subscription[0] = source.connect_observable()
 		is_connected[0] = true
 	
-	@warning_ignore(shadowed_variable)
+	@warning_ignore("shadowed_variable")
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null

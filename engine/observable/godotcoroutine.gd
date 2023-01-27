@@ -27,7 +27,7 @@ static func from_godot_coroutine_(
 				# Coroutine but either way should this code work! If 'coroutine'
 				# was a member function Godot would throw an error telling us
 				# that this is, in fact, a coroutine if it contains an 'await'.
-				@warning_ignore(redundant_await)
+				@warning_ignore("redundant_await")
 				res.v = await coroutine.call()
 				observer.on_next(res.v)
 				observer.on_completed()

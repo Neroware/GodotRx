@@ -25,7 +25,7 @@ static func average_(
 #			An observable sequence containing a single element with the
 #			average of the sequence of values.
 #		"""
-		@warning_ignore(incompatible_ternary)
+		@warning_ignore("incompatible_ternary")
 		var key_mapper_ : Callable = key_mapper if key_mapper != null else func(x): return float(x)
 		
 		var accumulator = func(prev : AverageValue, curr : float) -> AverageValue:

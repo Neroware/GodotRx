@@ -36,7 +36,7 @@ func _init(
 	self._distinct_until_changed = distinct_until_changed_
 	self._raise_latest_value_on_subscribe = raise_latest_value_on_subscribe_
 	
-	@warning_ignore(shadowed_variable)
+	@warning_ignore("shadowed_variable")
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null

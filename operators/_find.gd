@@ -26,7 +26,7 @@ static func find_value_(
 					index.v += 1
 			
 			var on_completed = func():
-				@warning_ignore(incompatible_ternary)
+				@warning_ignore("incompatible_ternary")
 				observer.on_next(-1 if yield_index else null)
 				observer.on_completed()
 			

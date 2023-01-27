@@ -52,7 +52,7 @@ func _init(
 	if source != null:
 		self._source_subscription = source.subscribe(func(i): Value = i)
 	
-	@warning_ignore(shadowed_variable)
+	@warning_ignore("shadowed_variable")
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler : SchedulerBase = null

@@ -37,7 +37,7 @@ static func replay_(
 		
 		var subject_factory = func(
 			scheduler : SchedulerBase
-		) -> BehaviorSubject:
+		) -> ReplaySubject:
 			var _buffer_size : int = buffer_size
 			var _window : float = window
 			return ReplaySubject.new(_buffer_size, _window, scheduler)

@@ -357,7 +357,7 @@ func materialize() -> Callable:
 	return _Materialize_.materialize_()
 
 ## See: [b]res://reactivex/operators/_max.gd[/b]
-@warning_ignore(shadowed_global_identifier)
+@warning_ignore("shadowed_global_identifier")
 func max(comparer = null) -> Callable:
 	return _Max_.max_(comparer)
 
@@ -374,7 +374,7 @@ func merge_all() -> Callable:
 	return _Merge_.merge_all_()
 
 ## See: [b]res://reactivex/operators/_min.gd[/b]
-@warning_ignore(shadowed_global_identifier)
+@warning_ignore("shadowed_global_identifier")
 func min(comparer = null) -> Callable:
 	return _Min_.min_(comparer)
 

@@ -483,7 +483,7 @@ func materialize() -> Observable:
 	return GDRx.op.materialize().call(self)
 
 ## See: [b]res://reactivex/operators/_max.gd[/b]
-@warning_ignore(shadowed_global_identifier)
+@warning_ignore("shadowed_global_identifier")
 func max(comparer = null) -> Observable:
 	return GDRx.op.max(comparer).call(self)
 
@@ -500,7 +500,7 @@ func merge_all() -> Observable:
 	return GDRx.op.merge_all().call(self)
 
 ## See: [b]res://reactivex/operators/_min.gd[/b]
-@warning_ignore(shadowed_global_identifier)
+@warning_ignore("shadowed_global_identifier")
 func min(comparer = null) -> Observable:
 	return GDRx.op.min(comparer).call(self)
 

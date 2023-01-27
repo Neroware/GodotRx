@@ -40,7 +40,7 @@ static func group_by_until_(
 	var element_mapper_ : Callable = element_mapper if element_mapper != null else GDRx.basic.identity
 	
 	var default_subject_mapper = func(): return Subject.new()
-	@warning_ignore(incompatible_ternary)
+	@warning_ignore("incompatible_ternary")
 	var subject_mapper_ : Callable = subject_mapper if subject_mapper != null else default_subject_mapper
 	
 	var group_by_until = func(source : Observable) -> Observable:

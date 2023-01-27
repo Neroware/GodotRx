@@ -21,7 +21,7 @@ static func window_with_count_(
 		GDRx.exc.ArgumentOutOfRangeException.Throw()
 		count = 1
 	
-	@warning_ignore(incompatible_ternary)
+	@warning_ignore("incompatible_ternary")
 	var skip_ : int = skip if skip != null else count
 	if skip_ <= 0:
 		GDRx.exc.ArgumentOutOfRangeException.Throw()

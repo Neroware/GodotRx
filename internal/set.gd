@@ -15,7 +15,7 @@ func add(item):
 		self._list.append(item)
 
 func erase(item):
-	return self._list.erase(item)
+	self._list.erase(item)
 
 func size() -> int:
 	return self._list.size()

@@ -17,7 +17,7 @@ static func process_time_interval_(initial_time : float = 0.0) -> Callable:
 				dt.v += delta
 			var process_sub : DisposableBase = GDRx.on_idle_frame().subscribe(on_process)
 			
-			var on_next = func(value) -> Tuple:
+			var on_next = func(value):
 				var span : float = dt.v
 				dt.v = 0.0
 				observer.on_next(Tuple.new([value, span]))
@@ -52,7 +52,7 @@ static func physics_time_interval_(initial_time : float = 0.0) -> Callable:
 				dt.v += delta
 			var process_sub : DisposableBase = GDRx.on_physics_step().subscribe(on_process)
 			
-			var on_next = func(value) -> Tuple:
+			var on_next = func(value):
 				var span : float = dt.v
 				dt.v = 0.0
 				observer.on_next(Tuple.new([value, span]))

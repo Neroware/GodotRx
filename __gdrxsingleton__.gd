@@ -316,7 +316,7 @@ func on_error_resume_next(sources : Array) -> Observable:
 	return obs.on_error_resume_next(sources)
 
 ## See: [b]res://reactivex/observable/range.gd[/b]
-@warning_ignore(shadowed_global_identifier)
+@warning_ignore("shadowed_global_identifier")
 func range(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
 	return obs.range(start, stop, step, scheduler)
 

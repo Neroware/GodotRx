@@ -62,6 +62,6 @@ static func sample_(
 				source, GDRx.obs.interval(sampler_time, scheduler)
 			)
 		else:
-			sample_observable(source, sampler)
+			return sample_observable(source, sampler)
 	
 	return sample
