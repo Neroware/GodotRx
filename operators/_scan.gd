@@ -19,7 +19,7 @@ static func scan_(
 #		Returns:
 #			An observable sequence containing the accumulated values.
 #		"""
-		var factory = func(scheduler : SchedulerBase) -> Observable:
+		var factory = func(_scheduler : SchedulerBase) -> Observable:
 			var has_accumulation = RefValue.Set(false)
 			var accumulation = RefValue.Null()
 			

@@ -6,7 +6,7 @@ class_name Observable
 var lock : RLock
 var _subscribe : Callable
 
-func _init(subscribe_ : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: 
+func _init(subscribe_ : Callable = func(_observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase: 
 	return Disposable.new()):
 		super._init()
 		

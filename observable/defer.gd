@@ -33,6 +33,6 @@ static func defer_(factory : Callable = GDRx.basic.default_factory) -> Observabl
 		) \
 		.end_try_catch():
 			return failed.v
-		return result.v.subscribe(observer, func(e):return, func():return, scheduler)
+		return result.v.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 	
 	return Observable.new(subscribe)

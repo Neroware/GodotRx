@@ -64,7 +64,7 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
-	var seconds = self.to_seconds(duetime)
+	var seconds = Scheduler.to_seconds(duetime)
 	if seconds <= 0.0:
 		return self.schedule(action, state)
 	
@@ -98,7 +98,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 ##            The disposable object used to cancel the scheduled action
 ##            (best effort).
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
-	duetime = self.to_seconds(duetime)
+	duetime = Scheduler.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)
 
 ## Utility function to cancel a timer

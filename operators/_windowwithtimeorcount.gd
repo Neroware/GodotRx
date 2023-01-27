@@ -25,7 +25,7 @@ static func window_with_time_or_count_(
 				var m = SingleAssignmentDisposable.new()
 				timer_d.v.disposable = m
 				
-				var action = func(scheduler : SchedulerBase, state = null):
+				var action = func(_scheduler : SchedulerBase, _state = null):
 					if _id != window_id.v:
 						return
 					

@@ -22,7 +22,7 @@ static func observe_on_(scheduler : SchedulerBase) -> Callable:
 		) -> DisposableBase:
 			return source.subscribe(
 				ObserveOnObserver.new(scheduler, observer),
-				func(e):return, func():return,
+				GDRx.basic.noop, GDRx.basic.noop,
 				subscribe_scheduler
 			)
 		

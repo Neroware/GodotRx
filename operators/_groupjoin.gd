@@ -135,7 +135,7 @@ static func group_join_(
 				) \
 				.end_try_catch(): return
 				
-				var on_error = func(error):
+				var on_error = func(__):
 					left.lock.lock()
 					for left_value in left_map.values():
 						left_value.as_observer().on_next(value)

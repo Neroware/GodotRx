@@ -5,7 +5,7 @@ static func observable_timer_date(duetime : float, scheduler : SchedulerBase = n
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = TimeoutScheduler.singleton()
 		
-		var action = func(scheduler : SchedulerBase, state):
+		var action = func(_scheduler : SchedulerBase, _state):
 			observer.on_next(0)
 			observer.on_completed()
 		
@@ -29,7 +29,7 @@ static func observable_timer_duetime_and_period(duetime : float, time_absolute :
 		var dt = RefValue.Set(duetime_ref.v)
 		var count = RefValue.Set(0)
 		
-		var action = func(scheduler : SchedulerBase, state, action_):
+		var action = func(scheduler : SchedulerBase, _state, action_):
 			if p > 0.0:
 				var now = scheduler.now()
 				dt.v = dt.v + p
@@ -54,7 +54,7 @@ static func observable_timer_timespan(duetime : float, scheduler : SchedulerBase
 		else: _scheduler = TimeoutScheduler.singleton()
 		var d = duetime # _scheduler.to_seconds(duetime)
 		
-		var action = func(scheduler : SchedulerBase, state):
+		var action = func(_scheduler : SchedulerBase, _state):
 			observer.on_next(0)
 			observer.on_completed()
 		

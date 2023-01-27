@@ -181,7 +181,7 @@ func _process(_delta):
 		else:
 			method.call()
 
-static func UNSUB(v) -> ObservableSequence.UnsubscribeOn:
+func UNSUB(v) -> ObservableSequence.UnsubscribeOn:
 	return ObservableSequence.UnsubscribeOn.new(v)
 var COMPLETE : ObservableSequence.Complete = ObservableSequence.Complete.new()
 var ERROR : ObservableSequence.Error = ObservableSequence.Error.new()
@@ -196,9 +196,9 @@ func _test_identity():
 	seq.compare(obs, self.sequence_finished)
 
 func _test_amb():
-	var obs1 : Observable = GDRx.start_periodic_timer(1.0).map(func(i): return "T1")
-	var obs2 : Observable = GDRx.start_timer(0.5).map(func(i): return "T2")
-	var obs3 : Observable = GDRx.start_periodic_timer(2.5).map(func(i): return "T3")
+	var obs1 : Observable = GDRx.start_periodic_timer(1.0).map(func(__): return "T1")
+	var obs2 : Observable = GDRx.start_timer(0.5).map(func(__): return "T2")
+	var obs3 : Observable = GDRx.start_periodic_timer(2.5).map(func(__): return "T3")
 	var obs = GDRx.amb([obs1, obs2, obs3])
 	var seq = ObservableSequence.new(["T2", COMPLETE])
 	seq.compare(obs, self.sequence_finished)
@@ -235,8 +235,8 @@ func _test_new_thread_scheduler():
 	var foo = GDRx.return_value("foo").delay(10.0)
 	foo.subscribe(
 		func(i): print("[ReactiveX]: This element was delayed by 10 seconds on a separate thread: ", i), 
-		func(e): return, 
-		func(): return, 
+		GDRx.noop, 
+		GDRx.noop, 
 		scheduler
 	)
 	

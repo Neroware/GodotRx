@@ -52,7 +52,7 @@ static func from_compute_shader_(
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = CurrentThreadScheduler.singleton()
 		
-		var action = func(scheduler = null, state = null):
+		var action = func(_scheduler = null, _state = null):
 			# Setup compute pipeline and uniforms
 			var compute_list = rd.compute_list_begin()
 			rd.compute_list_bind_compute_pipeline(compute_list, pipeline)

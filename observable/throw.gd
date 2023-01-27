@@ -6,7 +6,7 @@ static func throw_(err, scheduler : SchedulerBase = null) -> Observable:
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = ImmediateScheduler.singleton()
 		
-		var action = func(scheduler : SchedulerBase, state):
+		var action = func(_scheduler : SchedulerBase, _state):
 			observer.on_error(err)
 		
 		return _scheduler.schedule(action)

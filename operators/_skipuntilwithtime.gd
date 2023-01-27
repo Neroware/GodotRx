@@ -44,7 +44,7 @@ static func skip_until_with_time_(
 				scheduler_
 			)
 			
-			var action = func(scheduler : SchedulerBase, state = null):
+			var action = func(_scheduler : SchedulerBase, _state = null):
 				open[0] = true
 			
 			var disp : DisposableBase

@@ -29,7 +29,7 @@ static func time_interval_(
 				return Tuple.new([value, span])
 			
 			return source.pipe1(GDRx.op.map(mapper)).subscribe(
-				observer, func(e):return, func():return, _scheduler
+				observer, GDRx.basic.noop, GDRx.basic.noop, _scheduler
 			)
 		
 		return Observable.new(subscribe)

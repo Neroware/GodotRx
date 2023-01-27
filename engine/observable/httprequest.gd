@@ -15,7 +15,7 @@ static func from_http_request_(
 	requester : HTTPRequest = null,
 	custom_headers : PackedStringArray = PackedStringArray(),
 	tls_validate_domain : bool = true,
-	method : HTTPClient.Method = 0
+	method : HTTPClient.Method = HTTPClient.METHOD_GET
 ) -> Observable:
 	
 	var subscribe = func(

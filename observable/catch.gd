@@ -27,7 +27,7 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 		var last_exception = RefValue.Null()
 		var is_disposed = RefValue.Set(false)
 		
-		var action = func(scheduler : SchedulerBase, state = null, action_ : Callable = func(__, ___, ____): return):
+		var action = func(_scheduler : SchedulerBase, _state = null, action_ : Callable = func(__, ___, ____): return):
 			var on_error = func(exn):
 				last_exception.v = exn
 				cancelable.disposable = _scheduler.schedule(action_.bind(action_))

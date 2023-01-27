@@ -27,7 +27,7 @@ static func zip_(sources : Array[Observable]) -> Observable:
 		var lock = RLock.new()
 		var is_completed = [] ; for __ in range(n): is_completed.append(false)
 		
-		var next_ = func(i : int):
+		var next_ = func(__ : int):
 			lock.lock()
 			if queues.all(func(x): return x.size() > 0):
 				var res = RefValue.Null()

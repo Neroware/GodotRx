@@ -23,7 +23,7 @@ func _subscribe_core(
 	observer : ObserverBase,
 	scheduler : SchedulerBase = null
 ) -> DisposableBase:
-	return self.subject.as_observable().subscribe(observer, func(e): return, func(): return, scheduler)
+	return self.subject.as_observable().subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 
 ## Connects the observable
 func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
@@ -33,7 +33,7 @@ func connect_observable(scheduler : SchedulerBase = null) -> DisposableBase:
 		var dispose = func():
 			self.has_subscription = false
 		
-		var subscription_ = self.source.subscribe(self.subject.as_observer(), func(e): return, func(): return, scheduler)
+		var subscription_ = self.source.subscribe(self.subject.as_observer(), GDRx.basic.noop, GDRx.basic.noop, scheduler)
 		self.subscription = CompositeDisposable.new([subscription_, Disposable.new(dispose)])
 	
 	return self.subscription

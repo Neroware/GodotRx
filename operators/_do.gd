@@ -102,7 +102,7 @@ static func do_after_next(source : Observable, after_next : Callable) -> Observa
 #	after_next -- Action to invoke on each element after it has been emitted
 #	"""
 	var subscribe = func(
-		observer : ObserverBase, scheduler : SchedulerBase = null
+		observer : ObserverBase, _scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		var on_next = func(value):
 			GDRx.try(func():

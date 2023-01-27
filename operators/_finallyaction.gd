@@ -21,7 +21,7 @@ static func finally_action_(
 		) -> DisposableBase:
 			var subscription = RefValue.Null()
 			GDRx.try(func():
-				subscription.v = source.subscribe(observer, func(e):return, func():return, scheduler)
+				subscription.v = source.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 			) \
 			.catch("Exception", func(e):
 				action.call()

@@ -22,6 +22,7 @@ static func observable_delay_timespan(
 		var running = [false]
 		var queue : Array[Tuple] = []
 		
+		@warning_ignore("shadowed_variable") 
 		var on_next = func(notification : Tuple):
 			var should_run = false
 			
@@ -49,7 +50,7 @@ static func observable_delay_timespan(
 					var mad = MultipleAssignmentDisposable.new()
 					cancelable.disposable = mad
 					
-					var action = func(scheduler : SchedulerBase, state = null, __action_rec : Callable = func(__, ___, ____): return null):
+					var action = func(scheduler : SchedulerBase, _state = null, __action_rec : Callable = func(__, ___, ____): return null):
 						if exception.v != null:
 							return
 						
@@ -91,7 +92,7 @@ static func observable_delay_timespan(
 		var subscription = source.pipe2(
 			GDRx.op.materialize(),
 			GDRx.op.timestamp()
-		).subscribe(on_next, func(e):return, func():return, _scheduler)
+		).subscribe(on_next, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
 		
 		return CompositeDisposable.new([subscription, cancelable])
 	

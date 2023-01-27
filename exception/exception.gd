@@ -196,10 +196,10 @@ class HttpsRequestFailedException extends Exception:
 	var error_code : int
 	var error_message : String
 	
-	func _init(url : String, error_code : int, error_message : String):
-		self.url = url
-		self.error_code = error_code
-		self.error_message = error_message
+	func _init(url_ : String, error_code_ : int, error_message_ : String):
+		self.url = url_
+		self.error_code = error_code_
+		self.error_message = error_message_
 		var msg = "HTTP Request to host '" + url + "' failed! " \
 			+ "(" + error_message + ")"
 		super._init(msg)
@@ -207,5 +207,5 @@ class HttpsRequestFailedException extends Exception:
 	func tags() -> Array[String]:
 		return ["Exception", "HttpsRequestFailedException"]
 	
-	static func Throw(item = null) -> Variant:
+	static func Throw(_item = null) -> Variant:
 		return NotImplementedException.Throw()

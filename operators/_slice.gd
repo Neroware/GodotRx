@@ -54,7 +54,7 @@ static func slice_(
 		
 		if _step > 1:
 			pipeline.append(
-				GDRx.filter_indexed(func(x, i): return i % int(_step == 0))
+				GDRx.filter_indexed(func(_x, i): return i % int(_step == 0))
 			)
 		elif _step < 0:
 			GDRx.exc.ArgumentOutOfRangeException.Throw()

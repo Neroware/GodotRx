@@ -20,7 +20,7 @@ static func publish_(mapper = null) -> Callable:
 #		function.
 #	"""
 	if mapper != null:
-		var factory = func(scheduler : SchedulerBase = null) -> Subject:
+		var factory = func(_scheduler : SchedulerBase = null) -> Subject:
 			return Subject.new()
 		
 		return GDRx.op.multicast(null, factory, mapper)

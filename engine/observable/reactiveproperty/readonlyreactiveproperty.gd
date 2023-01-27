@@ -39,7 +39,7 @@ func _init(
 	@warning_ignore("shadowed_variable")
 	var subscribe = func(
 		observer : ObserverBase,
-		scheduler : SchedulerBase = null
+		_scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		
 		if self.is_disposed:

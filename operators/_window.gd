@@ -65,7 +65,7 @@ static func window_(boundaries : Observable) -> Callable:
 				)
 			)
 			
-			var on_next_observer = func(w : Observable):
+			var on_next_observer = func(_w : Observable):
 				window_subject.v.as_observer().on_completed()
 				window_subject.v = Subject.new()
 				observer.on_next(GDRx.util.AddRef(window_subject.v.as_observable(), r))

@@ -29,7 +29,7 @@ static func to_async_(
 	var wrapper = func(args : Array) -> Observable:
 		var subject = AsyncSubject.new()
 		
-		var action = func(scheduler : SchedulerBase, state = null):
+		var action = func(_scheduler : SchedulerBase, _state = null):
 			var result = RefValue.Null()
 			if GDRx.try(func():
 				result.v = fun.call(args)

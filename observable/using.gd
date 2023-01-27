@@ -40,13 +40,13 @@ static func using_(
 			source.v = observable_factory.call(resource)
 		) \
 		.catch("Exception", func(exception):
-			d.v = GDRx.obs.throw(exception).subscribe(observer, func(e): return, func(): return, scheduler)
+			d.v = GDRx.obs.throw(exception).subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 		) \
 		.end_try_catch():
 			return CompositeDisposable.new([d.v, disp.v])
 		
 		return CompositeDisposable.new([
-			source.v.subscribe(observer, func(e): return, func(): return, scheduler),
+			source.v.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler),
 			disp.v
 		])
 	

@@ -9,7 +9,7 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 		var cancelable = SerialDisposable.new()
 		var is_disposed = RefValue.Set(false)
 		
-		var action = func(scheduler : SchedulerBase, state = null, action_ = func(__, ___, ____): return):
+		var action = func(_scheduler : SchedulerBase, _state = null, action_ = func(__, ___, ____): return):
 			if is_disposed.v:
 				return
 			

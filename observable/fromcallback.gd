@@ -14,7 +14,7 @@
 ##        the callback, produces an Observable sequence with a single value of
 ##        the arguments to the callback as a list.
 static func from_callback(
-	fun : Callable = func(args : Array, cb : Callable): return,
+	fun : Callable = func(_args : Array, _cb : Callable): return,
 	mapper = null
 ) -> Callable:
 	
@@ -23,7 +23,7 @@ static func from_callback(
 		
 		var subscribe = func(
 			observer : ObserverBase,
-			scheduler : SchedulerBase = null
+			_scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var handler = func(args : Array):
 				var results = RefValue.Set(args)

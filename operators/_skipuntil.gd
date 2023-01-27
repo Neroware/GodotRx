@@ -38,7 +38,7 @@ static func skip_until_(other : Observable) -> Callable:
 			var right_subscription = SingleAssignmentDisposable.new()
 			subscriptions.add(right_subscription)
 			
-			var on_next2 = func(x):
+			var on_next2 = func(__):
 				is_open[0] = true
 				right_subscription.dispose()
 			

@@ -47,7 +47,7 @@ static func window_with_time_(
 				if is_shift:
 					next_shift[0] += timeshift
 				
-				var action = func(scheduler : SchedulerBase, state = null):
+				var action = func(_scheduler : SchedulerBase, _state = null):
 					source.lock.lock()
 					var s : Subject = null
 					

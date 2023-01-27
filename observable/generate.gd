@@ -13,7 +13,7 @@ static func generate_(
 		var state = RefValue.Set(initial_state)
 		var mad = MultipleAssignmentDisposable.new()
 		
-		var action = func(scheduler : SchedulerBase, state1, action_ : Callable):
+		var action = func(scheduler : SchedulerBase, _state, action_ : Callable):
 			var has_result = RefValue.Set(false)
 			var result = RefValue.Null()
 			

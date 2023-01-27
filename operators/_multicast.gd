@@ -48,7 +48,7 @@ static func multicast_(
 				)
 				if GDRx.assert_(mapper is Callable): return Disposable.new()
 				var subscription = mapper.call(connectable).subscribe(
-					observer, func(e):return, func():return,
+					observer, GDRx.basic.noop, GDRx.basic.noop,
 					scheduler
 				)
 				

@@ -36,7 +36,7 @@ func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups
 	return _ComputeShader_.from_compute_shader_(shader_path, rd, work_groups, uniform_sets, scheduler)
 
 ## See: [b]"res://reactivex/engine/observable/httprequest.gd"[/b]
-func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = 0) -> Observable:
+func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = HTTPClient.METHOD_GET) -> Observable:
 	return _HttpRequest_.from_http_request_(url, request_data, raw, encoding, requester, custom_headers, tls_validate_domain, method)
 
 ## See: [b]"res://reactivex/engine/operators/_processtimeinterval.gd"[/b]

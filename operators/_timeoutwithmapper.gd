@@ -56,10 +56,10 @@ static func timeout_with_mapper_(
 				var d = SingleAssignmentDisposable.new()
 				timer.disposable = d
 				
-				var on_next = func(x):
+				var on_next = func(__):
 					if timer_wins.call():
 						subscription.disposable = other_.subscribe(
-							observer, func(e):return, func():return, scheduler
+							observer, GDRx.basic.noop, GDRx.basic.noop, scheduler
 						)
 					
 					d.dispose()

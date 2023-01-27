@@ -38,7 +38,7 @@ static func skip_with_time_(
 			else: _scheduler = TimeoutScheduler.singleton()
 			var open = [false]
 			
-			var action = func(scheduler : SchedulerBase, state = null):
+			var action = func(_scheduler : SchedulerBase, _state = null):
 				open[0] = true
 			
 			var t = _scheduler.schedule_relative(duration, action)

@@ -13,7 +13,7 @@ static func as_observable_() -> Callable:
 			observer : ObserverBase,
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
-			return source.subscribe(observer, func(e):return, func():return, scheduler)
+			return source.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 		
 		return Observable.new(subscribe)
 	

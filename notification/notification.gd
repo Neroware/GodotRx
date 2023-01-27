@@ -69,7 +69,7 @@ func to_observable(scheduler : SchedulerBase = null) -> ObservableBase:
 	var _scheduler = scheduler if scheduler != null else ImmediateScheduler.singleton()
 	
 	var subscribe = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
-		var action = func(scheduler : SchedulerBase, state):
+		var action = func(_scheduler : SchedulerBase, _state):
 			self._accept_observer(observer)
 			if self.kind == "N":
 				observer.on_completed()
@@ -101,10 +101,10 @@ func eq(other) -> bool:
 ##        The observer object that invokes the specified handler using
 ##        a notification corresponding to each message it receives.
 static func from_notifier(handler : Callable) -> Observer:
-	var _on_next = func(value):
-		return handler.call(GDRx.OnNext.new(value))
-	var _on_error = func(err):
-		return handler.call(GDRx.OnError.new(err))
+	var _on_next = func(value_):
+		return handler.call(GDRx.OnNext.new(value_))
+	var _on_error = func(err_):
+		return handler.call(GDRx.OnError.new(err_))
 	var _on_completed = func():
 		return handler.call(GDRx.OnCompleted.new())
 	

@@ -5,7 +5,7 @@ static func publish_value_(
 	if mapper != null:
 		
 		var subject_factory = func(
-			scheduler : SchedulerBase
+			_scheduler : SchedulerBase
 		) -> BehaviorSubject:
 			return BehaviorSubject.new(initial_value)
 		

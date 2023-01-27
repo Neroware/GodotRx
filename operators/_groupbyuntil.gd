@@ -59,7 +59,7 @@ static func group_by_until_(
 				if GDRx.try(func():
 					key.v = key_mapper.call(x)
 				) \
-				.catch("Exception", func(e):
+				.catch("Exception", func(__):
 					for wrt in writers.values():
 						wrt.as_observer().on_error(key.v)
 					observer.on_error(key.v)
@@ -111,7 +111,7 @@ static func group_by_until_(
 						
 						group_disposable.remove(sad)
 					
-					var on_next = func(value):
+					var on_next = func(__):
 						pass
 					
 					var on_error = func(exn):

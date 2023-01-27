@@ -26,7 +26,7 @@ static func take_until_with_time_(
 			elif scheduler_ != null: _scheduler = scheduler_
 			else: _scheduler = TimeoutScheduler.singleton()
 			
-			var action = func(scheduler : SchedulerBase, state = null):
+			var action = func(_scheduler : SchedulerBase, _state = null):
 				observer.on_completed()
 			
 			var task
@@ -36,7 +36,7 @@ static func take_until_with_time_(
 				task = _scheduler.schedule_relative(end_time, action)
 			
 			return CompositeDisposable.new([
-				task, source.subscribe(observer, func(e):return, func():return, scheduler_)
+				task, source.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler_)
 			])
 		
 		return Observable.new(subscribe)

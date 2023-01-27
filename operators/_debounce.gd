@@ -37,7 +37,7 @@ static func debounce_(
 				var d = SingleAssignmentDisposable.new()
 				cancelable.disposable = d
 				
-				var action = func(scheduler : SchedulerBase, state = null):
+				var action = func(_scheduler : SchedulerBase, _state = null):
 					if has_value[0] and _id[0] == current_id:
 						observer.on_next(value[0])
 					has_value[0] = false
@@ -113,7 +113,7 @@ func throttle_with_mapper_(
 				var d = SingleAssignmentDisposable.new()
 				cancelable.disposable = d
 				
-				var on_next = func(x):
+				var on_next = func(__):
 					if has_value.v and _id[0] == current_id:
 						observer.on_next(value.v)
 					has_value.v = false

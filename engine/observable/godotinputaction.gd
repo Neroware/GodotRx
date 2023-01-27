@@ -14,7 +14,7 @@ static func from_godot_input_action_(input_action : String, checks : Observable)
 		var prev_pressed = RefValue.Set(false)
 		var curr_pressed = RefValue.Set(false)
 		
-		var on_next = func(value):
+		var on_next = func(__):
 			prev_pressed.v = curr_pressed.v
 			curr_pressed.v = Input.is_action_pressed(input_action)
 			if prev_pressed.v != curr_pressed.v:

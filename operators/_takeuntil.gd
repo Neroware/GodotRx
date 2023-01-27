@@ -23,7 +23,7 @@ static func take_until_(
 				observer.on_completed()
 			
 			return CompositeDisposable.new([
-				source.subscribe(observer, func(e):return, func():return, scheduler),
+				source.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler),
 				obs.subscribe(on_completed, observer.on_error, func():return, scheduler)
 			])
 		

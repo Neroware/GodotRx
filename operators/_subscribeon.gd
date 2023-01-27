@@ -26,7 +26,7 @@ static func subscribe_on_(scheduler : SchedulerBase) -> Callable:
 			var d = SerialDisposable.new()
 			d.disposable = m
 			
-			var action = func(scheduler : SchedulerBase, state = null):
+			var action = func(scheduler : SchedulerBase, _state = null):
 				d.disposable = ScheduledDisposable.new(
 					scheduler, source.subscribe(observer)
 				)

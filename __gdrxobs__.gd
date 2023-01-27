@@ -63,7 +63,7 @@ func fork_join(sources : Array[Observable]) -> Observable:
 	return _ForkJoin_.fork_join_(sources)
 
 ## See: [b]res://reactivex/observable/fromcallback.gd[/b]
-func from_callback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
+func from_callback(fun : Callable = func(_args : Array, _cb : Callable): return, mapper = null) -> Callable:
 	return _FromCallback_.from_callback_(fun, mapper)
 
 ## See: [b]res://reactivex/observable/fromiterable.gd[/b]
@@ -75,7 +75,7 @@ func generate(initial_state, condition : Callable = GDRx.basic.default_condition
 	return _Generate_.generate_(initial_state, condition, iterate)
 
 ## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
-func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
+func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(_state) -> float: return 1.0) -> Observable:
 	return _GenerateWithRealtiveTime_.generate_with_relative_time_(initial_state, condition, iterate, time_mapper)
 
 ## See: [b]res://reactivex/observable/ifthen.gd[/b]

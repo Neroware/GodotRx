@@ -57,7 +57,7 @@ static func range_(
 		var sd = MultipleAssignmentDisposable.new()
 		
 		var action = func(
-			scheduler : SchedulerBase,
+			_scheduler : SchedulerBase,
 			iterator : IterableBase,
 			action_ : Callable
 		):

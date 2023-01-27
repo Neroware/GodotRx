@@ -240,7 +240,7 @@ func case(mapper : Callable, sources : Dictionary, default_source : Observable =
 	return obs.case(mapper, sources, default_source)
 
 ## Create a new observable
-func create(subscribe : Callable = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
+func create(subscribe : Callable = func(_observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
 	return Observable.new(subscribe)
 
 ## See: [b]res://reactivex/observable/catch.gd[/b]
@@ -276,7 +276,7 @@ func fork_join(sources : Array[Observable]) -> Observable:
 	return obs.fork_join(sources)
 
 ## See: [b]res://reactivex/observable/fromcallback.gd[/b]
-func from_callback(fun : Callable = func(args : Array, cb : Callable): return, mapper = null) -> Callable:
+func from_callback(fun : Callable = func(_args : Array, _cb : Callable): return, mapper = null) -> Callable:
 	return obs.from_callback(fun, mapper)
 
 ## Transforms an array into an observable sequence.
@@ -292,7 +292,7 @@ func generate(initial_state, condition : Callable = GDRx.basic.default_condition
 	return obs.generate(initial_state, condition, iterate)
 
 ## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
-func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(state) -> float: return 1.0) -> Observable:
+func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(_state) -> float: return 1.0) -> Observable:
 	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
 
 ## See: [b]res://reactivex/observable/ifthen.gd[/b]
@@ -446,7 +446,7 @@ func on_tree_exiting_as_observable(node : Node) -> Observable:
 	return from_signal(node.tree_exiting)
 
 ## Creates an HTTP Request
-func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = 0) -> Observable:
+func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = HTTPClient.METHOD_GET) -> Observable:
 	return gd.from_http_request(url, request_data, raw, encoding, requester, custom_headers, tls_validate_domain, method)
 
 # =========================================================================== #

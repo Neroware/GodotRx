@@ -16,7 +16,7 @@ const DELTA_ZERO = 0
 ## [br]
 ##             The scheduler's current time, as a datetime instance.
 func now() -> float:
-	return self.to_seconds(GDRx.basic.default_now())
+	return Scheduler.to_seconds(GDRx.basic.default_now())
 
 ## Invoke the given given action. This is typically called by instances
 ##        of [ScheduledItem].

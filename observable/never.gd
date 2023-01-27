@@ -6,7 +6,7 @@
 ##        An observable sequence whose observers will never get called.
 static func never_() -> Observable:
 	
-	var subscribe = func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
+	var subscribe = func(_observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase:
 		return Disposable.new()
 	
 	return Observable.new(subscribe)

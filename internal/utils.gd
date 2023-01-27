@@ -53,7 +53,7 @@ func GetNotSet() -> NotSet:
 func AddRef(xs : Observable, r : RefCountDisposable) -> Observable:
 	var subscribe = func(
 		observer : ObserverBase,
-		scheduler : SchedulerBase = null
+		_scheduler : SchedulerBase = null
 	) -> DisposableBase:
 		return CompositeDisposable.new([
 			r.disposable, 

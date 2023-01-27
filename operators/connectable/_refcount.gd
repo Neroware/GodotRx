@@ -12,7 +12,7 @@ static func ref_count_() -> Callable:
 			count.v += 1
 			var should_connect = count.v == 1
 			var subscription = source.subscribe(
-				observer, func(e):return, func():return,
+				observer, GDRx.basic.noop, GDRx.basic.noop,
 				scheduler
 			)
 			if should_connect:

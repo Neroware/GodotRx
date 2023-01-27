@@ -18,7 +18,7 @@ var is_disposed:
 	get: return self.disposable.is_disposed
 
 func dispose():
-	var action = func(scheduler : SchedulerBase, state):
+	var action = func(_scheduler : SchedulerBase, _state):
 		self.disposable.dispose()
 	self.scheduler.schedule(action)
 

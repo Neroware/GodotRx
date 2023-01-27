@@ -15,7 +15,7 @@ static func pairwise_() -> Callable:
 #		"""
 		var subscribe = func(
 			observer : ObserverBase,
-			scheduler : SchedulerBase = null
+			_scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var has_previous = RefValue.Set(false)
 			var previous = RefValue.Null()

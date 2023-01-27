@@ -29,7 +29,7 @@ static func expand_(
 					is_owner = not is_aquired.v
 					is_aquired.v = true
 				
-				var action = func(scheduler : SchedulerBase, state = null, __action_rec : Callable = func(__, ___, ____): return):
+				var action = func(scheduler : SchedulerBase, _state = null, __action_rec : Callable = func(__, ___, ____): return):
 					var work : Observable
 					if not queue.is_empty():
 						work = queue.pop_front()

@@ -64,7 +64,7 @@ static func from_godot_node_lifecycle_event_(conn : Node, type : int) -> Observa
 				listener.v.queue_free()
 		
 		var subscription = GDRx.gd.from_godot_signal(listener.v.on_event).subscribe(
-			observer, func(e):return, func():return,
+			observer, GDRx.basic.noop, GDRx.basic.noop,
 			scheduler
 		)
 		

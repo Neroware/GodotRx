@@ -21,47 +21,47 @@ func schedule_signal(
 	match n_args:
 		0:
 			signal_callback = func():
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call()
 				disp = self.invoke_action(action_, state)
 		1:
 			signal_callback = func(arg1):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1)
 				disp = self.invoke_action(action_, state)
 		2:
 			signal_callback = func(arg1, arg2):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2)
 				disp = self.invoke_action(action_, state)
 		3:
 			signal_callback = func(arg1, arg2, arg3):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3)
 				disp = self.invoke_action(action_, state)
 		4:
 			signal_callback = func(arg1, arg2, arg3, arg4):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3, arg4)
 				disp = self.invoke_action(action_, state)
 		5:
 			signal_callback = func(arg1, arg2, arg3, arg4, arg5):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3, arg4, arg5)
 				disp = self.invoke_action(action_, state)
 		6:
 			signal_callback = func(arg1, arg2, arg3, arg4, arg5, arg6):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3, arg4, arg5, arg6)
 				disp = self.invoke_action(action_, state)
 		7:
 			signal_callback = func(arg1, arg2, arg3, arg4, arg5, arg6, arg7):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 				disp = self.invoke_action(action_, state)
 		8:
 			signal_callback = func(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8):
-				var action_ = func(scheduler : SchedulerBase, state = null):
+				var action_ = func(_scheduler : SchedulerBase, _state = null):
 					action.call(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 				disp = self.invoke_action(action_, state)
 		_:

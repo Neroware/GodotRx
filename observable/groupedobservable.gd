@@ -18,7 +18,7 @@ func _init(
 		) -> DisposableBase:
 			return CompositeDisposable.new([
 				merged_disposable.disposable if merged_disposable != null else Disposable.new(),
-				underlying_observable_.subscribe(observer, func(e): return, func(): return, scheduler)
+				underlying_observable_.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 			])
 		
 		self.underlying_observable = underlying_observable_ if merged_disposable == null else Observable.new(subscribe)
@@ -27,4 +27,4 @@ func _subscribe_core(
 	observer : ObserverBase,
 	scheduler : SchedulerBase = null
 ) -> DisposableBase:
-	return self.underlying_observable.subscribe(observer, func(e): return, func(): return, scheduler)
+	return self.underlying_observable.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)

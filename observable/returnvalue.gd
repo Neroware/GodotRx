@@ -24,7 +24,7 @@ static func return_value_(value, scheduler : SchedulerBase = null) -> Observable
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = CurrentThreadScheduler.singleton()
 		
-		var action = func(scheduler : SchedulerBase, state = null):
+		var action = func(_scheduler : SchedulerBase, _state = null):
 			observer.on_next(value)
 			observer.on_completed()
 		

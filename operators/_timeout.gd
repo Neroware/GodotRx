@@ -42,12 +42,12 @@ static func timeout_(
 			var create_timer = func():
 				var my_id = _id[0]
 				
-				var action = func(scheduler : SchedulerBase, state = null):
+				var action = func(scheduler : SchedulerBase, _state = null):
 					switched[0] = _id[0] == my_id
 					var timer_wins = switched[0]
 					if timer_wins:
 						subscription.disposable = obs.subscribe(
-							observer, func(e):return, func():return, scheduler
+							observer, GDRx.basic.noop, GDRx.basic.noop, scheduler
 						)
 				
 				if absolute:

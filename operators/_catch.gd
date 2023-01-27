@@ -24,7 +24,7 @@ static func catch_handler(
 			var d = SingleAssignmentDisposable.new()
 			subscription.disposable = d
 			d.disposable = result.v.subscribe(
-				observer, func(e):return, func():return, scheduler
+				observer, GDRx.basic.noop, GDRx.basic.noop, scheduler
 			)
 		
 		d1.disposable = source.subscribe(

@@ -29,7 +29,7 @@ static func generate_with_relative_time_(
 	initial_state,
 	condition : Callable = GDRx.basic.default_condition,
 	iterate : Callable = GDRx.basic.identity,
-	time_mapper : Callable = func(state) -> float: return 1.0
+	time_mapper : Callable = func(_state) -> float: return 1.0
 ) -> Observable:
 	
 	var subscribe = func(

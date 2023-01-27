@@ -18,7 +18,7 @@ static func from_godot_coroutine_(
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = CurrentThreadScheduler.singleton()
 		
-		var action = func(scheduler : SchedulerBase, state = null):
+		var action = func(_scheduler : SchedulerBase, _state = null):
 			var res = RefValue.Null()
 			
 			if GDRx.try(func():
