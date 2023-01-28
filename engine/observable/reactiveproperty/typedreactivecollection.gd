@@ -3,11 +3,12 @@ class_name ReactiveCollectionT
 
 var _basic_type : bool
 var _type
+var _push_type_err : bool
 
 var T:
 	get: return self._type
 
-func _init(collection = [], type_ = TYPE_MAX):
+func _init(collection = [], type_ = TYPE_MAX, push_type_err : bool = true):
 	if type_ is int:
 		self._basic_type = true
 	elif type_ is GDScript:
@@ -17,6 +18,7 @@ func _init(collection = [], type_ = TYPE_MAX):
 		GDRx.exc.BadArgumentException.new(msg).throw()
 		return
 	self._type = type_
+	self._push_type_err = push_type_err
 	super._init(collection)
 
 func _type_check(value) -> bool:
@@ -24,7 +26,9 @@ func _type_check(value) -> bool:
 		(not self._basic_type and not value is self._type)
 
 func _type_check_fail(value, default = null):
-	GDRx.exc.TypeMismatchException.new(value).throw(value)
+	var exc = GDRx.exc.TypeMismatchException.new(value)
+	if self._push_type_err: push_error(exc)
+	exc.throw(value)
 	return default
 
 func add_item(item) -> int:
