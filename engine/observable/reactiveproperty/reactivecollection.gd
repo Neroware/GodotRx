@@ -46,15 +46,21 @@ func _disconnect_all(event_class):
 	for observer in _observers:
 		observer.on_completed()
 
-func _init(data : Array = []):
+func _init(collection = []):
 	super._init()
 	
 	self._observers = {}
 	self._rwlock = ReadWriteLock.new()
 	self.is_disposed = false
 	
-	for item in data:
-		super.add_item(item)
+	if collection is Array:
+		for item in collection:
+			super.add_item(item)
+	elif collection is IterableBase:
+		var it = collection.iter()
+		var item = it.next()
+		while not item is it.End:
+			super.add_item(item)
 	
 	self._observe_add = Observable.new(self._get_subscription(CollectionAddEvent))
 	self._observe_move = Observable.new(self._get_subscription(CollectionMoveEvent))

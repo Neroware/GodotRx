@@ -17,19 +17,22 @@ var _rwlock : ReadWriteLock
 var is_disposed : bool
 ## Wrapped value
 var Value:
-	get: return self._latest_value
-	
-	set(value):
-		if self._distinct_until_changed and self._latest_value == value:
+	get = _get_value, set = _set_value
+
+func _get_value():
+	return self._latest_value
+
+func _set_value(value):
+	if self._distinct_until_changed and self._latest_value == value:
 			return
-		self._latest_value = value
-		
-		var observers_ : Array[ObserverBase]
-		self._rwlock.r_lock()
-		observers_ = self._observers.duplicate()
-		self._rwlock.r_unlock()
-		for obs in observers_:
-			obs.on_next(value)
+	self._latest_value = value
+	
+	var observers_ : Array[ObserverBase]
+	self._rwlock.r_lock()
+	observers_ = self._observers.duplicate()
+	self._rwlock.r_unlock()
+	for obs in observers_:
+		obs.on_next(value)
 
 func _to_string() -> String:
 	if self.is_disposed:
