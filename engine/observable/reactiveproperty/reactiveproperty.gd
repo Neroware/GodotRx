@@ -24,7 +24,7 @@ func _get_value():
 
 func _set_value(value):
 	if self._distinct_until_changed and self._latest_value == value:
-			return
+		return
 	self._latest_value = value
 	
 	var observers_ : Array[ObserverBase]
