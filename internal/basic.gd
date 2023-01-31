@@ -32,3 +32,6 @@ func default_condition(__ = null, ___ = null) -> bool:
 
 func default_factory(__ : SchedulerBase) -> Observable:
 	return GDRx.obs.empty()
+
+func default_type_equality(type, value) -> bool:
+	return typeof(value) == type if type is int else value is type

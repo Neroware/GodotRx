@@ -1,4 +1,4 @@
-static func oftype_(type, push_err : bool = true) -> Callable:
+static func oftype_(type, push_err : bool = true, type_equality : Callable = GDRx.basic.default_type_equality) -> Callable:
 	var oftype = func(source : Observable) -> Observable:
 #		"""Partially applied oftype operator.
 #
@@ -19,18 +19,7 @@ static func oftype_(type, push_err : bool = true) -> Callable:
 			scheduler : SchedulerBase = null
 		) -> DisposableBase:
 			var on_next = func(value):
-				var type_mismatch : bool = false
-				
-				if type is int:
-					type_mismatch = typeof(value) != type
-				elif type is GDScript:
-					type_mismatch = not (value is type)
-				else:
-					var msg = "Type fixation operator only accepts type codes " \
-						+ " as integer value or GDScript instances as parameter!"
-					observer.on_error(GDRx.exc.BadArgumentException.new(msg))
-					return
-				
+				var type_mismatch : bool = not type_equality.call(type, value)
 				if type_mismatch:
 					var exc = GDRx.exc.TypeMismatchException.new(value)
 					observer.on_error(exc)

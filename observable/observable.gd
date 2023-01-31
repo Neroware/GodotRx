@@ -521,8 +521,8 @@ func observe_on(scheduler : SchedulerBase) -> Observable:
 	return GDRx.op.observe_on(scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_oftype.gd[/b]
-func oftype(type, push_err : bool = true) -> Observable:
-	return GDRx.op.oftype(type, push_err).call(self)
+func oftype(type, push_err : bool = true, type_equality : Callable = GDRx.basic.default_type_equality) -> Observable:
+	return GDRx.op.oftype(type, push_err, type_equality).call(self)
 
 ## See: [b]res://reactivex/operators/_onerrorresumenext.gd[/b]
 func on_error_resume_next(second : Observable) -> Observable:

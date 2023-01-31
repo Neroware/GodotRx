@@ -34,5 +34,8 @@ func eq(other) -> bool:
 static func Unit() -> _Unit:
 	return _Unit.new()
 
+static func GetUnitType() -> GDScript:
+	return StreamItem._Unit
+
 func _to_string():
 	return str(self._payload)

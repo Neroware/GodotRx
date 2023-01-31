@@ -1,29 +1,22 @@
 extends ReactiveCollection
 class_name ReactiveCollectionT
 
-var _basic_type : bool
 var _type
+var _type_equality : Callable
+
 var _push_type_err : bool
 
 var T:
 	get: return self._type
 
-func _init(collection = [], type_ = TYPE_MAX, push_type_err : bool = true):
-	if type_ is int:
-		self._basic_type = true
-	elif type_ is GDScript:
-		self._basic_type = false
-	else:
-		var msg = "Type specifier of a typed ReactiveProperty needs to be [GDScript] or [int]!"
-		GDRx.exc.BadArgumentException.new(msg).throw()
-		return
+func _init(collection = [], type_ = TYPE_MAX, push_type_err : bool = true, type_equality : Callable = GDRx.basic.default_type_equality):
 	self._type = type_
 	self._push_type_err = push_type_err
+	self._type_equality = type_equality
 	super._init(collection)
 
 func _type_check(value) -> bool:
-	return (self._basic_type and typeof(value) != self._type) or \
-		(not self._basic_type and not value is self._type)
+	return not self._type_equality.call(self._type, value)
 
 func _type_check_fail(value, default = null):
 	var exc = GDRx.exc.TypeMismatchException.new(value)
