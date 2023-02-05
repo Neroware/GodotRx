@@ -17,7 +17,7 @@ class InfiniteIterator extends IterableBase:
 		if not self._infval is GDRx.util.NotSet:
 			return self._infval
 		return self._counter
-	func iter() -> IterableBase:
+	func iter() -> Iterator:
 		return Iterator.new(self)
 
 ## An infinite iterable sequence that stops when a condition is not met anymore.
@@ -31,8 +31,8 @@ class WhileIterator extends IterableBase:
 		if not self._cond.call():
 			return End.new()
 		return self._it.next()
-	func iter() -> IterableBase:
-		return Iterator.new(WhileIterator.new(Iterator.new(self._it), self._cond))
+	func iter() -> Iterator:
+		return Iterator.new(WhileIterator.new(self._it.iter(), self._cond))
 
 ## Creates an [ArrayIterator]
 func Iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:

@@ -12,3 +12,6 @@ func _init(it_ : IterableBase):
 
 func next() -> Variant:
 	return self._it.next()
+
+func iter():
+	return self._it.iter()

@@ -12,7 +12,7 @@ func next() -> Variant:
 
 ## Returns an iterator onto the given iterable sequence. The contents are NOT
 ## duplicates!
-func iter() -> IterableBase:
+func iter() -> Iterator:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 
