@@ -5,6 +5,9 @@ class_name Tuple
 
 var _x : Array
 
+static func Empty() -> Tuple:
+	return Tuple.new([])
+
 func _init(x : Array):
 	self._x = x
 

@@ -56,3 +56,9 @@ func find(item) -> int:
 	if self._type_check(item):
 		return self._type_check_fail(item, -1)
 	return super.find(item)
+
+func to_readonly() -> ReadOnlyReactiveCollection:
+	return ReadOnlyReactiveCollectionT.new(self)
+
+func to_typed_readonly() -> ReadOnlyReactiveCollectionT:
+	return self.to_readonly() as ReadOnlyReactiveCollectionT

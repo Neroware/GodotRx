@@ -34,3 +34,12 @@ func _set_value(value):
 		self._type_check_fail(value)
 		return
 	super._set_value(value)
+
+func to_readonly() -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactivePropertyT.new(
+		self, Value, self._distinct_until_changed, 
+		self._raise_latest_value_on_subscribe
+	)
+
+func to_typed_readonly() -> ReadOnlyReactivePropertyT:
+	return self.to_readonly() as ReadOnlyReactivePropertyT
