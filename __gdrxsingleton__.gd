@@ -51,7 +51,7 @@ const THREAD_JOIN_INTERVAL : float = 1.0
 
 ## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
-	func start(_callable : Callable, _priority : int = 1) -> int:
+	func start(_callable : Callable, _priority : Priority = 1) -> int:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
 	func wait_to_finish() -> Variant:
