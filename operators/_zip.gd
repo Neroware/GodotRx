@@ -15,7 +15,9 @@ static func zip_(args : Array[Observable]) -> Callable:
 #			An observable sequence containing the result of combining
 #			elements of the sources as a tuple.
 #		"""
-		return GDRx.obs.zip([source] + args)
+		var sources : Array[Observable] = args.duplicate()
+		sources.push_front(source)
+		return GDRx.obs.zip(sources)
 	return _zip
 
 static func zip_with_iterable_(seq : IterableBase) -> Callable:

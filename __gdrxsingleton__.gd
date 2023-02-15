@@ -51,18 +51,23 @@ const THREAD_JOIN_INTERVAL : float = 1.0
 
 ## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
+	@warning_ignore("native_method_override")
 	func start(_callable : Callable, _priority : Priority = 1) -> int:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
+	@warning_ignore("native_method_override")
 	func wait_to_finish() -> Variant:
 		GDRx.raise_message("Do not join the Main Thread Dummy!")
 		return null
 	func _to_string():
 		return "MAIN_THREAD::" + str(GDRx.MAIN_THREAD_ID)
+	@warning_ignore("native_method_override")
 	func get_id() -> String:
 		return str(GDRx.MAIN_THREAD_ID)
+	@warning_ignore("native_method_override")
 	func is_started() -> bool:
 		return true
+	@warning_ignore("native_method_override")
 	func is_alive() -> bool:
 		return true
 

@@ -10,6 +10,8 @@ static func concat_(sources : Array[Observable]) -> Callable:
 #			returns an observable sequence that contains the elements of
 #			each given sequence, in sequential order.
 #		"""
-		return GDRx.obs.concat_with_iterable(GDRx.util.Iter([source] + sources))
+		var sources_ : Array[Observable] = sources.duplicate()
+		sources_.push_front(source)
+		return GDRx.obs.concat_with_iterable(GDRx.util.Iter(sources_))
 	
 	return concat

@@ -20,7 +20,8 @@ static func merge_(
 #		"""
 		
 		if max_concorrent < 0:
-			var sources_ : Array[Observable] = [source] + sources
+			var sources_ : Array[Observable] = sources.duplicate()
+			sources_.push_front(source)
 			return GDRx.obs.merge(sources_)
 		
 		var subscribe = func(

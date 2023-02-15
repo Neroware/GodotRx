@@ -14,6 +14,8 @@ static func fork_join_(
 #			An observable sequence containing the result of combining
 #			last element from each source in given sequence.
 #		"""
-		return GDRx.obs.fork_join([source] + args)
+		var sources : Array[Observable] = args.duplicate()
+		sources.push_front(source)
+		return GDRx.obs.fork_join(sources)
 	
 	return fork_join

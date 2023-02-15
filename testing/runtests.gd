@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "identity,amb,throw,range,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
+@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -211,6 +211,21 @@ func _test_throw():
 func _test_range():
 	var seq = ObservableSequence.new([1, 3, 5, 7, 9, 11, COMPLETE])
 	var obs = GDRx.range(1, 13, 2)
+	seq.compare(obs, self.sequence_finished)
+
+func _test_merge():
+	var seq = ObservableSequence.new([1, 2, 3, 4, 5, 6, COMPLETE])
+	var obs = GDRx.merge([
+		GDRx.range(1, 7, 2),
+		GDRx.range(2, 8, 2)
+	])
+	seq.compare(obs, self.sequence_finished)
+
+func _test_merge_op():
+	var seq = ObservableSequence.new([1, 2, 3, 4, 5, 6, COMPLETE])
+	var obs1 : Observable = GDRx.range(1, 7, 2)
+	var obs2 : Observable = GDRx.range(2, 8, 2)
+	var obs = obs1.merge([obs2])
 	seq.compare(obs, self.sequence_finished)
 
 func _test_window_with_count():

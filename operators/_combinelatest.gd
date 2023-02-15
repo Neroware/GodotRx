@@ -11,7 +11,9 @@ static func combine_latest_(others : Array[Observable]) -> Callable:
 #			An observable sequence containing the result of combining
 #			elements of the sources into a tuple.
 #		"""
-		var sources : Array[Observable] = [source] + others
+		
+		var sources : Array[Observable] = others.duplicate()
+		sources.push_front(source)
 		return GDRx.obs.combine_latest(sources)
 	
 	return combine_latest
