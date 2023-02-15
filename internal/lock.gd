@@ -24,7 +24,7 @@ func unlock():
 	self._semaphore.post()
 
 func try_lock() -> bool:
-	return self._semaphore.try_wait() == OK
+	return self._semaphore.try_wait()
 
 func is_locking_thread() -> bool:
 	var id = OS.get_thread_caller_id()

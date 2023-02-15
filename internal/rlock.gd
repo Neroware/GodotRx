@@ -36,7 +36,7 @@ func unlock():
 	self._mutex.unlock()
 
 func try_lock() -> bool:
-	return self._mutex.try_lock() == OK
+	return self._mutex.try_lock()
 
 func is_locking_thread() -> bool:
 	var id = OS.get_thread_caller_id()
