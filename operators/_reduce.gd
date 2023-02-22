@@ -23,7 +23,7 @@ static func reduce_(
 #		an observable sequence containing a single element with the
 #		final accumulator value.
 #	"""
-	if !(seed_ is GDRx.util.NotSet):
+	if !is_instance_of(seed_, GDRx.util.NotSet):
 		var _seed = seed_
 		var scanner = GDRx.op.scan(accumulator, _seed)
 		return GDRx.pipe.compose2(

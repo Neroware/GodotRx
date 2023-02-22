@@ -63,7 +63,7 @@ static func range_(
 		):
 			if GDRx.assert_(iterator != null): return
 			var item = iterator.next()
-			if item is iterator.End:
+			if is_instance_of(item, iterator.End):
 				observer.on_completed()
 			else:
 				observer.on_next(item)

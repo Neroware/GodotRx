@@ -44,7 +44,7 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 			) \
 			.end_try_catch():
 				pass
-			elif current.v is sources_.End:
+			elif is_instance_of(current.v, sources_.End):
 				if last_exception.v != null:
 					observer.on_error(last_exception.v)
 				else:

@@ -48,7 +48,7 @@ static func zip_with_iterable_(seq : IterableBase) -> Callable:
 			
 			var on_next = func(left):
 				var right = second.next()
-				if right is second.End:
+				if is_instance_of(right, second.End):
 					observer.on_completed()
 				else:
 					var result = Tuple.new([left, right])
