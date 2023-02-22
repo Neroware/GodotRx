@@ -15,3 +15,12 @@ func next() -> Variant:
 
 func iter():
 	return self._it.iter()
+
+## Loops over all elements within the iterable sequence
+func foreach(what : Callable = func(__elem): pass):
+	var next_ = self.next()
+	while not next_ is ItEnd:
+		var continue_ = what.call(next_)
+		if continue_ == false:
+			break
+		next_ = self.next()

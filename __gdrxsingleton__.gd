@@ -52,7 +52,7 @@ const THREAD_JOIN_INTERVAL : float = 1.0
 ## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
 	@warning_ignore("native_method_override")
-	func start(_callable : Callable, _priority : Priority = 1) -> int:
+	func start(_callable : Callable, _priority : Priority = 1) -> Error:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
 		return -1
 	@warning_ignore("native_method_override")

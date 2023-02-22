@@ -5,7 +5,7 @@ class_name IterableBase
 ## This interface provides a function to iterate over containers.
 
 ## Returns next element in the iterable sequence. Return instance of 
-## [IterableBase.End] when end is reached.
+## [ItEnd] when end is reached.
 func next() -> Variant:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
@@ -15,6 +15,3 @@ func next() -> Variant:
 func iter() -> Iterator:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
-
-## Marks end of sequence.
-class End: pass

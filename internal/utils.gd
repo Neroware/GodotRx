@@ -3,7 +3,7 @@ const MAX_SIZE = 9223372036854775807
 ## Represents an un-defined state
 class NotSet extends Comparable:
 	func eq(other) -> bool:
-		return other is self
+		return other is NotSet
 
 ## An infinite iterable sequence
 class InfiniteIterator extends IterableBase:
@@ -14,7 +14,7 @@ class InfiniteIterator extends IterableBase:
 		self._counter = 0
 	func next() -> Variant:
 		self._counter += 1
-		if not self._infval is GDRx.util.NotSet:
+		if not is_instance_of(self._infval, GDRx.util.NotSet):
 			return self._infval
 		return self._counter
 	func iter() -> Iterator:
@@ -29,7 +29,7 @@ class WhileIterator extends IterableBase:
 		self._cond = cond
 	func next() -> Variant:
 		if not self._cond.call():
-			return End.new()
+			return ItEnd.new()
 		return self._it.next()
 	func iter() -> Iterator:
 		return Iterator.new(WhileIterator.new(self._it.iter(), self._cond))

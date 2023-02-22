@@ -10,16 +10,16 @@ enum ETestState {
 
 signal sequence_finished(result : ETestState, remaining : int)
 
+class Errored:
+	pass
+class Complete:
+	pass
+class UnsubscribeOn:
+	var value = null
+	func _init(value_):
+		self.value = value_
+
 class ObservableSequence extends ArrayIterator:
-	class Error:
-		pass
-	class Complete:
-		pass
-	class UnsubscribeOn:
-		var value = null
-		func _init(value_):
-			self.value = value_
-	
 	var seq : Array
 	
 	func _init(seq_ : Array):
@@ -29,11 +29,11 @@ class ObservableSequence extends ArrayIterator:
 	func count_internal_sequences() -> int:
 		var count = 0
 		for elem in self.seq:
-			if elem is ObservableSequence.Complete:
+			if elem is Complete:
 				break
-			elif elem is ObservableSequence.Error:
+			elif elem is Errored:
 				break
-			elif elem is ObservableSequence.UnsubscribeOn:
+			elif elem is UnsubscribeOn:
 				if elem.value is ObservableSequence:
 					count = count + 1 + elem.value.count_internal_sequences()
 				break
@@ -69,8 +69,7 @@ class ObservableSequence extends ArrayIterator:
 			if expected is Complete:
 				print("[ReactiveX]: Expected end of sequence but got item: ", i)
 				end_sequence.call(ETestState.FAILED)
-			
-			elif expected is Error:
+			elif expected is Errored:
 				print("[ReactiveX]: Expected error in sequence but got item: ", i)
 				end_sequence.call(ETestState.FAILED)
 			
@@ -85,7 +84,7 @@ class ObservableSequence extends ArrayIterator:
 				return
 			
 			var expected = self.next()
-			if expected is ObservableSequence.Error:
+			if expected is Errored:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
 				print("[ReactiveX]: Sequence failed with unexpected error: ", err)
@@ -96,7 +95,7 @@ class ObservableSequence extends ArrayIterator:
 				return
 			
 			var expected = self.next()
-			if expected is ObservableSequence.Complete:
+			if expected is Complete:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
 				print("[ReactiveX]: Sequence completed unexpected!")
@@ -166,7 +165,7 @@ func _print_results():
 func _next_test():
 	self._current_test = self._test_it.next()
 	self._test_counter += 1
-	if self._current_test is self._test_it.End:
+	if self._current_test is ItEnd:
 		_print_results()
 		return
 	print("[ReactiveX]: Running test '", self._current_test, "' . . . (", self._test_counter, " / ", self._n_tests, ")")
@@ -181,10 +180,10 @@ func _process(_delta):
 		else:
 			method.call()
 
-func UNSUB(v) -> ObservableSequence.UnsubscribeOn:
-	return ObservableSequence.UnsubscribeOn.new(v)
-var COMPLETE : ObservableSequence.Complete = ObservableSequence.Complete.new()
-var ERROR : ObservableSequence.Error = ObservableSequence.Error.new()
+func UNSUB(v) -> UnsubscribeOn:
+	return UnsubscribeOn.new(v)
+var COMPLETE : Complete = Complete.new()
+var ERROR : Errored = Errored.new()
 
 # ============================================================================ #
 # 								Test Suit									   #

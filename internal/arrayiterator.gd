@@ -18,7 +18,7 @@ func _init(x : Array, start : int = 0, end : int = -1):
 
 func next() -> Variant:
 	if self._index == self._end:
-		return self.End.new()
+		return ItEnd.new()
 	self._index += 1
 	return self._x[self._index - 1]
 

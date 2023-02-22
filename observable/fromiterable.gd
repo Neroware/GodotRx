@@ -37,7 +37,7 @@ static func from_iterable_(
 			GDRx.try(func():
 				while not disposed.v:
 					var value = iterator.next()
-					if value is IterableBase.End:
+					if value is ItEnd:
 						observer.on_completed()
 					else:
 						observer.on_next(value)

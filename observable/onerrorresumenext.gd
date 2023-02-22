@@ -31,7 +31,7 @@ static func on_error_resume_next_(
 			action_ : Callable = func(__, ___, ____): return
 		):
 			var source = sources_.next()
-			if source is sources_.End:
+			if source is ItEnd:
 				observer.on_completed()
 				return
 			

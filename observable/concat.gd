@@ -25,7 +25,7 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 			) \
 			.end_try_catch():
 				pass
-			elif current.v is sources_.End:
+			elif current.v is ItEnd:
 				observer.on_completed()
 			else:
 				var d = SingleAssignmentDisposable.new()

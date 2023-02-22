@@ -36,4 +36,4 @@ func default_factory(__ : SchedulerBase) -> Observable:
 func default_type_equality(type, value) -> bool:
 	if type is Dictionary:
 		return typeof(value) == TYPE_INT and type.find_key(value) != null
-	return typeof(value) == type if type is int else value is type
+	return is_instance_of(value, type)

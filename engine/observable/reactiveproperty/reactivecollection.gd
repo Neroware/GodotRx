@@ -59,7 +59,7 @@ func _init(collection = []):
 	elif collection is IterableBase:
 		var it = collection.iter()
 		var item = it.next()
-		while not item is it.End:
+		while not item is ItEnd:
 			super.add_item(item)
 	
 	self._observe_add = Observable.new(self._get_subscription(CollectionAddEvent))

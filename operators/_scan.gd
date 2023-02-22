@@ -2,7 +2,7 @@ static func scan_(
 	accumulator : Callable,
 	seed_ = GDRx.util.GetNotSet()
 ) -> Callable:
-	var has_seed = !(seed_ is GDRx.util.NotSet)
+	var has_seed = !is_instance_of(seed_, GDRx.util.NotSet)
 	
 	var scan = func(source : Observable) -> Observable:
 #		"""Partially applied scan operator.
