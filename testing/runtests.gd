@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic"
+@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic,reactive_collection"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -371,3 +371,14 @@ func _test_fix_type_mismatch_basic():
 	var obs = GDRx.from_array([1, 2, 3, "4", 5, 6]).oftype(TYPE_INT, false)
 	var seq = ObservableSequence.new([1, 2, 3, ERROR])
 	seq.compare(obs, self.sequence_finished)
+
+func _test_reactive_collection():
+	var seq : IterableBase = GDRx.iter([1, 2, 3, 4, 5, 6, 7, 8])
+	var rc : ReactiveCollection = ReactiveCollection.From(seq)
+	rc.to_readonly().ObserveRemove.subscribe(
+		func(i): 
+			if i.index == 3 and i.value == 4: 
+				self.sequence_finished.emit(ETestState.SUCCESS, 0)
+			else:
+				self.sequence_finished.emit(ETestState.FAILED, 0))
+	rc.remove_at(3)

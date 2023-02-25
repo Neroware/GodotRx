@@ -212,3 +212,8 @@ func _to_string() -> String:
 	if self.is_disposed:
 		return "<<Disposed ReactiveCollection>>"
 	return str(self._data)
+
+static func From(it : IterableBase) -> ReactiveCollection:
+	var collection = []
+	it.iter().foreach(func(i): collection.append(i))
+	return ReactiveCollection.new(collection)

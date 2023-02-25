@@ -24,3 +24,30 @@ func foreach(what : Callable = func(__elem): pass):
 		if continue_ == false:
 			break
 		next_ = self.next()
+
+## Loops and enumerates an iterable sequence
+func enumerate(what : Callable = func(__elem, __idx : int): pass):
+	var idx_ = 0
+	var next_ = self.next()
+	while not next_ is ItEnd:
+		var continue_ = what.call(next_, idx_)
+		if continue_ == false:
+			break
+		idx_ += 1
+		next_ = self.next()
+
+## Returns the first element within the sequence
+func front():
+	return self._it.iter().next()
+
+## Returns the last element within the sequence
+func end():
+	var _end = RefValue.Set(ItEnd.new())
+	self._it.iter().foreach(func(i): _end.v = i)
+	return _end.v
+
+## Returns the n-th element within the sequence
+func at(n : int):
+	var _end = RefValue.Set(ItEnd.new())
+	self._it.iter().enumerate(func(i, idx): if idx == n: _end.v = i)
+	return _end.v
