@@ -1,4 +1,5 @@
-func reduce(fun : Callable, it : IterableBase, initial = GDRx.util.GetNotSet()):
+func reduce(fun : Callable, iterable : IterableBase, initial = GDRx.util.GetNotSet()):
+	var it = iterable.iter()
 	var next_ = it.next()
 	var value_ = initial
 	while not next_ is ItEnd:

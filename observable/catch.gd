@@ -17,7 +17,7 @@
 ##        successfully.
 static func catch_with_iterable_(sources : IterableBase) -> Observable:
 	
-	var sources_ : IterableBase = sources.iter()
+	var sources_ : Iterator = sources.iter()
 	
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:
 		var _scheduler = scheduler_ if scheduler_ != null else CurrentThreadScheduler.singleton()

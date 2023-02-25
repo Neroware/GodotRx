@@ -58,7 +58,7 @@ static func range_(
 		
 		var action = func(
 			_scheduler : SchedulerBase,
-			iterator : IterableBase,
+			iterator : Iterator,
 			action_ : Callable
 		):
 			if GDRx.assert_(iterator != null): return
@@ -71,7 +71,7 @@ static func range_(
 					action_.bind(action_), iterator
 				)
 		
-		sd.disposable = _scheduler.schedule(action.bind(action), GDRx.util.Iter(range_t))
+		sd.disposable = _scheduler.schedule(action.bind(action), GDRx.util.Iter(range_t).iter())
 		return sd
 	
 	return Observable.new(subscribe)

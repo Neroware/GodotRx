@@ -35,7 +35,7 @@ static func from_http_request_(
 		var action = func(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray):
 			if requester == null: _requester.queue_free()
 			if _requester.get_downloaded_bytes() - n_bytes == 0:
-				observer.on_error(GDRx.exc.HttpsRequestFailedException.new(url, 0, "No data received"))
+				observer.on_error(GDRx.exc.HttpRequestFailedException.new(url, 0, "No data received"))
 				return
 			var http_request_result : HttpRequestResult = HttpRequestResult.new()
 			http_request_result.result = result
@@ -66,7 +66,7 @@ static func from_http_request_(
 		var error_code = request_cb.call(url, custom_headers, tls_validate_domain, method, request_data)
 		if error_code:
 			dispose.call()
-			observer.on_error(GDRx.exc.HttpsRequestFailedException.new(url, error_code, "Unable to create request"))
+			observer.on_error(GDRx.exc.HttpRequestFailedException.new(url, error_code, "Unable to create request"))
 			return Disposable.new()
 		
 		var subscription = gss.schedule_signal(_requester.request_completed, 4, action)

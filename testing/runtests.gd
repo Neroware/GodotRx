@@ -19,12 +19,13 @@ class UnsubscribeOn:
 	func _init(value_):
 		self.value = value_
 
-class ObservableSequence extends ArrayIterator:
+class ObservableSequence:
 	var seq : Array
+	var it : Iterator
 	
 	func _init(seq_ : Array):
 		self.seq = seq_
-		super._init(seq_)
+		self.it = GDRx.iter(seq_).iter()
 	
 	func count_internal_sequences() -> int:
 		var count = 0
@@ -65,7 +66,7 @@ class ObservableSequence extends ArrayIterator:
 			if seq_remaining.v <= 0:
 				return
 			
-			var expected = self.next()
+			var expected = self.it.next()
 			if expected is Complete:
 				print("[ReactiveX]: Expected end of sequence but got item: ", i)
 				end_sequence.call(ETestState.FAILED)
@@ -83,7 +84,7 @@ class ObservableSequence extends ArrayIterator:
 			if seq_remaining.v <= 0:
 				return
 			
-			var expected = self.next()
+			var expected =  self.it.next()
 			if expected is Errored:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
@@ -94,7 +95,7 @@ class ObservableSequence extends ArrayIterator:
 			if seq_remaining.v <= 0:
 				return
 			
-			var expected = self.next()
+			var expected =  self.it.next()
 			if expected is Complete:
 				end_sequence.call(ETestState.SUCCESS)
 			else:
@@ -106,7 +107,7 @@ class ObservableSequence extends ArrayIterator:
 var _next_sequence : bool
 
 var _test_names : PackedStringArray
-var _test_it : ArrayIterator
+var _test_it : Iterator
 var _current_test
 var _test_counter : int
 var _n_tests : int
@@ -120,7 +121,7 @@ func _ready():
 	
 	self._next_sequence = false
 	
-	self._test_it = ArrayIterator.new(self._test_names)
+	self._test_it = ArrayIterable.new(self._test_names).iter()
 	self._current_test = ""
 	self._test_counter = 0
 	self._n_tests = self._test_names.size()
@@ -374,7 +375,7 @@ func _test_fix_type_mismatch_basic():
 
 func _test_reactive_collection():
 	var seq : IterableBase = GDRx.iter([1, 2, 3, 4, 5, 6, 7, 8])
-	var rc : ReactiveCollection = ReactiveCollection.From(seq)
+	var rc : ReactiveCollection = ReactiveCollection.new(seq)
 	rc.to_readonly().ObserveRemove.subscribe(
 		func(i): 
 			if i.index == 3 and i.value == 4: 

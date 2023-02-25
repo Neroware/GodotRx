@@ -14,7 +14,7 @@ static func on_error_resume_next_(
 	sources : Array
 ) -> Observable:
 	
-	var sources_ : IterableBase = GDRx.util.Iter(sources)
+	var sources_ : Iterator = GDRx.util.Iter(sources).iter()
 	
 	var subscribe = func(
 		observer : ObserverBase,

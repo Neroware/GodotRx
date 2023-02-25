@@ -65,6 +65,9 @@ func reset():
 func to_list() -> Array:
 	return self._collection.to_list()
 
+func iter() -> Iterator:
+	return self._collection.iter()
+
 func size() -> int:
 	return self._collection.size()
 

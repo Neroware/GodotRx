@@ -38,7 +38,7 @@ static func zip_with_iterable_(seq : IterableBase) -> Callable:
 #			elements of the sources as a tuple.
 #		"""
 		var first = source
-		var second : IterableBase = seq.iter()
+		var second : Iterator = seq.iter()
 		
 		var subscribe = func(
 			observer : ObserverBase,

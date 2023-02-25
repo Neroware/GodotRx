@@ -208,6 +208,9 @@ func reset():
 func to_list() -> Array:
 	return self._data.duplicate()
 
+func iter() -> Iterator:
+	return GDRx.util.Iter(self._data).iter()
+
 func size() -> int:
 	return self._count
 

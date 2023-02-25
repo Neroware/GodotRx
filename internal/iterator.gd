@@ -1,20 +1,9 @@
-extends IterableBase
+extends IteratorBase
 class_name Iterator
 
-## A naive iterator type
+## A naive iterator with additional quality-of-life utility
 ##
-## This interface provides a function to iterate over iterable sequences.
-
-var _it : IterableBase
-
-func _init(it_ : IterableBase):
-	self._it = it_
-
-func next() -> Variant:
-	return self._it.next()
-
-func iter():
-	return self._it.iter()
+## See [IteratorBase] and [IterableBase] for more info!
 
 ## Loops over all elements within the iterable sequence
 func foreach(what : Callable = func(__elem): pass):
@@ -35,19 +24,3 @@ func enumerate(what : Callable = func(__elem, __idx : int): pass):
 			break
 		idx_ += 1
 		next_ = self.next()
-
-## Returns the first element within the sequence
-func front():
-	return self._it.iter().next()
-
-## Returns the last element within the sequence
-func end():
-	var _end = RefValue.Set(ItEnd.new())
-	self._it.iter().foreach(func(i): _end.v = i)
-	return _end.v
-
-## Returns the n-th element within the sequence
-func at(n : int):
-	var _end = RefValue.Set(ItEnd.new())
-	self._it.iter().enumerate(func(i, idx): if idx == n: _end.v = i)
-	return _end.v

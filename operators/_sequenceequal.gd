@@ -6,7 +6,7 @@ static func sequence_equal_(
 	var comparer_ = comparer if comparer != null else GDRx.basic.default_comparer
 	var second_ : Observable 
 	if second is Array:
-		second_ = GDRx.obs.from_iterable(GDRx.iter(second))
+		second_ = GDRx.obs.from_iterable(GDRx.util.Iter(second))
 	else:
 		second_ = second if second_it == null else GDRx.obs.from_iterable(second_it)
 	

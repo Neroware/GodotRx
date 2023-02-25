@@ -61,6 +61,7 @@ func _init(collection = []):
 		var item = it.next()
 		while not item is ItEnd:
 			super.add_item(item)
+			item = it.next()
 	
 	self._observe_add = Observable.new(self._get_subscription(CollectionAddEvent))
 	self._observe_move = Observable.new(self._get_subscription(CollectionMoveEvent))
@@ -179,6 +180,11 @@ func reset():
 	if self._count != c:
 		self._notify_all("CountChanged", self._count)
 
+func iter() -> Iterator:
+	if self.is_disposed:
+		return GDRx.exc.DisposedException.Throw()
+	return GDRx.util.Iter(self._data).iter()
+
 func to_list() -> Array:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
@@ -212,8 +218,3 @@ func _to_string() -> String:
 	if self.is_disposed:
 		return "<<Disposed ReactiveCollection>>"
 	return str(self._data)
-
-static func From(it : IterableBase) -> ReactiveCollection:
-	var collection = []
-	it.iter().foreach(func(i): collection.append(i))
-	return ReactiveCollection.new(collection)

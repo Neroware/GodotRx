@@ -193,24 +193,24 @@ func raise_message(msg : String, default = null):
 func with(l, fun : Callable = func():return):
 	return concur.with(l, fun)
 
-## Creates an [ArrayIterator] from a given [Array]
+## Creates an [ArrayIterable] from a given [Array]
 func iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:
 	return util.Iter(x, start, end)
 
-## Creates a [code]WhileIterator[/code] from a given condition and another iterator
+## Creates a [WhileIterable] from a given condition and another [IterableBase]
 func take_while(cond : Callable, it : IterableBase) -> IterableBase:
 	return util.TakeWhile(cond, it)
 
-## Generates an infinite sequence of a given value
+## Generates an [InfiniteIterable] sequence of a given value.
 func infinite(infval = NOT_SET) -> IterableBase:
 	return util.Infinite(infval)
 
 ## NOT Set value
 var NOT_SET = util.GetNotSet()
 
-## NOT Set value
-func not_set():
-	return NOT_SET
+## Is NOT Set value
+func not_set(value) -> bool:
+	return NOT_SET.eq(value)
 
 ## Alias for [code]GDRx.util.AddRef()[/code]
 func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
