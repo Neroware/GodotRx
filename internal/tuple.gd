@@ -24,6 +24,9 @@ func at(i : int):
 func as_list() -> Array:
 	return _x.duplicate()
 
+func iter() -> Iterator:
+	return GDRx.util.Iter(self._x).iter()
+
 func is_empty() -> bool:
 	return self._x.is_empty()
 

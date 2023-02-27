@@ -539,7 +539,7 @@ zero as long as the condition `func(): return true` is met. This simulates a whi
 - The `flat_map` operator emits all items of the observable given to it each time its parent
 emits an item. This causes a new computation on the GPU each tick.
 - The `map` operator maps an incoming item to a new value. In this case, we read the
-result the GPU computed for us using the rednering device emited by `obs_shader` and map
+result the GPU computed using the rendering device emitted by `obs_shader` and map
 it to a `Vector2i`.
 - Since we do not want to have computations running per observer we publish the sequence
 using `publish` and `auto_connect_observable`. As stated earlier, `obs_shader` is a COLD
