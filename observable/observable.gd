@@ -104,7 +104,7 @@ func subscribe(
 		else:
 			set_disposable.call()
 		
-		return Disposable.new(auto_detach_observer.dispose)
+		return Disposable.new(func(): auto_detach_observer.dispose())
 
 # ============================================================================ #
 # PIPE                                                                 #
