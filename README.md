@@ -537,7 +537,7 @@ the resulting observable to emit all items of its children (in this case
 - Using `GDRx.just(0).while_do(func(): return true)` we describe a sequence which emits
 zero as long as the condition `func(): return true` is met. This simulates a while-loop.
 - The `flat_map` operator emits all items of the observable given to it each time its parent
-emits an item. This causes us the commence a new computation on the GPU each tick.
+emits an item. This causes a new computation on the GPU each tick.
 - The `map` operator maps an incoming item to a new value. In this case, we read the
 result the GPU computed for us using the rednering device emited by `obs_shader` and map
 it to a `Vector2i`.
