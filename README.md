@@ -429,7 +429,7 @@ with red and blue color. A nice task for GPUs!
 The shader code can be found here: https://pastebin.com/pbGGjrE8
 
 First, let's create a script and define a few members. The public member 
-'ObserveComputeShader' will be our observable sequence, which emits the
+`ObserveComputeShader` will be our observable sequence, which emits the
 number of red and blue pixels each time these values change.
 ```swift
 extends Node
@@ -517,36 +517,38 @@ self._observe_compute_shader = GDRx.merge([
 				rd.buffer_update(buffer, 0, pbb.size(), pbb)
 				return Vector2i(output[0], output[1])
 				)
+		.publish() \
+		.auto_connect_observable() \
+		.subscribe_on(NewThreadScheduler.new())
 		]) \
-	.subscribe_on(NewThreadScheduler.new()) \
-	.publish() \
-	.auto_connect_observable() \
 	.pairwise()  \
 	.filter(func(tup : Tuple): return tup.at(0) != tup.at(1)) \
 	.map(func(tup : Tuple): return tup.at(1))
 	
-	self._observe_compute_shader.subscribe(func(result : Vector2i): print("> ", result))
+	self.ObserveComputeShader.subscribe(func(result : Vector2i): print("> ", result))
 ```
 
 Okay, now I lost you, am I right? Let's break it down, shall we? 
 
 - The `GDRx.just(...)` constructor just emits the value specified, then terminates.
-- In this scenario, we also use the `GDRx.merge([...])` constructor. This just causes
+- In this scenario, we also use the `GDRx.merge([...])` constructor. This causes
 the resulting observable to emit all items of its children (in this case 
 `GDRx.just(Vector2i(-1, -1))` and the second larger part).
 - Using `GDRx.just(0).while_do(func(): return true)` we describe a sequence which emits
-zero as long as the condition `func(): return true` is met.
+zero as long as the condition `func(): return true` is met. This simulates a while-loop.
 - The `flat_map` operator emits all items of the observable given to it each time its parent
 emits an item. This causes us the commence a new computation on the GPU each tick.
-- The `map` operator just maps an incoming item to a new value. In this case, we read the
-result the GPU computed for us using the rednering device emited by `obs_shader`.
-- The `subscribe_on` allows us to subscribe to the `merge`d sequence on a new thread using
-the `NewThreadScheduler`.
+- The `map` operator maps an incoming item to a new value. In this case, we read the
+result the GPU computed for us using the rednering device emited by `obs_shader` and map
+it to a `Vector2i`.
 - Since we do not want to have computations running per observer we publish the sequence
-using `publish` and `auto_connect_observable`.
+using `publish` and `auto_connect_observable`. As stated earlier, `obs_shader` is a COLD
+observable which would otherwise commence a computaton per subscriber.
+- The `subscribe_on` allows us to subscribe to the sequence on a new thread using
+the `NewThreadScheduler`. This means waiting for the GPU will not block the main thread.
 - The `pairwise` takes the n-th and (n-1)-th item and merges them in a tuple.
-- With `filter(func(tup : Tuple): return tup.at(0) != tup.at(1))` we can check if values changed.
-- Then `map(func(tup : Tuple): return tup.at(1))` just takes the second item from the pair.
+- With `filter` we check if the current value is different from the previous.
+- Then `map` just takes the second, n-th item from the pair.
 - Finally, we can subscribe to `ObserveComputeShader` to receive the pixel counts each time 
 they are changed.
 
