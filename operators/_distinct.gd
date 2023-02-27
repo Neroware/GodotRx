@@ -21,7 +21,7 @@ class HashSet:
 			self._set.append(ret_value)
 		return ret_value
 
-func distinct_(
+static func distinct_(
 	key_mapper : Callable = GDRx.basic.identity,
 	comparer : Callable = GDRx.basic.default_comparer
 ) -> Callable:

@@ -428,25 +428,19 @@ with red and blue color. A nice task for GPUs!
 
 The shader code can be found here: https://pastebin.com/pbGGjrE8
 
+First, let's create a script and define a few members. The public member 
+'ObserveComputeShader' will be our observable sequence, which emits the
+number of red and blue pixels each time these values change.
 ```swift
 extends Node
 
 @export var texture : Texture2D
 
-@onready var _nts : NewThreadScheduler = NewThreadScheduler.new()
-
-var ComputeResult : ReadOnlyReactiveProperty
-var _compute_result : ReactiveProperty
-
-
-func _ready():
-	# Let's schedule a new Thread for our Compute Shader
-	self._compute_result = ReactiveProperty.new(Vector2i(0, 0))
-	self.ComputeResult = self._compute_result.to_readonly()
-	self._nts.schedule(func(__, ___): self._compute_shader_thread())
+var _observe_compute_shader : Observable
+var ObserveComputeShader : Observable:
+	get: return self._observe_compute_shader
 ```
-Notice that we schedule the CPU-side on a separate Thread using the 
-NewThreadScheduler private member. To get the boilerplate out of the way, let's
+To get the boilerplate out of the way, let's
 create our uniforms from a RenderingDevice and a defined buffer. This helper
 function returns our uniform set (we only have a single one with `set = 0`)
 
@@ -482,13 +476,14 @@ func _get_uniform_set(rd : RenderingDevice, buffer) -> Array[RDUniform]:
 	return [buffer_uniform, tex_uniform]
 ```
 With that out of the way, we now get to the spicy part. Setting up our computation
-loop and compute shader. First, we create our compute shader as an observable.
-Please notice that it is a COLD observable which performs a computation on subscribe,
-emits the RenderingDevice as item and then finishes.
+loop and logic. First, we create an observable from a compute shader using the 
+`GDRx.from_compute_shader(...)` constructor. This generates an observable which
+commences and schedules the shader on the GPU, emits the rendering device when
+the shader finishes and then terminates the sequence causing all observers to
+disconnect.
 
 ```swift
-## Runs on separate thread
-func _compute_shader_thread():
+func _ready():
 	var rd = RenderingServer.create_local_rendering_device()
 	var pba = PackedInt32Array([0,0]).to_byte_array()
 	var buffer = rd.storage_buffer_create(pba.size(), pba)
@@ -504,24 +499,15 @@ func _compute_shader_thread():
 	)
 ```
 
-Then, it is only a matter of binding it all together. Let's break this down, shall we?
-
-First, we create an endless loop on our separate Thread using `while_do`. In this
-very scenario, since the condition is always 'true', we could also use `repeat_value`,
-but we want to be able to terminate the sequence.
-
-Using `flat_map`, for each repeat, we let a new computation commence. 
-
-After the compute shader finishes, we `map` the results from the RenderingDevice 
-into a Vector2i data structure. This is useful, because simple equality works. 
-
-Then, we set the value of the ReactiveProperty to our result.
+When this is done, we can define the private member `_observe_compute_shader` 
+which is going to behave as described at the beginning of this section.
 
 ```swift
-	# Create the source of our computational value
-	GDRx.just(0) \
+self._observe_compute_shader = GDRx.merge([
+		GDRx.just(Vector2i(-1, -1)),
+		GDRx.just(0) \
 		.while_do(func(): return true) \
-		.flat_map(func(__): return obs_shader) \
+		.flat_map(obs_shader) \
 		.map(
 			func(rd : RenderingDevice):
 				var byte_data = rd.buffer_get_data(buffer)
@@ -530,12 +516,39 @@ Then, we set the value of the ReactiveProperty to our result.
 				var pbb = pb.to_byte_array()
 				rd.buffer_update(buffer, 0, pbb.size(), pbb)
 				return Vector2i(output[0], output[1])
-				) \
-		.subscribe(func(result : Vector2i): self._compute_result.Value = result)
+				)
+		]) \
+	.subscribe_on(NewThreadScheduler.new()) \
+	.publish() \
+	.auto_connect_observable() \
+	.pairwise()  \
+	.filter(func(tup : Tuple): return tup.at(0) != tup.at(1)) \
+	.map(func(tup : Tuple): return tup.at(1))
+	
+	self._observe_compute_shader.subscribe(func(result : Vector2i): print("> ", result))
 ```
 
-This way, any observer on any thread subscribing to `ComputeResult` is immediatly
-notified when the computation results in a new value.
+Okay, now I lost you, am I right? Let's break it down, shall we? 
+
+- The `GDRx.just(...)` constructor just emits the value specified, then terminates.
+- In this scenario, we also use the `GDRx.merge([...])` constructor. This just causes
+the resulting observable to emit all items of its children (in this case 
+`GDRx.just(Vector2i(-1, -1))` and the second larger part).
+- Using `GDRx.just(0).while_do(func(): return true)` we describe a sequence which emits
+zero as long as the condition `func(): return true` is met.
+- The `flat_map` operator emits all items of the observable given to it each time its parent
+emits an item. This causes us the commence a new computation on the GPU each tick.
+- The `map` operator just maps an incoming item to a new value. In this case, we read the
+result the GPU computed for us using the rednering device emited by `obs_shader`.
+- The `subscribe_on` allows us to subscribe to the `merge`d sequence on a new thread using
+the `NewThreadScheduler`.
+- Since we do not want to have computations running per observer we publish the sequence
+using `publish` and `auto_connect_observable`.
+- The `pairwise` takes the n-th and (n-1)-th item and merges them in a tuple.
+- With `filter(func(tup : Tuple): return tup.at(0) != tup.at(1))` we can check if values changed.
+- Then `map(func(tup : Tuple): return tup.at(1))` just takes the second item from the pair.
+- Finally, we can subscribe to `ObserveComputeShader` to receive the pixel counts each time 
+they are changed.
 
 ## Final Thoughts
 

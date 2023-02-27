@@ -1,4 +1,4 @@
-## Represents a Godot [Signal] as an observable sequence
+## Represents a Godot coroutine as an observable sequence
 static func from_godot_coroutine_(
 	fun : Callable,
 	bindings : Array = [],
