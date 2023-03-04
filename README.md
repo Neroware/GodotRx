@@ -174,7 +174,8 @@ it like this:
 ```
 
 Note that 'Default' is the one used in the default TimeoutScheduler singleton.
-It always runs at process timestep, scaling with `Engine.time_scale`.
+It runs at process timestep scaling with `Engine.time_scale` and also considers
+pause mode.
 
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 

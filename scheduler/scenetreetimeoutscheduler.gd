@@ -8,7 +8,7 @@ var _ignore_time_scale : bool
 
 func _init(
 	verify_ = null, 
-	process_always : bool = true, 
+	process_always : bool = false, 
 	process_in_physics : bool = false, 
 	ignore_time_scale : bool = false):
 		if not verify_ == "GDRx":

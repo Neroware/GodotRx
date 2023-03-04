@@ -9,7 +9,7 @@ class_name TimeoutScheduler
 class TimeoutType:
 	
 	var _special_timeouts = {
-		"default":SceneTreeTimeoutScheduler.new("GDRx", true, false, false),
+		"default":SceneTreeTimeoutScheduler.new("GDRx"),
 		"physics":SceneTreeTimeoutScheduler.new("GDRx", true, true, false),
 		"inherit":SceneTreeTimeoutScheduler.new("GDRx", false, false, false),
 		"physics_inherit":SceneTreeTimeoutScheduler.new("GDRx", false, true, false),
