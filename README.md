@@ -180,7 +180,7 @@ pause mode.
 ### Await
 
 All observables can be awaited using the corresponding coroutines `next()`, `error()`
-and `completed()`. In this case we have a global periodic timer which emits an item
+and `completed()`. In this case, we have a global periodic timer which emits an item
 every three seconds. This way, any part of the program can await the next full tick.
 
 ```swift
@@ -189,7 +189,7 @@ var state = await timer.next()
 # Proceed on next full tick...
 ```
 
-Please not that coroutines with `await` do not work well with the error handling
+Please note that coroutines with `await` do not work well with the error handling
 described in the next section. The tailed execution of an async function
 state will not be considered in the observers' `on_error`-contract.
 If somebody can implement a better `ExceptionHandler` for this case, be my guest!
