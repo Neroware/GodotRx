@@ -52,9 +52,9 @@ const THREAD_JOIN_INTERVAL : float = 1.0
 ## Dummy class to represent the main [Thread] instance
 class _MainThreadDummy extends Thread:
 	@warning_ignore("native_method_override")
-	func start(_callable : Callable, _priority : Priority = 1) -> Error:
+	func start(_callable : Callable, _priority : Priority = PRIORITY_NORMAL) -> Error:
 		GDRx.raise_message("Do not launch the Main Thread Dummy!")
-		return -1
+		return FAILED
 	@warning_ignore("native_method_override")
 	func wait_to_finish() -> Variant:
 		GDRx.raise_message("Do not join the Main Thread Dummy!")
@@ -206,11 +206,16 @@ func infinite(infval = NOT_SET) -> IterableBase:
 	return util.Infinite(infval)
 
 ## NOT Set value
-var NOT_SET = util.GetNotSet()
+var NOT_SET:
+	get: return util.GetNotSet()
 
 ## Is NOT Set value
 func not_set(value) -> bool:
 	return NOT_SET.eq(value)
+
+## Unit item
+var UNIT:
+	get: return StreamItem.Unit()
 
 ## Alias for [code]GDRx.util.AddRef()[/code]
 func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:

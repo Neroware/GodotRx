@@ -107,7 +107,29 @@ func subscribe(
 		return Disposable.new(func(): auto_detach_observer.dispose())
 
 # ============================================================================ #
-# PIPE                                                                 #
+# AWAIT                                                                        #
+# ============================================================================ #
+
+## Coroutine which finishes when next item is emitted.
+## [br][br]
+## [code]var item = await obs.next()[/code]
+func next() -> Variant:
+	return await ObservableAwait.new(self).on_next()
+
+## Coroutine which finishes when sequence terminates with error.
+## [br][br]
+## [code]var err = await obs.error()[/code]
+func error() -> Variant:
+	return await ObservableAwait.new(self).on_error()
+
+## Coroutine which finishes when sequence terminates gracefully.
+## [br][br]
+## [code]await obs.completed()[/code]
+func completed():
+	return await ObservableAwait.new(self).on_completed()
+
+# ============================================================================ #
+# PIPE                                                                         #
 # ============================================================================ #
 
 ## Pipe operator

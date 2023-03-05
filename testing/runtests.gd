@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic,reactive_collection"
+@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic,reactive_collection,await_public_timer,await_immediate"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -383,3 +383,15 @@ func _test_reactive_collection():
 			else:
 				self.sequence_finished.emit(ETestState.FAILED, 0))
 	rc.remove_at(3)
+
+func _test_await_public_timer():
+	var seq = ObservableSequence.new([1, 2, COMPLETE])
+	var obs = GDRx.start_periodic_timer(0.2).take(3).publish().auto_connect_observable()
+	await obs.next()
+	seq.compare(obs, self.sequence_finished)
+
+func _test_await_immediate():
+	var seq = ObservableSequence.new([42, COMPLETE])
+	var obs = GDRx.just(42).repeat(3)
+	var i = await obs.next()
+	seq.compare(GDRx.just(i), self.sequence_finished)

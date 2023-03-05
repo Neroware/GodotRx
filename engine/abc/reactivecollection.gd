@@ -5,9 +5,9 @@ class CollectionAddEvent extends Comparable:
 	var index : int
 	var value
 	
-	func _init(index : int, value):
-		self.index = index
-		self.value = value
+	func _init(index_ : int, value_):
+		self.index = index_
+		self.value = value_
 	
 	func  _to_string() -> String:
 		return "Index: " + str(index) + " Value: " + str(value)
@@ -27,9 +27,9 @@ class CollectionRemoveEvent extends Comparable:
 	var index : int
 	var value
 	
-	func _init(index : int, value):
-		self.index = index
-		self.value = value
+	func _init(index_ : int, value_):
+		self.index = index_
+		self.value = value_
 	
 	func _to_string() -> String:
 		return "Index: " + str(index) + " Value: " + str(value)
@@ -50,10 +50,10 @@ class CollectionMoveEvent extends Comparable:
 	var new_index : int
 	var value
 	
-	func _init(old_index : int, new_index : int, value):
-		self.old_index = old_index
-		self.new_index = new_index
-		self.value = value
+	func _init(old_index_ : int, new_index_ : int, value_):
+		self.old_index = old_index_
+		self.new_index = new_index_
+		self.value = value_
 	
 	func  _to_string() -> String:
 		return "OldIndex: " + str(old_index) + " NewIndex: " + str(new_index) \
@@ -75,10 +75,10 @@ class CollectionReplaceEvent extends Comparable:
 	var old_value
 	var new_value
 	
-	func _init(index : int, old_value, new_value):
-		self.index = index
-		self.old_value = old_value
-		self.new_value = new_value
+	func _init(index_ : int, old_value_, new_value_):
+		self.index = index_
+		self.old_value = old_value_
+		self.new_value = new_value_
 	
 	func  _to_string() -> String:
 		return "Index: " + str(index) + " OldValue: " + str(old_value) \

@@ -20,35 +20,35 @@ func eq(other) -> bool:
 		return GDRx.eq(self._collection, other._collection)
 	return GDRx.eq(self._collection, other)
 
-func add_item(item) -> int:
+func add_item(_item) -> int:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return -1
 
-func remove_item(item) -> int:
+func remove_item(_item) -> int:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return -1
 
-func remove_at(index : int) -> Variant:
+func remove_at(_index : int) -> Variant:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return null
 
-func replace_item(item, with) -> int:
+func replace_item(_item, _with) -> int:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return -1
 
-func replace_at(index : int, item) -> Variant:
+func replace_at(_index : int, _item) -> Variant:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return null
 
-func swap(idx1 : int, idx2 : int) -> Tuple:
+func swap(_idx1 : int, _idx2 : int) -> Tuple:
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return null
 
-func move_to(curr_index : int, new_index : int):
+func move_to(_curr_index : int, _new_index : int):
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return null
 
-func insert_at(index : int, elem):
+func insert_at(_index : int, _elem):
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 	return null
 

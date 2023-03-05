@@ -7,7 +7,7 @@ var _rwlock : ReadWriteLock
 var is_disposed : bool
 
 func _get_subscription(event_class, notify_count = false) -> Callable:
-	return func(observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
+	return func(observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase:
 		if self.is_disposed:
 			observer.on_completed()
 			return Disposable.new()
@@ -21,29 +21,29 @@ func _get_subscription(event_class, notify_count = false) -> Callable:
 		self._observers[event_class].push_back(observer)
 		self._rwlock.w_unlock()
 		
-		var dispose = func():
+		var dispose_ = func():
 			self._rwlock.w_lock()
 			self._observers[event_class].erase(observer)
 			self._rwlock.w_unlock()
 		
-		return Disposable.new(dispose)
+		return Disposable.new(dispose_)
 
 func _notify_all(event_class, event):
-	var _observers : Array
+	var observers_ : Array
 	self._rwlock.r_lock()
 	if event_class in self._observers:
-		_observers = self._observers[event_class].duplicate()
+		observers_ = self._observers[event_class].duplicate()
 	self._rwlock.r_unlock()
-	for observer in _observers:
+	for observer in observers_:
 		observer.on_next(event)
 
 func _disconnect_all(event_class):
-	var _observers : Array
+	var observers_ : Array
 	self._rwlock.r_lock()
 	if event_class in self._observers:
-		_observers = self._observers[event_class].duplicate()
+		observers_ = self._observers[event_class].duplicate()
 	self._rwlock.r_unlock()
-	for observer in _observers:
+	for observer in observers_:
 		observer.on_completed()
 
 func _init(collection = []):

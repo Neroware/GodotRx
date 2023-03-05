@@ -93,13 +93,13 @@ func on_next(value):
 	for obs in observers_:
 		obs.on_next(value)
 
-func on_error(error):
+func on_error(error_):
 	var observers_ : Array[ObserverBase]
 	self._rwlock.r_lock()
 	observers_ = self._observers.duplicate()
 	self._rwlock.r_unlock()
 	for obs in observers_:
-		obs.on_error(error)
+		obs.on_error(error_)
 
 func on_completed():
 	self.dispose()
