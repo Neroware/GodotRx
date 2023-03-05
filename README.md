@@ -177,6 +177,23 @@ Note that 'Default' is the one used in the default TimeoutScheduler singleton.
 It runs at process timestep scaling with `Engine.time_scale` and also considers
 pause mode.
 
+### Await
+
+All observables can be awaited using the corresponding coroutines `next()`, `error()`
+and `completed()`. In this case we have a global periodic timer which emits an item
+every three seconds. This way, any part of the program can await the next full tick.
+
+```swift
+var timer = GDRx.start_periodic_timer(3.0).publish().auto_connect_observable()
+var state = await timer.next()
+# Proceed on next full tick...
+```
+
+Please not that coroutines with `await` do not work well with the error handling
+described in the next section. The tailed execution of an async function
+state will not be considered in the observers' `on_error`-contract.
+If somebody can implement a better `ExceptionHandler` for this case, be my guest!
+
 ### Error handling
 In my endless sanity, I throw my own custom exception handling into the ring. 
 When an exception is thrown, the Observers should be notified via their 
