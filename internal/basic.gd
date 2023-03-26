@@ -4,8 +4,10 @@ func noop(__ = null, ___ = null):
 func identity(x, __ = null):
 	return x
 
-func default_now() -> Dictionary:
-	return Time.get_datetime_dict_from_system(true)
+var start_time_sec : float = Scheduler.to_seconds(Time.get_datetime_dict_from_system(true))
+
+func default_now() -> float:
+	return start_time_sec + 1000.0 * Time.get_ticks_msec()
 
 func default_comparer(x, y) -> bool:
 	return x.eq(y) if (x is Object and x.has_method("eq")) else x == y

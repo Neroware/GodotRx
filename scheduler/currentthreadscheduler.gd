@@ -21,20 +21,20 @@ var _tramps : WeakKeyDictionary
 ##            The singleton [CurrentThreadScheduler] instance.
 static func singleton() -> CurrentThreadScheduler:
 	var thread = GDRx.get_current_thread()
-	var class_map = GDRx.CurrentThreadScheduler_global_.get_value(CurrentThreadScheduler)
-	var class_map_ : WeakKeyDictionary
-	if class_map == null:
-		class_map_ = WeakKeyDictionary.new()
-		GDRx.CurrentThreadScheduler_global_.set_pair(CurrentThreadScheduler, class_map_)
+	var class_map_ = GDRx.CurrentThreadScheduler_global_.get_value(CurrentThreadScheduler)
+	var class_map : WeakKeyDictionary
+	if class_map_ == null:
+		class_map = WeakKeyDictionary.new()
+		GDRx.CurrentThreadScheduler_global_.set_pair(CurrentThreadScheduler, class_map)
 	else:
-		class_map_ = class_map
+		class_map = class_map_
 	
 	var self_
-	if not class_map_.has_key(thread):
+	if not class_map.has_key(thread):
 		self_ = CurrentThreadSchedulerSingleton.new()
-		class_map_.set_pair(thread, self_)
+		class_map.set_pair(thread, self_)
 	else:
-		self_ = class_map_.get_value(thread)
+		self_ = class_map.get_value(thread)
 	
 	return self_
 

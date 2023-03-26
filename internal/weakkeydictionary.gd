@@ -2,175 +2,95 @@ class_name WeakKeyDictionary
 
 ## A dictionary with weak references to keys
 ##
-## Pairs with non-referenced keys are automatically removed in a gargabe collection
-## step
+## Pairs with non-referenced keys are automatically removed when deleted.
 
 var _data : Dictionary
 var _weakkeys : Dictionary
-var _lock : ReadWriteLock
-
-## After this amount of pair insertions, a garbage collection step is performed.
-const GARBAGE_COLLECTION_STEP : int = 100
-var _garbage_collection_state : int
 
 func _init(from : Dictionary = {}):
 	self._data = {}
 	self._weakkeys = {}
-	self._lock = ReadWriteLock.new()
-	self._garbage_collection_state = 0
 	for key in from.keys():
 		set_pair(key, from[key])
 
 func _hash_key(key) -> int:
 	return hash(key)
 
-func _collect_lost_references():
-	for hkey in self._weakkeys.keys():
-		var wkey = self._weakkeys[hkey].get_ref()
-		if wkey != null:
-			continue
-		self._weakkeys.erase(hkey)
-		self._data.erase(hkey)
+func _set_pair(hkey : int, wkey : WeakRef, value):
+	self._weakkeys[hkey] = wkey
+	self._data[hkey] = value
+
+func _remove_pair(hkey : int) -> bool:
+	return self._weakkeys.erase(hkey) and self._data.erase(hkey)
+
+func _add_disposer(key : Object, hkey : int):
+	var ref : WeakRef = weakref(self)
+	var on_dispose = func():
+		var d : WeakKeyDictionary = ref.get_ref()
+		if d == null:
+			return
+		d._remove_pair(hkey)
+	AutoDisposer.Add(key, Disposable.new(on_dispose))
 
 func set_pair(key, value):
 	if GDRx.assert_(key != null, "Key is NULL!"):
 		return
 	if GDRx.assert_(key is Object, "Key needs to be of type 'Object'"):
 		return
-	
-	var hkey = self._hash_key(key)
-	
-	self._lock.w_lock()
-	self._data[hkey] = value
-	self._weakkeys[hkey] = weakref(key)
-	self._garbage_collection_state += 1
-	if self._garbage_collection_state > GARBAGE_COLLECTION_STEP:
-		self._collect_lost_references()
-		self._garbage_collection_state = 0
-	self._lock.w_unlock()
+	var hkey : int = self._hash_key(key)
+	var wkey : WeakRef = weakref(key)
+	self._set_pair(hkey, wkey, value)
+	self._add_disposer(key, hkey)
 
 func get_value(key, default = null) -> Variant:
-	var res = null
-	
-	self._lock.r_lock()
-	res = self._data.get(self._hash_key(key), default)
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.get(self._hash_key(key), default)
 
 func find_key(value) -> Variant:
-	var res = null
-	
-	self._lock.r_lock()
 	var hkey = self._data.find_key(value)
 	if hkey == null:
-		self._lock.r_unlock()
 		return null
-	var wkey = self._weakkeys.get(hkey)
+	var wkey : WeakRef = self._weakkeys.get(hkey)
 	if wkey == null:
-		self._lock.r_unlock()
 		return null
-	res = wkey.get_ref()
-	self._lock.r_unlock()
-	
-	return res
+	return wkey.get_ref()
 
 func to_hash() -> int:
-	var res : int = 0
-	
-	self._lock.r_lock()
-	res = self._data.hash()
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.hash()
 
 func is_empty() -> bool:
-	var res : bool = true
-	
-	self._lock.r_lock()
-	res = self._data.is_empty()
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.is_empty()
 
 func clear():
-	self._lock.w_lock()
 	self._data.clear()
 	self._weakkeys.clear()
-	self._lock.w_unlock()
-
-func duplicate(deep : bool = false):
-	var copy : WeakKeyDictionary = WeakKeyDictionary.new()
-	self._lock.r_lock()
-	copy._data = self._data.duplicate(deep)
-	copy._weakkeys = self._weakkeys.duplicate()
-	self._lock.r_unlock()
-	return copy
 
 func erase(key) -> bool:
-	var res : bool = false
-	var hkey = self._hash_key(key)
-	
-	self._lock.w_lock()
-	self._weakkeys.erase(hkey)
-	res = self._data.erase(hkey)
-	self._lock.w_unlock()
-	
-	return res
+	var hkey : int = self._hash_key(key)
+	return self._remove_pair(hkey)
 
 func values() -> Array:
-	var res : Array
-	
-	self._lock.r_lock()
-	res = self._data.values()
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.values()
 
 func size() -> int:
-	var res : int = 0
-	
-	self._lock.r_lock()
-	res = self._data.size()
-	self._lock.r_unlock()
-	
-	return res
-
-func merge(dictionary : WeakKeyDictionary, overwrite : bool = false):
-	self._lock.w_lock()
-	self._weakkeys.merge(dictionary._weakkeys, overwrite)
-	self._data.merge(dictionary._data, overwrite)
-	self._lock.w_unlock()
+	return self._data.size()
 
 func keys() -> Array:
 	var res = []
-	
-	self._lock.r_lock()
-	var wkeys = self._weakkeys.duplicate().values()
-	for wkey in wkeys:
-		var key_ = wkey.get_ref()
-		if key_ != null:
-			res.append(key_)
-	self._lock.r_unlock()
-	
+	var hkeys = self._weakkeys.keys()
+	for hkey in hkeys:
+		var wkey : WeakRef = self._weakkeys[hkey]
+		if wkey == null:
+			continue
+		var key = wkey.get_ref()
+		if key == null:
+			continue
+		res.push_back(key)
 	return res
 
 func has_key(key) -> bool:
-	var res : bool = false
-	
-	self._lock.r_lock()
-	res = self._data.has(self._hash_key(key))
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.has(self._hash_key(key))
 
 func has_all(keys_ : Array) -> bool:
-	var res : bool = false
-	
-	self._lock.r_lock()
 	var _keys = keys_.duplicate()
 	_keys.all(func(elem): return self._hash_key(elem))
-	res = self._data.has_all(_keys)
-	self._lock.r_unlock()
-	
-	return res
+	return self._data.has_all(_keys)
