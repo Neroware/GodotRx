@@ -53,7 +53,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 	self._ensure_thread()
 	self._condition.unlock()
 	
-	return Disposable.new(si.cancel)
+	return Disposable.new(func(): si.cancel())
 
 ## Schedule a periodic action for repeated execution every time
 ## [code]period[/code] seconds have expired.

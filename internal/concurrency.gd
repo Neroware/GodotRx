@@ -20,6 +20,7 @@ class StartableThread extends StartableBase:
 			return
 		
 		var action = func():
+			Thread.set_thread_safety_checks_enabled(false)
 			GDRx.register_thread(self._thread)
 			self._target.call()
 			self._thread = null
