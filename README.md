@@ -2,7 +2,8 @@
 
 ## Warning
 **Untested** While it is almost a direct port of RxPY, this library has not 
-yet been fully tested in action. Proceed with caution!
+yet been fully tested in action. Proceed with caution! (For the native version, 
+go to https://github.com/Neroware/NativeGodotRx)
 
 ## What is GodotRx?
 GodotRx (short: GDRx) is a full implementation of ReactiveX for the Godot Game 
