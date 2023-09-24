@@ -10,7 +10,7 @@ class_name __GDRx_Singleton__
 #   Init script database
 # =========================================================================== #
 ## Access to internals
-# var __init__ : __GDRx_Init__ = __GDRx_Init__.new()
+var __init__ : __GDRx_Init__ = __GDRx_Init__.new()
 ## [Observable] constructor functions
 # var obs : __GDRx_Obs__ = __GDRx_Obs__.new()
 ## [Observable] operator functions
@@ -18,29 +18,31 @@ class_name __GDRx_Singleton__
 ## Engine Backend
 # var gd : __GDRx_Engine__ = __GDRx_Engine__.new()
 ## See [OnNextNotification]
-# var OnNext = __init__.NotificationOnNext_
+var OnNext = __init__.NotificationOnNext_
 ## See [OnErrorNotification]
-# var OnError = __init__.NotificationOnError_
+var OnError = __init__.NotificationOnError_
 ## See [OnCompletedNotification]
-# var OnCompleted = __init__.NotificationOnCompleted_
+var OnCompleted = __init__.NotificationOnCompleted_
 
 ## Internal heap implementation
-# var heap = __init__.Heap_.new()
+#var heap = __init__.Heap_.new()
 ## Basic functions & types
-# var basic = __init__.Basic_.new()
+var basic = __init__.Basic_.new()
 ## Concurrency functions & types
-# var concur = __init__.Concurrency_.new()
+#var concur = __init__.Concurrency_.new()
 ## Utility functions & types
-# var util = __init__.Util_.new()
+var util = __init__.Util_.new()
 ## Exception types
-# var exc = __init__.Exception_.new()
+#var exc = __init__.Exception_.new()
 ## Access to pipe operators
-# var pipe = __init__.Pipe_.new()
+#var pipe = __init__.Pipe_.new()
 
 # =========================================================================== #
 #   Multi-Threading
 # =========================================================================== #
 
+## Start Time
+var START_TIME_SEC = 0.0 # Scheduler.to_seconds(Time.get_datetime_dict_from_system(true)) # TODO
 ## Dummy instance for the Main Thread
 var MAIN_THREAD # = _MainThreadDummy.new()
 ## ID of the main thread
@@ -124,28 +126,32 @@ func assert_(assertion : bool, message : String = "Assertion failed!") -> bool:
 ### Blocks access to the function [code]fun[/code] using the given lock [code]l[/code]
 #func with(l, fun : Callable = func():return):
 #	return concur.with(l, fun)
-#
-### Creates an [ArrayIterable] from a given [Array]
-#func iter(x : Array, start : int = 0, end : int = -1) -> IterableBase:
-#	return util.Iter(x, start, end)
-#
+
+## Construct an [IterableBase] onto x.
+func to_iterable(x) -> IterableBase:
+	return Iterator.to_iterable(x)
+
+### Construct an [Iterator] onto x.
+func iter(x) -> Iterator:
+	return Iterator.iter(x)
+
 ### Creates a [WhileIterable] from a given condition and another [IterableBase]
-#func take_while(cond : Callable, it : IterableBase) -> IterableBase:
-#	return util.TakeWhile(cond, it)
-#
+func take_while(cond : Callable, it : IterableBase) -> IterableBase:
+	return WhileIterable.new(it, cond)
+
 ### Generates an [InfiniteIterable] sequence of a given value.
-#func infinite(infval = NOT_SET) -> IterableBase:
-#	return util.Infinite(infval)
-#
+func infinite(infval = NOT_SET) -> IterableBase:
+	return InfiniteIterable.new(infval)
+
 ### NOT Set value
-#var NOT_SET:
-#	get: return util.GetNotSet()
-#
-### Is NOT Set value
-#func not_set(value) -> bool:
-#	return NOT_SET.eq(value)
-#
-### Unit item
+var NOT_SET:
+	get: return util.NOT_SET
+
+## Is NOT Set value
+func not_set(value) -> bool:
+	return NOT_SET.eq(value)
+
+## Unit item
 #var UNIT:
 #	get: return StreamItem.Unit()
 #
