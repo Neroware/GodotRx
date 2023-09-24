@@ -122,10 +122,6 @@ func assert_(assertion : bool, message : String = "Assertion failed!") -> bool:
 ### Raises a [code]GDRx.exc.Exception[/code] containing the given message
 #func raise_message(msg : String, default = null):
 #	return exc.raise(msg, default)
-#
-### Blocks access to the function [code]fun[/code] using the given lock [code]l[/code]
-#func with(l, fun : Callable = func():return):
-#	return concur.with(l, fun)
 
 ## Construct an [IterableBase] onto x.
 func to_iterable(x) -> IterableBase:
@@ -155,7 +151,7 @@ func not_set(value) -> bool:
 #var UNIT:
 #	get: return StreamItem.Unit()
 #
-### Alias for [code]GDRx.util.AddRef()[/code]
+### Alias for [code]GDRx.util.add_ref()[/code]
 #func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 #	return util.AddRef(xs, r)
 #
@@ -166,15 +162,15 @@ func not_set(value) -> bool:
 ### Alias for [code]GDRx.obs.return_value[/code]
 #func just(value, scheduler : SchedulerBase = null) -> Observable:
 #	return self.return_value(value, scheduler)
-#
-### Empty operation as defined in [code]GDRx.basic.noop[/code]
-#func noop(__ = null, ___ = null):
-#	GDRx.basic.noop(__, ___)
-#
-### Identity mapping as defined in [code]GDRx.basic.identity[/code]
-#func identity(x, __ = null):
-#	return GDRx.basic.identity(x, __)
-#
+
+## Empty operation as defined in [code]GDRx.basic.noop[/code]
+func noop(__ = null, ___ = null):
+	GDRx.basic.noop(__, ___)
+
+## Identity mapping as defined in [code]GDRx.basic.identity[/code]
+func identity(x, __ = null):
+	return GDRx.basic.identity(x, __)
+
 ## =========================================================================== #
 ##   Observable Constructors
 ## =========================================================================== #
