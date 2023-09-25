@@ -5,7 +5,7 @@ func identity(x, __ = null):
 	return x
 
 func default_now() -> float:
-	return GDRx.START_TIME_SEC + 1000.0 * Time.get_ticks_msec()
+	return Time.get_unix_time_from_datetime_dict(Time.get_datetime_dict_from_system(true))
 
 func default_comparer(x, y) -> bool:
 	return x.eq(y) if (x is Object and x.has_method("eq")) else x == y

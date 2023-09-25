@@ -160,15 +160,21 @@ func run():
 ## Ends the thread associated with this scheduler. All
 ## remaining work in the scheduler queue is abandoned.
 func dispose():
-	var __ = LockGuard.new(self._lock)
-	if not this._is_disposed:
-		this._is_disposed = true
-		this._condition.notify()
+	var thread : StartableBase = null
+	
+	if true:
+		var __ = LockGuard.new(self._lock)
+		if not this._is_disposed:
+			this._is_disposed = true
+			this._ready_list.clear()
+			this._queue.clear()
+			this._condition.notify()
+			thread = this._thread
+			this._thread = null
+	
+	if thread:
+		thread.wait_to_finish()
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		this.dispose()
-
-## Transforms this scheduler into a [Disposable]
-func as_disposable() -> Disposable:
-	return Disposable.new(dispose)

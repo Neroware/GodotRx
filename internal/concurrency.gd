@@ -66,7 +66,7 @@ class StartableThread extends StartableBase:
 	var _target : Callable
 	var _priority : int
 	var _started : bool
-	var _joined : bool
+	var _joined : AtomicFlag
 	
 	var thread : Thread:
 		get: return self._thread
@@ -76,7 +76,7 @@ class StartableThread extends StartableBase:
 		self._target = target
 		self._priority = priority
 		self._started = false
-		self._joined = false
+		self._joined = AtomicFlag.new()
 	
 	func _register_thread():
 		var id = OS.get_thread_caller_id()
@@ -107,7 +107,7 @@ class StartableThread extends StartableBase:
 		self._thread.start(run, self._priority)
 	
 	func wait_to_finish():
-		if self._joined:
+		if self._joined.test_and_set():
 			return
 		self._thread.wait_to_finish()
 		self._thread = null
@@ -137,3 +137,25 @@ class MainThreadDummy_ extends Thread:
 	@warning_ignore("native_method_override")
 	func is_alive() -> bool:
 		return true
+
+## A naive Atomic Flag
+class AtomicFlag:
+	var _flag : bool
+	var _mutex : Mutex
+	
+	func _init():
+		self._flag = false
+		self._mutex = Mutex.new()
+	
+	func test_and_set() -> bool:
+		var res : bool
+		self._mutex.lock()
+		res = self._flag
+		self._flag = true
+		self._mutex.unlock()
+		return res
+	
+	func clear():
+		self._mutex.lock()
+		self._flag = false
+		self._mutex.unlock()

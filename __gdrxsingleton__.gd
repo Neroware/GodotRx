@@ -66,8 +66,6 @@ func _notification(what):
 #   Multi-Threading
 # =========================================================================== #
 
-## Start Time
-var START_TIME_SEC = 0.0 # Scheduler.to_seconds(Time.get_datetime_dict_from_system(true)) # TODO
 ## Dummy instance for the Main Thread
 var MAIN_THREAD = concur.MainThreadDummy_.new()
 ## ID of the main thread
@@ -95,6 +93,8 @@ var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
 var SceneTreeTimeoutScheduler_ : Array[SceneTreeTimeoutScheduler]
 ## [ThreadedTimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutScheduler.new("GDRx")
+## [NewThreadScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
+var NewThreadScheduler_ : NewThreadScheduler = NewThreadScheduler.new(self.concur.default_thread_factory)
 ## [GodotSignalScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 # var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
