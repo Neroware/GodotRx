@@ -82,14 +82,14 @@ class StartableThread extends StartableBase:
 		var id = OS.get_thread_caller_id()
 		var l : ReadWriteLock = GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(0)
 		l.w_lock()
-		GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(0)[id] = self._thread
+		GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(1)[id] = self._thread
 		l.w_unlock()
 	
 	func _deregister_thread():
 		var id = OS.get_thread_caller_id()
 		var l : ReadWriteLock = GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(0)
 		l.w_lock()
-		GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(0).erase(id)
+		GDRx.THREAD_MANAGER.THREAD_REGISTRY.at(1).erase(id)
 		l.w_unlock()
 	
 	func start():
@@ -102,16 +102,16 @@ class StartableThread extends StartableBase:
 			self._register_thread()
 			self._target.call()
 			self._deregister_thread()
-			
-			self._thread = null
-			self._target = GDRx.basic.noop
 		
 		self._started = true
 		self._thread.start(run, self._priority)
 	
 	func wait_to_finish():
-		if !self._joined:
-			self._thread.wait_to_finish()
+		if self._joined:
+			return
+		self._thread.wait_to_finish()
+		self._thread = null
+		self._target = GDRx.basic.noop
 
 func default_thread_factory(target : Callable) -> StartableThread:
 	return StartableThread.new(target)

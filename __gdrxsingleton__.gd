@@ -48,6 +48,14 @@ func _init():
 		reglock.w_lock()
 		self.THREAD_MANAGER.THREAD_REGISTRY.at(1)[MAIN_THREAD_ID] = MAIN_THREAD
 		reglock.w_unlock()
+	
+	## Init [SceneTreeScheduler] singleton
+	for i in range(8):
+		var process_always : bool = bool(i & 0b1)
+		var process_in_physics : bool = bool(i & 0b10)
+		var ignore_time_scale : bool = bool(i & 0b100)
+		self.SceneTreeTimeoutScheduler_.push_back(SceneTreeTimeoutScheduler.new(
+			"GDRx", process_always, process_in_physics, ignore_time_scale))
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
@@ -82,13 +90,11 @@ func get_current_thread() -> Thread:
 # =========================================================================== #
 
 ## [ImmediateScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
-# var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
-## [TimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
-# var TimeoutScheduler_ : TimeoutScheduler = TimeoutScheduler.new("GDRx")
+var ImmediateScheduler_ : ImmediateScheduler = ImmediateScheduler.new("GDRx")
 ## [SceneTreeTimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
-# var SceneTreeTimeoutScheduler_ : SceneTreeTimeoutScheduler = SceneTreeTimeoutScheduler.new("GDRx")
+var SceneTreeTimeoutScheduler_ : Array[SceneTreeTimeoutScheduler]
 ## [ThreadedTimeoutScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
-# var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutScheduler.new("GDRx")
+var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutScheduler.new("GDRx")
 ## [GodotSignalScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 # var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
