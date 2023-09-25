@@ -25,7 +25,7 @@ var OnError = __init__.NotificationOnError_
 var OnCompleted = __init__.NotificationOnCompleted_
 
 ## Internal heap implementation
-#var heap = __init__.Heap_.new()
+var heap = __init__.Heap_.new()
 ## Basic functions & types
 var basic = __init__.Basic_.new()
 ## Concurrency functions & types
@@ -99,9 +99,9 @@ var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutSchedu
 # var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
 ## Global singleton of [CurrentThreadScheduler]
-# var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
+var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
 ## Thread local singleton of [CurrentThreadScheduler]
-# var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
+var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #
 #   Exception Handler Singleton
