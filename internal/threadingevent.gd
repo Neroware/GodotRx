@@ -7,10 +7,12 @@ class_name ThreadingEvent
 ## [b]true[/b]. The flag is initially [b]false[/b].
 
 var _cond : ConditionalVariable
+var _lock : Lock
 var _flag : bool
 
 func _init():
-	self._cond = ConditionalVariable.new(Lock.new())
+	self._cond = ConditionalVariable.new()
+	self._lock = Lock.new()
 	self._flag = false
 
 ## Return [b]true[/b] if and only if the internal flag is [b]true[/b].
@@ -22,19 +24,19 @@ func is_set() -> bool:
 ## All threads waiting for it to become [b]true[/b] are awakened. Threads
 ## that call [method wait] once the flag is [b]true[/b] will not block at all.
 func set_flag():
-	self._cond.lock()
+	self._lock.lock()
 	self._flag = true
 	self._cond.notify_all()
-	self._cond.unlock()
+	self._lock.unlock()
 
 ## Reset the internal flag to [b]false[/b].
 ##
 ## Subsequently, threads calling [method wait] will block until [method set_flag] is called to
 ## set the internal flag to [b]true[/b] again.
 func clear():
-	self._cond.lock()
+	self._lock.lock()
 	self._flag = false
-	self._cond.unlock()
+	self._lock.unlock()
 
 ## Block until the internal flag is [b]true[/b].
 ##
@@ -50,9 +52,9 @@ func clear():
 ## [b]true[/b] except if a timeout is given and the operation times out.
 ##
 func wait(timeout = null):
-	self._cond.lock()
-	var signaled = self._flag
-	if not signaled:
-		signaled = self._cond.wait(timeout)
-	self._cond.unlock()
-	return signaled
+	var __ = LockGuard.new(self._lock)
+	if not self._flag and timeout:
+		self._cond.wait_for(self._lock, timeout)
+	elif not self._flag:
+		self.wait(self._lock)
+	return self._flag

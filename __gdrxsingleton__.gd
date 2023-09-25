@@ -29,7 +29,7 @@ var OnCompleted = __init__.NotificationOnCompleted_
 ## Basic functions & types
 var basic = __init__.Basic_.new()
 ## Concurrency functions & types
-#var concur = __init__.Concurrency_.new()
+var concur = __init__.Concurrency_.new()
 ## Utility functions & types
 var util = __init__.Util_.new()
 ## Exception types
@@ -38,22 +38,44 @@ var util = __init__.Util_.new()
 #var pipe = __init__.Pipe_.new()
 
 # =========================================================================== #
+#   Constructor/Destructor
+# =========================================================================== #
+
+func _init():
+	## Insert Main Thread
+	if true:
+		var reglock : ReadWriteLock = self.THREAD_MANAGER.THREAD_REGISTRY.at(0)
+		reglock.w_lock()
+		self.THREAD_MANAGER.THREAD_REGISTRY.at(1)[MAIN_THREAD_ID] = MAIN_THREAD
+		reglock.w_unlock()
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		self.THREAD_MANAGER.stop_and_join()
+		self.THREAD_MANAGER.free()
+
+# =========================================================================== #
 #   Multi-Threading
 # =========================================================================== #
 
 ## Start Time
 var START_TIME_SEC = 0.0 # Scheduler.to_seconds(Time.get_datetime_dict_from_system(true)) # TODO
 ## Dummy instance for the Main Thread
-var MAIN_THREAD # = _MainThreadDummy.new()
+var MAIN_THREAD = concur.MainThreadDummy_.new()
 ## ID of the main thread
 var MAIN_THREAD_ID = OS.get_thread_caller_id()
+## Thread Manager
+var THREAD_MANAGER = concur.ThreadManager.new()
 
 ## Returns the caller's current [Thread]
-## If no thread object is registered this function returns [b]MAIN_THREAD[/b]
-## implying that the caller is the main thread.
+## If the caller thread is the main thread, it returns [b]MAIN_THREAD[/b].
 func get_current_thread() -> Thread:
-	## TODO
-	return GDRx.exc.NotImplementedException.Throw()
+	var id = OS.get_thread_caller_id()
+	var l : ReadWriteLock = self.THREAD_MANAGER.THREAD_REGISTRY.at(0)
+	l.r_lock()
+	id = self.THREAD_MANAGER.THREAD_REGISTRY.at(1)[id]
+	l.r_unlock()
+	return id
 
 # =========================================================================== #
 #   Scheduler Singletons

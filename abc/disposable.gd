@@ -17,7 +17,7 @@ func _init():
 ## Disposes the disposable and executes a defined action.
 func dispose():
 	print("DISPOSE: ", this)
-	# GDRx.exc.NotImplementedException.Throw()
+	# GDRx.exc.NotImplementedException.Throw() TODO
 
 ## Links disposable to [Object] lifetime via an [AutoDisposer]
 func dispose_with(_obj : Object) -> DisposableBase:
