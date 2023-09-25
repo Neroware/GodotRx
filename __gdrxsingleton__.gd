@@ -33,7 +33,7 @@ var concur = __init__.Concurrency_.new()
 ## Utility functions & types
 var util = __init__.Util_.new()
 ## Exception types
-#var exc = __init__.Exception_.new()
+var exc = __init__.Exception_.new()
 ## Access to pipe operators
 #var pipe = __init__.Pipe_.new()
 
@@ -101,7 +101,7 @@ func get_current_thread() -> Thread:
 #   Exception Handler Singleton
 # =========================================================================== #
 ## [ExceptionHandler] singleton; [color=red]Leave it alone![/color]
-# var ExceptionHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
+var ExceptionHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
 
 # =========================================================================== #
 #  Helper functions
@@ -133,17 +133,17 @@ func assert_(assertion : bool, message : String = "Assertion failed!") -> bool:
 		GDRx.exc.AssertionFailedException.new(message).throw()
 	return not assertion
 
-### Creates a new [TryCatch] Statement
-#func try(fun : Callable) -> TryCatch:
-#	return TryCatch.new(fun)
-#
-### Raises a [ThrowableBase]
-#func raise(exc_ : ThrowableBase, default = null) -> Variant:
-#	return ExceptionHandler.singleton().raise(exc_, default)
-#
-### Raises a [code]GDRx.exc.Exception[/code] containing the given message
-#func raise_message(msg : String, default = null):
-#	return exc.raise(msg, default)
+## Creates a new [TryCatch] Statement
+func try(fun : Callable) -> TryCatch:
+	return TryCatch.new(fun)
+
+## Raises a [ThrowableBase]
+func raise(exc_ : ThrowableBase, default = null) -> Variant:
+	return ExceptionHandler.singleton().raise(exc_, default)
+
+## Raises a [code]GDRx.exc.Exception[/code] containing the given message
+func raise_message(msg : String, default = null):
+	return exc.raise(msg, default)
 
 ## Construct an [IterableBase] onto x.
 func to_iterable(x) -> IterableBase:

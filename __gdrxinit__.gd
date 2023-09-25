@@ -21,7 +21,7 @@ var Util_ = load("res://reactivex/internal/utils.gd")
 # =========================================================================== #
 #   Exception
 # =========================================================================== #
-var Exception_ # = load("res://reactivex/exception/exception.gd")
+var Exception_ = load("res://reactivex/exception/exception.gd")
 
 # =========================================================================== #
 #   Pipe

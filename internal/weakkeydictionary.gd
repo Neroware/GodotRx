@@ -85,7 +85,7 @@ func erase(key) -> bool:
 	var hkey = self._hash_key(key)
 	
 	var __ = ReadWriteLockGuard.new(self._lock, false)
-	return self._data.erase(key)
+	return self._data.erase(hkey)
 
 func values() -> Array:
 	var res : Array = []
