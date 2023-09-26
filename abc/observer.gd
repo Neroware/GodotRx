@@ -1,3 +1,4 @@
+extends DisposableBase
 class_name ObserverBase
 
 ## Interface of an observer

@@ -7,6 +7,18 @@ class NotSet extends Comparable:
 
 var NOT_SET : NotSet = NotSet.new()
 
+## Alias for [method to_iterable].
+func Iter(x) -> IterableBase:
+	return self.to_iterable(x)
+
+## Construct an [IterableBase] onto x.
+func to_iterable(x) -> IterableBase:
+	return Iterator.to_iterable(x)
+
+### Construct an [Iterator] onto x.
+func iter(x) -> Iterator:
+	return Iterator.iter(x)
+
 ## TODO
 #func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 #	var subscribe = func(

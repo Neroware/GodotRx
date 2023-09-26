@@ -35,7 +35,7 @@ var util = __init__.Util_.new()
 ## Exception types
 var exc = __init__.Exception_.new()
 ## Access to pipe operators
-#var pipe = __init__.Pipe_.new()
+var pipe = __init__.Pipe_.new()
 
 # =========================================================================== #
 #   Constructor/Destructor

@@ -6,9 +6,9 @@ class_name __GDRx_Init__
 # =========================================================================== #
 #   Notification
 # =========================================================================== #
-var NotificationOnNext_ # = load("res://reactivex/notification/onnext.gd")
-var NotificationOnError_ # = load("res://reactivex/notification/onerror.gd")
-var NotificationOnCompleted_ # = load("res://reactivex/notification/oncompleted.gd")
+var NotificationOnNext_ = load("res://reactivex/notification/onnext.gd")
+var NotificationOnError_ = load("res://reactivex/notification/onerror.gd")
+var NotificationOnCompleted_ = load("res://reactivex/notification/oncompleted.gd")
 
 # =========================================================================== #
 #   Internals
@@ -26,4 +26,4 @@ var Exception_ = load("res://reactivex/exception/exception.gd")
 # =========================================================================== #
 #   Pipe
 # =========================================================================== #
-var Pipe_ # = load("res://reactivex/pipe.gd")
+var Pipe_ = load("res://reactivex/pipe.gd")
