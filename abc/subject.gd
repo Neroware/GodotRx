@@ -4,23 +4,67 @@ class_name SubjectBase
 ##
 ## A subject is both an [Observer] and [Observable] in RxPY, 
 ## meaning it implements both interfaces, however, in GDScript, this is not 
-## allowed! So, access to its two behaviors is given via [method as_observer]
-## and [method as_observable] in GDRx.
+## allowed! So, this interface provides all interface methods from 
+## [ObserverBase] and [ObservableBase].
 
-## Returns the Subject's [Observer] behavior.
-func as_observer() -> ObserverBase:
+
+## Creates a new subscription.
+## [br]
+## There are two ways to invoke this method:
+## [br]
+## 1.  Subscribes an instance of [ObserverBase].
+## [br]
+## 2.  Builds a new Observer in accordance to the Observer-Observable-Contract 
+## (see [ObserverBase]) from callbacks and subscribes it.
+##
+## 		[codeblock]
+##		var disp = obs.subscribe(observer)
+##		var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
+##		[/codeblock]
+## [br]
+## Since GDScript has no overloading to this date, use [code]subscribe{n}(...)[/code]
+## for faster access!
+func subscribe(
+	_on_next, # Callable or Observer or Object with callbacks
+	_on_error : Callable = GDRx.basic.noop,
+	_on_completed : Callable = GDRx.basic.noop,
+	_scheduler : SchedulerBase = null) -> DisposableBase:
+		GDRx.exc.NotImplementedException.Throw()
+		return null
+
+## Simulated overload for [code]subscribe[/code]
+func subscribe1(obv : ObserverBase = null, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(obv, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe2(_on_next : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(_on_next, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe3(_on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, _on_error, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe4(_on_completed : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, GDRx.basic.noop, _on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe5(_on_next : Callable = GDRx.basic.noop, _on_completed : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(_on_next, GDRx.basic.noop, _on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe6(_on_next : Callable = GDRx.basic.noop, _on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(_on_next, _on_error, GDRx.basic.noop, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe7(_on_completed : Callable = GDRx.basic.noop, _on_error : Callable = GDRx.basic.noop, _scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, _on_error, _on_completed, _scheduler)
+## Simulated overload for [code]subscribe[/code]
+func subscribe8(_scheduler : SchedulerBase = null) -> DisposableBase:
+	return self.subscribe(GDRx.basic.noop, GDRx.basic.noop, GDRx.basic.noop, _scheduler)
+
+## Called when the [Observable] emits a new item on the stream
+func on_next(_i):
 	GDRx.exc.NotImplementedException.Throw()
-	return null
 
-## Returns the Subject's [Observable] behavior.
-func as_observable() -> ObservableBase:
+## Called when the [Observable] emits an error on the stream
+func on_error(_e):
 	GDRx.exc.NotImplementedException.Throw()
-	return null
 
-## The Subject's [Observer] behavior.
-var obv : ObserverBase:
-	get: return as_observer()
-
-## The Subject's [Observable] behavior.
-var obs : ObservableBase:
-	get: return as_observable()
+## Called when the [Observable] is finished and no more items are sent.
+func on_completed():
+	GDRx.exc.NotImplementedException.Throw()

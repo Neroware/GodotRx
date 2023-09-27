@@ -22,3 +22,7 @@ static func remove(obj : Object, disp : DisposableBase):
 static func remove_and_dispose(obj : Object, disp : DisposableBase):
 	remove(obj, disp)
 	disp.dispose()
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		self._disp.dispose()

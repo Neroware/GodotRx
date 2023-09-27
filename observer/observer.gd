@@ -6,6 +6,8 @@ var _handler_on_error : Callable
 var _handler_on_completed : Callable
 var is_stopped : bool
 
+var this : Observer
+
 func _init(
 	on_next_ : Callable = GDRx.basic.noop,
 	on_error_ : Callable = GDRx.basic.noop,
@@ -61,3 +63,7 @@ func to_notifier() -> Callable:
 
 func as_observer() -> ObserverBase:
 	return Observer.new(self.on_next, self.on_error, self.on_completed)
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		this.dispose()

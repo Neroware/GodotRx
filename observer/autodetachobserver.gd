@@ -9,6 +9,8 @@ var _subscription : SingleAssignmentDisposable
 
 var is_stopped : bool
 
+var this : AutoDetachObserver
+
 func _init(
 	on_next_ : Callable = GDRx.basic.noop,
 	on_error_ : Callable = GDRx.basic.noop,
@@ -64,3 +66,7 @@ func fail(err) -> bool:
 	self.is_stopped = true
 	self._on_error.call(err)
 	return true
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		this.dispose()

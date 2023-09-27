@@ -18,7 +18,7 @@ const DELTA_ZERO = 0
 func now() -> float:
 	return Scheduler.to_seconds(GDRx.basic.default_now())
 
-## Invoke the given given action. This is typically called by instances
+## Invoke the given action. This is typically called by instances
 ##        of [ScheduledItem].
 ## [br]
 ##        [b]Args:[/b]

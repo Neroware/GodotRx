@@ -1,11 +1,11 @@
 class_name DisposableBase
 
 ## Disposables represent Subscriptions in GDRx
-##
+## [br][br]
 ## Whenever [method dispose] is called, the corresponding
 ## action is performed, e.g. to destroy and clean up a subscription.
 
-## This is the [b]this[/b] reference. It acts like std::enable_shared_from_this
+## This is the [b]this[/b] reference. It acts like [code]std::enable_shared_from_this<>[/code]
 ## and is ignored in ref-counting. Yes, I do know what I am doing! 
 ## I coded this in C++!
 var this

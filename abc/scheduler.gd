@@ -5,6 +5,11 @@ class_name SchedulerBase
 ## Schedules actions for execution at some point in the future.
 ## [color=yellow]Important![/color] We will always use DateTime/DeltaTime in Seconds!
 
+## Invoke the given action. 
+func invoke_action(_action : Callable, _state = null) -> DisposableBase:
+	GDRx.exc.NotImplementedException.Throw()
+	return null
+
 ## Returns the current point in time (timestamp)
 func now() -> float:
 	GDRx.exc.NotImplementedException.Throw()

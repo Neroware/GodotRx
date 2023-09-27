@@ -1,4 +1,4 @@
-extends Scheduler
+extends SchedulerBase
 class_name PeriodicSchedulerBase
 
 ## A scheduler for periodic actions
