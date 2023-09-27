@@ -1,7 +1,7 @@
 class_name ThreadingEvent
 
 ## Class implementing event objects.
-##
+## 
 ## Events manage a flag that can be set to [b]true[/b] with the [method set_flag] method and reset
 ## to [b]false[/b] with the [method clear] method. The [method wait] method blocks until the flag is
 ## [b]true[/b]. The flag is initially [b]false[/b].

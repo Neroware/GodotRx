@@ -10,6 +10,13 @@ var exception
 
 var this
 
+## View to the [Observable] behavior of the [Subject]
+var obs : Observable:
+	get: return self.as_observable()
+## View to the [ObserverBase] behavior of the [Subject]
+var obv : ObserverBase:
+	get: return self.as_observer()
+
 func _init():
 	this = self
 	this.unreference()
@@ -24,44 +31,46 @@ func _init():
 func check_disposed():
 	if self.is_disposed:
 		GDRx.exc.DisposedException.Throw()
+		return false
+	return true
 
 ## Subscribe an observer to the observable sequence.
 ## [br]
-##        You may subscribe using an observer or callbacks, not both; if the first
-##        argument is an instance of [Observer] ([ObserverBase]) or if
-##        it has a [Callable] attribute named [code]on_next[/code], then any callback
-##        arguments will be ignored.
+## You may subscribe using an observer or callbacks, not both; if the first
+## argument is an instance of [Observer] ([ObserverBase]) or if
+## it has a [Callable] attribute named [code]on_next[/code], then any callback
+## arguments will be ignored.
 ## [br][br]
-##        [b]Examples:[/b]
-##            [codeblock]
-##            source.subscribe(observer)
-##            source.subscribe(on_next)
-##            source.subscribe(on_next, on_error)
-##            source.subscribe(on_next, on_error, on_completed)
-##            source.subscribe(on_next, on_error, on_completed, scheduler)
-##            [/codeblock]
+## [b]Examples:[/b]
+##    [codeblock]
+##    source.subscribe(observer)
+##    source.subscribe(on_next)
+##    source.subscribe(on_next, on_error)
+##    source.subscribe(on_next, on_error, on_completed)
+##    source.subscribe(on_next, on_error, on_completed, scheduler)
+##    [/codeblock]
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]observer[/code] The object that is to receive
-##                notifications.
+##    [code]observer[/code] The object that is to receive
+##    notifications.
 ## [br]
-##            [code]on_error[/code] [Optional] Action to invoke upon exceptional termination
-##                of the observable sequence.
+##    [code]on_error[/code] [Optional] Action to invoke upon exceptional termination
+##    of the observable sequence.
 ## [br]
-##            [code]on_completed[/code] [Optional] Action to invoke upon graceful termination
-##                of the observable sequence.
+##    [code]on_completed[/code] [Optional] Action to invoke upon graceful termination
+##    of the observable sequence.
 ## [br]
-##            [code]on_next[/code] Action to invoke for each element in the
-##                observable sequence.
+##    [code]on_next[/code] Action to invoke for each element in the
+##    observable sequence.
 ## [br]
-##            [code]scheduler[/code] [Optional] The default scheduler to use for this
-##                subscription.
+##    [code]scheduler[/code] [Optional] The default scheduler to use for this
+##    subscription.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            Disposable object representing an observer's subscription to
-##            the observable sequence.
+##    Disposable object representing an observer's subscription to
+##    the observable sequence.
 func subscribe(
 	on_next = null, # Callable or Observer or Object with callbacks
 	on_error : Callable = GDRx.basic.noop,
@@ -205,9 +214,35 @@ func to_notifier() -> Callable:
 		return notifier.accept(self.as_observer())
 
 func as_observer() -> ObserverBase:
-	return Observer.new(self.on_next, self.on_error, self.on_completed)
+	return _Observer.new(self)
+
+func as_observable() -> Observable:
+	return _Observable.new(self)
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		this.dispose()
 
+## Anonymous [ObserverBase]
+class _Observer extends ObserverBase:
+	var _subject : Subject
+	func _init(subject : Subject):
+		self._subject = subject
+	## Called when the [Observable] emits a new item on the stream
+	func on_next(i):
+		self._subject.on_next(i)
+	## Called when the [Observable] emits an error on the stream
+	func on_error(e):
+		self._subject.on_error(e)
+	## Called when the [Observable] is finished and no more items are sent.
+	func on_completed():
+		self._subject.on_completed()
+
+## Anonymous [ObservableBase]
+class _Observable extends Observable:
+	var _subject : Subject
+	func _init(subject : Subject):
+		self._subject = subject
+	func _subscribe_core(
+		observer : ObserverBase, scheduler : SchedulerBase = null) -> DisposableBase:
+			return self._subject.subscribe1(observer, scheduler)

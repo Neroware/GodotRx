@@ -1,7 +1,7 @@
 class_name IteratorBase
 
 ## An iterator type
-##
+## 
 ## An [IteratorBase] iterates over an [IterableBase] using [method next].
 
 ## Returns next element in the iterable sequence. Return instance of 

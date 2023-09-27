@@ -15,8 +15,8 @@ var _recursive_wrapper : CatchScheduler
 ## this scheduler).
 ## [br][br]
 ## [b]Args:[/b] [br]
-## [code]scheduler[/code]: The scheduler to be wrapped. [br]
-## [code]handler[/code]: Callable to handle exceptions raised by wrapped scheduler.
+##    [code]scheduler[/code]: The scheduler to be wrapped. [br]
+##    [code]handler[/code]: Callable to handle exceptions raised by wrapped scheduler.
 func _init(scheduler : SchedulerBase, handler : Callable):
 	super._init()
 	self._scheduler = scheduler

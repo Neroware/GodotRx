@@ -1,7 +1,7 @@
 class_name ExceptionHandler
 
 ## Handles raised Exceptions
-##
+## 
 ## Objects of type [ThrowableBase] are handled by this type's singleton
 
 var _try_catch_stack : Array[TryCatch]

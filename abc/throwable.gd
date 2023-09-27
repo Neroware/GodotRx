@@ -1,7 +1,7 @@
 class_name ThrowableBase
 
 ## Interface for throwable objects
-##
+## 
 ## Objects that implement this interface can be used within a try-catch-
 ## structure.
 

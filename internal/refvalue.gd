@@ -1,5 +1,5 @@
 ## Wraps a value
-##
+## 
 ## RefValue is used to account for the Python [code]nonlocal[/code]-keyword.
 ## A for a lambda-function global variable with basic type
 ## cannot be changed for its parent scopes, so it is wrapped

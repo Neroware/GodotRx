@@ -1,7 +1,7 @@
 class_name SubjectBase
 
 ## Interface of a Subject.
-##
+## 
 ## A subject is both an [Observer] and [Observable] in RxPY, 
 ## meaning it implements both interfaces, however, in GDScript, this is not 
 ## allowed! So, this interface provides all interface methods from 
@@ -16,11 +16,11 @@ class_name SubjectBase
 ## [br]
 ## 2.  Builds a new Observer in accordance to the Observer-Observable-Contract 
 ## (see [ObserverBase]) from callbacks and subscribes it.
-##
-## 		[codeblock]
-##		var disp = obs.subscribe(observer)
-##		var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
-##		[/codeblock]
+## 
+## [codeblock]
+## var disp = obs.subscribe(observer)
+## var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
+## [/codeblock]
 ## [br]
 ## Since GDScript has no overloading to this date, use [code]subscribe{n}(...)[/code]
 ## for faster access!

@@ -2,7 +2,7 @@ extends SchedulerBase
 class_name PeriodicSchedulerBase
 
 ## A scheduler for periodic actions
-##
+## 
 ## Periodically schedules actions for repeated future execution.
 
 ## Schedule a periodic action for repeated execution every time

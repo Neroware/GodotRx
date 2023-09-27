@@ -2,7 +2,7 @@ extends Node
 class_name __GDRx_Singleton__
 
 ## GDRx Singleton Script
-##
+## 
 ## Provides access to [Observable] constructors and operators.
 ## [color=yellow] Please add to autoload with name [code]GDRx[/code]![/color]
 
@@ -178,11 +178,11 @@ func not_set(value) -> bool:
 ## Unit item
 #var UNIT:
 #	get: return StreamItem.Unit()
-#
-### Alias for [code]GDRx.util.add_ref()[/code]
-#func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
-#	return util.AddRef(xs, r)
-#
+
+## Alias for [code]GDRx.util.add_ref()[/code]
+func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
+	return util.add_ref(xs, r)
+
 ### Create an observable sequence from an array
 #func of(data : Array, scheduler : SchedulerBase = null) -> Observable:
 #	return self.from_array(data, scheduler)

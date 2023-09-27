@@ -1,7 +1,7 @@
 class_name WeakKeyDictionary
 
 ## A dictionary with weak references to keys
-##
+## 
 ## Pairs with non-referenced keys are automatically removed when deleted.
 ## Each [b]n[/b] insertions, a garbage collection step is performed.
 

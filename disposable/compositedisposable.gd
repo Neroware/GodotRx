@@ -2,7 +2,7 @@ extends DisposableBase
 class_name CompositeDisposable
 
 ## A collection of disposables
-##
+## 
 ## When disposed, the underlying composition of disposables are disposed as well.
 
 var disposable : Array

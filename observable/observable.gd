@@ -20,41 +20,41 @@ func _subscribe_core(
 
 ## Subscribe an observer to the observable sequence.
 ## [br]
-##        You may subscribe using an observer or callbacks, not both; if the first
-##        argument is an instance of [Observer] ([ObserverBase]) or if
-##        it has a [Callable] attribute named [code]on_next[/code], then any callback
-##        arguments will be ignored.
+## You may subscribe using an observer or callbacks, not both; if the first
+## argument is an instance of [Observer] ([ObserverBase]) or if
+## it has a [Callable] attribute named [code]on_next[/code], then any callback
+## arguments will be ignored.
 ## [br][br]
-##        [b]Examples:[/b]
-##            [codeblock]
-##            source.subscribe(observer)
-##            source.subscribe(on_next)
-##            source.subscribe(on_next, on_error)
-##            source.subscribe(on_next, on_error, on_completed)
-##            source.subscribe(on_next, on_error, on_completed, scheduler)
-##            [/codeblock]
+## [b]Examples:[/b]
+##    [codeblock]
+##    source.subscribe(observer)
+##    source.subscribe(on_next)
+##    source.subscribe(on_next, on_error)
+##    source.subscribe(on_next, on_error, on_completed)
+##    source.subscribe(on_next, on_error, on_completed, scheduler)
+##    [/codeblock]
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]observer[/code] The object that is to receive
-##                notifications.
+##    [code]observer[/code] The object that is to receive
+##    notifications.
 ## [br]
-##            [code]on_error[/code] [Optional] Action to invoke upon exceptional termination
-##                of the observable sequence.
+##    [code]on_error[/code] [Optional] Action to invoke upon exceptional termination
+##    of the observable sequence.
 ## [br]
-##            [code]on_completed[/code] [Optional] Action to invoke upon graceful termination
-##                of the observable sequence.
+##    [code]on_completed[/code] [Optional] Action to invoke upon graceful termination
+##    of the observable sequence.
 ## [br]
-##            [code]on_next[/code] Action to invoke for each element in the
-##                observable sequence.
+##    [code]on_next[/code] Action to invoke for each element in the
+##    observable sequence.
 ## [br]
-##            [code]scheduler[/code] [Optional] The default scheduler to use for this
-##                subscription.
+##    [code]scheduler[/code] [Optional] The default scheduler to use for this
+##    subscription.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            Disposable object representing an observer's subscription to
-##            the observable sequence.
+##    Disposable object representing an observer's subscription to
+##    the observable sequence.
 func subscribe(
 	on_next = null, # Callable or Observer or Object with callbacks
 	on_error : Callable = GDRx.basic.noop,
@@ -230,25 +230,25 @@ func pipea(arr : Array):
 
 ## Compose multiple operators left to right.
 ## [br]
-##        Composes zero or more operators into a functional composition.
-##        The operators are composed from left to right. A composition of zero
-##        operators gives back the original source.
+## Composes zero or more operators into a functional composition.
+## The operators are composed from left to right. A composition of zero
+## operators gives back the original source.
 ## [br][br]
-##        [b]Examples:[/b]
-##            [codeblock]
-##            source.pipe0() == source
-##            source.pipe1(f) == f(source)
-##            source.pipe2(g, f) == f(g(source))
-##            source.pipe3(h, g, f) == f(g(h(source)))
-##            [/codeblock]
+## [b]Examples:[/b]
+##    [codeblock]
+##    source.pipe0() == source
+##    source.pipe1(f) == f(source)
+##    source.pipe2(g, f) == f(g(source))
+##    source.pipe3(h, g, f) == f(g(h(source)))
+##    [/codeblock]
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]operators[/code] Sequence of operators.
+##    [code]operators[/code] Sequence of operators.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##             The composed observable.
+##    The composed observable.
 func pipe(fns : IterableBase) -> Variant:
 	return GDRx.pipe.compose(fns).call(self)
 

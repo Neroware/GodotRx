@@ -86,7 +86,7 @@ func stop():
 ## running all work til that point.
 ## [br][br]
 ## [b]Args:[/b] [br]
-## [code]time[/code]: Absolute time to advance the schedulers clock to.
+##    [code]time[/code]: Absolute time to advance the schedulers clock to.
 func advance_to(time : float):
 	var dt : float = time
 	if true:
@@ -129,14 +129,14 @@ func advance_to(time : float):
 ## running all work scheduled for that timespan.
 ## [br][br]
 ## [b]Args:[/b] [br]
-## [code]time[/code]: Relative time to advance the schedulers clock by.
+##    [code]time[/code]: Relative time to advance the schedulers clock by.
 func advance_by(time : float):
 	self.advance_to(self.add(self.now(), time))
 
 ## Advances the schedulers clock by the specified relative time.
 ## [br][br]
 ## [b]Args:[/b] [br]
-## [code]time[/code]: Relative time to advance the schedulers clock by.
+##    [code]time[/code]: Relative time to advance the schedulers clock by.
 func sleep(time : float):
 	var absolute = self.add(self.now(), time)
 	var dt : float = absolute
@@ -151,10 +151,10 @@ func sleep(time : float):
 ## Adds a relative time value to an absolute time value.
 ## [br][br]
 ## [b]Args:[/b] [br]
-## [code]absolute[/code]: Absolute virtual time value. [br]
-## [code]relative[/code]: Relative virtual time value to add. [br]
+##    [code]absolute[/code]: Absolute virtual time value. [br]
+##    [code]relative[/code]: Relative virtual time value to add. [br]
 ## [br]
 ## [b]Returns:[/b] [br]
-## The resulting absolute virtual time sum value.
+##    The resulting absolute virtual time sum value.
 static func add(absolute : float, relative : float) -> float:
 	return absolute + relative

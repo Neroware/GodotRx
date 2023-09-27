@@ -1,7 +1,7 @@
 class_name ObserverBase
 
 ## Interface of an observer
-##
+## 
 ## All communication in GDRx is handled asynchronously via observable data 
 ## streams, so-called [Observable]s. An [Observer] can subscribe to an 
 ## [Observable] to receive emitted items sent on the stream.

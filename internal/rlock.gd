@@ -2,7 +2,7 @@ extends LockBase
 class_name RLock
 
 ## Re-entrant lock
-##
+## 
 ## Lock can be aquired multiple times by the same thread
 
 var _aquired_thread

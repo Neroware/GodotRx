@@ -1,7 +1,7 @@
 class_name ObservableBase
 
 ## Interface of an observable stream/subject/signal etc. 
-##
+## 
 ## All communication in GDRx is handled asynchronously via observable data 
 ## streams, so-called [Observable]s. An [Observer] can subscribe to an 
 ## [Observable] to receive emitted items sent on the stream.
@@ -16,10 +16,10 @@ class_name ObservableBase
 ## 2.  Builds a new Observer in accordance to the Observer-Observable-Contract 
 ## (see [ObserverBase]) from callbacks and subscribes it.
 ##
-## 		[codeblock]
-##		var disp = obs.subscribe(observer)
-##		var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
-##		[/codeblock]
+## [codeblock]
+## var disp = obs.subscribe(observer)
+## var disp = obs.subscribe(func(i) ..., func(e): ..., func(): ...)
+## [/codeblock]
 ## [br]
 ## Since GDScript has no overloading to this date, use [code]subscribe{n}(...)[/code]
 ## for faster access!

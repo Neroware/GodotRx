@@ -2,7 +2,7 @@ extends IteratorBase
 class_name Iterator
 
 ## A naive iterator with additional quality-of-life utility
-##
+## 
 ## See [IteratorBase] and [IterableBase] for more info!
 
 ## Loops over all elements within the iterable sequence

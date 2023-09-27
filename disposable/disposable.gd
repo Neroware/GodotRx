@@ -1,7 +1,7 @@
 extends DisposableBase
 class_name Disposable
 ## Main disposable class
-##
+## 
 ## Invokes specified action when disposed.
 
 var is_disposed : bool
@@ -10,17 +10,17 @@ var action : Callable
 var lock : RLock
 
 ## Creates a disposable object that invokes the specified
-##        action when disposed.
+## action when disposed.
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]action[/code] Action to run during the first call to dispose.
-##                The action is guaranteed to be run at most once.
+##    [code]action[/code] Action to run during the first call to dispose.
+##    The action is guaranteed to be run at most once.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            The disposable object that runs the given action upon
-##            disposal.
+##    The disposable object that runs the given action upon
+##    disposal.
 func _init(action_ : Callable = GDRx.basic.noop):
 	self.is_disposed = false
 	self.action = action_

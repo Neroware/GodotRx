@@ -19,15 +19,14 @@ func to_iterable(x) -> IterableBase:
 func iter(x) -> Iterator:
 	return Iterator.iter(x)
 
-## TODO
-#func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
-#	var subscribe = func(
-#		observer : ObserverBase,
-#		_scheduler : SchedulerBase = null
-#	) -> DisposableBase:
-#		return CompositeDisposable.new([
-#			r.disposable, 
-#			xs.subscribe(observer)
-#		])
-#
-#	return Observable.new(subscribe)
+func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
+	var subscribe = func(
+		observer : ObserverBase,
+		_scheduler : SchedulerBase = null
+	) -> DisposableBase:
+		return CompositeDisposable.new([
+			r.disposable, 
+			xs.subscribe(observer)
+		])
+	
+	return Observable.new(subscribe)

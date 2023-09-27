@@ -14,27 +14,27 @@ func _init():
 	self.kind = ""
 
 ## Invokes the delegate corresponding to the notification or an
-##        observer and returns the produced result.
+## observer and returns the produced result.
 ## [br]
-##        [b]Examples:[/b]
-##            [codeblock]
-##            notification.accept(observer)
-##            notification.accept(on_next, on_error, on_completed)
-##            [/codeblock]
+## [b]Examples:[/b]
+##    [codeblock]
+##    notification.accept(observer)
+##    notification.accept(on_next, on_error, on_completed)
+##    [/codeblock]
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]on_next[/code] Delegate to invoke for an OnNext notification.
+##    [code]on_next[/code] Delegate to invoke for an OnNext notification.
 ## [br]
-##            [code]on_error[/code] [Optional] Delegate to invoke for an OnError
-##                notification.
+##    [code]on_error[/code] [Optional] Delegate to invoke for an OnError
+##    notification.
 ## [br]
-##            [code]on_completed[/code] [Optional] Delegate to invoke for an
-##                OnCompleted notification.
+##    [code]on_completed[/code] [Optional] Delegate to invoke for an
+##    OnCompleted notification.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            Result produced by the observation.
+##    Result produced by the observation.
 func accept(
 	on_next, # Callable or ObserverBase
 	on_error : Callable = GDRx.basic.noop,
@@ -54,17 +54,17 @@ func _accept_observer(_observer : ObserverBase):
 	GDRx.exc.NotImplementedException.Throw()
 
 ## Returns an observable sequence with a single notification,
-##        using the specified scheduler, else the immediate scheduler.
+## using the specified scheduler, else the immediate scheduler.
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]scheduler[/code] [Optional] Scheduler to send out the
-##                notification calls on.
+##    [code]scheduler[/code] [Optional] Scheduler to send out the
+##     notification calls on.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            An observable sequence that surfaces the behavior of the
-##            notification upon subscription.
+##    An observable sequence that surfaces the behavior of the
+##    notification upon subscription.
 func to_observable(scheduler : SchedulerBase = null) -> ObservableBase:
 	var _scheduler = scheduler if scheduler != null else ImmediateScheduler.singleton()
 	
@@ -92,14 +92,14 @@ func eq(other) -> bool:
 
 ## Creates an observer from a notification callback.
 ## [br]
-##    [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##        [code]handler[/code] Action that handles a notification.
+##    [code]handler[/code] Action that handles a notification.
 ## [br][br]
-##    [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##        The observer object that invokes the specified handler using
-##        a notification corresponding to each message it receives.
+##    The observer object that invokes the specified handler using
+##    a notification corresponding to each message it receives.
 static func from_notifier(handler : Callable) -> Observer:
 	var _on_next = func(value_):
 		return handler.call(GDRx.OnNext.new(value_))

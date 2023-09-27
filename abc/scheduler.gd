@@ -1,7 +1,7 @@
 class_name SchedulerBase
 
 ## A scheduler performs a scheduled action at some future point.
-##
+## 
 ## Schedules actions for execution at some point in the future.
 ## [color=yellow]Important![/color] We will always use DateTime/DeltaTime in Seconds!
 

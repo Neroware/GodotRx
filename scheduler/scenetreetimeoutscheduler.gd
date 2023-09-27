@@ -30,16 +30,16 @@ static func singleton(
 
 ## Schedules an action to be executed.
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]action[/code] Action to be executed.
+##    [code]action[/code] Action to be executed.
 ## [br]
-##            [code]state[/code] [Optional] state to be given to the action function.
+##    [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            The disposable object used to cancel the scheduled action
-##            (best effort).
+##    The disposable object used to cancel the scheduled action
+##    (best effort).
 func schedule(action : Callable, state = null) -> DisposableBase:
 	var sad : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
 	
@@ -57,19 +57,19 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 
 ## Schedules an action to be executed after duetime.
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]duetime[/code] Relative time after which to execute the action.
+##    [code]duetime[/code] Relative time after which to execute the action.
 ## [br]
-##            [code]action[/code] Action to be executed.
+##    [code]action[/code] Action to be executed.
 ## [br]
-##            [code]state[/code] [Optional] state to be given to the action function.
+##    [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
 ##
-##        [b]Returns:[/b]
+## [b]Returns:[/b]
 ## [br]
-##            The disposable object used to cancel the scheduled action
-##            (best effort).
+##    The disposable object used to cancel the scheduled action
+##    (best effort).
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
 	var seconds = Scheduler.to_seconds(duetime)
 	if seconds <= 0.0:
@@ -91,19 +91,19 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 
 ## Schedules an action to be executed at duetime.
 ## [br]
-##        [b]Args:[/b]
+## [b]Args:[/b]
 ## [br]
-##            [code]duetime[/code] Absolute time at which to execute the action.
+##    [code]duetime[/code] Absolute time at which to execute the action.
 ## [br]
-##            [code]action[/code] Action to be executed.
+##    [code]action[/code] Action to be executed.
 ## [br]
-##            [code]state[/code] [Optional] state to be given to the action function.
+##    [code]state[/code] [Optional] state to be given to the action function.
 ## [br][br]
-##
-##        [b]Returns:[/b]
+## 
+## [b]Returns:[/b]
 ## [br]
-##            The disposable object used to cancel the scheduled action
-##            (best effort).
+##    The disposable object used to cancel the scheduled action
+##    (best effort).
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
 	duetime = Scheduler.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)
