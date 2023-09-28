@@ -19,12 +19,10 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 	return self.invoke_action(action, state)
 
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
-	duetime = Scheduler.to_seconds(duetime)
 	if duetime > DELTA_ZERO:
 		GDRx.exc.WouldBlockException.Throw()
 		return Disposable.new()
 	return self.invoke_action(action, state)
 
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
-	duetime = Scheduler.to_seconds(duetime)
 	return self.schedule_relative(duetime - self.now(), action, state)

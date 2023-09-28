@@ -3,7 +3,9 @@ class_name SchedulerBase
 ## A scheduler performs a scheduled action at some future point.
 ## 
 ## Schedules actions for execution at some point in the future.
-## [color=yellow]Important![/color] We will always use DateTime/DeltaTime in Seconds!
+## [br]
+## [color=yellow]Important: We will always use time values of type 
+## [float] representing seconds![/color]
 
 ## Invoke the given action. 
 func invoke_action(_action : Callable, _state = null) -> DisposableBase:
@@ -21,16 +23,11 @@ func schedule(_action : Callable, _state = null) -> DisposableBase:
 	return null
 
 ## Schedule a new action for future execution in [code]duetime[/code] seconds.
-func schedule_relative(_duetime, _action : Callable, _state = null) -> DisposableBase:
+func schedule_relative(_duetime : float, _action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
 
 ## Schedule a new action for future execution at [code]duetime[/code].
-func schedule_absolute(_duetime, _action : Callable, _state = null) -> DisposableBase:
+func schedule_absolute(_duetime : float, _action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
 	return null
-
-## Converts a timestamp-dictionary to Unix-time
-static func to_seconds(_datetime : Dictionary) -> float:
-	GDRx.exc.NotImplementedException.Throw()
-	return -1.0

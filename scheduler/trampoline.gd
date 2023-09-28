@@ -55,6 +55,6 @@ func _run():
 			if self._queue.size() == 0:
 				break
 			var item : ScheduledItem = self._queue.peek()
-			var seconds = Scheduler.to_seconds(item.duetime - item.scheduler.now())
+			var seconds = item.duetime - item.scheduler.now()
 			if seconds > 0.0:
 				self._condition.wait_for(self._lock, seconds)

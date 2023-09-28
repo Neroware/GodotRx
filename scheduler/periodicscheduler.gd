@@ -1,8 +1,8 @@
 extends PeriodicSchedulerBase
 class_name PeriodicScheduler
 
-const UTC_ZERO = Scheduler.UTC_ZERO
-const DELTA_ZERO = Scheduler.DELTA_ZERO
+const UTC_ZERO : float = Scheduler.UTC_ZERO
+const DELTA_ZERO : float = Scheduler.DELTA_ZERO
 
 var __scheduler__ : Scheduler = Scheduler.new()
 
@@ -32,10 +32,6 @@ func now() -> float:
 func invoke_action(action : Callable, state = null) -> DisposableBase:
 	return __scheduler__.invoke_action(action, state)
 
-## Converts a timestamp dictionary to Unix-time in seconds.
-static func to_seconds(value):
-	return Scheduler.to_seconds(value)
-
 ## Schedule a periodic action for repeated execution every time
 ## [code]period[/code] seconds have expired.
 func schedule_periodic(
@@ -44,7 +40,7 @@ func schedule_periodic(
 	state = null) -> DisposableBase:
 		
 		var disp : MultipleAssignmentDisposable = MultipleAssignmentDisposable.new()
-		var seconds = period # to_seconds(period)
+		var seconds : float = period
 		
 		var periodic : Callable = func(scheduler : SchedulerBase, state = null, periodic_ : Callable = func(__, ___, ____): return) -> Disposable:
 			if disp.is_disposed:

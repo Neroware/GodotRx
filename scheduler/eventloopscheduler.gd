@@ -48,7 +48,7 @@ func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBa
 		GDRx.exc.DisposedException.Throw()
 		return Disposable.new()
 	
-	var dt = duetime
+	var dt : float = duetime
 	var si : ScheduledItem = ScheduledItem.new(self, dt, state, action)
 	
 	if true:

@@ -51,7 +51,7 @@ func schedule(action : Callable, state = null) -> DisposableBase:
 ##    The disposable object used to cancel the scheduled action
 ##    (best effort).
 func schedule_relative(duetime, action : Callable, state = null) -> DisposableBase:
-	duetime = max(DELTA_ZERO, Scheduler.to_seconds(duetime))
+	duetime = max(DELTA_ZERO, duetime)
 	return self.schedule_absolute(self.now() + duetime, action, state)
 
 ## Schedules an action to be executed at duetime.
@@ -70,7 +70,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 ##    The disposable object used to cancel the scheduled action
 ##    (best effort).
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
-	var dt = Scheduler.to_seconds(duetime)
+	var dt : float = duetime
 	if dt > self.now():
 		push_warning("Do not schedule blocking work!")
 	var item : ScheduledItem = ScheduledItem.new(self, dt, state, action)
