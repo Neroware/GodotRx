@@ -667,7 +667,7 @@ func some(predicate = null) -> Observable:
 	return GDRx.op.some(predicate).call(self)
 
 ## See: [b]res://reactivex/operators/_startswith.gd[/b]
-func start_with(args : Array) -> Observable:
+func start_with(args) -> Observable:
 	return GDRx.op.start_with(args).call(self)
 
 ## See: [b]res://reactivex/operators/_subscribeon.gd[/b]
@@ -783,11 +783,11 @@ func window_with_time_or_count(timespan : float, count_ : int, scheduler : Sched
 	return GDRx.op.window_with_time_or_count(timespan, count_, scheduler).call(self)
 
 ## See: [b]res://reactivex/operators/_withlatestfrom.gd[/b]
-func with_latest_from(sources : Array[Observable]) -> Observable:
+func with_latest_from(sources) -> Observable:
 	return GDRx.op.with_latest_from(sources).call(self)
 
 ## See: [b]res://reactivex/operators/_zip.gd[/b]
-func zip(args : Array[Observable]) -> Observable:
+func zip(args) -> Observable:
 	return GDRx.op.zip(args).call(self)
 
 ## See: [b]res://reactivex/operators/_zip.gd[/b]

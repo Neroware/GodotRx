@@ -519,7 +519,7 @@ func some(predicate = null) -> Callable:
 	return _Some_.some_(predicate)
 
 ## See: [b]res://reactivex/operators/_startswith.gd[/b]
-func start_with(args : Array) -> Callable:
+func start_with(args) -> Callable:
 	return _StartWith_.start_with_(args)
 
 ## See: [b]res://reactivex/operators/_subscribeon.gd[/b]
@@ -635,11 +635,11 @@ func window_with_time_or_count(timespan : float, count_ : int, scheduler : Sched
 	return _WindowWithTimeOrCount_.window_with_time_or_count_(timespan, count_, scheduler)
 
 ## See: [b]res://reactivex/operators/_withlatestfrom.gd[/b]
-func with_latest_from(sources : Array[Observable]) -> Callable:
+func with_latest_from(sources) -> Callable:
 	return _WithLatestFrom_.with_latest_from_(sources)
 
 ## See: [b]res://reactivex/operators/_zip.gd[/b]
-func zip(args : Array[Observable]) -> Callable:
+func zip(args) -> Callable:
 	return _Zip_.zip_(args)
 
 ## See: [b]res://reactivex/operators/_zip.gd[/b]
