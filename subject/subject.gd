@@ -72,29 +72,29 @@ func check_disposed():
 ##    Disposable object representing an observer's subscription to
 ##    the observable sequence.
 func subscribe(
-	on_next = null, # Callable or Observer or Object with callbacks
-	on_error : Callable = GDRx.basic.noop,
-	on_completed : Callable = GDRx.basic.noop,
+	_on_next = null, # Callable or Observer or Object with callbacks
+	_on_error : Callable = GDRx.basic.noop,
+	_on_completed : Callable = GDRx.basic.noop,
 	scheduler : SchedulerBase = null) -> DisposableBase:
-		if on_next == null:
-			on_next = GDRx.basic.noop
+		if _on_next == null:
+			_on_next = GDRx.basic.noop
 		
-		if on_next is ObserverBase:
-			var obv : ObserverBase = on_next
-			on_next = func(i): obv.on_next.call(i)
-			on_error = func(e): obv.on_error.call(e)
-			on_completed = func(): obv.on_completed.call()
-		elif on_next is Object and on_next.has_method("on_next"):
-			var obv : Object = on_next
-			if obv.has_method("on_next"):
-				on_next = func(i): obv.on_next.call(i)
-			if obv.has_method("on_error"):
-				on_error = func(e): obv.on_error.call(e)
-			if obv.has_method("on_completed"):
-				on_completed = func(): obv.on_completed.call()
+		if _on_next is ObserverBase:
+			var _obv : ObserverBase = _on_next
+			_on_next = func(i): _obv.on_next.call(i)
+			_on_error = func(e): _obv.on_error.call(e)
+			_on_completed = func(): _obv.on_completed.call()
+		elif _on_next is Object and _on_next.has_method("on_next"):
+			var _obv : Object = _on_next
+			if _obv.has_method("on_next"):
+				_on_next = func(i): _obv.on_next.call(i)
+			if _obv.has_method("on_error"):
+				_on_error = func(e): _obv.on_error.call(e)
+			if _obv.has_method("on_completed"):
+				_on_completed = func(): _obv.on_completed.call()
 		
 		var auto_detach_observer : AutoDetachObserver = AutoDetachObserver.new(
-			on_next, on_error, on_completed
+			_on_next, _on_error, _on_completed
 		)
 		
 		var fix_subscriber = func(subscriber) -> DisposableBase:
@@ -124,7 +124,7 @@ func subscribe(
 
 func _subscribe_core(
 	observer : ObserverBase,
-	scheduler : SchedulerBase = null) -> DisposableBase:
+	_scheduler : SchedulerBase = null) -> DisposableBase:
 		var __ = LockGuard.new(self.lock)
 		self.check_disposed()
 		if not self.is_stopped:

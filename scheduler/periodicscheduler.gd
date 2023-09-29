@@ -4,8 +4,6 @@ class_name PeriodicScheduler
 const UTC_ZERO : float = Scheduler.UTC_ZERO
 const DELTA_ZERO : float = Scheduler.DELTA_ZERO
 
-var __scheduler__ : Scheduler = Scheduler.new()
-
 ## Represents a notion of time for this scheduler. Tasks being
 ## scheduled on a scheduler will adhere to the time denoted by this
 ## property.
@@ -14,7 +12,7 @@ var __scheduler__ : Scheduler = Scheduler.new()
 ## [br]
 ##    The scheduler's current time, as a datetime instance.
 func now() -> float:
-	return __scheduler__.now()
+	return GDRx.basic.default_now()
 
 ## Invoke the given given action. This is typically called by instances
 ## of [ScheduledItem].
@@ -30,7 +28,10 @@ func now() -> float:
 ##    The disposable object returned by the action, if any; or a new
 ##    (no-op) disposable otherwise.
 func invoke_action(action : Callable, state = null) -> DisposableBase:
-	return __scheduler__.invoke_action(action, state)
+	var ret = action.call(self, state)
+	if ret is DisposableBase:
+		return ret
+	return Disposable.new()
 
 ## Schedule a periodic action for repeated execution every time
 ## [code]period[/code] seconds have expired.

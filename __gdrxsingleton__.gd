@@ -12,7 +12,7 @@ class_name __GDRx_Singleton__
 ## Access to internals
 var __init__ : __GDRx_Init__ = __GDRx_Init__.new()
 ## [Observable] constructor functions
-# var obs : __GDRx_Obs__ = __GDRx_Obs__.new()
+var obs : __GDRx_Obs__ = __GDRx_Obs__.new()
 ## [Observable] operator functions
 # var op : __GDRx_Op__ = __GDRx_Op__.new()
 ## Engine Backend
@@ -176,20 +176,24 @@ func not_set(value) -> bool:
 	return NOT_SET.eq(value)
 
 ## Unit item
-#var UNIT:
-#	get: return StreamItem.Unit()
+var UNIT:
+	get: return StreamItem.Unit()
 
 ## Alias for [code]GDRx.util.add_ref()[/code]
 func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 	return util.add_ref(xs, r)
 
-### Create an observable sequence from an array
-#func of(data : Array, scheduler : SchedulerBase = null) -> Observable:
-#	return self.from_array(data, scheduler)
-#
-### Alias for [code]GDRx.obs.return_value[/code]
-#func just(value, scheduler : SchedulerBase = null) -> Observable:
-#	return self.return_value(value, scheduler)
+## Create an observable sequence from an array
+func of(data : Array, scheduler : SchedulerBase = null) -> Observable:
+	return self.from_array(data, scheduler)
+
+## Create an observable on any given iterable sequence
+func from(seq, scheduler : SchedulerBase = null) -> Observable:
+	return self.from_iterable(to_iterable(seq), scheduler)
+
+## Alias for [code]GDRx.obs.return_value[/code]
+func just(value, scheduler : SchedulerBase = null) -> Observable:
+	return self.return_value(value, scheduler)
 
 ## Empty operation as defined in [code]GDRx.basic.noop[/code]
 func noop(__ = null, ___ = null):
@@ -199,137 +203,138 @@ func noop(__ = null, ___ = null):
 func identity(x, __ = null):
 	return GDRx.basic.identity(x, __)
 
-## =========================================================================== #
-##   Observable Constructors
-## =========================================================================== #
-#
-### See: [b]res://reactivex/observable/amb.gd[/b]
-#func amb(sources : Array[Observable]) -> Observable:
-#	return obs.amb(sources)
-#
-### See: [b]res://reactivex/observable/case.gd[/b]
-#func case(mapper : Callable, sources : Dictionary, default_source : Observable = null) -> Observable:
-#	return obs.case(mapper, sources, default_source)
-#
-### Create a new observable
-#func create(subscribe : Callable = func(_observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
-#	return Observable.new(subscribe)
-#
-### See: [b]res://reactivex/observable/catch.gd[/b]
-#func catch(sources : Array) -> Observable:
-#	return obs.catch_with_iterable(GDRx.util.Iter(sources))
-#
-### See: [b]res://reactivex/observable/catch.gd[/b]
-#func catch_with_iterable(sources : IterableBase) -> Observable:
-#	return obs.catch_with_iterable(sources)
-#
-### See: [b]res://reactivex/observable/combinelatest.gd[/b]
-#func combine_latest(sources : Array[Observable]) -> Observable:
-#	return obs.combine_latest(sources)
-#
-### See: [b]res://reactivex/observable/concat.gd[/b]
-#func concat_streams(sources : Array) -> Observable:
-#	return obs.concat_with_iterable(GDRx.util.Iter(sources))
-#
-### See: [b]res://reactivex/observable/concat.gd[/b]
-#func concat_with_iterable(sources : IterableBase) -> Observable:
-#	return obs.concat_with_iterable(sources)
-#
-### See: [b]res://reactivex/observable/defer.gd[/b]
-#func defer(factory : Callable = GDRx.basic.default_factory) -> Observable:
-#	return obs.defer(factory)
-#
-### See: [b]res://reactivex/observable/empty.gd[/b]
-#func empty(scheduler : SchedulerBase = null) -> Observable:
-#	return obs.empty(scheduler)
-#
-### See: [b]res://reactivex/observable/forkjoin.gd[/b]
-#func fork_join(sources : Array[Observable]) -> Observable:
-#	return obs.fork_join(sources)
-#
-### See: [b]res://reactivex/observable/fromcallback.gd[/b]
-#func from_callback(fun : Callable = func(_args : Array, _cb : Callable): return, mapper = null) -> Callable:
-#	return obs.from_callback(fun, mapper)
-#
-### Transforms an array into an observable sequence.
-#func from_array(array : Array, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.from_iterable(GDRx.util.Iter(array), scheduler)
-#
-### See: [b]res://reactivex/observable/fromiterable.gd[/b]
-#func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.from_iterable(iterable, scheduler)
-#
-### See: [b]res://reactivex/observable/generate.gd[/b]
-#func generate(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity) -> Observable:
-#	return obs.generate(initial_state, condition, iterate)
-#
-### See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
-#func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(_state) -> float: return 1.0) -> Observable:
-#	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
-#
-### See: [b]res://reactivex/observable/ifthen.gd[/b]
-#func if_then(condition : Callable = GDRx.basic.default_condition, then_source : Observable = null, else_source : Observable = null) -> Observable:
-#	return obs.if_then(condition, then_source, else_source)
-#
-### See: [b]res://reactivex/observable/interval.gd[/b]
-#func interval(period : float, scheduler : SchedulerBase = null) -> ObservableBase:
-#	return obs.interval(period, scheduler)
-#
-### See: [b]res://reactivex/observable/merge.gd[/b]
-#func merge(sources : Array[Observable]) -> Observable:
-#	return obs.merge(sources)
-#
-### See: [b]res://reactivex/observable/never.gd[/b]
-#func never() -> Observable:
-#	return obs.never()
-#
-### See: [b]res://reactivex/observable/onerrorresumenext.gd[/b]
-#func on_error_resume_next(sources : Array) -> Observable:
-#	return obs.on_error_resume_next(sources)
-#
-### See: [b]res://reactivex/observable/range.gd[/b]
-#@warning_ignore("shadowed_global_identifier")
-#func range(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.range(start, stop, step, scheduler)
-#
-### See: [b]res://reactivex/observable/repeat.gd[/b]
-#func repeat_value(value, repeat_count = null) -> Observable:
-#	return obs.repeat_value(value, repeat_count)
-#
-### See: [b]res://reactivex/observable/returnvalue.gd[/b]
-#func return_value(value, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.return_value(value, scheduler)
-#
-### See: [b]res://reactivex/observable/returnvalue.gd[/b]
-#func return_value_from_callback(supplier : Callable, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.return_value_from_callback(supplier, scheduler)
-#
-### See: [b]res://reactivex/observable/throw.gd[/b]
-#func throw(err, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.throw(err, scheduler)
-#
-### See: [b]res://reactivex/observable/timer.gd[/b]
-#func timer(duetime : float, time_absolute : bool, period = null, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(duetime, time_absolute, period, scheduler)
-#
-### See: [b]res://reactivex/observable/toasync.gd[/b]
-#func to_async(fun : Callable, scheduler : SchedulerBase = null) -> Callable:
-#	return obs.to_async(fun, scheduler)
-#
-### See: [b]res://reactivex/observable/using.gd[/b]
-#func using(resource_factory : Callable, observable_factory : Callable) -> Observable:
-#	return obs.using(resource_factory, observable_factory)
-#
-### See: [b]res://reactivex/observable/withlatestfrom.gd[/b]
-#func with_latest_from(sources : Array[Observable]) -> Observable:
-#	var _sources : Array[Observable] = sources.duplicate()
-#	var parent = _sources.pop_front()
-#	return obs.with_latest_from(parent, _sources)
-#
-### See: [b]res://reactivex/observable/zip.gd[/b]
-#func zip(sources : Array[Observable]) -> Observable:
-#	return obs.zip(sources)
-#
+# =========================================================================== #
+#   Observable Constructors
+# =========================================================================== #
+
+## See: [b]res://reactivex/observable/amb.gd[/b]
+func amb(sources) -> Observable:
+	return obs.amb(sources)
+
+## See: [b]res://reactivex/observable/case.gd[/b]
+func case(mapper : Callable, sources : Dictionary, default_source : Observable = null) -> Observable:
+	return obs.case(mapper, sources, default_source)
+
+## Create a new observable
+func create(subscribe : Callable = func(_observer : ObserverBase, _scheduler : SchedulerBase = null) -> DisposableBase: return Disposable.new()) -> Observable:
+	return Observable.new(subscribe)
+
+## See: [b]res://reactivex/observable/catch.gd[/b]
+func catch(sources : Array[Observable]) -> Observable:
+	return obs.catch_with_iterable(to_iterable(sources))
+
+## See: [b]res://reactivex/observable/catch.gd[/b]
+func catch_with_iterable(sources : IterableBase) -> Observable:
+	return obs.catch_with_iterable(sources)
+
+## See: [b]res://reactivex/observable/combinelatest.gd[/b]
+func combine_latest(sources) -> Observable:
+	return obs.combine_latest(sources)
+
+## See: [b]res://reactivex/observable/concat.gd[/b]
+func concat_streams(sources : Array[Observable]) -> Observable:
+	return obs.concat_with_iterable(to_iterable(sources))
+
+## See: [b]res://reactivex/observable/concat.gd[/b]
+func concat_with_iterable(sources : IterableBase) -> Observable:
+	return obs.concat_with_iterable(sources)
+
+## See: [b]res://reactivex/observable/defer.gd[/b]
+func defer(factory : Callable = GDRx.basic.default_factory) -> Observable:
+	return obs.defer(factory)
+
+## See: [b]res://reactivex/observable/empty.gd[/b]
+func empty(scheduler : SchedulerBase = null) -> Observable:
+	return obs.empty(scheduler)
+
+## See: [b]res://reactivex/observable/forkjoin.gd[/b]
+func fork_join(sources) -> Observable:
+	return obs.fork_join(sources)
+
+## See: [b]res://reactivex/observable/fromcallback.gd[/b]
+func from_callback(fun : Callable = func(_args : Array, _cb : Callable): return, mapper = null) -> Callable:
+	return obs.from_callback(fun, mapper)
+
+## Transforms an array into an observable sequence.
+func from_array(array : Array, scheduler : SchedulerBase = null) -> Observable:
+	return obs.from_iterable(to_iterable(array), scheduler)
+
+## See: [b]res://reactivex/observable/fromiterable.gd[/b]
+func from_iterable(iterable : IterableBase, scheduler : SchedulerBase = null) -> Observable:
+	return obs.from_iterable(iterable, scheduler)
+
+## See: [b]res://reactivex/observable/generate.gd[/b]
+func generate(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity) -> Observable:
+	return obs.generate(initial_state, condition, iterate)
+
+## See: [b]res://reactivex/observable/generatewithrealtivetime.gd[/b]
+func generate_with_relative_time(initial_state, condition : Callable = GDRx.basic.default_condition, iterate : Callable = GDRx.basic.identity, time_mapper : Callable = func(_state) -> float: return 1.0) -> Observable:
+	return obs.generate_with_relative_time(initial_state, condition, iterate, time_mapper)
+
+## See: [b]res://reactivex/observable/ifthen.gd[/b]
+func if_then(condition : Callable = GDRx.basic.default_condition, then_source : Observable = null, else_source : Observable = null) -> Observable:
+	return obs.if_then(condition, then_source, else_source)
+
+## See: [b]res://reactivex/observable/interval.gd[/b]
+func interval(period : float, scheduler : SchedulerBase = null) -> ObservableBase:
+	return obs.interval(period, scheduler)
+
+## See: [b]res://reactivex/observable/merge.gd[/b]
+func merge(sources) -> Observable:
+	return obs.merge(sources)
+
+## See: [b]res://reactivex/observable/never.gd[/b]
+func never() -> Observable:
+	return obs.never()
+
+## See: [b]res://reactivex/observable/onerrorresumenext.gd[/b]
+func on_error_resume_next(sources : Array) -> Observable:
+	return obs.on_error_resume_next(sources)
+
+## See: [b]res://reactivex/observable/range.gd[/b]
+@warning_ignore("shadowed_global_identifier")
+func range(start : int, stop = null, step = null, scheduler : SchedulerBase = null) -> Observable:
+	return obs.range(start, stop, step, scheduler)
+
+## See: [b]res://reactivex/observable/repeat.gd[/b]
+func repeat_value(value, repeat_count = null) -> Observable:
+	return obs.repeat_value(value, repeat_count)
+
+## See: [b]res://reactivex/observable/returnvalue.gd[/b]
+func return_value(value, scheduler : SchedulerBase = null) -> Observable:
+	return obs.return_value(value, scheduler)
+
+## See: [b]res://reactivex/observable/returnvalue.gd[/b]
+func from_callable(supplier : Callable, scheduler : SchedulerBase = null) -> Observable:
+	return obs.from_callable(supplier, scheduler)
+
+## See: [b]res://reactivex/observable/throw.gd[/b]
+func throw(err, scheduler : SchedulerBase = null) -> Observable:
+	return obs.throw(err, scheduler)
+
+## See: [b]res://reactivex/observable/timer.gd[/b]
+func timer(duetime : float, time_absolute : bool, period = null, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(duetime, time_absolute, period, scheduler)
+
+## See: [b]res://reactivex/observable/toasync.gd[/b]
+func to_async(fun : Callable, scheduler : SchedulerBase = null) -> Callable:
+	return obs.to_async(fun, scheduler)
+
+## See: [b]res://reactivex/observable/using.gd[/b]
+func using(resource_factory : Callable, observable_factory : Callable) -> Observable:
+	return obs.using(resource_factory, observable_factory)
+
+## See: [b]res://reactivex/observable/withlatestfrom.gd[/b]
+func with_latest_from(sources) -> Observable:
+	var _sources : Array[Observable] = util.unpack_arg(sources)
+	assert_(_sources.size() > 0)
+	var parent = _sources.pop_front()
+	return obs.with_latest_from(parent, _sources)
+
+## See: [b]res://reactivex/observable/zip.gd[/b]
+func zip(sources) -> Observable:
+	return obs.zip(sources)
+
 ## =========================================================================== #
 ##   Timers
 ## =========================================================================== #

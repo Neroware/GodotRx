@@ -15,9 +15,20 @@ func Iter(x) -> IterableBase:
 func to_iterable(x) -> IterableBase:
 	return Iterator.to_iterable(x)
 
-### Construct an [Iterator] onto x.
+## Construct an [Iterator] onto x.
 func iter(x) -> Iterator:
 	return Iterator.iter(x)
+
+## Unpacks a [Variant] argument to a list of [Observable]s.
+func unpack_arg(sources) -> Array[Observable]:
+	if sources is Array[Observable]:
+		return sources
+	
+	var res : Array[Observable] = []
+	var it : Iterator = iter(sources)
+	while it.has_next():
+		res.push_back(it.next())
+	return res
 
 func add_ref(xs : Observable, r : RefCountDisposable) -> Observable:
 	var subscribe = func(
