@@ -309,11 +309,11 @@ func catch(handler) -> Observable:
 	return GDRx.op.catch(handler).call(self)
 
 ## See: [b]res://reactivex/operators/_combinelatest.gd[/b]
-func combine_latest(others : Array[Observable]) -> Observable:
+func combine_latest(others) -> Observable:
 	return GDRx.op.combine_latest(others).call(self)
 
 ## See: [b]res://reactivex/operators/_concat.gd[/b]
-func concat(sources : Array[Observable]) -> Observable:
+func concat(sources) -> Observable:
 	return GDRx.op.concat(sources).call(self)
 
 ## See: [b]res://reactivex/operators/_contains.gd[/b]
@@ -453,7 +453,7 @@ func flat_map_latest(mapper = null) -> Observable:
 	return GDRx.op.flat_map_latest(mapper).call(self)
 
 ## See: [b]res://reactivex/operators/_forkjoin.gd[/b]
-func fork_join(args : Array[Observable]) -> Observable:
+func fork_join(args) -> Observable:
 	return GDRx.op.fork_join(args).call(self)
 
 ## See: [b]res://reactivex/operators/_groupby.gd[/b]
@@ -514,7 +514,7 @@ func max_by(key_mapper : Callable, comparer = null) -> Observable:
 	return GDRx.op.max_by(key_mapper, comparer).call(self)
 
 ## See: [b]res://reactivex/operators/_merge.gd[/b]
-func merge(sources : Array[Observable], max_concorrent : int = -1) -> Observable:
+func merge(sources, max_concorrent : int = -1) -> Observable:
 	return GDRx.op.merge(sources, max_concorrent).call(self)
 
 ## See: [b]res://reactivex/operators/_merge.gd[/b]

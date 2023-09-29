@@ -6,7 +6,7 @@ class_name ImmediateScheduler
 ## 
 ## You're not allowed to schedule timeouts using the
 ## [ImmediateScheduler] since that will block the current thread while waiting.
-## Attempts to do so will raise a [code]GDRx.err.WouldBlockException[/code].
+## Attempts to do so will raise a [code]GDRx.exc.WouldBlockException[/code].
 
 func _init(verify_ = null):
 	if not verify_ == "GDRx":

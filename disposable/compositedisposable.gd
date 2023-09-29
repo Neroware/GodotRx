@@ -10,7 +10,7 @@ var is_disposed : bool
 var lock : RLock
 
 
-func _init(sources_):
+func _init(sources_ = []):
 	var sources = GDRx.iter(sources_)
 	while sources.has_next():
 		self.disposable.push_back(sources.next())

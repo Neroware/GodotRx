@@ -14,7 +14,7 @@ var __init__ : __GDRx_Init__ = __GDRx_Init__.new()
 ## [Observable] constructor functions
 var obs : __GDRx_Obs__ = __GDRx_Obs__.new()
 ## [Observable] operator functions
-# var op : __GDRx_Op__ = __GDRx_Op__.new()
+var op : __GDRx_Op__ = __GDRx_Op__.new()
 ## Engine Backend
 # var gd : __GDRx_Engine__ = __GDRx_Engine__.new()
 ## See [OnNextNotification]
@@ -335,37 +335,30 @@ func with_latest_from(sources) -> Observable:
 func zip(sources) -> Observable:
 	return obs.zip(sources)
 
-## =========================================================================== #
-##   Timers
-## =========================================================================== #
-#
-#var _timeout = TimeoutScheduler.TimeoutType.new()
-#
-### Collection of [SceneTreeTimeoutScheduler]s, see: [TimeoutScheduler.TimeoutType]
-### for more information!
-#var timeout:
-#	get: return self._timeout
-#
-### Creates an observable timer
-#func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(timespan_sec, false, null, scheduler)
-#
-### Creates an observable periodic timer
-#func start_periodic_timer(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(period_sec, false, period_sec, scheduler)
-#
-### Creates an observable periodic timer which starts after a timespan has passed
-#func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(timespan_sec, false, period_sec, scheduler)
-#
-### Creates an observable timer
-#func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(datetime_sec, true, null, scheduler)
-#
-### Creates an observable periodic timer which starts at a given timestamp.
-#func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
-#	return obs.timer(datetime_sec, true, period_sec, scheduler)
-#
+# =========================================================================== #
+#   Timers
+# =========================================================================== #
+
+## Creates an observable timer
+func start_timer(timespan_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, null, scheduler)
+
+## Creates an observable periodic timer
+func start_periodic_timer(period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(period_sec, false, period_sec, scheduler)
+
+## Creates an observable periodic timer which starts after a timespan has passed
+func start_periodic_timer_after_timespan(timespan_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(timespan_sec, false, period_sec, scheduler)
+
+## Creates an observable timer
+func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, null, scheduler)
+
+## Creates an observable periodic timer which starts at a given timestamp.
+func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
+	return obs.timer(datetime_sec, true, period_sec, scheduler)
+
 ## =========================================================================== #
 ##   Godot-specific Observable Constructors
 ## =========================================================================== #
