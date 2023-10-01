@@ -16,7 +16,7 @@ var obs : __GDRx_Obs__ = __GDRx_Obs__.new()
 ## [Observable] operator functions
 var op : __GDRx_Op__ = __GDRx_Op__.new()
 ## Engine Backend
-# var gd : __GDRx_Engine__ = __GDRx_Engine__.new()
+var gd : __GDRx_Engine__ = __GDRx_Engine__.new()
 ## See [OnNextNotification]
 var OnNext = __init__.NotificationOnNext_
 ## See [OnErrorNotification]
@@ -96,7 +96,7 @@ var ThreadedTimeoutScheduler_ : ThreadedTimeoutScheduler = ThreadedTimeoutSchedu
 ## [NewThreadScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
 var NewThreadScheduler_ : NewThreadScheduler = NewThreadScheduler.new(self.concur.default_thread_factory)
 ## [GodotSignalScheduler] Singleton; [color=red]Do [b]NOT[/b] access directly![/color]
-# var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
+var GodotSignalScheduler_ : GodotSignalScheduler = GodotSignalScheduler.new("GDRx")
 
 ## Global singleton of [CurrentThreadScheduler]
 var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
@@ -359,172 +359,172 @@ func schedule_datetime(datetime_sec : float, scheduler : SchedulerBase = null) -
 func start_periodic_timer_at_datetime(datetime_sec : float, period_sec : float, scheduler : SchedulerBase = null) -> Observable:
 	return obs.timer(datetime_sec, true, period_sec, scheduler)
 
-## =========================================================================== #
-##   Godot-specific Observable Constructors
-## =========================================================================== #
-#
-### Creates an observable from a Godot Signal
-#func from_signal(sig : Signal) -> Observable:
-#	return gd.from_godot_signal(sig)
-#
-### Creates an observable from a Coroutine
-#func from_coroutine(fun : Callable, bindings : Array = [], scheduler : SchedulerBase = null) -> Observable:
-#	return gd.from_godot_coroutine(fun, bindings, scheduler)
-#
-### Emits items from [method Node._process].
-#func on_process_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 0)
-#
-### Emits items from [method Node._physics_process].
-#func on_physics_process_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 1)
-#
-### Emits items from [method Node._input].
-#func on_input_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 2)
-#
-### Emits items from [method Node._shortcut_input].
-#func on_shortcut_input_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 3)
-#
-### Emits items from [method Node._unhandled_input].
-#func on_unhandled_input_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 4)
-#
-### Emits items from [method Node._unhandled_key_input].
-#func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
-#	return gd.from_godot_node_lifecycle_event(conn, 5)
-#
-### Tranforms an input action into an observable sequence emiting items on check.
-#func input_action(input_action_ : String, checks : Observable) -> Observable:
-#	return gd.from_godot_input_action(input_action_, checks)
-#
-### Creates a new Compute Shader as [Observable].
-#func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3i, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
-#	return gd.from_compute_shader(shader_path, rd, work_groups, uniform_sets, scheduler)
-#
-### Emits items when the node enters the scene tree
-#func on_tree_enter_as_observable(node : Node) -> Observable:
-#	return from_signal(node.tree_entered)
-#
-### Emits items when the node just exited the scene tree
-#func on_tree_exit_as_observable(node : Node) -> Observable:
-#	return from_signal(node.tree_exited)
-#
-### Emits items when the node is about to exit the scene tree
-#func on_tree_exiting_as_observable(node : Node) -> Observable:
-#	return from_signal(node.tree_exiting)
-#
-### Creates an HTTP Request
-#func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), tls_validate_domain : bool = true, method : HTTPClient.Method = HTTPClient.METHOD_GET) -> Observable:
-#	return gd.from_http_request(url, request_data, raw, encoding, requester, custom_headers, tls_validate_domain, method)
-#
-## =========================================================================== #
-##   Some useful Input Observables
-## =========================================================================== #
-#
-### Emits item when mouse button is just pressed
-#func on_mouse_down() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
-#		.filter(func(ev : InputEventMouseButton): return ev.is_pressed())
-#
-### Emits item when mouse button is just released
-#func on_mouse_up() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
-#		.filter(func(ev : InputEventMouseButton): return not ev.is_pressed())
-#
-### Emits item on mouse double-click
-#func on_mouse_double_click() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
-#		.filter(func(ev : InputEventMouseButton): return ev.is_pressed() and ev.double_click)
-#
-### Emits items on mouse motion
-#func on_mouse_motion() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion)
-#
-### Emits the relative mouse motion as a [Vector2].
-#func relative_mouse_movement_as_observable() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion) \
-#		.map(func(ev : InputEventMouseMotion): return ev.relative)
-#
-### Emits an item when the given keycode is just pressed.
-#func on_key_just_pressed(key : int) -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventKey) \
-#		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed and not ev.echo)
-#
-### Emits an item when the given keycode is pressed.
-#func on_key_pressed(key : int) -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventKey) \
-#		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed)
-#
-### Emits an item when the given keycode is just released.
-#func on_key_just_released(key : int) -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventKey) \
-#		.filter(func(ev : InputEventKey): return ev.keycode == key and not ev.pressed)
-#
-### Emits an item, when the screen is touched (touch devices).
-#func on_screen_touch() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventScreenTouch)
-#
-### Emits an item, when the touch screen notices a drag gesture (touch devices)
-#func on_screen_drag() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventScreenDrag)
-#
-### Emits an item on Midi event.
-#func on_midi_event() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventMIDI)
-#
-### Emits an item, when a joypad button is just pressed.
-#func on_joypad_button_down() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
-#		.filter(func(ev : InputEventJoypadButton): return not ev.is_echo() and ev.is_pressed())
-#
-### Emits an item, when a joypad button is pressed.
-#func on_joypad_button_pressed() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
-#		.filter(func(ev : InputEventJoypadButton): return ev.is_pressed())
-#
-### Emits an item, when a joypad button is just released.
-#func on_joypad_button_released() -> Observable:
-#	return on_input_as_observable(self) \
-#		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
-#		.filter(func(ev : InputEventJoypadButton): return not ev.is_pressed())
-#
-## =========================================================================== #
-##   Frame Events
-## =========================================================================== #
-#
-### Emits items on idle frame events.
-#func on_idle_frame() -> Observable:
-#	return from_signal(self.get_tree().process_frame) \
-#		.map(func(__): return get_process_delta_time())
-#
-### Emits items on physics frame events.
-#func on_physics_step() -> Observable:
-#	return from_signal(self.get_tree().physics_frame) \
-#		.map(func(__): return get_physics_process_delta_time())
-#
-### Emits an item when the scene tree has changed.
-#func on_tree_changed() -> Observable:
-#	return from_signal(self.get_tree().tree_changed)
-#
-### Emits an item at post-draw frame event.
-#func on_frame_post_draw() -> Observable:
-#	return from_signal(RenderingServer.frame_post_draw)
-#
-### Emits an item at pre-draw frame event.
-#func on_frame_pre_draw() -> Observable:
-#	return from_signal(RenderingServer.frame_pre_draw)
+# =========================================================================== #
+#   Godot-specific Observable Constructors
+# =========================================================================== #
+
+## Creates an observable from a Godot Signal
+func from_signal(sig : Signal) -> Observable:
+	return gd.from_godot_signal(sig)
+
+## Creates an observable from a Coroutine
+func from_coroutine(fun : Callable, bindings : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return gd.from_godot_coroutine(fun, bindings, scheduler)
+
+## Emits items from [method Node._process].
+func on_process_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 0)
+
+## Emits items from [method Node._physics_process].
+func on_physics_process_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 1)
+
+## Emits items from [method Node._input].
+func on_input_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 2)
+
+## Emits items from [method Node._shortcut_input].
+func on_shortcut_input_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 3)
+
+## Emits items from [method Node._unhandled_input].
+func on_unhandled_input_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 4)
+
+## Emits items from [method Node._unhandled_key_input].
+func on_unhandled_key_input_as_observable(conn : Node) -> Observable:
+	return gd.from_godot_node_lifecycle_event(conn, 5)
+
+## Tranforms an input action into an observable sequence emiting items on check.
+func input_action(input_action_ : String, checks : Observable) -> Observable:
+	return gd.from_godot_input_action(input_action_, checks)
+
+## Creates a new Compute Shader as [Observable].
+func from_compute_shader(shader_path : String, rd : RenderingDevice, work_groups : Vector3i, uniform_sets : Array = [], scheduler : SchedulerBase = null) -> Observable:
+	return gd.from_compute_shader(shader_path, rd, work_groups, uniform_sets, scheduler)
+
+## Emits items when the node enters the scene tree
+func on_tree_enter_as_observable(node : Node) -> Observable:
+	return from_signal(node.tree_entered)
+
+## Emits items when the node just exited the scene tree
+func on_tree_exit_as_observable(node : Node) -> Observable:
+	return from_signal(node.tree_exited)
+
+## Emits items when the node is about to exit the scene tree
+func on_tree_exiting_as_observable(node : Node) -> Observable:
+	return from_signal(node.tree_exiting)
+
+## Creates an HTTP Request
+func from_http_request(url : String, request_data = "", raw : bool = false, encoding : String = "", requester : HTTPRequest = null, custom_headers : PackedStringArray = PackedStringArray(), method : HTTPClient.Method = HTTPClient.METHOD_GET) -> Observable:
+	return gd.from_http_request(url, request_data, raw, encoding, requester, custom_headers, method)
+
+# =========================================================================== #
+#   Some useful Input Observables
+# =========================================================================== #
+
+## Emits item when mouse button is just pressed
+func on_mouse_down() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return ev.is_pressed())
+
+## Emits item when mouse button is just released
+func on_mouse_up() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return not ev.is_pressed())
+
+## Emits item on mouse double-click
+func on_mouse_double_click() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseButton) \
+		.filter(func(ev : InputEventMouseButton): return ev.is_pressed() and ev.double_click)
+
+## Emits items on mouse motion
+func on_mouse_motion() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion)
+
+## Emits the relative mouse motion as a [Vector2].
+func relative_mouse_movement_as_observable() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMouseMotion) \
+		.map(func(ev : InputEventMouseMotion): return ev.relative)
+
+## Emits an item when the given keycode is just pressed.
+func on_key_just_pressed(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed and not ev.echo)
+
+## Emits an item when the given keycode is pressed.
+func on_key_pressed(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and ev.pressed)
+
+## Emits an item when the given keycode is just released.
+func on_key_just_released(key : int) -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventKey) \
+		.filter(func(ev : InputEventKey): return ev.keycode == key and not ev.pressed)
+
+## Emits an item, when the screen is touched (touch devices).
+func on_screen_touch() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventScreenTouch)
+
+## Emits an item, when the touch screen notices a drag gesture (touch devices)
+func on_screen_drag() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventScreenDrag)
+
+## Emits an item on Midi event.
+func on_midi_event() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventMIDI)
+
+## Emits an item, when a joypad button is just pressed.
+func on_joypad_button_down() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return not ev.is_echo() and ev.is_pressed())
+
+## Emits an item, when a joypad button is pressed.
+func on_joypad_button_pressed() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return ev.is_pressed())
+
+## Emits an item, when a joypad button is just released.
+func on_joypad_button_released() -> Observable:
+	return on_input_as_observable(self) \
+		.filter(func(ev : InputEvent): return ev is InputEventJoypadButton) \
+		.filter(func(ev : InputEventJoypadButton): return not ev.is_pressed())
+
+# =========================================================================== #
+#   Frame Events
+# =========================================================================== #
+
+## Emits items on idle frame events.
+func on_idle_frame() -> Observable:
+	return from_signal(self.get_tree().process_frame) \
+		.map(func(__): return get_process_delta_time())
+
+## Emits items on physics frame events.
+func on_physics_step() -> Observable:
+	return from_signal(self.get_tree().physics_frame) \
+		.map(func(__): return get_physics_process_delta_time())
+
+## Emits an item when the scene tree has changed.
+func on_tree_changed() -> Observable:
+	return from_signal(self.get_tree().tree_changed)
+
+## Emits an item at post-draw frame event.
+func on_frame_post_draw() -> Observable:
+	return from_signal(RenderingServer.frame_post_draw)
+
+## Emits an item at pre-draw frame event.
+func on_frame_pre_draw() -> Observable:
+	return from_signal(RenderingServer.frame_pre_draw)
