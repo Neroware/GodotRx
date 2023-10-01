@@ -88,7 +88,8 @@ func _ensure_thread():
 		var _run = func():
 			var thread = _self._thread
 			_self.run()
-			thread_manager.finish(thread)
+			if thread:
+				thread_manager.finish(thread)
 		
 		var thread_ : StartableBase = self._thread_factory.call(_run)
 		if thread_:
@@ -173,7 +174,7 @@ func dispose():
 			this._thread = null
 	
 	if thread:
-		thread.wait_to_finish()
+		GDRx.THREAD_MANAGER.finish(thread)
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:

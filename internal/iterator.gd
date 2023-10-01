@@ -26,14 +26,14 @@ func enumerate(what : Callable = func(__elem, __idx : int): pass):
 		next_ = self.next()
 
 
-## An iterable working on an [Array]
+## An iterable working on an [Array] or a relative like [PackedByteArray]
 class ArrayIterable extends IterableBase:
-	var _x : Array
+	var _x
 	
 	var _start : int
 	var _end : int
 	
-	func _init(x : Array, start : int = 0, end : int = -1):
+	func _init(x, start : int = 0, end : int = -1):
 		self._x = x
 		self._start = start
 		self._end = x.size() if end < 0 else end
@@ -43,13 +43,13 @@ class ArrayIterable extends IterableBase:
 			return
 	
 	class _Iterator extends Iterator:
-		var _itx : Array
+		var _itx
 		var _itstart : int
 		var _itend : int
 		
 		var _itindex : int
 		
-		func _init(x : Array, start : int, end : int):
+		func _init(x, start : int, end : int):
 			self._itx = x
 			self._itstart = start
 			self._itend = end
@@ -132,7 +132,7 @@ class _Iterable extends IterableBase:
 
 ## Constructs an iterable sequence of type [IterableBase] based on x.
 static func to_iterable(x : Variant) -> IterableBase:
-	if x is Array:
+	if x is Array or x is PackedByteArray or x is PackedColorArray or x is PackedFloat32Array or x is PackedFloat64Array or x is PackedInt32Array or x is PackedInt64Array or x is PackedStringArray or x is PackedVector2Array or x is PackedVector3Array:
 		return ArrayIterable.new(x)
 	if x is Dictionary:
 		return DictionaryIterable.new(x)

@@ -194,7 +194,7 @@ func dispose():
 	if true:
 		var __ = LockGuard.new(this.lock)
 		this.is_disposed = true
-		this.observers = []
+		this.observers.clear()
 		this.exception = null
 		this.is_stopped = true
 
