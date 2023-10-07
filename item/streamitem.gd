@@ -9,6 +9,7 @@ var _payload
 class _Unit extends StreamItem:
 	func _init():
 		self._payload = self
+		self._payload.unreference()
 	
 	func is_unit() -> bool:
 		return true
