@@ -39,7 +39,7 @@ You can add GDRx to your Godot 4 project as followed:
 5. GDRx should now be ready to use. Try creating a simple Observable using:
 
 ```swift
-GDRx.just(42).subscribe(func(i): print("The answer: " + str(i))).dispose_with(self)
+GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ```
 
 ## Usage
