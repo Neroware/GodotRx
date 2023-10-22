@@ -39,7 +39,7 @@ You can add GDRx to your Godot 4 project as followed:
 5. GDRx should now be ready to use. Try creating a simple Observable using:
 
 ```swift
-GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
+GDRx.just(42).subscribe(func(i): print("The answer: " + str(i))).dispose_with(self)
 ```
 
 ## Usage
@@ -111,7 +111,7 @@ func _ready():
 			GDRx.from_coroutine(func(): await self._reference.coroutine2())
 		),
 		GDRx.from_coroutine(coroutine3),
-	]).subscribe()
+	]).subscribe().dispose_with(self)
 
 func coroutine1():
 	# ... 
@@ -139,8 +139,12 @@ simplifies creating timers.
 ```swift
 func _ready():
 	# Main Thread via SceneTreeTimer
-	GDRx.start_periodic_timer(1.0).subscribe(func(i): print("Periodic: ", i))
-	GDRx.start_timer(2.0).subscribe(func(i): print("One shot: ", i))
+	GDRx.start_periodic_timer(1.0) \
+		.subscribe(func(i): print("Periodic: ", i)) \
+		.dispose_with(self)
+	GDRx.start_timer(2.0) \
+		.subscribe(func(i): print("One shot: ", i)) \
+		.dispose_with(self)
 ```
 
 If you want to schedule a timer running on a separate thread, the 
@@ -150,9 +154,11 @@ is started it will not stop until the interval has passed!
 ```swift
 	# Multi-threaded via threaded timer
 	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
-		.subscribe(func(i): print("Threaded one shot: ", i))
+		.subscribe(func(i): print("Threaded one shot: ", i)) \
+		.dispose_with(self)
 	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
-		.subscribe(func(i): print("Threaded periodic: ", i))
+		.subscribe(func(i): print("Threaded periodic: ", i)) \
+		.dispose_with(self)
 ```
 
 Additionally, various process and pause modes are possible. I created
@@ -163,7 +169,12 @@ them like this:
 	# Set timescale
 	Engine.time_scale = 0.5
 
-	var scheduler = SceneTreeTimeoutScheduler.singleton(true, true, false)
+	var process_always = false
+	var process_in_physics = false
+	var ignore_time_scale = false
+
+	var scheduler = SceneTreeTimeoutScheduler.singleton(
+		process_always, process_in_physics, ignore_time_scale)
 ```
 
 Note that the default SceneTreeTimeoutScheduler runs at process timestep scaling with 
@@ -202,7 +213,8 @@ func _ready():
 	GDRx.from_array([0, 1, 2, 8]) \
 		.pairwise() \
 		.map(func(i : Tuple): return division(i.at(1), i.at(0))) \
-		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e))
+		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e)) \
+		.dispose_with(self)
 ```
 
 However, what I do know is that the Integer-division operator crashes if you 
@@ -251,21 +263,15 @@ func _ready():
 	var AnimOnProcess = GDRx.on_process_as_observable(anim)
 ```
 
-** Subscription Management **
+### Subscription Lifecycle (Disposables)
 
-It is important to note that if an object is deleted and not all subscriptions
-are disposed, this could lead to memory leaks. To account for this, the resulting
-subscription (an instance of type `DisposableBase`) can be linked to an object's
-lifetime via `DisposableBase.dispose_with(obj : Object)`. Doing so, will cause
-the subscription to be disposed, when the receiver in `dispose_with` is deleted.
-Only the receiver needs to be linked explicitly. Senders are already considered
-automatically by observables representing signals and lifecycle events.
+It is important to note that subscriptions are managed using disposables (an instance of type `DisposableBase`). As soon as a disposable goes out of scope, it will dispose of its managed subscription. (In the 4.0 branch, this was not yet possible due to some issues with Godot's self-reference management in the notification-callback.)
+
+To account for this, the resulting subscription (an instance of type `DisposableBase`) can be linked to an object's lifetime via `DisposableBase.dispose_with(obj : Object)`. Doing so, will cause the subscription to be deleted, whenever the object specified in `dispose_with` is destroyed.
 
 ```swift
-# Dispose when receiver 'self' is deleted, sender 'anim' already accounted!
+# Dispose when receiver 'self' is deleted
 GDRx.from_signal(anim.animation_finished).subscribe().dispose_with(self)
-# No dispose_with() needed!
-GDRx.on_process_as_observable(self).subscribe()
 ```
 
 *Also a huge shoutout to (https://github.com/semickolon/GodotRx) for his amazing
@@ -273,7 +279,7 @@ hack which automatically disposes subscriptions on instance death. Good on ya!*
 
 ### Reactive Properties
 
-Reactive Properties are a special kind of Observable which emit items whenever
+Reactive Properties are a special kind of Observable (and Disposable) which emit items whenever
 their value is changed. This is very useful e.g. for UI implementations.
 Creating a ReactiveProperty instance is straight forward. Access its contents
 via the `Value` property inside the ReactiveProperty instance.
@@ -304,7 +310,7 @@ var _attack_damage : int = 100
 func _ready():
 	# Create ReactiveProperty from member
 	var _Hp : ReactiveProperty = ReactiveProperty.FromMember(self, "_hp")
-	_Hp.subscribe(func(i): print("Changed Hp ", i))
+	var __ = _Hp.subscribe(func(i): print("Changed Hp ", i))
 	_Hp.Value += 10
 	print("Reflected: ", self._hp)
 ```
@@ -361,7 +367,7 @@ var TrueDamage : ReadOnlyReactiveProperty = ReactiveProperty.Computed2(
 	Stamina, AttackDamage,
 	func(st : float, ad : int): return (st * ad) as int
 )
-TrueDamage.subscribe(func(i): print("True Damage: ", i))
+TrueDamage.subscribe(func(i): print("True Damage: ", i)).dispose_with(self)
 _Stamina.Value = 0.2
 _AttackDamage.Value = 90
 ```
@@ -375,7 +381,7 @@ that it represents not a single value but a listing of values.
 var collection : ReactiveCollection = ReactiveCollection.new(["a", "b", "c", "d", "e", "f"])
 ```
 
-(I should probably make it support constructor arguments of type `IterableBase` as well...)
+(Its constructor should support generators of type `IterableBase` as well...)
 
 ### Operators
 
@@ -535,7 +541,8 @@ self._observe_compute_shader = GDRx.merge([
 	.filter(func(tup : Tuple): return tup.at(0) != tup.at(1)) \
 	.map(func(tup : Tuple): return tup.at(1))
 	
-	self.ObserveComputeShader.subscribe(func(result : Vector2i): print("> ", result))
+	self.ObserveComputeShader.subscribe(func(result : Vector2i): print("> ", result)) \
+		.dispose_with(self)
 ```
 
 Okay, now I lost you, am I right? Let's break it down, shall we? 
