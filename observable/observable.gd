@@ -558,6 +558,11 @@ func pairwise() -> Observable:
 func partition(predicate : Callable = GDRx.basic.default_condition) -> Array[Observable]:
 	return GDRx.op.partition(predicate).call(self)
 
+## Alternative to [method partition] but returning type an [IterableBase] containing.
+## the partitioned [Observable]s.
+func partitionit(predicate : Callable = GDRx.basic.default_condition) -> IterableBase:
+	return Iterator.to_iterable(self.partition(predicate))
+
 ## See: [b]res://reactivex/operators/_partition.gd[/b]
 func partition_indexed(predicate_indexed : Callable = GDRx.basic.default_condition) -> Observable:
 	return GDRx.op.partition_indexed(predicate_indexed).call(self)

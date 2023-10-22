@@ -187,7 +187,7 @@ func iter() -> Iterator:
 
 func to_list() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return GDRx.exc.DisposedException.Throw([])
 	return self._data.duplicate()
 
 func size() -> int:

@@ -39,7 +39,7 @@ func _set_value(value):
 func _to_string() -> String:
 	if self.is_disposed:
 		return "<<Disposed ReactiveProperty>>"
-	return str(self._latest_value)
+	return str(self.Value)
 
 func _init(
 	initial_value_,

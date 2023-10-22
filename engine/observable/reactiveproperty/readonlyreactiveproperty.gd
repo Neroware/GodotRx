@@ -121,3 +121,8 @@ func on_completed():
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		this.dispose()
+
+func _to_string() -> String:
+	if self.is_disposed:
+		return "<<Disposed ReadOnlyReactiveProperty>>"
+	return str(self.Value)
