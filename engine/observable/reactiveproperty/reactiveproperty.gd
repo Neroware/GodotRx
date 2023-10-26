@@ -1,12 +1,10 @@
-extends Observable
+extends ReactivePropertyBase
 class_name ReactiveProperty
 
 ## An observable property.
 ##
 ## Wraps a value and emits an item whenever it is changed.
 ## The emitted item is the new value of the [ReactiveProperty].
-
-var this : ReactiveProperty
 
 var _latest_value
 var _source_subscription : DisposableBase
@@ -17,9 +15,6 @@ var _raise_latest_value_on_subscribe : bool
 var _rwlock : ReadWriteLock
 
 var is_disposed : bool
-## Wrapped value
-var Value:
-	get = _get_value, set = _set_value
 
 func _get_value():
 	return self._latest_value
@@ -47,9 +42,9 @@ func _init(
 	raise_latest_value_on_subscribe_ : bool = true,
 	source : Observable = null
 ):
-	this = self
-	this.unreference()
 	var wself : WeakRef = weakref(self)
+	
+	self.is_disposed = false
 	
 	self._observers = []
 	self._rwlock = ReadWriteLock.new()
@@ -90,13 +85,6 @@ func _init(
 	
 	super._init(subscribe)
 
-func eq(other) -> bool:
-	if self.is_disposed:
-		return false
-	if other is ReactiveProperty:
-		return GDRx.eq(Value, other.Value)
-	return GDRx.eq(Value, other)
-
 func dispose():
 	if this.is_disposed:
 		return
@@ -122,10 +110,6 @@ func to_readonly() -> ReadOnlyReactiveProperty:
 		self, Value, self._distinct_until_changed, 
 		self._raise_latest_value_on_subscribe
 	)
-
-func _notification(what):
-	if what == NOTIFICATION_PREDELETE:
-		this.dispose()
 
 static func FromGetSet(
 	getter : Callable,

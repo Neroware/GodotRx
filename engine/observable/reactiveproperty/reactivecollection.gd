@@ -1,6 +1,8 @@
 extends ReactiveCollectionBase
 class_name ReactiveCollection
 
+var _count : int
+var _data : Array
 var _observers : Dictionary
 var _rwlock : ReadWriteLock
 
@@ -55,13 +57,15 @@ func _disconnect_all(event_class):
 func _init(collection = []):
 	super._init()
 	
+	self._count = 0
+	self._data = []
 	self._observers = {}
 	self._rwlock = ReadWriteLock.new()
 	self.is_disposed = false
 	
 	var it : Iterator = GDRx.iter(collection)
 	while it.has_next():
-		super.add_item(it.next())
+		self._add_item(it.next())
 	
 	self._observe_add = Observable.new(self._get_subscription(CollectionAddEvent))
 	self._observe_move = Observable.new(self._get_subscription(CollectionMoveEvent))
@@ -72,67 +76,102 @@ func _init(collection = []):
 func ObserveCountChanged(notify_current_count : bool = false) -> Observable:
 	return Observable.new(self._get_subscription("CountChanged", notify_current_count)).oftype(TYPE_INT)
 
-## Override from [Comparable]
-func eq(other : Comparable) -> bool:
-	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
-	return super.eq(other)
+func _add_item(item) -> int:
+	self._data.append(item)
+	self._count += 1
+	return self._count - 1
 
 func add_item(item) -> int:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw(-1)
-	var index = super.add_item(item)
+	var index = self._add_item(item)
 	var event_add = CollectionAddEvent.new(index, item)
 	self._notify_all(CollectionAddEvent, event_add)
 	self._notify_all("CountChanged", self._count)
 	return index
 
+func _remove_item(item) -> int:
+	var index = self._data.find(item)
+	if index >= 0:
+		self._data.remove_at(index)
+		self._count -= 1
+	return index
+
 func remove_item(item) -> int:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw(-1)
-	var index = super.remove_item(item)
+	var index = self._remove_item(item)
 	if index >= 0:
 		var event_remove = CollectionRemoveEvent.new(index, item)
 		self._notify_all(CollectionRemoveEvent, event_remove)
 		self._notify_all("CountChanged", self._count)
 	return index
 
+func _remove_at(index : int) -> Variant:
+	if index >= self._count:
+		return null
+	var value = self._data[index]
+	self._data.remove_at(index)
+	self._count -= 1
+	return value
+
 func remove_at(index : int) -> Variant:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
-	var value = super.remove_at(index)
+	var value = self._remove_at(index)
 	if value != null:
 		var event_remove = CollectionRemoveEvent.new(index, value)
 		self._notify_all(CollectionRemoveEvent, event_remove)
 		self._notify_all("CountChanged", self._count)
 	return value
 
+func _replace_item(item, with) -> int:
+	var index = self._data.find(item)
+	if index >= 0:
+		self._data[index] = with
+	return index
+
 func replace_item(item, with) -> int:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	if GDRx.eq(item, with):
 		return self._data.find(item)
-	var index : int = super.replace_item(item, with)
+	var index : int = self._replace_item(item, with)
 	if index >= 0:
 		var event_replace = CollectionReplaceEvent.new(index, item, with)
 		self._notify_all(CollectionReplaceEvent, event_replace)
 	return index
 
+func _replace_at(index : int, item) -> Variant:
+	if index >= self._count:
+		return null
+	var value = self._data[index]
+	self._data[index] = item
+	return value
+
 func replace_at(index : int, item) -> Variant:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
-	var value = super.replace_at(index, item)
+	var value = self._replace_at(index, item)
 	if value != null and GDRx.neq(value, item):
 		var event_replace = CollectionReplaceEvent.new(index, value, item)
 		self._notify_all(CollectionReplaceEvent, event_replace)
 	return value
+
+func _swap(idx1 : int, idx2 : int) -> Tuple:
+	if idx1 >= self._count or idx2 >= self._count:
+		return null
+	var tmp = self._data[idx1]
+	self._data[idx1] = self._data[idx2]
+	self._data[idx2] = tmp
+	return Tuple.new([self._data[idx2], self._data[idx1]])
 
 func swap(idx1 : int, idx2 : int) -> Tuple:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	if idx1 >= self._count or idx2 >= self._count:
 		return
-	var pair = super.swap(idx1, idx2)
+	var pair = self._swap(idx1, idx2)
 	if GDRx.eq(pair.at(0), pair.at(1)):
 		return pair
 	var event_move1 = CollectionMoveEvent.new(idx1, idx2, pair.at(0))
@@ -141,54 +180,86 @@ func swap(idx1 : int, idx2 : int) -> Tuple:
 	self._notify_all(CollectionMoveEvent, event_move2)
 	return pair
 
+func _move_to(curr_index : int, new_index : int):
+	if curr_index >= self._count or new_index >= self._count:
+		return
+	var tmp = self._data[curr_index]
+	self._data.remove_at(curr_index)
+	self._data.insert(new_index, tmp)
+
 func move_to(old_index : int, new_index : int):
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	if old_index >= self._count or new_index >= self._count or old_index == new_index:
 		return
 	var moved = self._data[old_index]
-	super.move_to(old_index, new_index)
+	self._move_to(old_index, new_index)
 	var event_move = CollectionMoveEvent.new(old_index, new_index, moved)
 	self._notify_all(CollectionMoveEvent, event_move)
+
+func _insert_at(index : int, elem):
+	if index > self._count:
+		return
+	self._data.insert(index, elem)
+	self._count += 1
 
 func insert_at(index : int, elem):
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	if index > self._count:
 		return
-	super.insert_at(index, elem)
+	self._insert_at(index, elem)
 	var event_add = CollectionAddEvent.new(index, elem)
 	self._notify_all(CollectionAddEvent, event_add)
 	self._notify_all("CountChanged", self._count)
 
+func _at(index : int):
+	return self._data[index]
+
 func at(index : int):
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
-	return super.at(index)
+	return self._at(index)
+
+func _find(item) -> int:
+	return self._data.find(item)
 
 func find(item) -> int:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw(-1)
-	return super.find(item)
+	return self._find(item)
+
+func _reset():
+	self._data.clear()
+	self._count = 0
 
 func reset():
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	var c = self._count
-	super.reset()
+	self._reset()
 	self._notify_all("Reset", StreamItem.Unit())
 	if self._count != c:
 		self._notify_all("CountChanged", self._count)
+
+func _iter() -> Iterator:
+	return GDRx.util.Iter(self._data).iter()
 
 func iter() -> Iterator:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw()
 	return GDRx.iter(self._data)
 
+func _to_list() -> Array:
+	return self._data.duplicate()
+
 func to_list() -> Array:
 	if self.is_disposed:
 		return GDRx.exc.DisposedException.Throw([])
 	return self._data.duplicate()
+
+func _size() -> int:
+	return self._count
 
 func size() -> int:
 	if self.is_disposed:

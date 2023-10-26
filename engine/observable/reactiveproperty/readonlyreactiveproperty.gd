@@ -1,12 +1,10 @@
-extends Observable
+extends ReadOnlyReactivePropertyBase
 class_name ReadOnlyReactiveProperty
 
 ## An observable property with read-only access.
 ##
 ## Wraps a value and emits an item whenever it is changed.
 ## The emitted item is the new value of the [ReactiveProperty].
-
-var this : ReadOnlyReactiveProperty
 
 var _latest_value
 var _source_subscription : DisposableBase
@@ -18,29 +16,22 @@ var _rwlock : ReadWriteLock
 
 var is_disposed : bool
 
-## Wrapped value
-var Value:
-	get: return self._latest_value
-	set(__):
-		GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
-
 func _init(
 	source : ObservableBase,
 	initial_value_,
 	distinct_until_changed_ : bool = true,
 	raise_latest_value_on_subscribe_ : bool = true
 ):
-	this = self
-	this.unreference()
 	var wself : WeakRef = weakref(self)
 	
 	self._observers = []
 	self._rwlock = ReadWriteLock.new()
+	self.is_disposed = false
 	
 	self._source_subscription = source.subscribe(
-		func(i): wself.get_ref().on_next(i),
-		func(e): wself.get_ref().on_error(e),
-		func(): wself.get_ref().on_completed()
+		func(i): wself.get_ref()._on_next(i),
+		func(e): wself.get_ref()._on_error(e),
+		func(): wself.get_ref()._on_completed()
 	)
 	self._latest_value = initial_value_
 	self._distinct_until_changed = distinct_until_changed_
@@ -76,6 +67,9 @@ func _init(
 	
 	super._init(subscribe)
 
+func _get_value():
+	return self._latest_value
+
 func dispose():
 	if this.is_disposed:
 		return
@@ -95,7 +89,7 @@ func dispose():
 	
 	this._source_subscription.dispose()
 
-func on_next(value):
+func _on_next(value):
 	if self._distinct_until_changed and self._latest_value == value:
 		return
 	
@@ -107,7 +101,7 @@ func on_next(value):
 	for obs in observers_:
 		obs.on_next(value)
 
-func on_error(error_):
+func _on_error(error_):
 	var observers_ : Array[ObserverBase]
 	if true:
 		var __ = ReadWriteLockGuard.new(self._rwlock, true)
@@ -115,12 +109,8 @@ func on_error(error_):
 	for obs in observers_:
 		obs.on_error(error_)
 
-func on_completed():
+func _on_completed():
 	self.dispose()
-
-func _notification(what):
-	if what == NOTIFICATION_PREDELETE:
-		this.dispose()
 
 func _to_string() -> String:
 	if self.is_disposed:
