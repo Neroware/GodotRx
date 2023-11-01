@@ -74,7 +74,7 @@ func _init(collection = []):
 	self._observe_reset = Observable.new(self._get_subscription("Reset"))
 
 func ObserveCountChanged(notify_current_count : bool = false) -> Observable:
-	return Observable.new(self._get_subscription("CountChanged", notify_current_count)).oftype(TYPE_INT)
+	return Observable.new(self._get_subscription("CountChanged", notify_current_count))
 
 func _add_item(item) -> int:
 	self._data.append(item)

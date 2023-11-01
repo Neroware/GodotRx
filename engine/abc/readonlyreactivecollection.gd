@@ -98,7 +98,7 @@ class CollectionReplaceEvent extends Comparable:
 var Count : int:
 	get: return self.size()
 
-## [Observable]<[ReactiveCollectionBase.CollectionAddEvent]>
+## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionAddEvent]>
 var ObserveAdd : Observable:
 	get: return self._observe_add.oftype(ReadOnlyReactiveCollectionBase.CollectionAddEvent)
 var _observe_add : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
@@ -112,17 +112,17 @@ func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
 var ObserveCount : Observable:
 	get: return ObserveCountChanged(true).oftype(TYPE_INT)
 
-## [Observable]<[ReactiveCollectionBase.CollectionMoveEvent]>
+## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionMoveEvent]>
 var ObserveMove : Observable:
 	get: return self._observe_move.oftype(ReadOnlyReactiveCollectionBase.CollectionMoveEvent)
 var _observe_move : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
 
-## [Observable]<[ReactiveCollectionBase.CollectionRemoveEvent]>
+## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionRemoveEvent]>
 var ObserveRemove : Observable:
 	get: return self._observe_remove.oftype(ReadOnlyReactiveCollectionBase.CollectionRemoveEvent)
 var _observe_remove : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
 
-## [Observable]<[ReactiveCollectionBase.CollectionReplaceEvent]>
+## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionReplaceEvent]>
 var ObserveReplace : Observable:
 	get: return self._observe_replace.oftype(ReadOnlyReactiveCollectionBase.CollectionReplaceEvent) 
 var _observe_replace : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
