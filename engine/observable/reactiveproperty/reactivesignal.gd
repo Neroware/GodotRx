@@ -20,7 +20,7 @@ var _n_args : int
 var _observers : Array[ObserverBase]
 var _connections : Array[Callable]
 
-func _init(n_args : int = 0):
+func _init(n_args : int = 1):
 	if n_args > MAX_ARGS:
 		GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
 			"Only up to 8 signal parameters supported! Use lists instead!"))
@@ -102,7 +102,7 @@ func _init(n_args : int = 0):
 	
 	super._init(subscribe_)
 
-func emit(args = []):
+func _emit(args = []):
 	if self.is_disposed:
 		return
 	
@@ -111,6 +111,7 @@ func emit(args = []):
 		args_.push_back(arg))
 	
 	match self._n_args:
+		0: self._signal.emit()
 		1: self._signal.emit(args_[0])
 		2: self._signal.emit(args_[0], args_[1])
 		3: self._signal.emit(args_[0], args_[1], args_[2])
@@ -121,14 +122,14 @@ func emit(args = []):
 		8: self._signal.emit(args_[0], args_[1], args_[2], args_[3], args_[4], args_[5], args_[6], args_[7])
 		_: assert(false) # "should not happen"
 
-func rx_connect(cb : Callable):
+func attach(cb : Callable):
 	if self.is_disposed:
 		return
 	if not cb in self._connections:
 		self._signal.connect(cb)
 		self._connections.push_back(cb)
 
-func rx_disconnect(cb : Callable):
+func detach(cb : Callable):
 	if self.is_disposed:
 		return
 	if cb in self._connections:

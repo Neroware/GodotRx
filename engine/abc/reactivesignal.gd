@@ -13,33 +13,37 @@ func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		this.dispose()
 
-func emit(_args = []):
+func _emit(_args = []):
 	GDRx.exc.NotImplementedException.Throw()
 
-func rx_connect(_cb : Callable):
+func attach(_cb : Callable):
 	GDRx.exc.NotImplementedException.Throw()
 
-func rx_disconnect(_cb : Callable):
+func detach(_cb : Callable):
 	GDRx.exc.NotImplementedException.Throw()
 
+func emit():
+	self._emit()
 func emit0():
-	self.emit([])
+	self._emit([])
 func emit1(arg0):
-	self.emit([arg0])
+	self._emit([arg0])
 func emit2(arg0, arg1):
-	self.emit([arg0, arg1])
+	self._emit([arg0, arg1])
 func emit3(arg0, arg1, arg2):
-	self.emit([arg0, arg1, arg2])
+	self._emit([arg0, arg1, arg2])
 func emit4(arg0, arg1, arg2, arg3):
-	self.emit([arg0, arg1, arg2, arg3])
+	self._emit([arg0, arg1, arg2, arg3])
 func emit5(arg0, arg1, arg2, arg3, arg4):
-	self.emit([arg0, arg1, arg2, arg3, arg4])
+	self._emit([arg0, arg1, arg2, arg3, arg4])
 func emit6(arg0, arg1, arg2, arg3, arg4, arg5):
-	self.emit([arg0, arg1, arg2, arg3, arg4, arg5])
+	self._emit([arg0, arg1, arg2, arg3, arg4, arg5])
 func emit7(arg0, arg1, arg2, arg3, arg4, arg5, arg6):
-	self.emit([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
+	self._emit([arg0, arg1, arg2, arg3, arg4, arg5, arg6])
 func emit8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7):
-	self.emit([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+	self._emit([arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7])
+func emit_unit():
+	self._emit([StreamItem.Unit()])
 
 func dispose():
 	GDRx.exc.NotImplementedException.Throw()

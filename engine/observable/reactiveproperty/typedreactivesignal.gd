@@ -45,7 +45,7 @@ func _type_check_fail(value, default = null):
 	exc.throw(value)
 	return default
 
-func emit(args = []):
+func _emit(args = []):
 	var args_valid = RefValue.Set(true)
 	GDRx.iter(args).enumerate(func(value, i : int):
 		if not self._type_equality.call(self._type_list[i], value):
@@ -54,4 +54,4 @@ func emit(args = []):
 			return false)
 	
 	if args_valid.v:
-		super.emit(args)
+		super._emit(args)
