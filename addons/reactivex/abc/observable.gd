@@ -7,6 +7,9 @@ class_name ObservableBase
 ## [Observable] to receive emitted items sent on the stream.
 ## Create a new subscription via [method subscribe].
 
+func _init():
+	pass
+
 ## Creates a new subscription.
 ## [br]
 ## There are two ways to invoke this method:

@@ -7,6 +7,8 @@ class_name SubjectBase
 ## allowed! So, this interface provides all interface methods from 
 ## [ObserverBase] and [ObservableBase].
 
+func _init():
+	pass
 
 ## Creates a new subscription.
 ## [br]

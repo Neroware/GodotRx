@@ -7,6 +7,9 @@ class_name SchedulerBase
 ## [color=yellow]Important: We will always use time values of type 
 ## [float] representing seconds![/color]
 
+func _init():
+	pass
+
 ## Invoke the given action. 
 func invoke_action(_action : Callable, _state = null) -> DisposableBase:
 	GDRx.exc.NotImplementedException.Throw()
