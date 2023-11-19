@@ -34,9 +34,8 @@ You can add GDRx to your Godot 4 project as followed:
 
 1. Download this repository as an archive.
 2. Navigate to your project root folder.
-3. Extract GDRx into your project. The folder must be named `res://reactivex/`.
-4. Add the singleton script with name 'GDRx' to autoload (`res://reactivex/__gdrxsingleton__.gd`)
-5. GDRx should now be ready to use. Try creating a simple Observable using:
+3. Extract GDRx into your project's `addons` directory. The path needs to be `res://addons/reactivex/`.
+4. GDRx should now be ready to use. Try creating a simple Observable using:
 
 ```swift
 GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))

@@ -2,7 +2,7 @@ class_name PriorityQueue
 
 ## Implementation of a priority queue using a heap
 ## 
-## Priority queue using a heap data structure, see: [b]res://reactivex/internal/heap.gd[/b]
+## Priority queue using a heap data structure, see: [b]res://addons/reactivex/internal/heap.gd[/b]
 
 var _Heap = GDRx.heap
 
