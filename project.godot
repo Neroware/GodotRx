@@ -11,5 +11,14 @@ config_version=5
 [application]
 
 config/name="GodotRx"
+run/main_scene="res://runtests.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GDRx="*res://addons/reactivex/__gdrxsingleton__.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/reactivex/plugin.cfg")

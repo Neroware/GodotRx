@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://4uilmlh360h8"]
+
+[ext_resource type="Script" path="res://addons/reactivex/testing/runtests.gd" id="1_g2y4j"]
+
+[node name="RunTests" type="Node"]
+script = ExtResource("1_g2y4j")
