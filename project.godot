@@ -13,7 +13,7 @@ config_version=5
 config/name="GodotRx"
 run/main_scene="res://runtests.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [autoload]
 
