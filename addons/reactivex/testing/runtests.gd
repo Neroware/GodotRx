@@ -1,6 +1,6 @@
 extends Node
 
-@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic,reactive_collection,await_public_timer,await_immediate"
+@export var tests : String = "identity,amb,throw,range,merge,merge_op,window_with_count,compare_array,new_thread_scheduler,faulty_map,coroutine,separate_thread,threaded_try_catch,faulty_map_new_thread,timer_faulty_filter,reactive_property,fix_type_basic,fix_type_class,fix_type_mismatch_basic,reactive_collection,await_public_timer,await_immediate,subject_as_observable,subject_pipe"
 
 enum ETestState {
 	SUCCESS = 1,
@@ -399,3 +399,27 @@ func _test_await_immediate():
 	var obs = GDRx.just(42).repeat(3)
 	var i = await obs.next()
 	seq.compare(GDRx.just(i), self.sequence_finished)
+
+func _test_subject_as_observable():
+	var seq = ObservableSequence.new([1, 2, 3, COMPLETE])
+	var subject : Subject = Subject.new()
+	var obs : Observable = subject.as_observable()
+	seq.compare(obs, self.sequence_finished)
+	subject.on_next(1)
+	subject.on_next(2)
+	subject.on_next(3)
+	subject.on_completed()
+
+func _test_subject_pipe():
+	var seq = ObservableSequence.new([2, 4, 6, COMPLETE])
+	var subject : Subject = Subject.new()
+	var obs : Observable = subject \
+		.filter(func(i): return i < 4) \
+		.map(func(i): return 2 * i)
+	seq.compare(obs, self.sequence_finished)
+	subject.on_next(1)
+	subject.on_next(42) # Filtered out!
+	subject.on_next(2)
+	subject.on_next(3)
+	subject.on_next(42) # Filtered out!
+	subject.on_completed()
