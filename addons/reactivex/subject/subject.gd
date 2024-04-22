@@ -948,3 +948,6 @@ func process_time_interval(initial_time : float = 0.0) -> Observable:
 func physics_time_interval(initial_time : float = 0.0) -> Observable:
 	return GDRx.gd.physics_time_interval(initial_time).call(obs)
 
+## Create a [ReadOnlyReactiveProperty] from the given sequence
+func to_reactive_property(initial_value, distinct_until_changed : bool = true, raise_latest_value_on_subscribe = true) -> ReadOnlyReactiveProperty:
+	return ReadOnlyReactiveProperty.new(obs, initial_value, distinct_until_changed, raise_latest_value_on_subscribe)
