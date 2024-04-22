@@ -83,7 +83,8 @@ func _add_item(item) -> int:
 
 func add_item(item) -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	var index = self._add_item(item)
 	var event_add = CollectionAddEvent.new(index, item)
 	self._notify_all(CollectionAddEvent, event_add)
@@ -99,7 +100,8 @@ func _remove_item(item) -> int:
 
 func remove_item(item) -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	var index = self._remove_item(item)
 	if index >= 0:
 		var event_remove = CollectionRemoveEvent.new(index, item)
@@ -117,7 +119,7 @@ func _remove_at(index : int) -> Variant:
 
 func remove_at(index : int) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	var value = self._remove_at(index)
 	if value != null:
 		var event_remove = CollectionRemoveEvent.new(index, value)
@@ -133,7 +135,7 @@ func _replace_item(item, with) -> int:
 
 func replace_item(item, with) -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	if GDRx.eq(item, with):
 		return self._data.find(item)
 	var index : int = self._replace_item(item, with)
@@ -151,7 +153,7 @@ func _replace_at(index : int, item) -> Variant:
 
 func replace_at(index : int, item) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	var value = self._replace_at(index, item)
 	if value != null and GDRx.neq(value, item):
 		var event_replace = CollectionReplaceEvent.new(index, value, item)
@@ -168,7 +170,7 @@ func _swap(idx1 : int, idx2 : int) -> Tuple:
 
 func swap(idx1 : int, idx2 : int) -> Tuple:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	if idx1 >= self._count or idx2 >= self._count:
 		return
 	var pair = self._swap(idx1, idx2)
@@ -189,7 +191,7 @@ func _move_to(curr_index : int, new_index : int):
 
 func move_to(old_index : int, new_index : int):
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	if old_index >= self._count or new_index >= self._count or old_index == new_index:
 		return
 	var moved = self._data[old_index]
@@ -205,7 +207,7 @@ func _insert_at(index : int, elem):
 
 func insert_at(index : int, elem):
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	if index > self._count:
 		return
 	self._insert_at(index, elem)
@@ -218,7 +220,7 @@ func _at(index : int):
 
 func at(index : int):
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	return self._at(index)
 
 func _find(item) -> int:
@@ -226,7 +228,8 @@ func _find(item) -> int:
 
 func find(item) -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._find(item)
 
 func _reset():
@@ -235,7 +238,7 @@ func _reset():
 
 func reset():
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	var c = self._count
 	self._reset()
 	self._notify_all("Reset", StreamItem.Unit())
@@ -247,7 +250,7 @@ func _iter() -> Iterator:
 
 func iter() -> Iterator:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw()
+		return DisposedError.raise()
 	return GDRx.iter(self._data)
 
 func _to_list() -> Array:
@@ -255,7 +258,8 @@ func _to_list() -> Array:
 
 func to_list() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._data.duplicate()
 
 func _size() -> int:
@@ -263,7 +267,8 @@ func _size() -> int:
 
 func size() -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._count
 
 func dispose():

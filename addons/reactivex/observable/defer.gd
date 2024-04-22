@@ -28,8 +28,8 @@ static func defer_(factory : Callable = GDRx.basic.default_factory) -> Observabl
 		if GDRx.try(func():
 			result.v = factory.call(scheduler if scheduler != null else ImmediateScheduler.singleton())
 		) \
-		.catch("Exception", func(ex):
-			failed.v = GDRx.obs.throw(ex).subscribe(observer)
+		.catch("Error", func(err):
+			failed.v = GDRx.obs.throw(err).subscribe(observer)
 		) \
 		.end_try_catch():
 			return failed.v

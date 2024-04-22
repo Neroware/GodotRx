@@ -11,5 +11,5 @@ func schedule_periodic(
 	_period : float,
 	_action : Callable,
 	_state = null) -> DisposableBase:
-		GDRx.exc.NotImplementedException.Throw()
+		NotImplementedError.raise()
 		return null

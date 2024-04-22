@@ -127,8 +127,8 @@ static func window_when_(closing_mapper : Callable) -> Callable:
 				if GDRx.try(func():
 					window_close.v = closing_mapper.call()
 				) \
-				.catch("Exception", func(exception):
-					observer.on_error(exception)
+				.catch("Error", func(error):
+					observer.on_error(error)
 				) \
 				.end_try_catch(): return
 				

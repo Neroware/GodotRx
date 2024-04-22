@@ -24,7 +24,7 @@ func _init(
 	super._init(initial_value_, distinct_until_changed_, raise_latest_value_on_subscribe_, source)
 
 func _type_check_fail(value, default = null):
-	var exc = GDRx.exc.TypeMismatchException.new(value)
+	var exc = TypeMismatchError.new(value)
 	if self._push_type_err: push_error(exc)
 	exc.throw(value)
 	return default

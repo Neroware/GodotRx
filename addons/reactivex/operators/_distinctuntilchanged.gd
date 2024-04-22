@@ -42,8 +42,8 @@ func distinct_until_changed_(
 				if GDRx.try(func():
 					key.v = key_mapper_.call(value)
 				) \
-				.catch("Exception", func(exception):
-					observer.on_error(exception)
+				.catch("Error", func(error):
+					observer.on_error(error)
 				) \
 				.end_try_catch(): return
 				
@@ -51,8 +51,8 @@ func distinct_until_changed_(
 					if GDRx.try(func():
 						comparer_equals.v = comparer_.call(current_key.v, key.v)
 					) \
-					.catch("Exception", func(exception):
-						observer.on_error(exception)
+					.catch("Error", func(error):
+						observer.on_error(error)
 					) \
 					.end_try_catch(): return
 				

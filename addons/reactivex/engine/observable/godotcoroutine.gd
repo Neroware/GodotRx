@@ -32,7 +32,7 @@ static func from_godot_coroutine_(
 				observer.on_next(res.v)
 				observer.on_completed()
 			) \
-			.catch("Exception", func(e):
+			.catch("Error", func(e):
 				observer.on_error(e)
 			) \
 			.end_try_catch(): return

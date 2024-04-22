@@ -19,11 +19,6 @@ var Concurrency_ = load("res://addons/reactivex/internal/concurrency.gd")
 var Util_ = load("res://addons/reactivex/internal/utils.gd")
 
 # =========================================================================== #
-#   Exception
-# =========================================================================== #
-var Exception_ = load("res://addons/reactivex/exception/exception.gd")
-
-# =========================================================================== #
 #   Pipe
 # =========================================================================== #
 var Pipe_ = load("res://addons/reactivex/pipe.gd")

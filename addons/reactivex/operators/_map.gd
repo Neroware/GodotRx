@@ -29,7 +29,7 @@ static func map_(
 				if not GDRx.try(func():
 					result.v = _mapper.call(value)
 				) \
-				.catch("Exception", func(err):
+				.catch("Error", func(err):
 					obv.on_error(err)
 				) \
 				.end_try_catch():

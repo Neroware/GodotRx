@@ -1,7 +1,7 @@
 class_name StartableBase
 
 func start():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 func wait_to_finish():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

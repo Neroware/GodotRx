@@ -40,7 +40,7 @@ func _init(
 		super._init(n_args)
 
 func _type_check_fail(value, default = null):
-	var exc = GDRx.exc.TypeMismatchException.new(value)
+	var exc = TypeMismatchError.new(value)
 	if self._push_type_err: push_error(exc)
 	exc.throw(value)
 	return default

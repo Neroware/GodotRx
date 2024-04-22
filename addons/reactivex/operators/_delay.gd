@@ -17,7 +17,7 @@ static func observable_delay_timespan(
 		var duetime_ = _duetime.v
 		
 		var cancelable = SerialDisposable.new()
-		var exception : RefValue = RefValue.Null()
+		var error : RefValue = RefValue.Null()
 		var active = [false]
 		var running = [false]
 		var queue : Array[Tuple] = []
@@ -31,7 +31,7 @@ static func observable_delay_timespan(
 				if notification.at(0) is OnErrorNotification:
 					queue.clear()
 					queue.append(notification)
-					exception.v = notification.at(0).err
+					error.v = notification.at(0).err
 					should_run = not running[0]
 				else:
 					queue.append(
@@ -44,17 +44,17 @@ static func observable_delay_timespan(
 					active[0] = true
 			
 			if should_run:
-				if exception.v != null:
-					observer.on_error(exception.v)
+				if error.v != null:
+					observer.on_error(error.v)
 				else:
 					var mad = MultipleAssignmentDisposable.new()
 					cancelable.disposable = mad
 					
 					var action = func(scheduler : SchedulerBase, _state = null, __action_rec : Callable = func(__, ___, ____): return null):
-						if exception.v != null:
+						if error.v != null:
 							return
 						
-						var ex
+						var err
 						var should_continue : bool
 						var recurse_duetime : float
 						if true:
@@ -80,11 +80,11 @@ static func observable_delay_timespan(
 							else:
 								active[0] = false
 							
-							ex = exception.v
+							err = error.v
 							running[0] = false
 						
-						if ex != null:
-							observer.on_error(ex)
+						if err != null:
+							observer.on_error(err)
 						elif should_continue:
 							mad.disposable = scheduler.schedule_relative(
 								recurse_duetime, __action_rec.bind(__action_rec)

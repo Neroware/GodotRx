@@ -1,5 +1,5 @@
 ## Continues an observable sequence that is terminated normally or
-##    by an exception with the next observable sequence.
+##    by an error with the next observable sequence.
 ## [br][br]
 ##    [b]Examples:[/b]
 ##        [codeblock]

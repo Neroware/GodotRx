@@ -44,9 +44,9 @@ static func debounce_(
 				
 				d.disposable = _scheduler.schedule_relative(duetime, action)
 			
-			var on_error = func(exception):
+			var on_error = func(error):
 				cancelable.dispose()
-				observer.on_error(exception)
+				observer.on_error(error)
 				has_value[0] = false
 				_id[0] += 1
 			
@@ -101,7 +101,7 @@ func throttle_with_mapper_(
 				if GDRx.try(func():
 					throttle.v = throttle_duration_mapper.call(x)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					observer.on_error(e)
 				) \
 				.end_try_catch(): return

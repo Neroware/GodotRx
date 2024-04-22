@@ -14,8 +14,8 @@ static func find_value_(
 				if GDRx.try(func():
 					should_run.v = predicate.call(x, index.v, source)
 				) \
-				.catch("Exception", func(ex):
-					observer.on_error(ex)
+				.catch("Error", func(err):
+					observer.on_error(err)
 				) \
 				.end_try_catch(): return
 				

@@ -59,7 +59,7 @@ static func multicast_(
 			return Observable.new(subscribe)
 		
 		if subject == null:
-			GDRx.exc.NullReferenceException.Throw()
+			NullReferenceError.raise()
 		var ret = ConnectableObservable.new(source, subject)
 		return ret
 	

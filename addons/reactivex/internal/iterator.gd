@@ -39,7 +39,7 @@ class ArrayIterable extends IterableBase:
 		self._end = x.size() if end < 0 else end
 		
 		if self._start < 0 or self._start > self._end or self._end > x.size():
-			GDRx.exc.ArgumentOutOfRangeException.Throw()
+			ArgumentOutOfRangeError.raise()
 			return
 	
 	class _Iterator extends Iterator:

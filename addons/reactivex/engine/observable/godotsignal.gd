@@ -14,7 +14,7 @@ static func from_godot_signal_(
 		
 		var obj = instance_from_id(sig.get_object_id())
 		if obj == null:
-			GDRx.raise(GDRx.exc.NullReferenceException.new())
+			GDRx.raise(NullReferenceError.new())
 			return Disposable.new()
 		var n_args = -1
 		var sig_lst = obj.get_signal_list()
@@ -56,7 +56,7 @@ static func from_godot_signal_(
 				action = func(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8):
 					observer.on_next(Tuple.new([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]))
 			_:
-				GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+				GDRx.raise(TooManyArgumentsError.new(
 					"Only up to 8 signal parameters supported! Use lists instead!"))
 				return Disposable.new()
 		

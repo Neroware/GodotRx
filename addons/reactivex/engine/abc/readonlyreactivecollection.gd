@@ -101,12 +101,13 @@ var Count : int:
 ## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionAddEvent]>
 var ObserveAdd : Observable:
 	get: return self._observe_add.oftype(ReadOnlyReactiveCollectionBase.CollectionAddEvent)
-var _observe_add : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_add : Observable = GDRx.throw(NotImplementedError.new())
 
 ## Creates an [Observable] which emits the collection's current element count
 ## when the size changes.
 func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
-	return GDRx.exc.NotImplementedException.Throw(Observable.new())
+	NotImplementedError.raise()
+	return Observable.new()
 
 ## [Observable]<[int]>
 var ObserveCount : Observable:
@@ -115,22 +116,22 @@ var ObserveCount : Observable:
 ## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionMoveEvent]>
 var ObserveMove : Observable:
 	get: return self._observe_move.oftype(ReadOnlyReactiveCollectionBase.CollectionMoveEvent)
-var _observe_move : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_move : Observable = GDRx.throw(NotImplementedError.new())
 
 ## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionRemoveEvent]>
 var ObserveRemove : Observable:
 	get: return self._observe_remove.oftype(ReadOnlyReactiveCollectionBase.CollectionRemoveEvent)
-var _observe_remove : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_remove : Observable = GDRx.throw(NotImplementedError.new())
 
 ## [Observable]<[ReadOnlyReactiveCollectionBase.CollectionReplaceEvent]>
 var ObserveReplace : Observable:
 	get: return self._observe_replace.oftype(ReadOnlyReactiveCollectionBase.CollectionReplaceEvent) 
-var _observe_replace : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_replace : Observable = GDRx.throw(NotImplementedError.new())
 
 ## [Observable]<[StreamItem._Unit]>
 var ObserveReset : Observable:
 	get: return self._observe_reset.oftype(StreamItem._Unit)
-var _observe_reset : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_reset : Observable = GDRx.throw(NotImplementedError.new())
 
 var this
 
@@ -149,19 +150,24 @@ func eq(other) -> bool:
 	return false
 
 func at(index : int):
-	return GDRx.exc.NotImplementedException.Throw(null)
+	NotImplementedError.raise()
+	return null
 
 func find(item) -> int:
-	return GDRx.exc.NotImplementedException.Throw(-1)
+	NotImplementedError.raise()
+	return -1
 
 func to_list() -> Array:
-	return GDRx.exc.NotImplementedException.Throw([])
+	NotImplementedError.raise()
+	return []
 
 func iter() -> Iterator:
-	return GDRx.exc.NotImplementedException.Throw(null)
+	NotImplementedError.raise()
+	return null
 
 func size() -> int:
-	return GDRx.exc.NotImplementedException.Throw(-1)
+	NotImplementedError.raise()
+	return -1
 
 func dispose():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

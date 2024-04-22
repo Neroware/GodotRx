@@ -3,7 +3,7 @@ static func oftype_(type, push_err : bool = true, type_equality : Callable = GDR
 #		"""Partially applied oftype operator.
 #
 #		Fixes the type of an element to a specific class. Elements of wrong 
-#		type cause an Exception.
+#		type cause an error.
 #
 #		Example:
 #			>>> oftype.call(source)
@@ -21,7 +21,7 @@ static func oftype_(type, push_err : bool = true, type_equality : Callable = GDR
 			var on_next = func(value):
 				var type_mismatch : bool = not type_equality.call(type, value)
 				if type_mismatch:
-					var exc = GDRx.exc.TypeMismatchException.new(value)
+					var exc = TypeMismatchError.new(value)
 					observer.on_error(exc)
 					if push_err:
 						push_error(exc)

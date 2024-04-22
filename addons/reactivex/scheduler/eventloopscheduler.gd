@@ -45,7 +45,7 @@ func schedule_relative(duetime, action : Callable, state = null) -> DisposableBa
 ## Schedule a new action for future execution at [code]duetime[/code].
 func schedule_absolute(duetime, action : Callable, state = null) -> DisposableBase:
 	if self._is_disposed:
-		GDRx.exc.DisposedException.Throw()
+		DisposedError.raise()
 		return Disposable.new()
 	
 	var dt : float = duetime
@@ -69,7 +69,7 @@ func schedule_periodic(
 	action : Callable,
 	state = null) -> DisposableBase:
 		if self._is_disposed:
-			GDRx.exc.DisposedException.Throw()
+			DisposedError.raise()
 			return Disposable.new()
 		
 		return super.schedule_periodic(period, action, state)
@@ -96,7 +96,7 @@ func _ensure_thread():
 			self._thread = thread_
 			self._thread.start()
 		else:
-			GDRx.exc.BadArgumentException.Throw()
+			BadArgumentError.raise()
 
 ## Event loop scheduled on the designated event loop thread. 
 ## The loop is suspended/resumed using the condition which gets notified

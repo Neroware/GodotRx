@@ -1,6 +1,6 @@
-class_name ExceptionHandler
+class_name ErrorHandler
 
-## Handles raised Exceptions
+## Handles raised Errors
 ## 
 ## Objects of type [ThrowableBase] are handled by this type's singleton
 
@@ -11,11 +11,11 @@ func _init():
 	self._try_catch_stack = []
 	self._has_failed = {}
 
-static func singleton() -> ExceptionHandler:
+static func singleton() -> ErrorHandler:
 	var thread = GDRx.get_current_thread()
-	if not GDRx.ExceptionHandler_.has_key(thread):
-		GDRx.ExceptionHandler_.set_pair(thread, ExceptionHandler.new())
-	return GDRx.ExceptionHandler_.get_value(thread)
+	if not GDRx.ErrorHandler_.has_key(thread):
+		GDRx.ErrorHandler_.set_pair(thread, ErrorHandler.new())
+	return GDRx.ErrorHandler_.get_value(thread)
 
 func run(stmt : TryCatch) -> bool:
 	self._has_failed[stmt] = false

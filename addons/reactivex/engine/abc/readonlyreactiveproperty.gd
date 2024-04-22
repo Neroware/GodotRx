@@ -22,7 +22,8 @@ func _set_value(__):
 	GDRx.raise_message("Tried to write to a ReadOnlyReactiveProperty")
 
 func _get_value():
-	return GDRx.exc.NotImplementedException.Throw(null)
+	NotImplementedError.raise()
+	return null
 
 func eq(other) -> bool:
 	if other is ReadOnlyReactivePropertyBase:
@@ -30,4 +31,4 @@ func eq(other) -> bool:
 	return GDRx.eq(Value, other)
 
 func dispose():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

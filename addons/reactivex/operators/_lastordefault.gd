@@ -16,7 +16,7 @@ static func last_or_default_async(
 		
 		var on_completed = func():
 			if not seen_value[0] and not has_default:
-				observer.on_error(GDRx.exc.SequenceContainsNoElementsException.new())
+				observer.on_error(SequenceContainsNoElementsError.new())
 			else:
 				observer.on_next(value[0])
 				observer.on_completed()

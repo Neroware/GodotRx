@@ -77,7 +77,8 @@ func clear():
 
 func erase(key) -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	if self._data.has(key):
 		var value = self._data[key]
 		self._data.erase(key)
@@ -89,7 +90,8 @@ func erase(key) -> bool:
 
 func set_pair(key, value):
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	if not self._data.has(key):
 		self._count += 1
 		self._data[key] = value
@@ -101,52 +103,62 @@ func set_pair(key, value):
 
 func to_dict() -> Dictionary:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw({})
+		DisposedError.raise()
+		return {}
 	return self._data.duplicate()
 
 func find_key(value) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._data.find_key(value)
 
 func get_value(key, default = null) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._data.get(key, default)
 
 func has_key(key) -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._data.has(key)
 
 func has_all(keys : Array) -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._data.has_all(keys)
 
 func hash() -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(0)
+		DisposedError.raise()
+		return 0
 	return self._data.hash()
 
 func is_empty() -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._data.is_empty()
 
 func keys() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._data.keys()
 
 func size() -> int: 
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._count
 
 func values() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._data.values()
 
 func dispose():

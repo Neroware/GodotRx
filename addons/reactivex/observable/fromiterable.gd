@@ -42,7 +42,7 @@ static func from_iterable_(
 					else:
 						observer.on_next(value)
 			) \
-			.catch("Exception", func(error):
+			.catch("Error", func(error):
 				observer.on_error(error)
 			) \
 			.end_try_catch()

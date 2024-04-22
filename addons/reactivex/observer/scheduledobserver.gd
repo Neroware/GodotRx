@@ -61,7 +61,7 @@ func run(_scheduler : SchedulerBase, _state = null):
 			return
 	
 	GDRx.try(work) \
-		.catch("Exception", func(e):
+		.catch("Error", func(e):
 			if true:
 				var __ = LockGuard.new(self.lock)
 				parent.queue = []

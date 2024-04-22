@@ -2,10 +2,11 @@ extends ReadOnlyReactiveDictionaryBase
 class_name ReactiveDictionaryBase
 
 func clear():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 func erase(key) -> bool:
-	return GDRx.exc.NotImplementedException.Throw(false)
+	NotImplementedError.raise()
+	return false
 
 func set_pair(key, value):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

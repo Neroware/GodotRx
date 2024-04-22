@@ -23,11 +23,11 @@ func lock():
 
 func unlock():
 	if self._counter <= 0:
-		GDRx.exc.LockNotAquiredException.new(
+		LockNotAquiredError.new(
 			"RLock was released but nobody aquired it!").throw()
 		return
 	if self._aquired_thread != OS.get_thread_caller_id():
-		GDRx.exc.LockNotAquiredException.new(
+		LockNotAquiredError.new(
 			"RLock was released by a thread which has not aquired it!").throw()
 		return
 	self._counter -= 1

@@ -204,7 +204,7 @@ func _test_amb():
 	seq.compare(obs, self.sequence_finished)
 
 func _test_throw():
-	var obs = GDRx.throw(GDRx.exc.Exception.new("Kill sequence"))
+	var obs = GDRx.throw(RxBaseError.new("Kill sequence"))
 	var seq = ObservableSequence.new([ERROR])
 	seq.compare(obs, self.sequence_finished)
 
@@ -288,10 +288,10 @@ func _test_threaded_try_catch():
 			var thread = GDRx.concur.StartableThread.new(run)
 			thread.start()
 		) \
-		.catch("Exception", func(e): print("[ReactiveX]: Inner ERROR: ", e)) \
+		.catch("Error", func(e): print("[ReactiveX]: Inner ERROR: ", e)) \
 		.end_try_catch()
 	) \
-	.catch("Exception", func(e): print("[ReactiveX]: Outer ERROR: ", e)) \
+	.catch("Error", func(e): print("[ReactiveX]: Outer ERROR: ", e)) \
 	.end_try_catch()
 
 func _test_faulty_map():
@@ -300,7 +300,7 @@ func _test_faulty_map():
 		if i < 5:
 			return 2 * i
 		else:
-			return GDRx.exc.Exception.new("Expected Error!").throw(-1)
+			return RxBaseError.new("Expected Error!").throw(-1)
 		)
 	var seq = ObservableSequence.new([2, 4, 6, 8, ERROR])
 	seq.compare(obs, self.sequence_finished)
@@ -311,7 +311,7 @@ func _test_faulty_map_new_thread():
 		if i < 5:
 			return 2 * i
 		else:
-			return GDRx.exc.Exception.new("Expected Error!").throw(-1)
+			return RxBaseError.new("Expected Error!").throw(-1)
 		)
 	var seq = ObservableSequence.new([2, 4, 6, 8, ERROR])
 	seq.compare(obs, self.sequence_finished)

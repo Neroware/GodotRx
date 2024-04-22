@@ -36,8 +36,8 @@ static func zip_(sources_) -> Observable:
 					var queued_values = [] ; for x in queues: queued_values.append(x.pop_front())
 					res.v = Tuple.new(queued_values)
 				) \
-				.catch("Exception", func(ex):
-					observer.on_error(ex)
+				.catch("Error", func(err):
+					observer.on_error(err)
 				) \
 				.end_try_catch(): return
 				

@@ -14,13 +14,13 @@ func _notification(what):
 		this.dispose()
 
 func _emit(_args = []):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 func attach(_cb : Callable):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 func detach(_cb : Callable):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 func emit():
 	self._emit()
@@ -46,4 +46,4 @@ func emit_unit():
 	self._emit([StreamItem.Unit()])
 
 func dispose():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

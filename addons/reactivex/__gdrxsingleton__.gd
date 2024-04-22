@@ -32,8 +32,6 @@ var basic = __init__.Basic_.new()
 var concur = __init__.Concurrency_.new()
 ## Utility functions & types
 var util = __init__.Util_.new()
-## Exception types
-var exc = __init__.Exception_.new()
 ## Access to pipe operators
 var pipe = __init__.Pipe_.new()
 
@@ -104,10 +102,10 @@ var CurrentThreadScheduler_global_ : WeakKeyDictionary = WeakKeyDictionary.new()
 var CurrentThreadScheduler_local_ = CurrentThreadScheduler._Local.new()
 
 # =========================================================================== #
-#   Exception Handler Singleton
+#   Error Handler Singleton
 # =========================================================================== #
-## [ExceptionHandler] singleton; [color=red]Leave it alone![/color]
-var ExceptionHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
+## [ErrorHandler] singleton; [color=red]Leave it alone![/color]
+var ErrorHandler_ : WeakKeyDictionary = WeakKeyDictionary.new()
 
 # =========================================================================== #
 #  Helper functions
@@ -132,11 +130,11 @@ func gte(x, y) -> bool:
 func lte(x, y) -> bool:
 	return x.lte(y) if (x is Object and x.has_method("lte")) else x <= y
 
-## Raises a [code]GDRx.exc.AssertionFailedException[/code] and returns [b]true[/b]
+## Raises a [AssertionFailedError] and returns [b]true[/b]
 ## should the assertion fail.
 func assert_(assertion : bool, message : String = "Assertion failed!") -> bool:
 	if not assertion: 
-		GDRx.exc.AssertionFailedException.new(message).throw()
+		AssertionFailedError.new(message).throw()
 	return not assertion
 
 ## Creates a new [TryCatch] Statement
@@ -145,11 +143,11 @@ func try(fun : Callable) -> TryCatch:
 
 ## Raises a [ThrowableBase]
 func raise(exc_ : ThrowableBase, default = null) -> Variant:
-	return ExceptionHandler.singleton().raise(exc_, default)
+	return ErrorHandler.singleton().raise(exc_, default)
 
-## Raises a [code]GDRx.exc.Exception[/code] containing the given message
+## Raises a [RxBaseError] containing the given message
 func raise_message(msg : String, default = null):
-	return exc.raise(msg, default)
+	return RxBaseError.raise(msg, default)
 
 ## Construct an [IterableBase] onto x.
 func to_iterable(x) -> IterableBase:

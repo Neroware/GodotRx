@@ -13,7 +13,7 @@ static func first_or_default_async_(
 			
 			var on_completed = func():
 				if not has_default:
-					observer.on_error(GDRx.exc.SequenceContainsNoElementsException.new())
+					observer.on_error(SequenceContainsNoElementsError.new())
 				else:
 					observer.on_next(default_value)
 					observer.on_completed()

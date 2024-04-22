@@ -27,8 +27,8 @@ static func generate_(
 				if has_result.v:
 					result.v = state.v
 			) \
-			.catch("Exception", func(exception):
-				observer.on_error(exception)
+			.catch("Error", func(err):
+				observer.on_error(err)
 			) \
 			.end_try_catch(): return
 			

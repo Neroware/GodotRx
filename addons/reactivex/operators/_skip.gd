@@ -1,6 +1,6 @@
 static func skip_(count : int) -> Callable:
 	if count < 0:
-		GDRx.exc.ArgumentOutOfRangeException.new().throw()
+		ArgumentOutOfRangeError.new().throw()
 		count = 0
 	
 	var skip = func(source : Observable) -> Observable:

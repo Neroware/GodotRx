@@ -32,8 +32,8 @@ static func take_while_(
 					if GDRx.try(func():
 						running.v = predicate.call(value)
 					) \
-					.catch("Exception", func(exn):
-						observer.on_error(exn)
+					.catch("Error", func(err):
+						observer.on_error(err)
 					).end_try_catch(): return
 				
 				if running.v:
@@ -88,8 +88,8 @@ static func take_while_indexed_(
 					if GDRx.try(func():
 						running.v = predicate.call(value, i.v)
 					) \
-					.catch("Exception", func(exn):
-						observer.on_error(exn)
+					.catch("Error", func(err):
+						observer.on_error(err)
 					).end_try_catch(): return
 					else:
 						i.v += 1

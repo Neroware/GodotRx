@@ -25,7 +25,7 @@ static func to_dict_(
 				if GDRx.try(func():
 					key.v = key_mapper.call(x)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					observer.on_error(e)
 				) \
 				.end_try_catch(): return
@@ -34,7 +34,7 @@ static func to_dict_(
 				if GDRx.try(func():
 					element.v = element_mapper.call(x)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					observer.on_error(e)
 				) \
 				.end_try_catch(): return

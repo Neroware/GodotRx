@@ -35,7 +35,7 @@ static func from_http_request_(
 		var action = func(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray):
 			if requester == null: _requester.queue_free()
 			if _requester.get_downloaded_bytes() - n_bytes == 0:
-				observer.on_error(GDRx.exc.HttpRequestFailedException.new(url, 0, "No data received"))
+				observer.on_error(HttpRequestFailedError.new(url, 0, "No data received"))
 				return
 			var http_request_result : HttpRequestResult = HttpRequestResult.new()
 			http_request_result.result = result
@@ -50,7 +50,7 @@ static func from_http_request_(
 					"utf32" : func(): return body.get_string_from_utf32()
 				}
 				if not encoding in encodings:
-					observer.on_error(GDRx.exc.BadArgumentException.new("Unknown encoding: " + str(encoding)))
+					observer.on_error(BadArgumentError.new("Unknown encoding: " + str(encoding)))
 					return
 				var get_string : Callable = encodings[encoding]
 				http_request_result.decoded = get_string.call()
@@ -66,7 +66,7 @@ static func from_http_request_(
 		var error_code = request_cb.call(url, custom_headers, method, request_data)
 		if error_code:
 			dispose.call()
-			observer.on_error(GDRx.exc.HttpRequestFailedException.new(
+			observer.on_error(HttpRequestFailedError.new(
 				url, error_code, "Unable to create request"))
 			return Disposable.new()
 		

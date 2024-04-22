@@ -7,5 +7,5 @@ class_name IterableBase
 
 ## Returns an iterator onto the given iterable sequence.
 func iter() -> Iterator:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null

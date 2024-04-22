@@ -11,13 +11,13 @@ static func catch_handler(
 		
 		subscription.disposable = d1
 		
-		var on_error = func(exception):
+		var on_error = func(err):
 			var result = RefValue.Null()
 			if GDRx.try(func():
-				result.v = handler.call(exception, source)
+				result.v = handler.call(err, source)
 			) \
-			.catch("Exception", func(ex):
-				observer.on_error(ex)
+			.catch("Error", func(e):
+				observer.on_error(e)
 			) \
 			.end_try_catch(): return
 			
@@ -38,7 +38,7 @@ static func catch_handler(
 static func catch_(handler) -> Callable:
 	var catch = func(source : Observable) -> Observable:
 #		"""Continues an observable sequence that is terminated by an
-#		exception with the next observable sequence.
+#		error with the next observable sequence.
 #
 #		Examples:
 #			>>> var op = catch.call(ys)
@@ -47,14 +47,14 @@ static func catch_(handler) -> Callable:
 #		Args:
 #			handler: Second observable sequence used to produce
 #				results when an error occurred in the first sequence, or an
-#				exception handler function that returns an observable sequence
+#				error handler function that returns an observable sequence
 #				given the error and source observable that occurred in the
 #				first sequence.
 #
 #		Returns:
 #			An observable sequence containing the first sequence's
 #			elements, followed by the elements of the handler sequence
-#			in case an exception occurred.
+#			in case an error occurred.
 #		"""
 		if handler is Callable:
 			return catch_handler(source, handler)

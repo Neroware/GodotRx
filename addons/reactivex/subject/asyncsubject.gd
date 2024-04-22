@@ -28,12 +28,12 @@ func _subscribe_core(
 			self.observers.append(observer)
 			return InnerSubscription.new(self, observer)
 	
-	var ex = self.exception
+	var err = self.error_value
 	var has_value_ = self.has_value
 	var value_ = self.value
 	
-	if ex != null:
-		observer.on_error(ex)
+	if err != null:
+		observer.on_error(err)
 	elif has_value_:
 		observer.on_next(value_)
 		observer.on_completed()

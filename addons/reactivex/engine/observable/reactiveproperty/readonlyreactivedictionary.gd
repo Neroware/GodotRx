@@ -29,52 +29,62 @@ func ObserveCountChanged(notify_current_count : bool = false) -> Observable:
 
 func to_dict() -> Dictionary:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw({})
+		DisposedError.raise()
+		return {}
 	return self._dict.to_dict()
 
 func find_key(value) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._dict.find_key(value)
 
 func get_value(key, default = null) -> Variant:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._dict.get_value(key, default)
 
 func has_key(key) -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._dict.has_key(key)
 
 func has_all(keys : Array) -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._dict.has_all(keys)
 
 func hash() -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(0)
+		DisposedError.raise()
+		return 0
 	return self._dict.hash()
 
 func is_empty() -> bool:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(false)
+		DisposedError.raise()
+		return false
 	return self._dict.is_empty()
 
 func keys() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._dict.keys()
 
 func size() -> int: 
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._dict.size()
 
 func values() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._dict.value()
 
 func dispose():

@@ -34,8 +34,8 @@ static func to_async_(
 			if GDRx.try(func():
 				result.v = fun.call(args)
 			) \
-			.catch("Exception", func(ex):
-				subject.on_error(ex)
+			.catch("Error", func(err):
+				subject.on_error(err)
 			) \
 			.end_try_catch(): return
 			

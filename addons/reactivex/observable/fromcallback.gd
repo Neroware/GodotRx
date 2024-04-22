@@ -31,7 +31,7 @@ static func from_callback(
 					if GDRx.try(func():
 						results.v = mapper.call(args)
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						observer.on_error(e)
 					).end_try_catch():
 						return Disposable.new()

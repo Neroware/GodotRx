@@ -44,7 +44,7 @@ static func from_callable_(supplier : Callable, scheduler : SchedulerBase = null
 				observer.on_next(supplier.call())
 				observer.on_completed()
 			) \
-			.catch("Exception", func(e):
+			.catch("Error", func(e):
 				observer.on_error(e)
 			) \
 			.end_try_catch()

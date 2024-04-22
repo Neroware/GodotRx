@@ -13,7 +13,7 @@ func _init(fun : Callable = GDRx.basic.noop):
 	self._caught_types = {}
 
 func end_try_catch() -> bool:
-	return ExceptionHandler.singleton().run(self)
+	return ErrorHandler.singleton().run(self)
 
 func catch(type : String, fun : Callable = GDRx.basic.noop) -> TryCatch:
 	if self._caught_types.has(type):

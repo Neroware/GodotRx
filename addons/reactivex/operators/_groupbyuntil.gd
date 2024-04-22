@@ -59,7 +59,7 @@ static func group_by_until_(
 				if GDRx.try(func():
 					key.v = key_mapper.call(x)
 				) \
-				.catch("Exception", func(__):
+				.catch("Error", func(__):
 					for wrt in writers.values():
 						wrt.on_error(key.v)
 					observer.on_error(key.v)
@@ -72,7 +72,7 @@ static func group_by_until_(
 					if GDRx.try(func():
 						writer.v = subject_mapper_.call()
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						for wrt in writers.values():
 							wrt.on_error(e)
 						observer.on_error(e)
@@ -93,7 +93,7 @@ static func group_by_until_(
 					if GDRx.try(func():
 						duration.v = duration_mapper.call(duration_group)
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						for wrt in writers.values():
 							wrt.on_error(e)
 						observer.on_error(e)
@@ -132,7 +132,7 @@ static func group_by_until_(
 				if GDRx.try(func():
 					element.v = element_mapper_.call(x)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					for wrt in writers.values():
 						wrt.on_error(e)
 					observer.on_error(e)

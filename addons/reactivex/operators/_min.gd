@@ -1,6 +1,6 @@
 static func first_only(x : Array):
 	if x.is_empty():
-		return GDRx.exc.SequenceContainsNoElementsException.Throw()
+		return SequenceContainsNoElementsError.raise()
 	return x[0]
 
 static func min_(

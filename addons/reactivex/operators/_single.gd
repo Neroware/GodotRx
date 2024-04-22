@@ -3,7 +3,7 @@ static func single_(
 ) -> Callable:
 	
 #	"""Returns the only element of an observable sequence that satisfies the
-#	condition in the optional predicate, and reports an exception if there
+#	condition in the optional predicate, and reports an error if there
 #	is not exactly one element in the observable sequence.
 #
 #	Example:

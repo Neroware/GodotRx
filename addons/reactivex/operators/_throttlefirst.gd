@@ -24,7 +24,7 @@ static func throttle_first_(
 			
 			var duration : float = window_duration
 			if duration <= 0:
-				GDRx.exc.ArgumentOutOfRangeException.Throw()
+				ArgumentOutOfRangeError.raise()
 			var last_on_next = RefValue.Null()
 			
 			var on_next = func(x):

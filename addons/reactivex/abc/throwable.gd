@@ -6,9 +6,9 @@ class_name ThrowableBase
 ## structure.
 
 func throw(_default = null) -> Variant:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null
 
 func tags() -> Array[String]:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return []

@@ -23,8 +23,8 @@ static func filter_(predicate : Callable = GDRx.basic.default_condition) -> Call
 				if GDRx.try(func():
 					should_run.v = predicate.call(value)
 				) \
-				.catch("Exception", func(ex):
-					observer.on_error(ex)
+				.catch("Error", func(err):
+					observer.on_error(err)
 				) \
 				.end_try_catch(): return
 				
@@ -66,7 +66,7 @@ static func filter_indexed_(predicate : Callable = GDRx.basic.default_condition)
 			var on_next = func(value):
 				var should_run = predicate.call(value, count.v)
 				if not should_run is bool:
-					observer.on_error(GDRx.exc.BadArgumentException.new())
+					observer.on_error(BadArgumentError.new())
 					return
 				count.v += 1
 				if should_run:

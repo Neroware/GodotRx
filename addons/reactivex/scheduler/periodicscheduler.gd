@@ -53,9 +53,9 @@ func schedule_periodic(
 			if not GDRx.try(func():
 				state_res.v = action.call(state)
 			) \
-			.catch("Exception", func(ex):
+			.catch("Error", func(err):
 				disp.dispose()
-				GDRx.raise(ex)
+				GDRx.raise(err)
 			) \
 			.end_try_catch(): state = state_res.v 
 			

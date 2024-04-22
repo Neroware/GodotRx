@@ -18,13 +18,13 @@ static func window_with_count_(
 #		An observable sequence of windows.
 #	"""
 	if count <= 0:
-		GDRx.exc.ArgumentOutOfRangeException.Throw()
+		ArgumentOutOfRangeError.raise()
 		count = 1
 	
 	@warning_ignore("incompatible_ternary")
 	var skip_ : int = skip if skip != null else count
 	if skip_ <= 0:
-		GDRx.exc.ArgumentOutOfRangeException.Throw()
+		ArgumentOutOfRangeError.raise()
 		skip_ = 1
 	
 	var window_with_count = func(source : Observable) -> Observable:
@@ -57,10 +57,10 @@ static func window_with_count_(
 				if (n[0] % skip_) == 0:
 					create_window.call()
 			
-			var on_error = func(exception):
+			var on_error = func(error):
 				while not q.is_empty():
-					q.pop_front().on_error(exception)
-				observer.on_error(exception)
+					q.pop_front().on_error(error)
+				observer.on_error(error)
 			
 			var on_completed = func():
 				while not q.is_empty():

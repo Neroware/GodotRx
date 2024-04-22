@@ -22,7 +22,7 @@ var _connections : Array[Callable]
 
 func _init(n_args : int = 1):
 	if n_args > MAX_ARGS:
-		GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+		GDRx.raise(TooManyArgumentsError.new(
 			"Only up to 8 signal parameters supported! Use lists instead!"))
 		super._init(func(__, ___ = null): return Disposable.new())
 		return
@@ -92,7 +92,7 @@ func _init(n_args : int = 1):
 				action = func(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8):
 					observer.on_next(Tuple.new([arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8]))
 			_:
-				GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+				GDRx.raise(TooManyArgumentsError.new(
 					"Only up to 8 signal parameters supported! Use lists instead!"))
 				return Disposable.new()
 		

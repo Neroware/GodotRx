@@ -16,8 +16,8 @@ static func extrema_by(
 			if GDRx.try(func():
 				key.v = key_mapper.call(x)
 			) \
-			.catch("Exception", func(ex):
-				observer.on_error(ex)
+			.catch("Error", func(err):
+				observer.on_error(err)
 			) \
 			.end_try_catch(): return
 			
@@ -30,8 +30,8 @@ static func extrema_by(
 				if GDRx.try(func():
 					comparison.v = comparer.call(key.v, last_key.v)
 				) \
-				.catch("Exception", func(ex):
-					observer.on_error(ex)
+				.catch("Error", func(err):
+					observer.on_error(err)
 				) \
 				.end_try_catch(): return
 			

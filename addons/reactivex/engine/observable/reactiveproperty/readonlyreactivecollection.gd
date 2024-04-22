@@ -31,27 +31,32 @@ func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
 
 func at(index : int):
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._collection.at(index)
 
 func find(item) -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._collection.find(item)
 
 func to_list() -> Array:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw([])
+		DisposedError.raise()
+		return []
 	return self._collection.to_list()
 
 func iter() -> Iterator:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(null)
+		DisposedError.raise()
+		return null
 	return self._collection.iter()
 
 func size() -> int:
 	if self.is_disposed:
-		return GDRx.exc.DisposedException.Throw(-1)
+		DisposedError.raise()
+		return -1
 	return self._collection.size()
 
 func dispose():

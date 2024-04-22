@@ -91,7 +91,7 @@ func subscribe(
 			if not GDRx.try(func():
 				subscriber.v = self._subscribe_core(auto_detach_observer, scheduler)
 			) \
-			.catch("Exception", func(ex):
+			.catch("Error", func(ex):
 				if not auto_detach_observer.fail(ex):
 					GDRx.raise(ex)
 			) \

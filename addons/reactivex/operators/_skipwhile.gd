@@ -29,7 +29,7 @@ static func skip_while_(predicate : Callable) -> Callable:
 					if GDRx.try(func():
 						running.v = not predicate.call(value)
 					) \
-					.catch("Exception", func(exn):
+					.catch("Error", func(exn):
 						observer.on_error(exn)
 					) \
 					.end_try_catch(): return

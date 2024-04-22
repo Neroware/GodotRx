@@ -57,7 +57,7 @@ static func slice_(
 				GDRx.filter_indexed(func(_x, i): return i % int(_step == 0))
 			)
 		elif _step < 0:
-			GDRx.exc.ArgumentOutOfRangeException.Throw()
+			ArgumentOutOfRangeError.raise()
 		
 		return source.pipe(GDRx.util.Iter(pipeline))
 	

@@ -17,7 +17,7 @@ func get_disposabe() -> DisposableBase:
 
 func set_disposable(value : DisposableBase):
 	if self.current != null:
-		GDRx.exc.DisposedException.Throw()
+		DisposedError.raise()
 		return
 	
 	var should_dispose : bool

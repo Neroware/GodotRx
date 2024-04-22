@@ -48,7 +48,7 @@ static func delay_with_mapper_(
 						if GDRx.assert_(mapper != null): return
 						delay.v = mapper.call(x)
 					) \
-					.catch("Exception", func(error):
+					.catch("Error", func(error):
 						observer.on_error(error)
 					) \
 					.end_try_catch(): return

@@ -60,7 +60,7 @@ static func generate_with_relative_time_(
 					result.v = state.v
 					time.v = time_mapper.call(state.v)
 			) \
-			.catch("Exception", func(e):
+			.catch("Error", func(e):
 				observer.on_error(e)
 			) \
 			.end_try_catch(): return

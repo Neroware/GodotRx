@@ -6,7 +6,7 @@ var lock : RLock
 
 var is_disposed : bool
 var observers : Array[ObserverBase]
-var exception
+var error_value
 
 var this
 
@@ -26,11 +26,11 @@ func _init():
 	
 	self.is_disposed = false
 	self.observers = []
-	self.exception = null
+	self.error_value = null
 
 func check_disposed():
 	if self.is_disposed:
-		GDRx.exc.DisposedException.Throw()
+		DisposedError.raise()
 		return false
 	return true
 
@@ -107,9 +107,9 @@ func subscribe(
 			if not GDRx.try(func():
 				subscriber.v = self._subscribe_core(auto_detach_observer, scheduler)
 			) \
-			.catch("Exception", func(ex):
-				if not auto_detach_observer.fail(ex):
-					GDRx.raise(ex)
+			.catch("Error", func(err):
+				if not auto_detach_observer.fail(err):
+					GDRx.raise(err)
 			) \
 			.end_try_catch():
 				auto_detach_observer.subscription = fix_subscriber.call(subscriber.v)
@@ -131,8 +131,8 @@ func _subscribe_core(
 			self.observers.append(observer)
 			return InnerSubscription.new(self, observer)
 		
-		if self.exception != null:
-			observer.on_error(self.exception)
+		if self.error_value != null:
+			observer.on_error(self.error_value)
 		else:
 			observer.on_completed()
 		return Disposable.new()
@@ -167,7 +167,7 @@ func _on_error_core(e):
 		var __ = LockGuard.new(this.lock)
 		observers_ = self.observers.duplicate()
 		self.observers.clear()
-		self.exception = e
+		self.error_value = e
 	
 	for observer in observers_:
 		observer.on_error(e)
@@ -195,7 +195,7 @@ func dispose():
 		var __ = LockGuard.new(this.lock)
 		this.is_disposed = true
 		this.observers.clear()
-		this.exception = null
+		this.error_value = null
 		this.is_stopped = true
 
 func fail(e):

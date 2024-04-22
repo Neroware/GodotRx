@@ -31,7 +31,7 @@ func subscribe(
 	_on_error : Callable = GDRx.basic.noop,
 	_on_completed : Callable = GDRx.basic.noop,
 	_scheduler : SchedulerBase = null) -> DisposableBase:
-		GDRx.exc.NotImplementedException.Throw()
+		NotImplementedError.raise()
 		return null
 
 ## Simulated overload for [code]subscribe[/code]

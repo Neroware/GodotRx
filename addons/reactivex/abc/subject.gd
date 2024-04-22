@@ -31,7 +31,7 @@ func subscribe(
 	_on_error : Callable = GDRx.basic.noop,
 	_on_completed : Callable = GDRx.basic.noop,
 	_scheduler : SchedulerBase = null) -> DisposableBase:
-		GDRx.exc.NotImplementedException.Throw()
+		NotImplementedError.raise()
 		return null
 
 ## Simulated overload for [code]subscribe[/code]
@@ -61,12 +61,12 @@ func subscribe8(_scheduler : SchedulerBase = null) -> DisposableBase:
 
 ## Called when the [Observable] emits a new item on the stream
 func on_next(_i):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Called when the [Observable] emits an error on the stream
 func on_error(_e):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Called when the [Observable] is finished and no more items are sent.
 func on_completed():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

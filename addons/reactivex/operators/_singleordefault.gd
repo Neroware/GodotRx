@@ -11,14 +11,14 @@ static func single_or_default_async_(
 			
 			var on_next = func(x):
 				if seen_value.v:
-					observer.on_error(GDRx.exc.Exception.new("Sequence contains more than one element"))
+					observer.on_error(RxBaseError.new("Sequence contains more than one element"))
 				else:
 					value.v = x
 					seen_value.v = true
 			
 			var on_completed = func():
 				if not seen_value.v and not has_default:
-					observer.on_error(GDRx.exc.SequenceContainsNoElementsException.new())
+					observer.on_error(SequenceContainsNoElementsError.new())
 				else:
 					observer.on_next(value.v)
 					observer.on_completed()
@@ -38,7 +38,7 @@ static func single_or_default_(
 ) -> Callable:
 #	"""Returns the only element of an observable sequence that matches
 #	the predicate, or a default value if no such element exists this
-#	method reports an exception if there is more than one element in the
+#	method reports an error if there is more than one element in the
 #	observable sequence.
 #
 #	Examples:

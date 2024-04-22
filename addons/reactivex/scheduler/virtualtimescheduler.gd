@@ -92,7 +92,7 @@ func advance_to(time : float):
 	if true:
 		var __ = LockGuard.new(self._lock)
 		if self.now() > dt:
-			GDRx.exc.ArgumentOutOfRangeException.Throw()
+			ArgumentOutOfRangeError.raise()
 			return
 		
 		if self.now() == dt or self._is_enabled:
@@ -142,7 +142,7 @@ func sleep(time : float):
 	var dt : float = absolute
 	
 	if self.now() > dt:
-		GDRx.exc.ArgumentOutOfRangeException.Throw()
+		ArgumentOutOfRangeError.raise()
 		return
 	
 	var __ = LockGuard.new(self._lock)

@@ -115,7 +115,7 @@ func schedule_signal(
 					action.call(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 				disp = self.invoke_action(action_, state)
 		_:
-			GDRx.raise(GDRx.exc.TooManyArgumentsException.new(
+			GDRx.raise(TooManyArgumentsError.new(
 				"Only up to 8 signal parameters supported! Use lists instead!"))
 			return null
 	

@@ -50,8 +50,8 @@ static func group_join_(
 				if GDRx.try(func():
 					result.v = Tuple.new([value, GDRx.util.add_ref(subject.as_observable(), rcd)])
 				) \
-				.catch("Exception", func(e):
-					push_error("*** Exception: ", e)
+				.catch("Error", func(e):
+					push_error("*** Error: ", e)
 					for left_value in left_map.values():
 						left_value.on_error(e)
 					
@@ -78,7 +78,7 @@ static func group_join_(
 				if GDRx.try(func():
 					duration.v = left_duration_mapper.call(value)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					for left_value in left_map.values():
 						left_value.on_error(e)
 					
@@ -130,7 +130,7 @@ static func group_join_(
 				if GDRx.try(func():
 					duration.v = right_duration_mapper.call(value)
 				) \
-				.catch("Exception", func(e):
+				.catch("Error", func(e):
 					for left_value in left_map.values():
 						left_value.on_error(e)
 					

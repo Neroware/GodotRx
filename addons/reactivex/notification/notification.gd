@@ -48,10 +48,10 @@ func _accept(
 	_on_next : Callable,
 	_on_error : Callable = GDRx.basic.noop,
 	_on_completed : Callable = GDRx.basic.noop):
-		GDRx.exc.NotImplementedException.Throw()
+		NotImplementedError.raise()
 
 func _accept_observer(_observer : ObserverBase):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Returns an observable sequence with a single notification,
 ## using the specified scheduler, else the immediate scheduler.

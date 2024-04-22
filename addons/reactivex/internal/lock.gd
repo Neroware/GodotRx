@@ -17,7 +17,7 @@ func lock():
 
 func unlock():
 	if self._aquired_thread == null:
-		GDRx.exc.LockNotAquiredException.new(
+		LockNotAquiredError.new(
 			"Lock was released but nobody aquired it!").throw()
 		return
 	self._aquired_thread = null

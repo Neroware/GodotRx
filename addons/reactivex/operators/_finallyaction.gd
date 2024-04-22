@@ -23,7 +23,7 @@ static func finally_action_(
 			GDRx.try(func():
 				subscription.v = source.subscribe(observer, GDRx.basic.noop, GDRx.basic.noop, scheduler)
 			) \
-			.catch("Exception", func(e):
+			.catch("Error", func(e):
 				action.call()
 				GDRx.raise(e)
 			) \

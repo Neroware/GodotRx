@@ -80,7 +80,7 @@ static func observable_timer_timespan_and_period(duetime : float, period : float
 				return null
 			
 			if not _scheduler is PeriodicScheduler:
-				GDRx.exc.BadArgumentException.new(
+				BadArgumentError.new(
 					"Scheduler must be PeriodicScheduler").throw()
 				return Disposable.new()
 			var periodic_scheduler : PeriodicScheduler = _scheduler

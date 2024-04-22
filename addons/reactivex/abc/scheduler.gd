@@ -12,25 +12,25 @@ func _init():
 
 ## Invoke the given action. 
 func invoke_action(_action : Callable, _state = null) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null
 
 ## Returns the current point in time (timestamp)
 func now() -> float:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return -1.0
 
 ## Schedule a new action for future execution
 func schedule(_action : Callable, _state = null) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null
 
 ## Schedule a new action for future execution in [code]duetime[/code] seconds.
 func schedule_relative(_duetime : float, _action : Callable, _state = null) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null
 
 ## Schedule a new action for future execution at [code]duetime[/code].
 func schedule_absolute(_duetime : float, _action : Callable, _state = null) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null

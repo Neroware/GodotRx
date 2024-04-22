@@ -16,11 +16,11 @@ func _init():
 
 ## Disposes the disposable and executes a defined action.
 func dispose():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Links disposable to [Object] lifetime via an [AutoDisposer]
 func dispose_with(_obj : Object) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null
 
 func _notification(what):

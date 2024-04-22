@@ -18,7 +18,7 @@ func r_lock():
 
 func r_unlock():
 	if self._num_r <= 0:
-		GDRx.exc.LockNotAquiredException.new(
+		LockNotAquiredError.new(
 			"Read-Write-Lock was released but nobody aquired it!").throw()
 		return
 	self._num_r_lock.lock()

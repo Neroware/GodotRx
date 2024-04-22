@@ -37,23 +37,23 @@ static func do_action_(
 				else:
 					GDRx.try(func():
 						on_next.call(x)
-					).catch("Exception", func(e):
+					).catch("Error", func(e):
 						observer.on_error(e)
 					).end_try_catch()
 					
 					observer.on_next(x)
 			
-			var _on_error = func(exception):
+			var _on_error = func(error):
 				if on_error == null:
-					observer.on_error(exception)
+					observer.on_error(error)
 				else:
 					GDRx.try(func():
-						on_error.call(exception)
-					).catch("Exception", func(e):
+						on_error.call(error)
+					).catch("Error", func(e):
 						observer.on_error(e)
 					).end_try_catch()
 					
-					observer.on_error(exception)
+					observer.on_error(error)
 			
 			var _on_completed = func():
 				if on_completed == null:
@@ -61,7 +61,7 @@ static func do_action_(
 				else:
 					GDRx.try(func():
 						on_completed.call()
-					).catch("Exception", func(e):
+					).catch("Error", func(e):
 						observer.on_error(e)
 					).end_try_catch()
 					
@@ -108,7 +108,7 @@ static func do_after_next(source : Observable, after_next : Callable) -> Observa
 			GDRx.try(func():
 				observer.on_next(value)
 				after_next.call(value)
-			).catch("Exception", func(e):
+			).catch("Error", func(e):
 				observer.on_error(e)
 			).end_try_catch()
 		
@@ -185,18 +185,18 @@ static func do_on_terminate(source : Observable, on_terminate : Callable) -> Obs
 		var on_completed = func():
 			if not GDRx.try(func():
 				on_terminate.call()
-			).catch("Exception", func(err):
+			).catch("Error", func(err):
 				observer.on_error(err)
 			).end_try_catch():
 				observer.on_completed()
 		
-		var on_error = func(exception):
+		var on_error = func(error):
 			if not GDRx.try(func():
 				on_terminate.call()
-			).catch("Exception", func(err):
+			).catch("Error", func(err):
 				observer.on_error(err)
 			).end_try_catch():
-				observer.on_error(exception)
+				observer.on_error(error)
 		
 		return source.subscribe(
 			observer.on_next, on_error, on_completed,
@@ -220,15 +220,15 @@ static func do_after_terminate(source : Observable, after_terminate : Callable) 
 			observer.on_completed()
 			GDRx.try(func():
 				after_terminate.call()
-			).catch("Exception", func(err):
+			).catch("Error", func(err):
 				observer.on_error(err)
 			).end_try_catch()
 		
-		var on_error = func(exception):
-			observer.on_error(exception)
+		var on_error = func(error):
+			observer.on_error(error)
 			GDRx.try(func():
 				after_terminate.call()
-			).catch("Exception", func(err):
+			).catch("Error", func(err):
 				observer.on_error(err)
 			).end_try_catch()
 		
@@ -281,19 +281,19 @@ static func do_finally(finally_action : Callable) -> Callable:
 						finally_action.call()
 						was_invoked[0] = true
 				) \
-				.catch("Exception", func(err):
+				.catch("Error", func(err):
 					observer.on_error(err)
 				) \
 				.end_try_catch()
 			
-			var on_error = func(exception):
-				observer.on_error(exception)
+			var on_error = func(error):
+				observer.on_error(error)
 				GDRx.try(func():
 					if not was_invoked[0]:
 						finally_action.call()
 						was_invoked[0] = true
 				) \
-				.catch("Exception", func(err):
+				.catch("Error", func(err):
 					observer.on_error(err)
 				) \
 				.end_try_catch()

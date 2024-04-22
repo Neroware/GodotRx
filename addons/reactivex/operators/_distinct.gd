@@ -56,8 +56,8 @@ static func distinct_(
 				if GDRx.try(func():
 					key.v = key_mapper.call(key.v)
 				) \
-				.catch("Exception", func(ex):
-					observer.on_error(ex)
+				.catch("Error", func(err):
+					observer.on_error(err)
 				) \
 				.end_try_catch(): return
 				

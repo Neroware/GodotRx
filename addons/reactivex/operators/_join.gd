@@ -49,8 +49,8 @@ static func join_(
 				if GDRx.try(func():
 					duration.v = left_duration_mapper.call(value)
 				) \
-				.catch("Exception", func(exception):
-					observer.on_error(exception)
+				.catch("Error", func(error):
+					observer.on_error(error)
 				) \
 				.end_try_catch(): return
 				
@@ -96,8 +96,8 @@ static func join_(
 				if GDRx.try(func():
 					duration.v = right_duration_mapper.call(value)
 				) \
-				.catch("Exception", func(exception):
-					observer.on_error(exception)
+				.catch("Error", func(error):
+					observer.on_error(error)
 				) \
 				.end_try_catch(): return
 				

@@ -50,7 +50,7 @@ static func sequence_equal_(
 					if GDRx.try(func():
 						equal.v = comparer_.call(v, x)
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						observer.on_error(e)
 					) \
 					.end_try_catch(): return
@@ -82,7 +82,7 @@ static func sequence_equal_(
 					if GDRx.try(func():
 						equal.v = comparer_.call(v, x)
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						observer.on_error(e)
 					) \
 					.end_try_catch(): return

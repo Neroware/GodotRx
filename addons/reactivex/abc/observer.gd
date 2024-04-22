@@ -14,12 +14,12 @@ class_name ObserverBase
 
 ## Called when the [Observable] emits a new item on the stream
 func on_next(_i):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Called when the [Observable] emits an error on the stream
 func on_error(_e):
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 
 ## Called when the [Observable] is finished and no more items are sent.
 func on_completed():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()

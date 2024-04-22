@@ -20,8 +20,8 @@ static func concat_with_iterable_(sources : IterableBase) -> Observable:
 			if GDRx.try(func():
 				current.v = sources_.next()
 			) \
-			.catch("Exception", func(ex):
-				observer.on_error(ex)
+			.catch("Error", func(err):
+				observer.on_error(err)
 			) \
 			.end_try_catch():
 				pass

@@ -1,22 +1,22 @@
 extends PeriodicScheduler
 class_name CatchScheduler
 
-## A scheduler with exception handling wrapping a [SchedulerBase]
+## A scheduler with error handling wrapping a [SchedulerBase]
 
 var _scheduler : SchedulerBase
 var _handler : Callable
 var _recursive_original : SchedulerBase
 var _recursive_wrapper : CatchScheduler
 
-## Wraps a scheduler, passed as constructor argument, adding exception
+## Wraps a scheduler, passed as constructor argument, adding error
 ## handling for scheduled actions. The handler should return [b]true[/b] to
-## indicate it handled the exception successfully. Falsy return values will
-## be taken to indicate that the exception should be escalated (raised by
+## indicate it handled the error successfully. Falsy return values will
+## be taken to indicate that the error should be escalated (raised by
 ## this scheduler).
 ## [br][br]
 ## [b]Args:[/b] [br]
 ##    [code]scheduler[/code]: The scheduler to be wrapped. [br]
-##    [code]handler[/code]: Callable to handle exceptions raised by wrapped scheduler.
+##    [code]handler[/code]: Callable to handle errors raised by wrapped scheduler.
 func _init(scheduler : SchedulerBase, handler : Callable):
 	super._init()
 	self._scheduler = scheduler
@@ -51,7 +51,7 @@ func schedule_periodic(
 	state = null) -> DisposableBase:
 		var schedule_periodic = self._scheduler.get("schedule_periodic")
 		if schedule_periodic == null:
-			GDRx.exc.NotImplementedException.Throw()
+			NotImplementedError.raise()
 			return Disposable.new()
 		
 		var disp : SingleAssignmentDisposable = SingleAssignmentDisposable.new()
@@ -64,7 +64,7 @@ func schedule_periodic(
 			if GDRx.try(func():
 				res.v = action.call(state)
 			) \
-			.catch("Exception", func(e):
+			.catch("Error", func(e):
 				failed.v = true
 				if not self._handler.call(e):
 					GDRx.raise(e)
@@ -89,7 +89,7 @@ func _wrap(action : Callable) -> Callable:
 		if GDRx.try(func():
 			res.v = action.call(parent._get_recursive_wrapper(self_), state)
 		) \
-		.catch("Exception", func(ex):
+		.catch("Error", func(ex):
 			if not parent._handler.call(ex):
 				GDRx.raise(ex)
 		) \

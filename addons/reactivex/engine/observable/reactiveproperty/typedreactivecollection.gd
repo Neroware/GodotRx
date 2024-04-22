@@ -19,7 +19,7 @@ func _type_check(value) -> bool:
 	return not self._type_equality.call(self._type, value)
 
 func _type_check_fail(value, default = null):
-	var exc = GDRx.exc.TypeMismatchException.new(value)
+	var exc = TypeMismatchError.new(value)
 	if self._push_type_err: push_error(exc)
 	exc.throw(value)
 	return default

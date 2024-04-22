@@ -46,8 +46,8 @@ static func expand_(
 						if GDRx.try(func():
 							result.v = mapper.call(value)
 						) \
-						.catch("Exception", func(ex):
-							observer.on_error(ex)
+						.catch("Error", func(err):
+							observer.on_error(err)
 						) \
 						.end_try_catch(): return
 						

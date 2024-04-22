@@ -13,5 +13,5 @@ func schedule_signal(
 	_action : Callable, 
 	_state = null
 ) -> DisposableBase:
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
 	return null

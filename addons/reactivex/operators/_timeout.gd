@@ -5,7 +5,7 @@ static func timeout_(
 	scheduler : SchedulerBase = null
 ) -> Callable:
 	
-	var _other = other if other != null else GDRx.obs.throw(GDRx.exc.Exception.new("Timeout"))
+	var _other = other if other != null else GDRx.obs.throw(RxBaseError.new("Timeout"))
 	var obs = _other
 	
 	var timeout = func(source : Observable) -> Observable:

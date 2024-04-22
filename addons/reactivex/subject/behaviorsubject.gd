@@ -24,7 +24,7 @@ func _subscribe_core(
 	observer : ObserverBase,
 	_scheduler : SchedulerBase = null,
 ) -> DisposableBase:
-	var ex
+	var err
 	if true:
 		var __ = LockGuard.new(self.lock)
 		if not check_disposed(): return Disposable.new()
@@ -32,10 +32,10 @@ func _subscribe_core(
 			self.observers.append(observer)
 			observer.on_next(self.value)
 			return InnerSubscription.new(self, observer)
-		ex = self.exception
+		err = self.error_value
 	
-	if ex != null:
-		observer.on_error(ex)
+	if err != null:
+		observer.on_error(err)
 	else:
 		observer.on_completed()
 	

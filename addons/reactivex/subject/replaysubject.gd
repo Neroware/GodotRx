@@ -71,8 +71,8 @@ func _subscribe_core(
 		for item in self.queue:
 			so.on_next(item.value)
 		
-		if self.exception != null:
-			so.on_error(self.exception)
+		if self.error_value != null:
+			so.on_error(self.error_value)
 		elif self.is_stopped:
 			so.on_completed()
 	
@@ -103,14 +103,14 @@ func _on_next_core(i):
 		var so : ScheduledObserver = observer
 		so.ensure_active()
 
-## Notifies all subscribed observers with the exception.
+## Notifies all subscribed observers with the error.
 func _on_error_core(e):
 	var observers_
 	if true:
 		var __ = LockGuard.new(self.lock)
 		observers_ = self.observers.duplicate()
 		self.observers.clear()
-		self.exception = e
+		self.error_value = e
 		var now = self.scheduler.now()
 		self._trim(now)
 	

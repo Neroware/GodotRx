@@ -31,7 +31,7 @@ static func timeout_with_mapper_(
 #	"""
 	
 	var first_timeout_ = first_timeout if first_timeout != null else GDRx.obs.never()
-	var other_ = other if other != null else GDRx.obs.throw(GDRx.exc.Exception.new("Timeout"))
+	var other_ = other if other != null else GDRx.obs.throw(RxBaseError.new("Timeout"))
 	
 	var timeout_with_mapper = func(source : Observable) -> Observable:
 		var subscribe = func(
@@ -95,7 +95,7 @@ static func timeout_with_mapper_(
 					if GDRx.try(func():
 						timeout.v = timeout_duration_mapper.call(x)
 					) \
-					.catch("Exception", func(e):
+					.catch("Error", func(e):
 						observer.on_error(e)
 					) \
 					.end_try_catch(): return

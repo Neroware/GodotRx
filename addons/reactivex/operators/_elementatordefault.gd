@@ -3,7 +3,7 @@ static func element_at_or_default_(
 ) -> Callable:
 	
 	if index < 0:
-		GDRx.exc.ArgumentOutOfRangeException.new(
+		ArgumentOutOfRangeError.new(
 			"Argument cannot be lower than zero!").throw()
 		index = 0
 	
@@ -28,7 +28,7 @@ static func element_at_or_default_(
 			
 			var on_completed = func():
 				if not has_default:
-					observer.on_error(GDRx.exc.ArgumentOutOfRangeException.new())
+					observer.on_error(ArgumentOutOfRangeError.new())
 				else:
 					observer.on_next(default_value)
 					observer.on_completed()

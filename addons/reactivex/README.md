@@ -194,17 +194,17 @@ var state = await timer.next()
 Please note that coroutines with `await` do not work well with the error handling
 described in the next section. The tailed execution of an async function
 state will not be considered in the observers' `on_error`-contract.
-If somebody can implement a better `ExceptionHandler` for this case, be my guest!
+If somebody can implement a better `ErrorHandler` for this case, be my guest!
 
 ### Error handling
-In my endless sanity, I throw my own custom exception handling into the ring. 
-When an exception is thrown, the Observers should be notified via their 
+In my endless sanity, I throw my own custom error handling into the ring. 
+When an error is thrown, the Observers should be notified via their 
 `on_error()` contract. If this works all the time, I do not know at this point.
 
 ```swift
 func division(n1 : int, n2 : int) -> int:
 	if n2 == 0:
-		GDRx.exc.Exception.new("Divided by zero!").throw()
+		RxBaserError.new("Divided by zero!").throw()
 		return -1 # Stops control flow, the -1 has no meaning and is discarded.
 	return n1 / n2
 
@@ -316,17 +316,17 @@ func _ready():
 
 A ReadOnlyReactiveProperty with read-only access can be created via the
 `ReactiveProperty.to_readonly()` method. Trying to set the value will throw
-an exception.
+an error.
 
 ```swift
 # To ReadOnlyReactiveProperty
 var Hp : ReadOnlyReactiveProperty = _Hp.to_readonly()
 
-# Writing to ReadOnlyReactiveProperty causes an exception
+# Writing to ReadOnlyReactiveProperty causes an error
 GDRx.try(func(): 
 	Hp.Value = -100
 ) \
-.catch("Exception", func(exc):
+.catch("Error", func(exc):
 	print("Err: ", exc)
 ) \
 .end_try_catch()

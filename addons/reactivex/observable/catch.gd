@@ -1,5 +1,5 @@
 ## Continues an observable sequence that is terminated by an
-##    exception with the next observable sequence.
+##    error with the next observable sequence.
 ##    [br]
 ##    [b]Examples:[/b]
 ##        [codeblock]
@@ -24,12 +24,12 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 		
 		var subscription = SerialDisposable.new()
 		var cancelable = SerialDisposable.new()
-		var last_exception = RefValue.Null()
+		var last_error = RefValue.Null()
 		var is_disposed = RefValue.Set(false)
 		
 		var action = func(_scheduler : SchedulerBase, _state = null, action_ : Callable = func(__, ___, ____): return):
-			var on_error = func(exn):
-				last_exception.v = exn
+			var on_error = func(err):
+				last_error.v = err
 				cancelable.disposable = _scheduler.schedule(action_.bind(action_))
 			
 			if is_disposed.v:
@@ -39,14 +39,14 @@ static func catch_with_iterable_(sources : IterableBase) -> Observable:
 			if GDRx.try(func():
 				current.v = sources_.next()
 			) \
-			.catch("Exception", func(ex):
-				observer.on_error(ex)
+			.catch("Error", func(err):
+				observer.on_error(err)
 			) \
 			.end_try_catch():
 				pass
 			elif current.v is ItEnd:
-				if last_exception.v != null:
-					observer.on_error(last_exception.v)
+				if last_error.v != null:
+					observer.on_error(last_error.v)
 				else:
 					observer.on_completed()
 			else:

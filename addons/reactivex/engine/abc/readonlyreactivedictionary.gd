@@ -64,12 +64,13 @@ var Count : int:
 ## [Observable]<[ReadOnlyReactiveDictionaryBase.DictionaryAddKeyEvent]>
 var ObserveAddKey : Observable:
 	get: return self._observe_add_key.oftype(ReadOnlyReactiveDictionaryBase.DictionaryAddKeyEvent)
-var _observe_add_key : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_add_key : Observable = GDRx.throw(NotImplementedError.new())
 
 ## Creates an [Observable] which emits the dictionary's current key count
 ## when the size changes.
 func ObserveCountChanged(_notify_current_count : bool = false) -> Observable:
-	return GDRx.exc.NotImplementedException.Throw(GDRx.throw(GDRx.exc.NotImplementedException.new()))
+	return GDRx.throw(NotImplementedError.new())
+
 
 ## [Observable]<[int]>
 var ObserveCount : Observable:
@@ -78,12 +79,12 @@ var ObserveCount : Observable:
 ## [Observable]<[ReadOnlyReactiveDictionaryBase.DictionaryRemoveKeyEvent]>
 var ObserveRemoveKey : Observable:
 	get: return self._observe_remove_key.oftype(ReadOnlyReactiveDictionaryBase.DictionaryRemoveKeyEvent)
-var _observe_remove_key : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observe_remove_key : Observable = GDRx.throw(NotImplementedError.new())
 
 ## [Observable]<[ReadOnlyReactiveDictionaryBase.DictionaryUpdateValueEvent]>
 var ObserveUpdateValue : Observable:
 	get: return self._observer_update_value.oftype(ReadOnlyReactiveDictionaryBase.DictionaryUpdateValueEvent)
-var _observer_update_value : Observable = GDRx.throw(GDRx.exc.NotImplementedException.new())
+var _observer_update_value : Observable = GDRx.throw(NotImplementedError.new())
 
 var this
 
@@ -96,34 +97,44 @@ func _notification(what):
 		this.dispose()
 
 func to_dict() -> Dictionary:
-	return GDRx.exc.NotImplementedException.Throw({})
+	NotImplementedError.raise()
+	return {}
 
 func find_key(value) -> Variant:
-	return GDRx.exc.NotImplementedException.Throw(null)
+	NotImplementedError.raise()
+	return null
 
 func get_value(key, default = null) -> Variant:
-	return GDRx.exc.NotImplementedException.Throw(null)
+	NotImplementedError.raise()
+	return null
 
 func has_key(key) -> bool:
-	return GDRx.exc.NotImplementedException.Throw(false)
+	NotImplementedError.raise()
+	return false
 
 func has_all(keys : Array) -> bool:
-	return GDRx.exc.NotImplementedException.Throw(false)
+	NotImplementedError.raise()
+	return false
 
 func hash() -> int:
-	return GDRx.exc.NotImplementedException.Throw(0)
+	NotImplementedError.raise()
+	return 0
 
 func is_empty() -> bool:
-	return GDRx.exc.NotImplementedException.Throw(false)
+	NotImplementedError.raise()
+	return false
 
 func keys() -> Array:
-	return GDRx.exc.NotImplementedException.Throw([])
+	NotImplementedError.raise()
+	return []
 
 func size() -> int: 
-	return GDRx.exc.NotImplementedException.Throw(-1)
+	NotImplementedError.raise()
+	return -1
 
 func values() -> Array:
-	return GDRx.exc.NotImplementedException.Throw([])
+	NotImplementedError.raise()
+	return []
 
 func dispose():
-	GDRx.exc.NotImplementedException.Throw()
+	NotImplementedError.raise()
