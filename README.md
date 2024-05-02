@@ -285,7 +285,9 @@ via the `Value` property inside the ReactiveProperty instance.
 
 ```swift
 var prop = ReactiveProperty.new(42)
-prop.subscribe(func(i): print(">> ", i))
+// You must save the subscribed result into a variable.
+// If you'd like the subscription to continue behind the scope of the method you must save the variable in a wider scope.
+var subscribed = prop.subscribe(func(i): print(">> ", i))
 
 # Emits an item on the stream
 prop.Value += 42 
