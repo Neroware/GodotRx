@@ -11,11 +11,9 @@ func _init(url_ : String, error_code_ : int, error_message_ : String):
 	self.url = url_
 	self.error_code = error_code_
 	self.error_message = error_message
-	var msg = "HTTP Request to host '" + url + "' failed! " \
-		+ "(" + error_message + ")"
+	var msg = "HTTP Request to host '" + self.url + "' failed with code " + str(self.error_code) \
+		+ "" if self.error_message.is_empty() else " (" + self.error_message + ")"
 	super._init(msg, ERROR_TYPE)
 
-static func raise(error_message : String, default = null, url : String = "", error_code : int = -1):
-	var msg = "HTTP Request to host '" + url + "' failed! " \
-		+ "(" + error_message + ")"
+static func raise(default = null, error_message : String = "", url : String = "", error_code : int = -1):
 	return GDRx.raise(HttpRequestFailedError.new(url, error_code, error_message), default)

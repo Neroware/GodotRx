@@ -147,7 +147,7 @@ func raise(exc_ : ThrowableBase, default = null) -> Variant:
 
 ## Raises a [RxBaseError] containing the given message
 func raise_message(msg : String, default = null):
-	return RxBaseError.raise(msg, default)
+	return RxBaseError.raise(default, msg)
 
 ## Construct an [IterableBase] onto x.
 func to_iterable(x) -> IterableBase:

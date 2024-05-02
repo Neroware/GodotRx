@@ -27,5 +27,5 @@ func tags() -> Array[String]:
 		txs.append(t as String)
 	return txs
 
-static func raise(msg : String, default = null):
+static func raise(default = null, msg : String = "An error occured"):
 	return GDRx.raise(RxBaseError.new(msg), default)
