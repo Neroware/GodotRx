@@ -66,3 +66,20 @@ func lt(other) -> bool:
 		return false
 	return (self._x.is_empty() and other._x.is_empty()) \
 	or GDRx.lt(self._x[0], other._x[0])
+
+var __it__ : Iterator
+var __curr__ : Variant
+
+func _iter_init(arg):
+	self.__it__ = iter()
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_next(arg):
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_get(arg):
+	return self.__curr__

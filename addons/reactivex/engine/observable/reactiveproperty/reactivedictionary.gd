@@ -182,3 +182,6 @@ func _to_string() -> String:
 	if self.is_disposed:
 		return "<<Disposed ReactiveDictionary>>"
 	return str(self._data)
+
+func iter() -> Iterator:
+	return GDRx.iter(self._data)

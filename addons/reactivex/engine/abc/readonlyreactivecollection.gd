@@ -171,3 +171,20 @@ func size() -> int:
 
 func dispose():
 	NotImplementedError.raise()
+
+var __it__ : Iterator
+var __curr__ : Variant
+
+func _iter_init(arg):
+	self.__it__ = iter()
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_next(arg):
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_get(arg):
+	return self.__curr__

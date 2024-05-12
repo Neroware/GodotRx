@@ -138,3 +138,24 @@ func values() -> Array:
 
 func dispose():
 	NotImplementedError.raise()
+
+func iter() -> Iterator:
+	NotImplementedError.raise()
+	return null
+
+var __it__ : Iterator
+var __curr__ : Variant
+
+func _iter_init(arg):
+	self.__it__ = self.iter()
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_next(arg):
+	var continue_ = self.__it__.has_next()
+	self.__curr__ = self.__it__.next()
+	return continue_
+
+func _iter_get(arg):
+	return self.__curr__

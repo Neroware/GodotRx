@@ -93,3 +93,6 @@ func dispose():
 	this.is_disposed = true
 	for observer in this._observers:
 		observer.on_completed()
+
+func iter() -> Iterator:
+	return GDRx.iter(self._dict)

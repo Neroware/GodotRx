@@ -245,9 +245,6 @@ func reset():
 	if self._count != c:
 		self._notify_all("CountChanged", self._count)
 
-func _iter() -> Iterator:
-	return GDRx.util.Iter(self._data).iter()
-
 func iter() -> Iterator:
 	if self.is_disposed:
 		return DisposedError.raise()
