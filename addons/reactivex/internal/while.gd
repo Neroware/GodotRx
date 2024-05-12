@@ -20,7 +20,7 @@ class _Iterator extends Iterator:
 		self._itcond = cond
 	
 	func has_next() -> bool:
-		return self._itit.has_next() or not self._itcond.call()
+		return self._itit.has_next() and self._itcond.call()
 	
 	func next() -> Variant:
 		return ItEnd.new() if not self._itcond.call() else self._itit.next()
