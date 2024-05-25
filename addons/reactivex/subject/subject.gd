@@ -255,19 +255,19 @@ class _Observable extends Observable:
 ## [br][br]
 ## [code]var item = await obs.next()[/code]
 func next() -> Variant:
-	return await ObservableAwait.new(obs).on_next()
+	return await ObservableAwait.new().on_next(obs)
 
 ## Coroutine which finishes when sequence terminates with error.
 ## [br][br]
 ## [code]var err = await obs.error()[/code]
 func error() -> Variant:
-	return await ObservableAwait.new(obs).on_error()
+	return await ObservableAwait.new().on_error(obs)
 
 ## Coroutine which finishes when sequence terminates gracefully.
 ## [br][br]
 ## [code]await obs.completed()[/code]
 func completed():
-	return await ObservableAwait.new(obs).on_completed()
+	return await ObservableAwait.new().on_completed(obs)
 
 # ============================================================================ #
 # PIPE                                                                         #
@@ -890,6 +890,10 @@ func to_iterable() -> Observable:
 
 ## See: [b]res://addons/reactivex/operators/_tolist.gd[/b]
 func to_list() -> Observable:
+	return GDRx.op.to_list().call(obs)
+
+## See: [b]res://addons/reactivex/operators/_tolist.gd[/b]
+func to_array() -> Observable:
 	return GDRx.op.to_list().call(obs)
 
 ## See: [b]res://addons/reactivex/operators/_toset.gd[/b]
