@@ -9,23 +9,33 @@ func _init():
 func run_tests():
 	var test_unit_name = self.get("TEST_UNIT_NAME") if self.get("TEST_UNIT_NAME") \
 		 != null else "<<test>>"
+	print("[ReactiveX]: ================================")
 	print("[ReactiveX]: Running tests for: ", test_unit_name)
+	print("[ReactiveX]: --------------------------------")
 	var method_list = get_method_list()
 	for method in method_list:
 		if method.name.begins_with("test_"):
 			print("[ReactiveX]: Running ", method.name)
 			var result = await call(method.name)
 			test_results.append({method.name: result})
-	_print_results()
-	print("[ReactiveX]: ----------------")
+	self._print_results()
+	print("[ReactiveX]: ================================")
+	print("[ReactiveX]:")
 
 func _print_results():
+	print("[ReactiveX]: --------------------------------")
+	var success = 0
+	var failed = 0
 	for result in test_results:
 		for test_name in result.keys():
 			if result[test_name]:
-				print("[ReactiveX]: > ", test_name, ": FAIL")
+				failed += 1
+				print("[ReactiveX]: ", test_name, ": FAIL")
 			else:
-				print("[ReactiveX]: > ", test_name, ": PASS")
+				success += 1
+				print("[ReactiveX]: ", test_name, ": PASS")
+	print("[ReactiveX]: --------------------------------")
+	print("[ReactiveX]: ", success, " PASS, ", failed, " FAIL - (", success, " / ", success + failed, ")")
 
 class _Error extends Comparable:
 	var type : String
@@ -71,10 +81,20 @@ static func to_history() -> Callable:
 		
 	return to_history_
 
-static func is_equals(obs : Observable, seq : Array) -> bool:
+static func compare(obs : Observable, seq : Array) -> bool:
 	var history : Observable = to_history().call(obs)
 	var result : Array = await history.next()
-	for i in range(seq.size()):
-		if i >= result.size() or not GDRx.eq(seq[i], result[i]):
+	return _compare_sequence(seq, result)
+
+static func _compare_sequence(seq1 : Array, seq2 : Array) -> bool:
+	if seq1.size() != seq2.size():
+		return true
+	
+	for i in range(seq1.size()):
+		if seq1[i] is Array and seq2[i] is Array:
+			if _compare_sequence(seq1[i], seq2[i]):
+				return true
+		if not GDRx.eq(seq1[i], seq2[i]):
 			return true
+	
 	return false
