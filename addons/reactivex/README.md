@@ -1,9 +1,12 @@
 # GodotRx - Reactive Extensions for the Godot Game Engine version 4 (GDRx)
 
+(For the native version, 
+go to https://github.com/Neroware/NativeGodotRx)
+
 ## Warning
 **Untested** While it is almost a direct port of RxPY, this library has not 
-yet been fully tested in action. Proceed with caution! (For the native version, 
-go to https://github.com/Neroware/NativeGodotRx)
+yet been fully battle tested in action. Proceed with caution! Test submissions
+and bug reports are welcome!
 
 ## What is GodotRx?
 GodotRx (short: GDRx) is a full implementation of ReactiveX for the Godot Game 
@@ -15,19 +18,11 @@ GDScript.
 observable data streams. It encourages high cohesion 
 and low coupling rendering the code more easily readable and extendable.
 
-The Godot Engine brings a well thought-out event system as well as
-a nice implementation of coroutines to the table. It allows you to easily 
-implement asynchronous code execution, meaning that code is not run in
-the sequence order which it is written in. An observer listens to an 
-observable event which fires when something important happens in the program 
-resulting in side-effects for the connected instances, this can be e.g. a player
-attacking an enemy or an item, which is picked up.
+The Godot Engine offers a robust event system in form of signals and a seamless implementation of coroutines, making it easy to execute asynchronous code. This allows you to run code outside of the typical sequential order, which is essential for handling complex tasks like user inputs, network responses, and animations.
 
-Rx extends this idea by turning all forms of data within the program like 
-GD-signals, GD-lifecycle events, callbacks, data structures, coroutines etc. 
-into observable data streams which emit items. These data streams, referred to as
-'Observables', can be transformed using concepts from the world of functional 
-programming. (Say hello to Flat-Map, Reduce and friends!)
+In this context, an observer listens to an observable event, which triggers when something significant occurs in the program, leading to side effects in the connected instances. For example, this could be a player attacking an enemy on button press or picking up an item when a collision is detected.
+
+GDRx enhances this idea by converting all forms of data within the program, such as GD-signals, GD-lifecycle events, callbacks, data structures, coroutines, etc., into observable data streams that emit items. These data streams, known as 'Observables', are immutable and can be transformed using functional programming techniques to describe more complex behavior. (Say hello to Flat-Map, Filter, Reduce, and their functional friends!)
 
 ## Installation
 You can add GDRx to your Godot 4 project as followed:
@@ -41,9 +36,185 @@ You can add GDRx to your Godot 4 project as followed:
 GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ```
 
+**Note:** If this fails, add the `GDRx` singleton in file `__gdrxsingleton__.gd` manually.
+
+## Features
+
+GDRx is a full implementation of the Observer design pattern combined with the Iterator design pattern.
+The following classes are featured:
+
+**Observer:** An observer is an entity that listens to an observable sequence. In standard GDScript, you would connect a `Callable` to a `Signal` creating an implicit observer that receives a notification from the signal and forwards it to the corresponding callback. In GDRx, each observer follows a strict contract consisting of the three notifications `on_next(item)`, `on_error(error)` and `on_completed()`.
+
+**Observable:** An observable is an entity that can be subscribed to by an observer. This is achieved through the subscription-operator, a method with the signature `subscribe(on_next, on_error, on_completed)`. Whenever an observer subscribes to the observables via the subscription-method it receives notifications from the observer-observable-contract over the course of the observer's active subscription.
+
+
+**Disposable:** Disposables are entities that represent subscriptions in GDRx. They are used for clean-up and dispose themselves automatically when they go out of scope or when the method `dispose()` is called explicitly. The subscription-operator returns the new subscription (in Godot you would call it connection) as a disposable. Since disposables delete themselves when going out of scope, their lifetime can be linked to another object's lifetime via the method `dispose_with(obj)`.
+*Also a huge shoutout to Semickolon (https://github.com/semickolon/GodotRx) for his amazing
+hack which automatically disposes subscriptions on instance death. Good on ya!*
+
+**Scheduler:** Schedulers schedule pieces of work (actions) for execution. The most prominent scheduling strategies in GDRx are as followed:
+
+- *ImmediateScheduler:* Schedules actions to be executed immediately. This would be equivalent to invoking the action directly.
+- *TrampolineScheduler:* A scheduler with additional protection against recursive scheduling.
+- *CurrentThreadScheduler:* A TrampolineScheduler that schedules actions on the current thread. This is usually the default scheduling strategy.
+- *EventLoopScheduler:* Creates a new thread and schedules all actions on it.
+- *NewThreadScheduler:* Creates a new thread for each scheduled action.
+- *SceneTreeTimeoutScheduler:* Schedules actions for execution after a timeout has expired. The timer is based on Godot's `SceneTreeTimer`.
+- *ThreadedTimeoutscheduler:* Schedules actions for execution after a timeout has expired. The timer is run on a separate thread.
+- *PeriodicScheduler:* Allows periodic scheduling of actions.
+- *GodotSignalScheduler:* Schedules an action for execution after a `Signal` is received.
+
+**Iterable:** Iterables are sequences that can be iterated using Godot's `for`-loop. They become relevant when working with observable data streams and can also be infinite.
+
+**Subject:** A subject implements both observable and observer behavior meaning it can receive notifications and allow other observers to subscribe to it at the same time.
+
+**ReactiveProperty:** A reactive property is a special form of observable that maintains a value and sends notifications whenever a change to said value occurs. Highly useful!
+
+**Operator:** An operator is a function taking an observable sequence and transforming it to another. A large set of functional operators can be used to transform observables. **Be careful! I have not tested them all...! Test submissions are welcome!** For more info, also check out the comments in the operator scripts!
+
+**Throwable:** The item of an `on_error`-notification. Raising an error sends a notification to all observers of the corresponding observable sequence, which terminates the stream ungracefully. This does not work with observables containing coroutines due to Godot's technical limitations!
+
+*For more information, it is recommended to read the RxPY documentation, which covers all the features of GDRx that are not directly related to the Godot Engine.*
+
 ## Usage
 
-### Type Fixation
+### Basics
+
+In GodotRx, an observer listens to an observable sequence. The `GDRx`-singleton contains a selection of constructors:
+
+```swift
+var observable = GDRx.from([1, 2, 3, 4])
+```
+
+A connection can be established via `Observable.subscribe(...)` as followed:
+
+```swift
+var subscription = observable.subscribe(
+    func(i): print("next> ", i), 
+    func(e): print("Err> ", e), 
+    func(): print("Completed!"))
+```
+
+A subscription is automatically disposed whenever it goes out of scope. Do not forget to link subscription lifetime to an object via `Disposable.dispose_with(obj)`:
+
+```swift
+GDRx.start_periodic_timer(1.0) \
+    .subscribe(func(i): print("Tick: ", i)) \
+    .dispose_with(self)
+```
+
+### Timers
+
+Timers were already possible either by using the `Timer`-Node or by combining a coroutine with an awaited timeout signal of a `SceneTreeTimer`. For periodic timers, code gets even more convoluted. GDRx drastically simplifies creating timers.
+
+```swift
+func _ready():
+	GDRx.start_periodic_timer(1.0) \
+		.subscribe(func(i): print("Periodic: ", i)) \
+		.dispose_with(self)
+	GDRx.start_timer(2.0) \
+		.subscribe(func(i): print("One shot: ", i)) \
+		.dispose_with(self)
+```
+
+If you want to schedule a timer running on a separate thread, the 
+ThreadedTimeoutScheduler Singleton allows you to do so. **Careful:** Once the thread
+is started it will not stop until the interval has passed!
+
+```swift
+	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
+		.subscribe(func(i): print("Threaded one shot: ", i)) \
+		.dispose_with(self)
+	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
+		.subscribe(func(i): print("Threaded periodic: ", i)) \
+		.dispose_with(self)
+```
+
+Additionally, various process and pause modes are possible. I created
+a list with various versions of the SceneTreeTimeoutScheduler for this. Access
+them like this:
+
+```swift
+	Engine.time_scale = 0.5
+
+	var process_always = false
+	var process_in_physics = false
+	var ignore_time_scale = false
+
+	var scheduler = SceneTreeTimeoutScheduler.singleton(
+		process_always, process_in_physics, ignore_time_scale)
+```
+
+Note that the default SceneTreeTimeoutScheduler runs at process timestep scaling with 
+`Engine.time_scale` and also considers pause mode.
+
+
+### Transforming signals
+
+A very nice feature of GodotRx are signal transformations through observables. Let us take a simple example with two signals. Assume, we only want to execute logic, when both signals are emitted. In Godot, this would require some additional logic in the signal's callbacks. In GDRx, this can be achieved this behavior through observable transformations.
+
+```swift
+signal signal_a(a)
+signal signal_b(b)
+
+var combined_signal : Observable
+
+func _ready():
+    combined_signal = GDRx.from_signal(signal_a) \
+        .zip([GDRx.from_signal(signal_b)])
+```
+
+Using the `from_signal`-constructor, an observable can be created on top of a signal, which emits items whenever the signal is emitted. Using the `zip`-operator, the resulting observable only emits items, when both signals have been emitted. This even has the advantages that the resulting observable can be passed around like a `Signal` instance as first-class-citizen.
+
+### Error handling
+
+GDRx features custom error handling. Raising an error inside an observable sequence causes all observers to be notified with said error. The following is an example of a safe division operation.
+
+```swift
+var safe_division = func(a, b):
+	return a / b if b != 0 else DividedByZeroError.raise(-1)
+var mapped = GDRx.of([6, 2, 1, 0, 2, 1]) \
+	.pairwise() \
+	.map(func(tup : Tuple): return safe_division.call(tup.first, tup.second))
+```
+
+This code results in the sequence "3, 2" after which the observers are notified with a "DividedByZeroError" notification terminating the observable.
+
+**Warning** It is currently technically impossible to get the error handling working with asynchronous GDScript, meaning this will break in scenarios were errors are raised after an `await`-statement. If somebody has a solution to this problem, feel free to send me an E-Mail or answer to issue #20!
+
+### Coroutines
+
+In GDRx, sequential execution of coroutines can be managed through observable streams, which helps readability.
+
+```swift
+var _reference
+
+func coroutine1():
+	# ... 
+	print("Do something.")
+	# ...
+	await get_tree().create_timer(1.0).timeout
+	# ...
+	print("Do something.")
+	# ...
+
+func coroutine3():
+	await get_tree().create_timer(1.0).timeout
+	print("Done.")
+
+func _ready():
+	GDRx.concat_streams([
+		GDRx.from_coroutine(coroutine1),
+		GDRx.if_then(
+			func(): return self._reference != null,
+			GDRx.from_coroutine(func(): await self._reference.coroutine2())
+		),
+		GDRx.from_coroutine(coroutine3),
+	]).subscribe().dispose_with(self)
+```
+
+### Type fixation
+
 GDScript is a fully dynamically typed language. This has many advantages, however, 
 at some point, we might want to fix types of a certain computation. 
 After all, variables can get type hints as well! Since Godot does not support
@@ -67,214 +238,21 @@ func _ready():
 	self._obs2 : Observable = GDRx.just(RefValue.Set(42))
 ```
 
-### Coroutines
-Assume we have a coroutine which executes code, awaits a signal and then continues
-by calling a second coroutine (in another instance for example) if a condition
-is met.
+### Multithreading
+
+With GDRx multithreading is just one scheduling away.
 
 ```swift
-var _reference
-
-func _ready():
-	coroutine1()
-
-func coroutine1():
-	# ... 
-	print("Do something.")
-	# ...
-	await get_tree().create_timer(1.0).timeout
-	# ...
-	print("Do something.")
-	# ...
-	if self._reference != null:
-		await self._reference.coroutine2()
-	await coroutine3()
-
-func coroutine3():
-	await get_tree().create_timer(1.0).timeout
-	print("Done.")
-```
-Following a good coding style, each of these three coroutines executes one 
-specific task, however, the first coroutine is also tasked with handling control
-flow (null check of self._reference). GDRx allows us to easily coordinate 
-these program parts by providing a declarative execution plan.
-
-```swift
-var _reference
-
-func _ready():
-	GDRx.concat_streams([
-		GDRx.from_coroutine(coroutine1),
-		GDRx.if_then(
-			func(): return self._reference != null,
-			GDRx.from_coroutine(func(): await self._reference.coroutine2())
-		),
-		GDRx.from_coroutine(coroutine3),
-	]).subscribe().dispose_with(self)
-
-func coroutine1():
-	# ... 
-	print("Do something.")
-	# ...
-	await get_tree().create_timer(1.0).timeout
-	# ...
-	print("Do something.")
-	# ...
-
-func coroutine3():
-	await get_tree().create_timer(1.0).timeout
-	print("Done.")
-```
-As you can see, coroutine1() now only contains code bound to the task it should
-perform. Remember: In good code design, each function should execute a single 
-task only!
-
-### Timers
-Timers were already possible with coroutines but when running on a separate thread
-things get a bit tricky. Godot 4 appears to not support signals on separate 
-threads. Also, periodic timers only exist as Node objects. GDRx drastically
-simplifies creating timers.
-
-```swift
-func _ready():
-	# Main Thread via SceneTreeTimer
-	GDRx.start_periodic_timer(1.0) \
-		.subscribe(func(i): print("Periodic: ", i)) \
-		.dispose_with(self)
-	GDRx.start_timer(2.0) \
-		.subscribe(func(i): print("One shot: ", i)) \
-		.dispose_with(self)
+var nfs : NewThreadScheduler = NewThreadScheduler.singleton()
+GDRx.just(0, nfs) \
+	.repeat(10) \
+	.subscribe(func(__): print("Thread ID: ", OS.get_thread_caller_id())) \
+	.dispose_with(self)
 ```
 
-If you want to schedule a timer running on a separate thread, the 
-ThreadedTimeoutScheduler Singleton allows you to do so. Careful: Once the thread
-is started it will not stop until the interval has passed!
+Threads terminate automatically when they finish computation. No need to call `Thread.wait_to_finish()`.
 
-```swift
-	# Multi-threaded via threaded timer
-	GDRx.start_timer(3.0, ThreadedTimeoutScheduler.singleton()) \
-		.subscribe(func(i): print("Threaded one shot: ", i)) \
-		.dispose_with(self)
-	GDRx.start_periodic_timer(2.0, ThreadedTimeoutScheduler.singleton()) \
-		.subscribe(func(i): print("Threaded periodic: ", i)) \
-		.dispose_with(self)
-```
-
-Additionally, various process and pause modes are possible. I created
-a list with various versions of the SceneTreeTimeoutScheduler for this. Access
-them like this:
-
-```swift
-	# Set timescale
-	Engine.time_scale = 0.5
-
-	var process_always = false
-	var process_in_physics = false
-	var ignore_time_scale = false
-
-	var scheduler = SceneTreeTimeoutScheduler.singleton(
-		process_always, process_in_physics, ignore_time_scale)
-```
-
-Note that the default SceneTreeTimeoutScheduler runs at process timestep scaling with 
-`Engine.time_scale` and also considers pause mode.
-
-### Await
-
-All observables can be awaited using the corresponding coroutines `next()`, `error()`
-and `completed()`. In this case, we have a global periodic timer which emits an item
-every three seconds. This way, any part of the program can await the next full tick.
-
-```swift
-var timer = GDRx.start_periodic_timer(3.0).publish().auto_connect_observable()
-var state = await timer.next()
-# Proceed on next full tick...
-```
-
-Please note that coroutines with `await` do not work well with the error handling
-described in the next section. The tailed execution of an async function
-state will not be considered in the observers' `on_error`-contract.
-If somebody can implement a better `ErrorHandler` for this case, be my guest!
-
-### Error handling
-In my endless sanity, I throw my own custom error handling into the ring. 
-When an error is thrown, the Observers should be notified via their 
-`on_error()` contract. If this works all the time, I do not know at this point.
-
-```swift
-func division(n1 : int, n2 : int) -> int:
-	if n2 == 0:
-		RxBaserError.new("Divided by zero!").throw()
-		return -1 # Stops control flow, the -1 has no meaning and is discarded.
-	return n1 / n2
-
-func _ready():
-	GDRx.from_array([0, 1, 2, 8]) \
-		.pairwise() \
-		.map(func(i : Tuple): return division(i.at(1), i.at(0))) \
-		.subscribe(func(i): print("DIV: ", i), func(e): print("ERR: ", e)) \
-		.dispose_with(self)
-```
-
-However, what I do know is that the Integer-division operator crashes if you 
-were to divide by zero ;)
-
-This error handling can be especially useful when executing code which can 
-generate some form of fail-state like e.g. an HTTPRequest. In this example
-we decide what to do if we do not receive the wanted data from our http server.
-Using `catch` we can declare alternatives should a specific sequence terminate
-with an error.
-
-```swift
-func _ready():
-	var parser_cb = func(i : String):
-		var parser = JSON.new()
-		if parser.parse(i):
-			return GDRx.raise_message(str(parser.get_error_line()) + ":" + parser.get_error_message())
-		return parser.data
-	
-	var obs : Observable = GDRx.catch([
-		GDRx.from_http_request("http://www.mocky.io/v2/5185415ba171ea3a00704eed", "", false, "utf8") \
-			.map(func(i): return parser_cb.call(i.decoded)),
-		GDRx.from_http_request("https://this.url.should.not.exist.1234567890.de", "", false, "utf8") \
-			.map(func(i): return parser_cb.call(i.decoded)),
-		GDRx.just({"hello":"world"})
-	])
-	
-	obs.subscribe(func(i): print("hello> ", i["hello"])).dispose_with(self)
-```
-
-Do you notice how expressive this approach is? In defining the single higher-order
-Observable `obs`, we could implement the concept of a try-catch-like structure just
-by listing our alternatives.
-
-### Signals & Node Lifecycle Events
-
-In the world of GDRx, signals and node lifecycle events are all Observables.
-
-```swift
-func _ready():
-	var OnPhysicsProcess = GDRx.on_physics_process_as_observable(self)
-	var OnInput = GDRx.on_input_as_observable(self)
-	
-	var anim : AnimationPlayer = $AnimationPlayer
-	var AnimationFinished : Observable = GDRx.from_signal(anim.animation_finished)
-	var AnimOnProcess = GDRx.on_process_as_observable(anim)
-```
-
-### Subscription Lifecycle (Disposables)
-
-It is important to note that subscriptions are managed using disposables (an instance of type `DisposableBase`). As soon as a disposable goes out of scope, it will dispose of its managed subscription. (In the 4.0 branch, this was not yet possible due to some issues with Godot's self-reference management in the notification-callback.)
-
-To account for this, the resulting subscription (an instance of type `DisposableBase`) can be linked to an object's lifetime via `DisposableBase.dispose_with(obj : Object)`. Doing so, will cause the subscription to be deleted, whenever the object specified in `dispose_with` is destroyed.
-
-```swift
-# Dispose when receiver 'self' is deleted
-GDRx.from_signal(anim.animation_finished).subscribe().dispose_with(self)
-```
-
-*Also a huge shoutout to (https://github.com/semickolon/GodotRx) for his amazing
-hack which automatically disposes subscriptions on instance death. Good on ya!*
+## Godot Features
 
 ### Reactive Properties
 
@@ -380,12 +358,7 @@ that it represents not a single value but a listing of values.
 var collection : ReactiveCollection = ReactiveCollection.new(["a", "b", "c", "d", "e", "f"])
 ```
 
-(Its constructor should support generators of type `IterableBase` as well...)
-
-### Operators
-
-A large set of functional operators can be used to transform observables. **Be careful! I have not tested them all...!**
-For more info, also check out the comments in the operator scripts!
+Its constructor supports generators of type `IterableBase` as well...
 
 ### Input Events
 
@@ -432,141 +405,6 @@ GDRx.on_frame_post_draw() \
 	.subscribe(func(__): print("Post Draw!")) \
 	.dispose_with(self)
 ```
-### Compute Shaders
-
-With GDRx it is quite easy to implement an async interface between GPU and CPU.
-This allows some nice implementations of Compute Shaders. For this example, I 
-follow the tutorial from (https://www.youtube.com/watch?v=5CKvGYqagyI) and his
-shader code. 
-In this scenario, we want to sample a texture and count the amount of pixels
-with red and blue color. A nice task for GPUs!
-
-The shader code can be found here: https://pastebin.com/pbGGjrE8
-
-First, let's create a script and define a few members. The public member 
-`ObserveComputeShader` will be our observable sequence, which emits the
-number of red and blue pixels each time these values change.
-```swift
-extends Node
-
-@export var texture : Texture2D
-
-var _observe_compute_shader : Observable
-var ObserveComputeShader : Observable:
-	get: return self._observe_compute_shader
-```
-To get the boilerplate out of the way, let's
-create our uniforms from a RenderingDevice and a defined buffer. This helper
-function returns our uniform set (we only have a single one with `set = 0`)
-
-```swift
-## Helper function to generate the uniform set with id 0 for our shader.
-## This represents bindings for 'buffer MyDataBuffer' and 'uniform sampler2D tex'
-func _get_uniform_set(rd : RenderingDevice, buffer) -> Array[RDUniform]:
-	var buffer_uniform = RDUniform.new()
-	buffer_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	buffer_uniform.binding = 0
-	buffer_uniform.add_id(buffer)
-	
-	var img = texture.get_image()
-	var img_pba = img.get_data()
-	
-	var fmt = RDTextureFormat.new()
-	fmt.width = 2048
-	fmt.height = 2048
-	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
-	fmt.format = RenderingDevice.DATA_FORMAT_R8G8B8A8_SRGB
-	
-	var v_tex = rd.texture_create(fmt, RDTextureView.new(), [img_pba])
-	var samp_state = RDSamplerState.new()
-	samp_state.unnormalized_uvw = true
-	var samp = rd.sampler_create(samp_state)
-	
-	var tex_uniform = RDUniform.new()
-	tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
-	tex_uniform.binding = 1
-	tex_uniform.add_id(samp)
-	tex_uniform.add_id(v_tex)
-	
-	return [buffer_uniform, tex_uniform]
-```
-With that out of the way, we now get to the spicy part. Setting up our computation
-loop and logic. First, we create an observable from a compute shader using the 
-`GDRx.from_compute_shader(...)` constructor. This generates an observable which
-commences and schedules the shader on the GPU, emits the rendering device when
-the shader finishes and then terminates the sequence causing all observers to
-disconnect.
-
-```swift
-func _ready():
-	var rd = RenderingServer.create_local_rendering_device()
-	var pba = PackedInt32Array([0,0]).to_byte_array()
-	var buffer = rd.storage_buffer_create(pba.size(), pba)
-	
-	# Get Uniform Set with id 0
-	var uniform_set0 = self._get_uniform_set(rd, buffer)
-	
-	# Create the Observable from the compute shader
-	var obs_shader = GDRx.from_compute_shader(
-		"res://compute_shaders/test_compute_shader.glsl",
-		rd, Vector3i(2048/8, 2048/8, 1),
-		[uniform_set0]
-	)
-```
-
-When this is done, we can define the private member `_observe_compute_shader` 
-which is going to behave as described at the beginning of this section.
-
-```swift
-self._observe_compute_shader = GDRx.merge([
-		GDRx.just(Vector2i(-1, -1)),
-		GDRx.just(0) \
-		.while_do(func(): return true) \
-		.flat_map(obs_shader) \
-		.map(
-			func(rd : RenderingDevice):
-				var byte_data = rd.buffer_get_data(buffer)
-				var output = byte_data.to_int32_array()
-				var pb = PackedInt32Array([0,0])
-				var pbb = pb.to_byte_array()
-				rd.buffer_update(buffer, 0, pbb.size(), pbb)
-				return Vector2i(output[0], output[1])
-				)
-		.publish() \
-		.auto_connect_observable() \
-		.subscribe_on(NewThreadScheduler.new())
-		]) \
-	.pairwise()  \
-	.filter(func(tup : Tuple): return tup.at(0) != tup.at(1)) \
-	.map(func(tup : Tuple): return tup.at(1))
-	
-	self.ObserveComputeShader.subscribe(func(result : Vector2i): print("> ", result)) \
-		.dispose_with(self)
-```
-
-Okay, now I lost you, am I right? Let's break it down, shall we? 
-
-- The `GDRx.just(...)` constructor just emits the value specified, then terminates.
-- In this scenario, we also use the `GDRx.merge([...])` constructor. This causes
-the resulting observable to emit all items of its children (in this case 
-`GDRx.just(Vector2i(-1, -1))` and the second larger part).
-- Using `GDRx.just(0).while_do(func(): return true)` we describe a sequence which emits
-zero as long as the condition `func(): return true` is met. This simulates a while-loop.
-- The `flat_map` operator emits all items of the observable given to it each time its parent
-emits an item. This causes a new computation on the GPU each tick.
-- The `map` operator maps an incoming item to a new value. In this case, we read the
-result the GPU computed using the rendering device emitted by `obs_shader` and map
-it to a `Vector2i`.
-- Since we do not want to have computations running per observer we publish the sequence
-using `publish` and `auto_connect_observable`. As stated earlier, `obs_shader` is a COLD
-observable which would otherwise commence a computaton per subscriber.
-- The `subscribe_on` allows us to subscribe to the sequence on a new thread using
-the `NewThreadScheduler`. This means waiting for the GPU will not block the main thread.
-- The `pairwise` takes the n-th and (n-1)-th item and merges them in a tuple.
-- With `filter` we check if the current value is different from the previous.
-- Then `map` just takes the second, n-th item from the pair.
-- Finally, we can subscribe to `ObserveComputeShader` to receive the pixel counts each time 
-they are changed.
 
 ## Final Thoughts
 
@@ -575,5 +413,10 @@ I hope I could clarify the usage of GDRx a bit using some of these examples.
 I do not know if this library is useful in the case of Godot 4 but if you are
 familiar with and into ReactiveX, go for it!
 
+## Contributing
+
+Contributions and bug reports are always welcome! We also invite folks to submit unit tests verifiying the functionality of GDRx ;)
+
 ## License
+
 Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/master/LICENSE).
