@@ -123,7 +123,7 @@ static func FromGetSet(
 		raise_latest_value_on_subscribe_
 	)
 	
-	prop.subscribe(func(x): setter.call(x))
+	prop.subscribe(func(x): setter.call(x)).dispose_with(prop)
 	return prop
 
 static func FromMember(
