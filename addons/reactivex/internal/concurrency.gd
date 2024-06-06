@@ -107,11 +107,17 @@ class StartableThread extends StartableBase:
 		self._thread.start(run, self._priority)
 	
 	func wait_to_finish():
+		if self._is_caller():
+			GDRx.THREAD_MANAGER.finish(self)
+			return
 		if self._joined.test_and_set():
 			return
 		self._thread.wait_to_finish()
 		self._thread = null
 		self._target = GDRx.basic.noop
+	
+	func _is_caller() -> bool:
+		return str(OS.get_thread_caller_id()) == self._thread.get_id()
 
 func default_thread_factory(target : Callable) -> StartableThread:
 	return StartableThread.new(target)
