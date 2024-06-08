@@ -94,6 +94,9 @@ static func _compare_sequence(seq1 : Array, seq2 : Array) -> bool:
 		if seq1[i] is Array and seq2[i] is Array:
 			if _compare_sequence(seq1[i], seq2[i]):
 				return true
+		if seq1[i] is Tuple and seq2[i] is Tuple:
+			if _compare_sequence(seq1[i].as_list(), seq2[i].as_list()):
+				return true
 		if not GDRx.eq(seq1[i], seq2[i]):
 			return true
 	

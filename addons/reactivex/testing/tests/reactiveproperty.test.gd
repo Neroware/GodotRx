@@ -2,7 +2,7 @@ extends __GDRx_Test__
 
 const TEST_UNIT_NAME = "REACTIVE_PROPERTY"
 
-func test_reactive_property() -> bool:
+func test_gd_reactive_property() -> bool:
 	var prop = ReactiveProperty.new(0)
 	var xs : Array = []
 	var __ = prop.subscribe(func(x): xs.append(x))
@@ -17,7 +17,7 @@ func test_reactive_property() -> bool:
 	return await compare(GDRx.from_array(xs), result) or !correct_value
 
 var _member : int = -1
-func test_from_member() -> bool:
+func test_gd_from_member() -> bool:
 	self._member = 0
 	var prop = ReactiveProperty.FromMember(self, "_member")
 	var xs : Array = []
@@ -37,7 +37,7 @@ func _set_member(value : int):
 	self._setget_member = value
 func _get_member() -> int:
 	return self._setget_member
-func test_setget_reactive_property() -> bool:
+func test_gd_setget_reactive_property() -> bool:
 	self._set_member(0)
 	var prop = ReactiveProperty.FromGetSet(self._get_member, self._set_member)
 	var xs : Array = []
@@ -52,7 +52,7 @@ func test_setget_reactive_property() -> bool:
 	var result = [0, 1, 2, 3, Comp()]
 	return await compare(GDRx.from_array(xs), result) or !correct_value or self._get_member() != 3
 
-func test_readonly_reactive_property() -> bool:
+func test_gd_readonly_reactive_property() -> bool:
 	var prop = ReactiveProperty.new(0)
 	var ro_prop = prop.to_readonly()
 	var xs : Array = []
@@ -67,7 +67,7 @@ func test_readonly_reactive_property() -> bool:
 	var result = [0, 1, 2, 3, Comp()]
 	return await compare(GDRx.from_array(xs), result) or !correct_value
 
-func test_sourced_reactive_property() -> bool:
+func test_gd_sourced_reactive_property() -> bool:
 	var subject = Subject.new()
 	var prop = ReactiveProperty.new(0, true, true, subject.as_observable())
 	var ro_prop = prop.to_readonly()
@@ -83,7 +83,7 @@ func test_sourced_reactive_property() -> bool:
 	var result = [0, 1, 2, 3, Comp()]
 	return await compare(GDRx.from_array(xs), result) or !correct_value
 
-func test_computed_reactive_property() -> bool:
+func test_gd_computed_reactive_property() -> bool:
 	var prop1 = ReactiveProperty.new(0)
 	var prop2 = ReactiveProperty.new(0)
 	var ro_prop1 = prop1.to_readonly()

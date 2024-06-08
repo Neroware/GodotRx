@@ -28,7 +28,8 @@ static func Empty() -> Tuple:
 	return Tuple.new([])
 
 func _init(x : Array):
-	self._x = x
+	self._x = x.duplicate()
+	self._x.make_read_only()
 
 func _to_string():
 	var s = "( "
