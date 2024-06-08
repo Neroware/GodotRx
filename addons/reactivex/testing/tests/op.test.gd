@@ -56,3 +56,22 @@ func test_op_combine_latest() -> bool:
 		Comp()
 	]
 	return await compare(obs, result)
+
+func test_op_concat() -> bool:
+	var obs1 = GDRx.from(["a", "b", "c"])
+	var t1 = GDRx.start_periodic_timer(0.05).take(3)
+	var obs2 = GDRx.just(42)
+	var obs = obs1.concat([t1, obs2])
+	var result = ["a", "b", "c", 0, 1, 2, 42, Comp()]
+	return await compare(obs, result)
+
+func test_op_contains() -> bool:
+	var seq = GDRx.from(["aaa", "aab", "bb", "baa"])
+	var obs1 = seq.contains("bb")
+	var obs2 = seq.contains("bbb")
+	return await compare(obs1, [true, Comp()]) and await compare(obs2, [false, Comp()])
+
+func test_op_count() -> bool:
+	var obs = GDRx.from(["aaa", "aab", "bb", "baa"]).count()
+	var result = [4, Comp()]
+	return await compare(obs, result)
