@@ -1,4 +1,4 @@
-func distinct_until_changed_(
+static func distinct_until_changed_(
 	key_mapper : Callable = GDRx.basic.identity,
 	comparer : Callable = GDRx.basic.default_comparer
 ) -> Callable:

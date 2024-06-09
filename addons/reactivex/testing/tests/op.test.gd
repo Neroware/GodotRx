@@ -75,3 +75,57 @@ func test_op_count() -> bool:
 	var obs = GDRx.from(["aaa", "aab", "bb", "baa"]).count()
 	var result = [4, Comp()]
 	return await compare(obs, result)
+
+func test_op_debounce() -> bool:
+	var obs = GDRx.merge([
+			GDRx.from([1, 2, 3, 4]),
+			GDRx.start_timer(0.1)]) \
+		.debounce(0.05)
+	var result = [4, 0, Comp()]
+	return await compare(obs, result)
+
+func test_op_default_if_empty() -> bool:
+	var seq = GDRx.from([1, 2, 3, 4])
+	var obs1 = seq.filter(func(i): return i > 42).default_if_empty(-1)
+	var obs2 = seq.filter(func(i): return i < 42).default_if_empty(-1)
+	return await compare(obs1, [-1, Comp()]) or await compare(obs2, [1, 2, 3, 4, Comp()])
+
+func test_op_delay() -> bool:
+	var obs = GDRx.merge([
+		GDRx.from([1, 2, 3]).delay(0.2),
+		GDRx.start_timer(0.1)])
+	var result = [0, 1, 2, 3, Comp()]
+	return await compare(obs, result)
+
+func test_op_delay_subscription() -> bool:
+	var obs = GDRx.merge([
+		GDRx.from([1, 2, 3]).delay_subscription(0.2),
+		GDRx.start_timer(0.1)])
+	var result = [0, 1, 2, 3, Comp()]
+	return await compare(obs, result)
+
+func test_op_delay_with_mapper() -> bool:
+	var obs = GDRx.merge([
+		GDRx.from([1, 2, 3]).delay_with_mapper(func(x): return GDRx.just(x).delay(0.1) if x > 0 else GDRx.just(x)),
+		GDRx.start_timer(0.05)])
+	var result = [0, 1, 2, 3, Comp()]
+	return await compare(obs, result)
+
+func test_op_dematerialize() -> bool:
+	var obs = GDRx.from([
+			OnNextNotification.new(42),
+			OnNextNotification.new("Foo"),
+			OnErrorNotification.new(BadArgumentError.new())]) \
+		.dematerialize()
+	var result = [42, "Foo", Err("BadArgumentError")]
+	return await compare(obs, result)
+
+func test_op_distinct() -> bool:
+	var obs = GDRx.from(["aa", "ab", "aa", "aba", "bb", "aba", "abb"]).distinct()
+	var result = ["aa", "ab", "aba", "bb", "abb", Comp()]
+	return await compare(obs, result)
+
+func test_op_distinct_until_changed() -> bool:
+	var obs = GDRx.from(["a", "a", "b", "a", "b", "b", "c"]).distinct_until_changed()
+	var result = ["a", "b", "a", "b", "c", Comp()]
+	return await compare(obs, result)

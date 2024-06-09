@@ -18,7 +18,7 @@ class HashSet:
 	func push(value):
 		var ret_value = HashSet.array_index_of_comparer(self._set, value, self._comparer) == -1
 		if ret_value:
-			self._set.append(ret_value)
+			self._set.append(value)
 		return ret_value
 
 static func distinct_(

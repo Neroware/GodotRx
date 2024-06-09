@@ -206,7 +206,7 @@ func delay_with_mapper(subscription_delay = null, delay_duration_mapper = null) 
 
 ## See: [b]res://addons/reactivex/operators/_dematerialize.gd[/b]
 func dematerialize() -> Callable:
-	return _Dematerialize_.dematerialize()
+	return _Dematerialize_.dematerialize_()
 
 ## See: [b]res://addons/reactivex/operators/_distinct.gd[/b]
 func distinct(key_mapper : Callable = GDRx.basic.identity, comparer : Callable = GDRx.basic.default_comparer) -> Callable:
