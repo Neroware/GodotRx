@@ -129,3 +129,20 @@ func test_op_distinct_until_changed() -> bool:
 	var obs = GDRx.from(["a", "a", "b", "a", "b", "b", "c"]).distinct_until_changed()
 	var result = ["a", "b", "a", "b", "c", Comp()]
 	return await compare(obs, result)
+
+func test_op_do():
+	var flag_on_next = RefValue.Set(true)
+	var flag_on_complete = RefValue.Set(true)
+	var flag_after_next = RefValue.Set(true)
+	var flag_on_subscribe = RefValue.Set(true)
+	var flag_on_terminate = RefValue.Set(true)
+	var flag_after_terminate = RefValue.Set(true)
+	var flag_finally = RefValue.Set(true)
+	var obs = GDRx.just(42) \
+		.do_action(func(__): flag_on_next.v = false, null, func(): flag_on_complete.v = false) \
+		.do_after_next(func(__): flag_after_next.v = false) \
+		.do_on_subscribe(func(): flag_on_subscribe.v = false) \
+		.do_on_terminate(func(): flag_on_terminate.v = false) \
+		.do_after_terminate(func(): flag_after_terminate.v = false) \
+		.do_finally(func(): flag_finally.v = false)
+	return await compare(obs, [42, Comp()]) or flag_on_next.v or flag_on_complete.v or flag_after_next.v or flag_on_subscribe.v or flag_on_terminate.v or flag_after_terminate.v or flag_finally.v
