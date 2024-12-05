@@ -146,3 +146,10 @@ func test_op_do():
 		.do_after_terminate(func(): flag_after_terminate.v = false) \
 		.do_finally(func(): flag_finally.v = false)
 	return await compare(obs, [42, Comp()]) or flag_on_next.v or flag_on_complete.v or flag_after_next.v or flag_on_subscribe.v or flag_on_terminate.v or flag_after_terminate.v or flag_finally.v
+
+func test_op_with_latest_from():
+	var t1 = GDRx.start_periodic_timer(1.1).take(2)
+	var t2 = GDRx.start_periodic_timer(0.25)
+	var t3 = GDRx.start_periodic_timer(0.5)
+	var obs = t1.with_latest_from([t2, t3])
+	return await compare(obs, [Tuple.new([0, 3, 1]), Tuple.new([1, 7, 3]), Comp()])
