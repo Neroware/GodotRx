@@ -49,7 +49,8 @@ static func with_latest_from_(
 			)
 			parent_subscription.disposable = disp
 			
-			var ret : Array[SingleAssignmentDisposable] = children_subscription.duplicate()
+			var ret : Array[SingleAssignmentDisposable] = []
+			ret.assign(children_subscription.duplicate())
 			ret.push_front(parent_subscription)
 			return ret
 		
