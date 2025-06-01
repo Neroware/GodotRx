@@ -21,8 +21,8 @@ static func fork_join_(sources_) -> Observable:
 	) -> DisposableBase:
 		var n = sources.size()
 		var values = [] ; for __ in range(n): values.append(null)
-		var is_done = [] ; for __ in range(n): values.append(false)
-		var has_value = [] ; for __ in range(n): values.append(false)
+		var is_done = [] ; for __ in range(n): is_done.append(false)
+		var has_value = [] ; for __ in range(n): has_value.append(false)
 		
 		var done = func(i : int):
 			is_done[i] = true
