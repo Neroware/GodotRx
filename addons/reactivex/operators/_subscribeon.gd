@@ -1,3 +1,4 @@
+@tool
 static func subscribe_on_(scheduler : SchedulerBase) -> Callable:
 	var subscribe_on = func(source : Observable) -> Observable:
 #		"""Subscribe on the specified scheduler.

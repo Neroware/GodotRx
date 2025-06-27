@@ -1,3 +1,4 @@
+@tool
 static func max_(comparer = null) -> Callable:
 #	"""Returns the maximum value in an observable sequence according to
 #	the specified comparer.

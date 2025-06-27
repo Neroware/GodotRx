@@ -1,3 +1,4 @@
+@tool
 extends DisposableBase
 class_name Disposable
 ## Main disposable class

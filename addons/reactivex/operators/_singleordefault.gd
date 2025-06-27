@@ -1,3 +1,4 @@
+@tool
 static func single_or_default_async_(
 	has_default : bool = false, default_value = null
 ) -> Callable:

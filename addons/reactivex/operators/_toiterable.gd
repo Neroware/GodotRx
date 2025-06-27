@@ -1,3 +1,4 @@
+@tool
 static func to_iterable_() -> Callable:
 	var to_iterable = func(source : Observable) -> Observable:
 #		"""Creates an iterable from an observable sequence.

@@ -1,3 +1,4 @@
+@tool
 extends ReadOnlyReactiveCollection
 class_name ReadOnlyReactiveCollectionT
 

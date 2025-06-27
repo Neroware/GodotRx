@@ -1,3 +1,4 @@
+@tool
 static func group_join_(
 	right : Observable,
 	left_duration_mapper : Callable,

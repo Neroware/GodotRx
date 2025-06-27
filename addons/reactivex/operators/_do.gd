@@ -1,3 +1,4 @@
+@tool
 static func do_action_(
 	on_next = null, on_error = null, on_completed = null
 ) -> Callable:

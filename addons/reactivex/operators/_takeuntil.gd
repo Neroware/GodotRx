@@ -1,3 +1,4 @@
+@tool
 static func take_until_(
 	other : Observable
 ) -> Callable:

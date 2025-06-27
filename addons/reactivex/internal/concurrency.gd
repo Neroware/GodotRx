@@ -1,3 +1,4 @@
+@tool
 class ThreadManager extends Object:
 	
 	var _thread_registry_lock : ReadWriteLock

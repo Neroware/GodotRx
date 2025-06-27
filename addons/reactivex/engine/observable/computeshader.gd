@@ -1,3 +1,4 @@
+@tool
 ## Represents a Compute Shader as an Observable Sequence.
 ## [br][br]
 ## Please note: This is a [b]cold[/b] [Observable]. It transfers data to GPU

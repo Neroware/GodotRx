@@ -1,3 +1,4 @@
+@tool
 static func extrema_by(
 	source : Observable,
 	key_mapper : Callable,

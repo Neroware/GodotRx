@@ -1,3 +1,4 @@
+@tool
 static func group_by_(
 	key_mapper : Callable,
 	element_mapper = null,

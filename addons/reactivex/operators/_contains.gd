@@ -1,3 +1,4 @@
+@tool
 static func contains_(
 	value,
 	comparer = GDRx.basic.default_comparer

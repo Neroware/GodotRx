@@ -1,3 +1,4 @@
+@tool
 static func to_list_() -> Callable:
 	var to_list = func(source : Observable) -> Observable:
 		

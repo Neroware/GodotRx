@@ -1,3 +1,4 @@
+@tool
 func noop(__ = null, ___ = null):
 	pass
 

@@ -1,3 +1,4 @@
+@tool
 class HashSet:
 	var _comparer : Callable
 	var _set : Array

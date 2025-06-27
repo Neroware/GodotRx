@@ -1,3 +1,4 @@
+@tool
 static func scan_(
 	accumulator : Callable,
 	seed_ = GDRx.util.GetNotSet()

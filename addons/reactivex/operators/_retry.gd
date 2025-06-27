@@ -1,3 +1,4 @@
+@tool
 static func retry_(retry_count : int = -1) -> Callable:
 #	"""Repeats the source observable sequence the specified number of
 #	times or until it successfully terminates. If the retry count is

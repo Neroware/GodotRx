@@ -1,3 +1,4 @@
+@tool
 extends ReadOnlyReactiveProperty
 class_name ReadOnlyReactivePropertyT
 

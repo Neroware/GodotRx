@@ -1,3 +1,4 @@
+@tool
 static func window_toggle_(
 	openings : Observable, closing_mapper : Callable
 ) -> Callable:

@@ -1,3 +1,4 @@
+@tool
 static func exclusive_() -> Callable:
 #	"""Performs a exclusive waiting for the first to finish before
 #	subscribing to another observable. Observables that come in between

@@ -1,3 +1,4 @@
+@tool
 static func skip_(count : int) -> Callable:
 	if count < 0:
 		ArgumentOutOfRangeError.new().throw()

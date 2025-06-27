@@ -1,3 +1,4 @@
+@tool
 static func _flat_map_internal(
 	source : Observable,
 	mapper = null,

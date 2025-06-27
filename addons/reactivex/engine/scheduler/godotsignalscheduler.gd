@@ -1,3 +1,4 @@
+@tool
 extends GodotSignalSchedulerBase
 class_name GodotSignalScheduler
 

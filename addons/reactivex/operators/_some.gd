@@ -1,3 +1,4 @@
+@tool
 static func some_(
 	predicate = null
 ) -> Callable:

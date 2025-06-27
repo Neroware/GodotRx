@@ -1,3 +1,4 @@
+@tool
 class_name PriorityQueue
 
 ## Implementation of a priority queue using a heap

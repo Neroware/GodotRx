@@ -1,3 +1,4 @@
+@tool
 static func observable_delay_timespan(
 	source : Observable,
 	duetime : float,

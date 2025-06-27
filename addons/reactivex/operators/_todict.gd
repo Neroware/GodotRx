@@ -1,3 +1,4 @@
+@tool
 static func to_dict_(
 	key_mapper : Callable, 
 	element_mapper : Callable = GDRx.basic.identity

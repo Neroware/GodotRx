@@ -1,3 +1,4 @@
+@tool
 static func case_(
 	mapper : Callable,
 	sources : Dictionary,

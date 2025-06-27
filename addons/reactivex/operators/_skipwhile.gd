@@ -1,3 +1,4 @@
+@tool
 static func skip_while_(predicate : Callable) -> Callable:
 	var skip_while = func(source : Observable) -> Observable:
 		

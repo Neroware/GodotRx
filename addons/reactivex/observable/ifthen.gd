@@ -1,3 +1,4 @@
+@tool
 ## Determines whether an observable collection contains values.
 ## [br]
 ##    [b]Example:[/b]

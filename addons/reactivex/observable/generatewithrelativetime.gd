@@ -1,3 +1,4 @@
+@tool
 ## Generates an observable sequence by iterating a state from an
 ##    initial state until the condition fails.
 ##    [br]

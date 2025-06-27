@@ -1,3 +1,4 @@
+@tool
 static func last_or_default_async(
 	source : Observable,
 	has_default : bool = false,

@@ -1,3 +1,4 @@
+@tool
 class_name ObservableBase
 
 ## Interface of an observable stream/subject/signal etc. 

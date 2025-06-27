@@ -1,3 +1,4 @@
+@tool
 static func concat_(sources_) -> Callable:
 	var sources : Array[Observable] = GDRx.util.unpack_arg(sources_)
 	var concat = func(source : Observable) -> Observable:

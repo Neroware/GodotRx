@@ -1,3 +1,4 @@
+@tool
 static func group_by_until_(
 	key_mapper : Callable,
 	duration_mapper : Callable,

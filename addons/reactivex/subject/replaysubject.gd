@@ -1,3 +1,4 @@
+@tool
 extends Subject
 class_name ReplaySubject
 

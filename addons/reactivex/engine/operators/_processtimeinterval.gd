@@ -1,3 +1,4 @@
+@tool
 ## Returns the amount of process time passed between two items using idle time.
 ## The emitted item is a [Tuple] containing the real item as first and the 
 ## time delta as second component.

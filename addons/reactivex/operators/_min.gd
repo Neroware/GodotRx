@@ -1,3 +1,4 @@
+@tool
 static func first_only(x : Array):
 	if x.is_empty():
 		return SequenceContainsNoElementsError.raise()

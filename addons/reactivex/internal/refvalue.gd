@@ -1,3 +1,4 @@
+@tool
 ## Wraps a value
 ## 
 ## RefValue is used to account for the Python [code]nonlocal[/code]-keyword.

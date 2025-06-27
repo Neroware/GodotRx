@@ -1,3 +1,4 @@
+@tool
 extends ThrowableBase
 class_name RxBaseError
 

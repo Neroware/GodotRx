@@ -1,3 +1,4 @@
+@tool
 class_name __GDRx_Op__
 ## Provides access to [Observable] operators.
 ##

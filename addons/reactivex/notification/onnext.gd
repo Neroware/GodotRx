@@ -1,3 +1,4 @@
+@tool
 extends Notification
 class_name OnNextNotification
 

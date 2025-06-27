@@ -1,3 +1,4 @@
+@tool
 ## Wait for observables to complete and then combine last values
 ##    they emitted into a tuple. Whenever any of that observables completes
 ##    without emitting any value, result sequence will complete at that moment as well.

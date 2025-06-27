@@ -1,3 +1,4 @@
+@tool
 static func window_with_count_(
 	count : int, skip = null
 ) -> Callable:

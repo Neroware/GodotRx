@@ -1,3 +1,4 @@
+@tool
 class_name ReadWriteLock
 
 var _w_lock : Lock

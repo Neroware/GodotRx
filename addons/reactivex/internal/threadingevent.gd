@@ -1,3 +1,4 @@
+@tool
 class_name ThreadingEvent
 
 ## Class implementing event objects.

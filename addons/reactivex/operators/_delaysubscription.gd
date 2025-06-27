@@ -1,3 +1,4 @@
+@tool
 static func delay_subscription_(
 	duetime : float,
 	time_absolute : bool = false,

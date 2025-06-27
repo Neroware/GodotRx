@@ -1,3 +1,4 @@
+@tool
 extends ScheduledObserver
 class_name ObserveOnObserver
 

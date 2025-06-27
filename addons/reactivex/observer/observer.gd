@@ -1,3 +1,4 @@
+@tool
 extends ObserverBase
 class_name Observer
 

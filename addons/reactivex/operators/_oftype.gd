@@ -1,3 +1,4 @@
+@tool
 static func oftype_(type, push_err : bool = true, type_equality : Callable = GDRx.basic.default_type_equality) -> Callable:
 	var oftype = func(source : Observable) -> Observable:
 #		"""Partially applied oftype operator.

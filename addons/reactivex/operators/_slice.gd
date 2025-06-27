@@ -1,3 +1,4 @@
+@tool
 static func slice_(
 	start : int = 0, 
 	stop : int = GDRx.util.MAX_SIZE,

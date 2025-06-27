@@ -1,3 +1,4 @@
+@tool
 static func merge_(_sources, max_concorrent : int = -1) -> Callable:
 	var merge = func(source : Observable) -> Observable:
 #		"""Merges an observable sequence of observable sequences into

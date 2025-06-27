@@ -1,3 +1,4 @@
+@tool
 func reduce(fun : Callable, iterable : IterableBase, initial = GDRx.util.NOT_SET):
 	var it = iterable.iter()
 	var next_ = it.next()

@@ -1,3 +1,4 @@
+@tool
 class_name Trampoline
 
 var _idle : bool

@@ -1,3 +1,4 @@
+@tool
 static func max_by_(
 	key_mapper : Callable,
 	comparer = null

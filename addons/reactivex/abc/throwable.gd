@@ -1,3 +1,4 @@
+@tool
 class_name ThrowableBase
 
 ## Interface for throwable objects

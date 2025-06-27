@@ -1,3 +1,4 @@
+@tool
 static func with_latest_from_(sources_) -> Callable:
 #	"""With latest from operator.
 #

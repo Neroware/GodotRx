@@ -1,3 +1,4 @@
+@tool
 ## Constructs an observable sequence that depends on a resource
 ##    object, whose lifetime is tied to the resulting observable
 ##    sequence's lifetime.

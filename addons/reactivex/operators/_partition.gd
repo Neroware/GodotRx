@@ -1,3 +1,4 @@
+@tool
 static func partition_(
 	predicate : Callable = GDRx.basic.default_condition
 ) -> Callable:

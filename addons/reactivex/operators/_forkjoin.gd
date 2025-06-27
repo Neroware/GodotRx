@@ -1,3 +1,4 @@
+@tool
 static func fork_join_(args) -> Callable:
 	var fork_join = func(source : Observable) -> Observable:
 #		"""Wait for observables to complete and then combine last values

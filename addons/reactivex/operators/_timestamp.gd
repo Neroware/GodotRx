@@ -1,3 +1,4 @@
+@tool
 static func timestamp_(
 	scheduler : SchedulerBase = null
 ) -> Callable:

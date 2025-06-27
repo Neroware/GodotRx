@@ -1,3 +1,4 @@
+@tool
 extends PeriodicSchedulerBase
 class_name PeriodicScheduler
 

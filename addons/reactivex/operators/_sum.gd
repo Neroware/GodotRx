@@ -1,3 +1,4 @@
+@tool
 static func sum_(
 	key_mapper = null
 ) -> Callable:

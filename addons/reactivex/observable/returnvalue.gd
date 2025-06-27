@@ -1,3 +1,4 @@
+@tool
 ## Returns an observable sequence that contains a single element,
 ##    using the specified scheduler to send out observer messages.
 ##    There is an alias called [method __GDRx_Singleton__.just].

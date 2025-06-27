@@ -1,3 +1,4 @@
+@tool
 static func dematerialize_() -> Callable:
 	var dematerialize = func(source : Observable) -> Observable:
 #		"""Partially applied dematerialize operator.

@@ -1,3 +1,4 @@
+@tool
 static func take_while_(
 	predicate : Callable = GDRx.basic.default_condition,
 	inclusive : bool = false

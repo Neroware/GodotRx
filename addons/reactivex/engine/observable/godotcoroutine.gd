@@ -1,3 +1,4 @@
+@tool
 ## Represents a Godot coroutine as an observable sequence
 static func from_godot_coroutine_(
 	fun : Callable,

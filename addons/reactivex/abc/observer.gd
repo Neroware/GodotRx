@@ -1,3 +1,4 @@
+@tool
 class_name ObserverBase
 
 ## Interface of an observer

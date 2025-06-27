@@ -1,3 +1,4 @@
+@tool
 static func buffer_with_time_(
 	timespan : float,
 	timeshift = null,

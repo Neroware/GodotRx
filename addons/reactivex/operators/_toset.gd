@@ -1,3 +1,4 @@
+@tool
 static func to_set_() -> Callable:
 #	"""Converts the observable sequence to a set.
 #

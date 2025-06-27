@@ -1,3 +1,4 @@
+@tool
 extends ReactiveSignal
 class_name ReactiveSignalT
 

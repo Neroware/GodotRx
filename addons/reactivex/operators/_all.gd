@@ -1,3 +1,4 @@
+@tool
 static func all_(predicate : Callable) -> Callable:
 	var filter = func(v):
 		return not predicate.call(v)

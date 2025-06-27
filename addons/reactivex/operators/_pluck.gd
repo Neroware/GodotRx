@@ -1,3 +1,4 @@
+@tool
 static func pluck_(key) -> Callable:
 #	"""Retrieves the value of a specified key using dict-like access (as in
 #	element[key]) from all elements in the Observable sequence.

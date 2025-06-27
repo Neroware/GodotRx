@@ -1,3 +1,4 @@
+@tool
 extends PeriodicScheduler
 class_name SceneTreeTimeoutScheduler
 ## A scheduler that schedules work via a [SceneTreeTimer].

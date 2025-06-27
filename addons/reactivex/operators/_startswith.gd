@@ -1,3 +1,4 @@
+@tool
 static func start_with_(args) -> Callable:
 	var start_with = func(source : Observable) -> Observable:
 #		"""Partially applied start_with operator.

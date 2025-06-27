@@ -1,3 +1,4 @@
+@tool
 extends PeriodicScheduler
 class_name EventLoopScheduler
 

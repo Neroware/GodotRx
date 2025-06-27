@@ -1,3 +1,4 @@
+@tool
 static func map_(
 	mapper : Callable = GDRx.basic.identity
 ) -> Callable:

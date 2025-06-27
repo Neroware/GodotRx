@@ -1,3 +1,4 @@
+@tool
 static func publish_(mapper = null) -> Callable:
 #	"""Returns an observable sequence that is the result of invoking the
 #	mapper on a connectable observable sequence that shares a single

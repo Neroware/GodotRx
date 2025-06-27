@@ -1,3 +1,4 @@
+@tool
 static func with_latest_from_(
 	parent : Observable, sources_
 ) -> Observable:

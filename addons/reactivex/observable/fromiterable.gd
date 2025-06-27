@@ -1,3 +1,4 @@
+@tool
 ## Converts an iterable to an observable sequence.
 ##    [br]
 ##    [b]Example:[/b]

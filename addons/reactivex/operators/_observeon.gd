@@ -1,3 +1,4 @@
+@tool
 static func observe_on_(scheduler : SchedulerBase) -> Callable:
 	var observe_on = func(source : Observable) -> Observable:
 #		"""Wraps the source sequence in order to run its observer

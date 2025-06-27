@@ -1,3 +1,4 @@
+@tool
 static func throttle_first_(
 	window_duration : float,
 	scheduler : SchedulerBase = null

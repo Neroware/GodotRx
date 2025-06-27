@@ -1,3 +1,4 @@
+@tool
 class_name __GDRx_Obs__
 ## Provides access to [Observable] constructor.
 ##

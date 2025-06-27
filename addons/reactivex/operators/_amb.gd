@@ -1,3 +1,4 @@
+@tool
 static func amb_(right_source : Observable) -> Callable:
 	var obs : Observable = right_source
 	

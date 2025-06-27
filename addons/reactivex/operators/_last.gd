@@ -1,3 +1,4 @@
+@tool
 static func last_(predicate = null) -> Callable:
 	var last = func(source : Observable) -> Observable:
 #		"""Partially applied last operator.

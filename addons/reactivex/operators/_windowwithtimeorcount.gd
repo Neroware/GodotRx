@@ -1,3 +1,4 @@
+@tool
 static func window_with_time_or_count_(
 	timespan : float,
 	count : int,

@@ -1,3 +1,4 @@
+@tool
 const MAX_SIZE = 9223372036854775807
 
 ## Represents an un-defined state

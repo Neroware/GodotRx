@@ -1,3 +1,4 @@
+@tool
 const MAX_SIZE = 9223372036854775807
 
 ## Generates an observable sequence of integral numbers within a

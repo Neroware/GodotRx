@@ -1,3 +1,4 @@
+@tool
 static func observable_timer_date(duetime : float, scheduler : SchedulerBase = null) -> Observable:
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:
 		var _scheduler : SchedulerBase = null

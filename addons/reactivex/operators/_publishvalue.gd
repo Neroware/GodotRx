@@ -1,3 +1,4 @@
+@tool
 static func publish_value_(
 	initial_value,
 	mapper = null

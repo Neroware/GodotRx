@@ -1,3 +1,4 @@
+@tool
 ## Converts the function into an asynchronous function. Each
 ##    invocation of the resulting asynchronous function causes an
 ##    invocation of the original synchronous function on the specified

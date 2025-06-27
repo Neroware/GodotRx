@@ -1,3 +1,4 @@
+@tool
 static func switch_latest_() -> Callable:
 	var switch_latest = func(source : Observable) -> Observable:
 #		"""Partially applied switch_latest operator.

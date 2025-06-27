@@ -1,3 +1,4 @@
+@tool
 static func pairwise_() -> Callable:
 	var pairwise = func(source : Observable) -> Observable:
 #		"""Partially applied pairwise operator.

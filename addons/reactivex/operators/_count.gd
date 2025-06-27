@@ -1,3 +1,4 @@
+@tool
 static func count_(
 	predicate = null
 ) -> Callable:

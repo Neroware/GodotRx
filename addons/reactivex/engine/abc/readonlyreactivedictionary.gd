@@ -1,3 +1,4 @@
+@tool
 extends Comparable
 class_name ReadOnlyReactiveDictionaryBase
 

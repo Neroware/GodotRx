@@ -1,3 +1,4 @@
+@tool
 static func do_while_(
 	condition : Callable
 ) -> Callable:

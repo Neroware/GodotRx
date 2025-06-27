@@ -1,3 +1,4 @@
+@tool
 static func find_value_(
 	predicate : Callable, yield_index : bool
 ) -> Callable:

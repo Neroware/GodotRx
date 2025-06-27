@@ -1,3 +1,4 @@
+@tool
 static func on_error_resume_next_(
 	second : Observable
 ) -> Callable:

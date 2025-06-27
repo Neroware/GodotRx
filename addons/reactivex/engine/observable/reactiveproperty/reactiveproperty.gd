@@ -1,3 +1,4 @@
+@tool
 extends ReactivePropertyBase
 class_name ReactiveProperty
 

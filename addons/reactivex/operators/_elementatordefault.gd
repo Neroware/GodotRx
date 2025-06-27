@@ -1,3 +1,4 @@
+@tool
 static func element_at_or_default_(
 	index : int, has_default : bool = false, default_value = GDRx.util.GetNotSet()
 ) -> Callable:

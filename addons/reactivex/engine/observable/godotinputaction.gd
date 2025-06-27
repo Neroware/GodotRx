@@ -1,3 +1,4 @@
+@tool
 enum EInputState 
 {
 	RELEASED = 0, JUST_PRESSED = 1, PRESSED = 2, JUST_RELEASED = 3

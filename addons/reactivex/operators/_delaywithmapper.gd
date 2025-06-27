@@ -1,3 +1,4 @@
+@tool
 static func delay_with_mapper_(
 	subscription_delay = null,
 	delay_duration_mapper = null

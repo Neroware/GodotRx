@@ -1,3 +1,4 @@
+@tool
 extends IteratorBase
 class_name Iterator
 

@@ -1,3 +1,4 @@
+@tool
 static func sample_observable(
 	source : Observable, sampler : Observable
 ) -> Observable:

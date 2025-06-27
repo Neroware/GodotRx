@@ -1,3 +1,4 @@
+@tool
 static func as_observable_() -> Callable:
 	var as_observable = func(source : Observable) -> Observable:
 #		"""Hides the identity of an observable sequence.

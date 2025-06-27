@@ -1,3 +1,4 @@
+@tool
 static func while_do_(
 	condition : Callable = GDRx.basic.default_condition
 ) -> Callable:

@@ -1,3 +1,4 @@
+@tool
 class_name AutoDisposer
 
 ## Links a [DisposableBase] to an [Object]'s lifetime.

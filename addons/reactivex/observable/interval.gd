@@ -1,3 +1,4 @@
+@tool
 static func interval_(
 	period : float,
 	scheduler : SchedulerBase = null

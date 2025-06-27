@@ -1,3 +1,4 @@
+@tool
 static func take_until_with_time_(
 	end_time : float,
 	absolute : bool = false,

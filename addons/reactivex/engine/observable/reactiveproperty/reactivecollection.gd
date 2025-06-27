@@ -1,3 +1,4 @@
+@tool
 extends ReactiveCollectionBase
 class_name ReactiveCollection
 

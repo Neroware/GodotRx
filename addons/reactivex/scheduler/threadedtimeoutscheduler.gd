@@ -1,3 +1,4 @@
+@tool
 extends PeriodicScheduler
 class_name ThreadedTimeoutScheduler
 ## A scheduler that schedules work via a threaded timer.

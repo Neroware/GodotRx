@@ -1,3 +1,4 @@
+@tool
 class AverageValue:
 	var sum : float
 	var count : int

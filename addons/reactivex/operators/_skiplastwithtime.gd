@@ -1,3 +1,4 @@
+@tool
 static func skip_last_with_time_(
 	duration : float, scheduler : SchedulerBase = null
 ) -> Callable:

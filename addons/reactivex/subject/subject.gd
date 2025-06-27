@@ -1,3 +1,4 @@
+@tool
 extends SubjectBase
 class_name Subject
 

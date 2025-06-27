@@ -1,3 +1,4 @@
+@tool
 ## Returns an observable sequence that invokes the specified factory
 ##    function whenever a new observer subscribes.
 ##    [br]

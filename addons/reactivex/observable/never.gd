@@ -1,3 +1,4 @@
+@tool
 ## Returns a non-terminating observable sequence, which can be used
 ##    to denote an infinite duration (e.g. when using reactive joins).
 ## [br][br]

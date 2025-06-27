@@ -1,3 +1,4 @@
+@tool
 static func is_empty_() -> Callable:
 #	"""Determines whether an observable sequence is empty.
 #

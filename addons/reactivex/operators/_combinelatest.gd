@@ -1,3 +1,4 @@
+@tool
 static func combine_latest_(others_) -> Callable:
 	var others : Array[Observable] = GDRx.util.unpack_arg(others_)
 	

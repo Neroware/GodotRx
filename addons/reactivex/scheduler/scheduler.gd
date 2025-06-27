@@ -1,3 +1,4 @@
+@tool
 extends SchedulerBase
 class_name Scheduler
 

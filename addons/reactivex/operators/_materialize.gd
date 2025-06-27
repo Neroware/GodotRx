@@ -1,3 +1,4 @@
+@tool
 static func materialize_() -> Callable:
 	var materialize = func(source : Observable) -> Observable:
 #		"""Partially applied materialize operator.

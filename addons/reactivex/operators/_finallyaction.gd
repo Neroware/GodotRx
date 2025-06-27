@@ -1,3 +1,4 @@
+@tool
 static func finally_action_(
 	action : Callable
 ) -> Callable:

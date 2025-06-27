@@ -1,3 +1,4 @@
+@tool
 static func sequence_equal_(
 	second, # Array or Observable
 	comparer  = null,

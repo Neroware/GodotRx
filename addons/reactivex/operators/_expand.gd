@@ -1,3 +1,4 @@
+@tool
 static func expand_(
 	mapper : Callable
 ) -> Callable:

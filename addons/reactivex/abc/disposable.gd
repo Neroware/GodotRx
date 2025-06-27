@@ -1,3 +1,4 @@
+@tool
 class_name DisposableBase
 
 ## Disposables represent Subscriptions in GDRx

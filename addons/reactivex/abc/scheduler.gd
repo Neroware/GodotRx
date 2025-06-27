@@ -1,3 +1,4 @@
+@tool
 class_name SchedulerBase
 
 ## A scheduler performs a scheduled action at some future point.

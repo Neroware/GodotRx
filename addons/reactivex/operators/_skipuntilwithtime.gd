@@ -1,3 +1,4 @@
+@tool
 static func skip_until_with_time_(
 	start_time : float,
 	time_absolute : bool = false,

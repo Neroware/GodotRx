@@ -1,3 +1,4 @@
+@tool
 class_name LockBase
 
 ## Interface of a Lock

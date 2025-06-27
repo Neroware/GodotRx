@@ -1,3 +1,4 @@
+@tool
 class _NodeLifecycleListener extends Node:
 	signal on_event(data)
 

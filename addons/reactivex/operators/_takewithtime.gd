@@ -1,3 +1,4 @@
+@tool
 static func take_with_time_(
 	duration : float, scheduler : SchedulerBase = null
 ) -> Callable:

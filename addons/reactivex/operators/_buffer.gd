@@ -1,3 +1,4 @@
+@tool
 static func buffer_(boundaries : Observable) -> Callable:
 	return GDRx.pipe.compose2(
 		GDRx.op.window(boundaries),

@@ -1,3 +1,4 @@
+@tool
 class_name __GDRx_Init__
 ## Provides access to GDRx-library types.
 ##

@@ -1,3 +1,4 @@
+@tool
 static func generate_(
 	initial_state,
 	condition : Callable = GDRx.basic.default_condition,

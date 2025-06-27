@@ -1,3 +1,4 @@
+@tool
 static func timeout_with_mapper_(
 	first_timeout : Observable = null,
 	timeout_duration_mapper : Callable = func(__) -> Observable: return GDRx.obs.never(),

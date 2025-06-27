@@ -1,3 +1,4 @@
+@tool
 static func replay_(
 	mapper = null,
 	buffer_size = null,

@@ -1,3 +1,4 @@
+@tool
 static func default_if_empty_(
 	default_value = null
 ) -> Callable:

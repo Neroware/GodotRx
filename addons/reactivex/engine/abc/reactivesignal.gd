@@ -1,3 +1,4 @@
+@tool
 extends Observable
 class_name ReactiveSignalBase
 

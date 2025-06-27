@@ -1,3 +1,4 @@
+@tool
 class_name __GDRx_Engine__
 ## Provides access to Godot-specific [Observable] constructors.
 ##

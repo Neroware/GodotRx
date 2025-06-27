@@ -1,3 +1,4 @@
+@tool
 extends TrampolineScheduler
 class_name CurrentThreadScheduler
 

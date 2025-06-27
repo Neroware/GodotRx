@@ -1,3 +1,4 @@
+@tool
 ## Heap queue algorithm (a.k.a. priority queue).
 ## See [url]https://github.com/python/cpython/blob/3.10/Lib/heapq.py[/url]
 

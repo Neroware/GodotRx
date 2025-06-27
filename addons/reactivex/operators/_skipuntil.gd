@@ -1,3 +1,4 @@
+@tool
 static func skip_until_(other : Observable) -> Callable:
 #	"""Returns the values from the source observable sequence only after
 #	the other observable sequence produces a value.

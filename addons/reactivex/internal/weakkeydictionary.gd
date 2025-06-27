@@ -1,3 +1,4 @@
+@tool
 class_name WeakKeyDictionary
 
 ## A dictionary with weak references to keys

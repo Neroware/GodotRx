@@ -1,3 +1,4 @@
+@tool
 static func repeat_(
 	repeat_count = null
 ) -> Callable:

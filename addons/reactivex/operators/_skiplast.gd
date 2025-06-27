@@ -1,3 +1,4 @@
+@tool
 static func skip_last_(count : int) -> Callable:
 	var skip_last = func(source : Observable) -> Observable:
 #		"""Bypasses a specified number of elements at the end of an

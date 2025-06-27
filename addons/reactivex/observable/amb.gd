@@ -1,3 +1,4 @@
+@tool
 ## Propagates the observable sequence that reacts first.
 ##    [br]
 ##    [b]Example:[/b]

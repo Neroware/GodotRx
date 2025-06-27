@@ -1,3 +1,4 @@
+@tool
 extends ReactiveDictionaryBase
 class_name ReactiveDictionary
 

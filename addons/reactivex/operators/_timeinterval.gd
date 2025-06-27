@@ -1,3 +1,4 @@
+@tool
 static func time_interval_(
 	scheduler : SchedulerBase = null
 ) -> Callable:

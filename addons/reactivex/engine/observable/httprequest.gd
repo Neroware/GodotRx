@@ -1,3 +1,4 @@
+@tool
 ## Struct representing the results of a [HTTPRequest]
 class HttpRequestResult:
 	var result : int

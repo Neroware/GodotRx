@@ -1,3 +1,4 @@
+@tool
 static func empty_(scheduler : SchedulerBase = null) -> Observable:
 	
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:

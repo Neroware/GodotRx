@@ -1,3 +1,4 @@
+@tool
 static func zip_(args) -> Callable:
 	var _zip = func(source : Observable) -> Observable:
 #		"""Merges the specified observable sequences into one observable

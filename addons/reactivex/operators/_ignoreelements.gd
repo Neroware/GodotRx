@@ -1,3 +1,4 @@
+@tool
 static func ignore_elements_() -> Callable:
 #	"""Ignores all elements in an observable sequence leaving only the
 #	termination messages.

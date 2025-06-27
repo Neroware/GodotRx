@@ -1,3 +1,4 @@
+@tool
 class_name Comparable
 
 ## Interface for comparable objects

@@ -1,3 +1,4 @@
+@tool
 static func take_last_buffer_(count : int) -> Callable:
 	var take_last_buffer = func(source : Observable) -> Observable:
 #		"""Returns an array with the specified number of contiguous

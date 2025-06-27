@@ -1,3 +1,4 @@
+@tool
 extends ObservableBase
 class_name Observable
 

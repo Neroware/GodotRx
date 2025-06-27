@@ -1,3 +1,4 @@
+@tool
 ## Generates an observable sequence that repeats the given element
 ##    the specified number of times.
 ## [br]

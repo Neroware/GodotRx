@@ -1,3 +1,4 @@
+@tool
 class_name ObservableAwait
 
 signal _on_next(item : Variant)

@@ -1,3 +1,4 @@
+@tool
 ## Converts a callback function to an observable sequence.
 ##    [br]
 ##    [b]Args:[/b]

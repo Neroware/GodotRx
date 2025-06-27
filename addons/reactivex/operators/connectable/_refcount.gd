@@ -1,3 +1,4 @@
+@tool
 static func ref_count_() -> Callable:
 	
 	var connectable_subscription = RefValue.Null()

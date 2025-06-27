@@ -1,3 +1,4 @@
+@tool
 class_name TryCatch
 
 var _risky_code : Callable

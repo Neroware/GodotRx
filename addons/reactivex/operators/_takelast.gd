@@ -1,3 +1,4 @@
+@tool
 static func take_last_(count : int) -> Callable:
 	var take_last = func(source : Observable) -> Observable:
 #		"""Returns a specified number of contiguous elements from the end of an

@@ -1,3 +1,4 @@
+@tool
 static func catch_handler(
 	source : Observable,
 	handler : Callable

@@ -1,3 +1,4 @@
+@tool
 static func filter_(predicate : Callable = GDRx.basic.default_condition) -> Callable:
 	var filter = func(source : Observable) -> Observable:
 #		"""Partially applied filter operator.

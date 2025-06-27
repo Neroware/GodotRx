@@ -1,3 +1,4 @@
+@tool
 static func debounce_(
 	duetime : float,
 	scheduler : SchedulerBase = null

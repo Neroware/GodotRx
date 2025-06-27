@@ -1,3 +1,4 @@
+@tool
 static func window_with_time_(
 	timespan : float,
 	timeshift = null,

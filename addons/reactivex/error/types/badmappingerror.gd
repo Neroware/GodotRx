@@ -1,3 +1,4 @@
+@tool
 extends RxBaseError
 class_name BadMappingError
 

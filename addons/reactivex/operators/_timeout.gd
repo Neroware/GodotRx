@@ -1,3 +1,4 @@
+@tool
 static func timeout_(
 	duetime : float,
 	absolute : bool = false,

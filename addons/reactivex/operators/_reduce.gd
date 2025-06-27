@@ -1,3 +1,4 @@
+@tool
 static func reduce_(
 	accumulator : Callable, seed_ = GDRx.util.GetNotSet()
 ) -> Callable:

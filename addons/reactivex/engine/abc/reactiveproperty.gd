@@ -1,3 +1,4 @@
+@tool
 extends ReadOnlyReactivePropertyBase
 class_name ReactivePropertyBase
 

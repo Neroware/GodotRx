@@ -1,3 +1,4 @@
+@tool
 static func concat_with_iterable_(sources : IterableBase) -> Observable:
 	
 	var subscribe = func(observer : ObserverBase, scheduler_ : SchedulerBase = null) -> DisposableBase:

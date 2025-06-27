@@ -1,3 +1,4 @@
+@tool
 extends LockBase
 class_name RLock
 

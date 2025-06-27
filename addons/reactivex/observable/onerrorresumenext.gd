@@ -1,3 +1,4 @@
+@tool
 ## Continues an observable sequence that is terminated normally or
 ##    by an error with the next observable sequence.
 ## [br][br]

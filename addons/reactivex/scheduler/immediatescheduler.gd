@@ -1,3 +1,4 @@
+@tool
 extends Scheduler
 class_name ImmediateScheduler
 

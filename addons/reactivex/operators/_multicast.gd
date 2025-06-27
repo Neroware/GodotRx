@@ -1,3 +1,4 @@
+@tool
 static func multicast_(
 	subject : SubjectBase = null,
 	subject_factory = null,

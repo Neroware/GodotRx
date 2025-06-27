@@ -1,3 +1,4 @@
+@tool
 ## Merges the specified observable sequences into one observable
 ##    sequence by creating a tuple whenever any of the
 ##    observable sequences produces an element.

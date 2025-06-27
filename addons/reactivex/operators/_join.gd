@@ -1,3 +1,4 @@
+@tool
 static func join_(
 	right : Observable,
 	left_duration_mapper : Callable,

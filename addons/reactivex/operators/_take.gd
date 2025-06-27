@@ -1,3 +1,4 @@
+@tool
 static func take_(count : int) -> Callable:
 	if count < 0:
 		ArgumentOutOfRangeError.raise()
