@@ -36,7 +36,7 @@ Unfortunately, GodotRx has no own documentation, however, it is a direct port fr
 
 Additional Godot-specific features are located in `res://addons/reactivex/engine/`.
 
-We also refer the the documentaion comments in the script files!
+We also refer the the documentation comments in the script files!
 
 ## Testing
 
@@ -107,7 +107,7 @@ func _ready():
 
 ### Multi-threading
 
-With GDRx multithreading is just one scheduling away.
+With GDRx, multithreading is just one scheduling away.
 
 ```swift
 var nfs : NewThreadScheduler = NewThreadScheduler.singleton()
