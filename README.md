@@ -1,13 +1,13 @@
 # GodotRx - Reactive Extensions for the Godot Game Engine version 4 (GDRx)
 
-A library for composing asynchronous and event-based programs using observable collections and query operator functions in GD-Script
+A library for composing asynchronous and event-based programs using observable collections and query operator functions in GDScript
 
 ## Warning
 *While it is almost a direct port of RxPY, this library has not yet been fully battle tested in action. Proceed with caution! Test submissions and bug reports are always welcome!*
 
 ## About ReactiveX
 
-ReactiveX for Godot Engine version 4 (GodotRx) is a library for composing asynchronous and event-based programs using observable sequences and pipable query operators in GD-Script. Using Rx, developers represent asynchronous data streams with Observables, query asynchronous data streams using operators, and parameterize concurrency in data/event streams using Schedulers. The code was originally ported from RxPY (see: https://github.com/ReactiveX/RxPY) as Python shares a lot of similarities with GDScript.
+ReactiveX for Godot Engine version 4 (GodotRx) is a library for composing asynchronous and event-based programs using observable sequences and pipable query operators in GDScript. Using Rx, developers represent asynchronous data streams with Observables, query asynchronous data streams using operators, and parameterize concurrency in data/event streams using Schedulers. The code was originally ported from RxPY (see: https://github.com/ReactiveX/RxPY) as Python shares a lot of similarities with GDScript.
 
 ```swift
 source = GDRx.just("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
