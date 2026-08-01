@@ -1,15 +1,34 @@
 # GodotRx - Reactive Extensions for the Godot Game Engine version 4 (GDRx)
 
-A library for composing asynchronous and event-based programs using observable collections and query operator functions in GDScript
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Neroware/GodotRx/blob/main/LICENSE)
+[![Godot v4.7](https://img.shields.io/badge/Godot-v4.7-478cbf.svg)](https://godotengine.org)
+
+A library for composing asynchronous and event-based programs using observable collections and query operator functions in GDScript.
 
 ## Warning
 *While it is almost a direct port of RxPY, this library has not yet been fully battle tested in action. Proceed with caution! Test submissions and bug reports are always welcome!*
+
+## Table of Contents
+
+- [About ReactiveX](#about-reactivex)
+- [Installation](#installation)
+- [Learning ReactiveX](#learning-reactivex)
+- [Testing](#testing)
+- [Additional Godot-specific features](#additional-godot-specific-features)
+  - [Coroutines](#coroutines)
+  - [Type fixation](#type-fixation)
+  - [Multi-threading](#multi-threading)
+  - [Reactive Property](#reactive-property)
+  - [Reactive Collection](#reactive-collection)
+- [Final Thoughts](#final-thoughts)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## About ReactiveX
 
 ReactiveX for Godot Engine version 4 (GodotRx) is a library for composing asynchronous and event-based programs using observable sequences and pipable query operators in GDScript. Using Rx, developers represent asynchronous data streams with Observables, query asynchronous data streams using operators, and parameterize concurrency in data/event streams using Schedulers. The code was originally ported from RxPY (see: https://github.com/ReactiveX/RxPY) as Python shares a lot of similarities with GDScript.
 
-```swift
+```gdscript
 source = GDRx.just("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
 
 composed = source \
@@ -19,7 +38,7 @@ composed.subscribe(func(value): print("Received: " + value))
 ```
 
 ## Installation
-You can add GDRx to your Godot 4 project as followed:
+You can add GDRx to your Godot 4 project as follows:
 
 1. Download this repository as an archive.
 2. Extract GDRx into your project's `addons` directory. The path needs to be `res://addons/reactivex/`.
@@ -27,12 +46,14 @@ You can add GDRx to your Godot 4 project as followed:
 
 GDRx should now be ready to use. Try creating a simple Observable using:
 
-```swift
+```gdscript
 GDRx.just(42).subscribe(func(i): print("The answer: " + str(i)))
 ```
 
+> **Note:** `main` targets Godot 4.7. If you are on an older release, check out the matching `godot/4.x.x` branch instead (`godot/4.1.x` through `godot/4.6.x` are available).
+
 ## Learning ReactiveX
-Unfortunately, GodotRx has no own documentation, however, it is a direct port from RxPY, which is why we refer to its [documentation](https://rxpy.readthedocs.io/en/latest/) for now.
+Unfortunately, GodotRx does not have its own documentation yet, however, it is a direct port from RxPY, which is why we refer to its [documentation](https://rxpy.readthedocs.io/en/latest/) for now.
 
 Additional Godot-specific features are located in `res://addons/reactivex/engine/`.
 
@@ -40,9 +61,15 @@ We also refer to the documentation comments in the script files!
 
 ## Testing
 
-Add the Testrunner at `res://addons/reactivex/testing/testrunner.gd` to any node in the scene tree.
+Add the Testrunner at `res://addons/reactivex/testing/testrunner.gd` to any node in the scene tree, or simply open the project and run the `runtests.tscn` scene (the default main scene). Tests can also be run headlessly, provided a `godot`/`godot4` binary is available:
 
-```swift
+```sh
+godot --headless --path . res://runtests.tscn
+```
+
+Results are printed to the console per test method (`PASS`/`FAIL`) with a summary count at the end.
+
+```gdscript
 extends __GDRx_Test__
 
 const TEST_UNIT_NAME = "BASICS"
@@ -60,7 +87,7 @@ func test_rx_map() -> bool:
 
 In GDRx, sequential execution of coroutines can be managed through observable streams, which helps readability.
 
-```swift
+```gdscript
 var _reference
 
 func coroutine1():
@@ -91,7 +118,7 @@ func _ready():
 
 Godot does not support generic types of Observables, however, we can still fix the type of a sequence with the oftype operator. Now observers can be sure to always receive items of the wanted type. Generating a wrong type will cause an error notification via the on_error contract. Per default, it also notifies the programmer via a push-error message in the editor.
 
-```swift
+```gdscript
 var _obs1 : Observable
 var _obs2 : Observable
 
@@ -109,7 +136,7 @@ func _ready():
 
 With GDRx, multithreading is just one scheduling away.
 
-```swift
+```gdscript
 var nfs : NewThreadScheduler = NewThreadScheduler.singleton()
 GDRx.just(0, nfs) \
 	.repeat(10) \
@@ -121,7 +148,7 @@ GDRx.just(0, nfs) \
 
 Reactive Properties are a special kind of Observable (and Disposable) which emit items whenever their value is changed. This is very useful e.g. for UI implementations. Creating a ReactiveProperty instance is easy: Access its contents via the Value property inside the ReactiveProperty instance.
 
-```swift
+```gdscript
 var prop = ReactiveProperty.new(42)
 prop.subscribe(func(i): print(">> ", i))
 
@@ -138,7 +165,7 @@ A ReactiveCollection works similar to a ReactiveProperty with the main differenc
 
 Its constructor supports generators of type IterableBase as well!
 
-```swift
+```gdscript
 var collection : ReactiveCollection = ReactiveCollection.new(["a", "b", "c", "d", "e", "f"])
 ```
 
@@ -148,8 +175,8 @@ I do not know if this library is useful in the case of Godot 4 but if you are fa
 
 ## Contributing
 
-Contributions and bug reports are always welcome! We also invite folks to submit unit tests verifiying the functionality of GDRx ;)
+Contributions and bug reports are always welcome! We also invite folks to submit unit tests verifying the functionality of GDRx ;)
 
 ## License
 
-Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/master/LICENSE).
+Distributed under the [MIT License](https://github.com/Neroware/GodotRx/blob/main/LICENSE).
