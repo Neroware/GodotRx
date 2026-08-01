@@ -40,6 +40,7 @@ func _siftdown(heap : Array, startpos, pos):
 		var parentpos = (pos - 1) >> 1
 		var parent = heap[parentpos]
 		if GDRx.lt(newitem, parent):
+			heap[pos] = parent
 			pos = parentpos
 			continue
 		break

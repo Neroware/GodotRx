@@ -60,14 +60,15 @@ func run(_scheduler : SchedulerBase, _state = null):
 			parent.is_acquired = false
 			return
 	
-	GDRx.try(work) \
+	if GDRx.try(work) \
 		.catch("Error", func(e):
 			if true:
 				var __ = LockGuard.new(self.lock)
 				parent.queue = []
 				parent.has_faulted = true
 			GDRx.raise(e)) \
-		.end_try_catch()
+		.end_try_catch():
+			return
 	
 	self.scheduler.schedule(self.run)
 

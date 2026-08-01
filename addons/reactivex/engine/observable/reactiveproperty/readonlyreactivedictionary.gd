@@ -85,7 +85,7 @@ func values() -> Array:
 	if self.is_disposed:
 		DisposedError.raise()
 		return []
-	return self._dict.value()
+	return self._dict.values()
 
 func dispose():
 	if this.is_disposed:

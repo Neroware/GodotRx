@@ -15,7 +15,7 @@ static func expand_(
 		var subscribe = func(
 			observer : ObserverBase, scheduler : SchedulerBase = null
 		) -> DisposableBase:
-			var scheduler_ = scheduler if scheduler == null else ImmediateScheduler.singleton()
+			var scheduler_ = scheduler if scheduler != null else ImmediateScheduler.singleton()
 			
 			var queue : Array[Observable] = []
 			var m = SerialDisposable.new()

@@ -12,7 +12,7 @@ func _init():
 	
 	super._init()
 
-func get_disposabe() -> DisposableBase:
+func get_disposable() -> DisposableBase:
 	return self.current
 
 func set_disposable(value : DisposableBase):
@@ -32,7 +32,7 @@ func set_disposable(value : DisposableBase):
 
 var disposable : DisposableBase:
 	set(value): set_disposable(value)
-	get: return get_disposabe()
+	get: return get_disposable()
 
 func dispose():
 	var old = null

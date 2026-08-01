@@ -17,7 +17,7 @@ func end_try_catch() -> bool:
 
 func catch(type : String, fun : Callable = GDRx.basic.noop) -> TryCatch:
 	if self._caught_types.has(type):
-		return
+		return self
 	self._caught_types[type] = fun
 	return self
 

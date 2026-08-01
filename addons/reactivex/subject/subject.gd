@@ -126,7 +126,8 @@ func _subscribe_core(
 	observer : ObserverBase,
 	_scheduler : SchedulerBase = null) -> DisposableBase:
 		var __ = LockGuard.new(self.lock)
-		self.check_disposed()
+		if not self.check_disposed():
+			return Disposable.new()
 		if not self.is_stopped:
 			self.observers.append(observer)
 			return InnerSubscription.new(self, observer)

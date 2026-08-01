@@ -21,7 +21,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-GDRx="*res://addons/reactivex/__gdrxsingleton__.gd"
+GDRx="*uid://cxwirx3xo7pvv"
 
 [editor_plugins]
 

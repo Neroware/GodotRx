@@ -56,5 +56,5 @@ func wait(timeout = null):
 	if not self._flag and timeout:
 		self._cond.wait_for(self._lock, timeout)
 	elif not self._flag:
-		self.wait(self._lock)
+		self._cond.wait(self._lock)
 	return self._flag

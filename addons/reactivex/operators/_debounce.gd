@@ -69,7 +69,7 @@ static func debounce_(
 	
 	return debounce
 
-func throttle_with_mapper_(
+static func throttle_with_mapper_(
 	throttle_duration_mapper : Callable
 ) -> Callable:
 	var throttle_with_mapper = func(source : Observable) -> Observable:
@@ -146,7 +146,7 @@ func throttle_with_mapper_(
 				_id[0] += 1
 			
 			var subscription = source.subscribe(
-				on_next, on_error, on_completed.
+				on_next, on_error, on_completed,
 				scheduler
 			)
 			return CompositeDisposable.new([subscription, cancelable])

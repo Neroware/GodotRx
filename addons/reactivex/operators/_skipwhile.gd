@@ -46,7 +46,7 @@ static func skip_while_(predicate : Callable) -> Callable:
 	
 	return skip_while
 
-func skip_while_indexed_(predicate : Callable) -> Callable:
+static func skip_while_indexed_(predicate : Callable) -> Callable:
 	var indexer = func(x, i : int) -> Tuple:
 		return Tuple.new([x, i])
 	

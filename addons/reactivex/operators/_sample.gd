@@ -57,7 +57,7 @@ static func sample_(
 #			Sampled observable sequence.
 #		"""
 	var sample = func(source : Observable) -> Observable:
-		if sampler_time != NAN:
+		if not is_nan(sampler_time):
 			return sample_observable(
 				source, GDRx.obs.interval(sampler_time, scheduler)
 			)

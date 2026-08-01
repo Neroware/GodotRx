@@ -37,7 +37,7 @@ func enqueue(item):
 func remove(item) -> bool:
 	for index in range(self._items.size()):
 		var _item = self._items[index]
-		if self._item.at(0) == item:
+		if _item.at(0) == item:
 			self._items.pop_at(index)
 			_Heap.heapify(self._items)
 			return true

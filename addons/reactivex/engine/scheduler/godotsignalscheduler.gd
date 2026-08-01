@@ -122,7 +122,7 @@ func schedule_signal(
 	var obj = instance_from_id(sig.get_object_id())
 	
 	var dispose = func():
-		if obj != null:
+		if obj != null and is_instance_valid(obj):
 			sig.disconnect(signal_callback)
 	
 	sig.connect(signal_callback)

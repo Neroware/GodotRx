@@ -145,7 +145,7 @@ static func group_join_(
 					
 					observer.on_error(error)
 				
-				md.disposable = duration.v.pipe1(GDRx.obs.take(1)).subscribe(
+				md.disposable = duration.v.pipe1(GDRx.op.take(1)).subscribe(
 					nothing, on_error, expire,
 					scheduler
 				)

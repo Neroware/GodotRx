@@ -5,5 +5,5 @@ static func buffer_with_time_or_count_(
 ) -> Callable:
 	return GDRx.pipe.compose2(
 		GDRx.op.window_with_time_or_count(timespan, count, scheduler),
-		GDRx.op.flat_map(GDRx.op.to_iterable()),
+		GDRx.op.flat_map(GDRx.op.to_list()),
 	)

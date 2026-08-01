@@ -3,11 +3,6 @@ static func slice_(
 	stop : int = GDRx.util.MAX_SIZE,
 	step : int = 1
 ) -> Callable:
-	var _start = start
-	var _stop = stop
-	var _step = step
-	
-	var pipeline : Array[Callable] = []
 	
 	var slice = func(source : Observable) -> Observable:
 #		"""The partially applied slice operator.
@@ -41,6 +36,12 @@ static func slice_(
 #		Returns:
 #			A sliced observable sequence.
 #		"""
+		var _start = start
+		var _stop = stop
+		var _step = step
+	
+		var pipeline : Array[Callable] = []
+
 		if _stop >= 0:
 			pipeline.append(GDRx.op.take(_stop))
 		
@@ -54,7 +55,7 @@ static func slice_(
 		
 		if _step > 1:
 			pipeline.append(
-				GDRx.filter_indexed(func(_x, i): return i % int(_step == 0))
+				GDRx.op.filter_indexed(func(_x, i): return int(i % _step) == 0)
 			)
 		elif _step < 0:
 			ArgumentOutOfRangeError.raise()

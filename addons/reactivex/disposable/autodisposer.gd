@@ -25,7 +25,7 @@ static func _collect_garbage(obj : Object):
 		var meta_entry = obj.get_meta(meta_key)
 		if meta_entry is AutoDisposer:
 			if meta_entry._disp.get("is_disposed"):
-				obj.remove_meta(meta_entry)
+				obj.remove_meta(meta_key)
 
 static func add(obj : Object, disp : DisposableBase) -> AutoDisposer:
 	AutoDisposer._collect_garbage(obj)
