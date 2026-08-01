@@ -50,23 +50,31 @@ func iter() -> Iterator:
 func is_empty() -> bool:
 	return self._x.is_empty()
 
-func gt(other) -> bool:
-	if not (other is Tuple):
-		return false
-	return (self._x.is_empty() and other._x.is_empty()) \
-	or GDRx.gt(self._x[0], other._x[0])
-
 func eq(other) -> bool:
 	if not (other is Tuple):
 		return false
-	return (self._x.is_empty() and other._x.is_empty()) \
-	or GDRx.eq(self._x[0], other._x[0])
+	if self._x.size() != other._x.size():
+		return false
+	for i in range(self._x.size()):
+		if not GDRx.eq(self._x[i], other._x[i]):
+			return false
+	return true
 
 func lt(other) -> bool:
 	if not (other is Tuple):
 		return false
-	return (self._x.is_empty() and other._x.is_empty()) \
-	or GDRx.lt(self._x[0], other._x[0])
+	var n = min(self._x.size(), other._x.size())
+	for i in range(n):
+		if GDRx.lt(self._x[i], other._x[i]):
+			return true
+		if GDRx.lt(other._x[i], self._x[i]):
+			return false
+	return self._x.size() < other._x.size()
+
+func gt(other) -> bool:
+	if not (other is Tuple):
+		return false
+	return other.lt(self)
 
 var __it__ : Iterator
 var __curr__ : Variant

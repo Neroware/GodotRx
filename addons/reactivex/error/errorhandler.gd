@@ -39,7 +39,9 @@ func raise(exc : ThrowableBase, default = null) -> Variant:
 	
 	var stmt : TryCatch = self._try_catch_stack.pop_back()
 	self._has_failed[stmt] = true
-	for type in exc.tags():
+	var exc_tags = exc.tags()
+	for i in range(exc_tags.size() - 1, -1, -1):
+		var type = exc_tags[i]
 		if type in stmt.caught_types:
 			handler = stmt.caught_types[type]
 			break

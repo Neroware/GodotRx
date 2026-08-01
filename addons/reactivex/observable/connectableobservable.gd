@@ -72,7 +72,6 @@ func auto_connect_observable(subscriber_count : int = 1) -> Observable:
 		var dispose = func():
 			_subscription.dispose()
 			count[0] -= 1
-			is_connected[0] = false
 		
 		return Disposable.new(dispose)
 	

@@ -119,6 +119,6 @@ func has_key(key) -> bool:
 
 func has_all(keys_ : Array) -> bool:
 	var _keys = keys_.duplicate()
-	_keys.map(func(elem): return self._hash_key(elem))
+	_keys = _keys.map(func(elem): return self._hash_key(elem))
 	var __ = ReadWriteLockGuard.new(self._lock, true)
 	return self._data.has_all(_keys)

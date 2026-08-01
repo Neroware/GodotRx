@@ -30,10 +30,7 @@ static func from_godot_signal_(
 					observer.on_next(Tuple.new([]))
 			1:
 				action = func(arg1):
-					if arg1 is Array:
-						observer.on_next(Tuple.new(arg1))
-					else:
-						observer.on_next(arg1)
+					observer.on_next(arg1)
 			2:
 				action = func(arg1, arg2):
 					observer.on_next(Tuple.new([arg1, arg2]))

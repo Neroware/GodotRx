@@ -27,7 +27,7 @@ func set_disposable(value : DisposableBase):
 		if not should_dispose:
 			self.current = value
 	
-	if self.is_disposed and value != null:
+	if should_dispose and value != null:
 		value.dispose()
 
 var disposable : DisposableBase:

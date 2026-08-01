@@ -30,28 +30,34 @@ static func from_compute_shader_(
 	scheduler : SchedulerBase = null
 ) -> Observable:
 	
-	# Create shader and pipeline
-	var shader_file = load(shader_path)
-	var shader_spirv = shader_file.get_spirv()
-	var shader = rd.shader_create_from_spirv(shader_spirv)
-	var pipeline = rd.compute_pipeline_create(shader)
-	
-	var uniform_sets_rids = []
-	for sid in range(uniform_sets.size()):
-		uniform_sets_rids.append(
-			rd.uniform_set_create(uniform_sets[sid], shader, sid)
-		)
-	
 	var subscribe = func(
 		observer : ObserverBase,
 		scheduler_ : SchedulerBase = null
 	) -> DisposableBase:
-		
+
 		var _scheduler
 		if scheduler != null: _scheduler = scheduler
 		elif scheduler_ != null: _scheduler = scheduler_
 		else: _scheduler = CurrentThreadScheduler.singleton()
-		
+
+		# Create shader and pipeline
+		var shader_file = load(shader_path)
+		var shader_spirv = shader_file.get_spirv()
+		var shader = rd.shader_create_from_spirv(shader_spirv)
+		var pipeline = rd.compute_pipeline_create(shader)
+
+		var uniform_sets_rids = []
+		for sid in range(uniform_sets.size()):
+			uniform_sets_rids.append(
+				rd.uniform_set_create(uniform_sets[sid], shader, sid)
+			)
+
+		var free_resources = func():
+			for uid in uniform_sets_rids:
+				rd.free_rid(uid)
+			rd.free_rid(pipeline)
+			rd.free_rid(shader)
+
 		var action = func(_scheduler = null, _state = null):
 			# Setup compute pipeline and uniforms
 			var compute_list = rd.compute_list_begin()
@@ -60,15 +66,16 @@ static func from_compute_shader_(
 				rd.compute_list_bind_uniform_set(compute_list, uniform_sets_rids[sid], sid)
 			rd.compute_list_dispatch(compute_list, work_groups.x, work_groups.y, work_groups.z)
 			rd.compute_list_end()
-			
+
 			# Send to GPU
 			rd.submit()
 			# Sync with CPU
 			rd.sync()
-			
+
 			observer.on_next(rd)
 			observer.on_completed()
-		
-		return _scheduler.schedule(action)
-	
+
+		var subscription = _scheduler.schedule(action)
+		return CompositeDisposable.new([subscription, Disposable.new(free_resources)])
+
 	return Observable.new(subscribe)
