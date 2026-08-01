@@ -98,7 +98,8 @@ class StartableThread extends StartableBase:
 			return
 		
 		var run = func():
-			Thread.set_thread_safety_checks_enabled(false)
+			# This function is not supported in Godot 4.0
+			# Thread.set_thread_safety_checks_enabled(false)
 			self._register_thread()
 			self._target.call()
 			self._deregister_thread()
